@@ -1032,3 +1032,13 @@ button.ci-row:active { background: color-mix(in srgb, var(--line) 45%, transpare
 .patch-log .pill.applied { background: var(--green-soft); color: var(--green); }
 .patch-log .pill.reverted, .patch-log .pill.rejected { background: var(--bar); color: var(--muted); }
 .export-due h3 { margin-top: 0; }
+
+/* ---------------------------------------------------------------- timed exercise countdown */
+.ex-timer { margin: 14px 0 18px; padding: 14px 16px; background: var(--accent-soft); border-radius: 16px; }
+.ex-timer h4 { margin: 0 0 6px; }
+.ex-timer-step { font-weight: 800; font-size: 15px; margin-top: 8px; }
+.ex-timer-count { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 56px; letter-spacing: -0.03em; line-height: 1.05; margin: 4px 0 10px; color: var(--accent-strong); }
+.ex-timer-count.done { color: var(--green); font-size: 40px; }
+.ex-timer-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.ex-timer-chip { text-decoration: none; background: var(--accent-soft); color: var(--accent-strong); font-variant-numeric: tabular-nums; border: 0; cursor: pointer; }
+.ex-timer-chip.due { background: var(--green-soft); color: var(--green); }

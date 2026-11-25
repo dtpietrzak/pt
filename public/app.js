@@ -16,6 +16,7 @@ import { renderSettings } from "./js/ui/settings.js";
 import { renderHistory, refreshEngine, startReminders } from "./js/ui/checkins.js";
 import { renderStatus, renderRed, maybeShowDecisions } from "./js/ui/status.js";
 import { renderExport, exportDueInfo, markSettingsDue } from "./js/ui/export.js";
+import { wireExerciseTimerChip } from "./js/ui/exercise-timer.js";
 
 const PAGES = { today: "Today", work: "Work", plan: "Plan", settings: "Settings", history: "History", status: "Status", red: "Red flags", export: "Export" };
 const main = $("#main");
@@ -65,6 +66,7 @@ function render() {
   $("#title").textContent = PAGES[r];
   $("#level-chip").textContent = `${ctx.state.level_id}${ctx.state.mode !== "active" ? " · " + ctx.state.mode : ""}`;
   $("#level-chip").hidden = false;
+  wireExerciseTimerChip(ctx);
   renderAccount(ctx);
   document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("on", a.dataset.page === (["history", "status", "red"].includes(r) ? "today" : r === "export" ? "settings" : r)));
   $(".nav").hidden = false;

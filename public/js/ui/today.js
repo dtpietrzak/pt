@@ -8,7 +8,8 @@ import { exportCardHtml } from "./export.js";
 import { needsEquipConfirm } from "../status.js";
 import { templateItems, nextStrengthTemplate } from "../pipeline.js";
 import { isoLocal, localTime } from "../util.js";
-import { $, esc, BLOCKS, today, nowHM, addMin, minutesSince, fmtDate, openSheet, closeSheet, showExercise, toast } from "./dom.js";
+import { $, esc, BLOCKS, today, nowHM, addMin, minutesSince, fmtDate, openSheet, closeSheet, toast } from "./dom.js";
+import { showExercise, wireExerciseTimerChip } from "./exercise-timer.js";
 
 const DAILY = ["daily_mobility", "daily_core", "walking"];
 const MORNING_WINDOW_MIN = 45;
@@ -71,6 +72,7 @@ function blockSummary(block, its, doneSet, log, walkTarget) {
 }
 
 export async function renderToday(ctx, main) {
+  wireExerciseTimerChip(ctx);
   const d = today();
   const lv = ctx.level();
   const [log, wake, view, wkSaved] = await Promise.all([dayLog(ctx, d), ctx.store.kvGet(`wake:${d}`), loadView(ctx), ctx.store.kvGet(wkKey(d))]);

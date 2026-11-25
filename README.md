@@ -82,6 +82,7 @@ Work tab: **Start work mode** runs Stand 40 → Walk 2 → Sit 20 → Decompress
 - `public/js/util.js`: Chicago time, ULIDs, and canonical JSON + SHA-256 (matches PT Bot's Python hashes)
 - `public/js/schema.js`: a small JSON Schema validator for the bundled schemas
 - `public/js/checkins.js` (due logic, form -> record), `pipeline.js` (store -> engine -> store), `ui/checkins.js` (forms, Today card, history, reminders)
+- Timed-exercise countdown: in the exercise sheet, for any current dose with `hold_s`, `time_s` or `time_min` (detected from the rung, not by exercise id). Multi-set and per-side counters, a start/pause/reset control, and a header chip if you close the sheet. Reuses the work timer's chime.
 - `public/js/status.js` (level status, gate eligibility/results, announcements), `ui/status.js` (status page, gate flow, red screen, announcements, equipment)
 - `public/js/export.js` (weekly JSON + markdown), `patch.js` (validation, safety review, state migration), `ui/export.js` (export page, patch preview/apply/undo)
 - `public/js/db.js`, `data.js`, `dose.js`, `defaults.js`: storage, seed loading and migration, dose text, and fallback defaults

@@ -103,22 +103,3 @@ export function minutesSince(d, hm) {
 export function fmtDate(d) {
   return new Date(`${d}T12:00:00`).toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" });
 }
-
-export function showExercise(ctx, itemKey) {
-  const it = ctx.docs.levels.levels.flatMap((l) => l.items).find((i) => i.item_key === itemKey);
-  if (!it) return;
-  const ex = ctx.exById[it.exercise_id] || {};
-  const st = ctx.state.item_state[itemKey];
-  const ladder = it.rungs
-    .map((r, n) => `<li class="${st && st.rung === n ? "cur" : ""}">${esc(formatDose(r, it, ctx.profile))}${n === it.target_rung ? " (target)" : ""}</li>`)
-    .join("");
-  openSheet(`
-    <h2>${esc(ex.name || it.exercise_id)}</h2>
-    <p class="muted small">${esc(it.item_key)} · ${esc(ex.category || "")} · rest ${it.rest_s ?? "-"} s</p>
-    ${ex.cues?.length ? `<h4>Cues</h4><ul>${ex.cues.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}
-    <h4>Ladder</h4><ol class="ladder">${ladder}</ol>
-    ${ex.stop_if ? `<h4>Stop if</h4><p>${esc(ex.stop_if)}</p>` : ""}
-    ${ex.contraindications ? `<h4>Cautions</h4><p>${esc(ex.contraindications)}</p>` : ""}
-    ${ex.equipment?.length ? `<h4>Equipment</h4><p>${esc(ex.equipment.join(", "))}</p>` : ""}
-    ${it.requires?.length ? `<p class="muted small">Unlocks after: ${esc(it.requires.join(", "))}</p>` : ""}`);
-}
