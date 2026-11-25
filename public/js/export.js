@@ -4,7 +4,7 @@ import { exportState, standingRatio, levelById } from "./engine.js";
 
 const SESSION_MODS = new Set(["poor_sleep", "illness", "unusual_load", "missing_morning_checkin", "pause_mode", "easy_dose"]);
 const SESSION_KEYS = ["id", "local_date", "started_at", "ended_at", "template", "level_id", "items", "gate_test_ids", "gate_results", "post_workout_checkin_id", "status", "tests", "final_color", "clean", "modifiers", "probation"];
-const PROFILE_KEYS = ["name", "timezone", "body_weight_lb", "equipment", "baselines", "notify", "settings"];
+const PROFILE_KEYS = ["name", "timezone", "body_weight_lb", "sports", "equipment", "baselines", "notify", "settings"];
 const pick = (o, keys) => Object.fromEntries(keys.filter((k) => o[k] !== undefined).map((k) => [k, o[k]]));
 
 export function weekRange(anyDate) {
@@ -80,6 +80,9 @@ export function buildExport(i) {
       morning_pain: mornings.map((c) => c.data.pain_on_waking),
       evening_pain_peak: evenings.map((c) => c.data.pain_peak_today),
       first_pressure_h: evenings.map((c) => c.data.standing?.first_pressure_h ?? null),
+      first_sitting_pressure_min: evenings.map((c) => c.data.sitting?.first_pressure_min ?? null),
+      stand_block_min: evenings.map((c) => c.data.posture_cycle?.stand_prescribed_min).filter((v) => typeof v === "number"),
+      sit_block_min: evenings.map((c) => c.data.posture_cycle?.sit_prescribed_min).filter((v) => typeof v === "number"),
       sleep_hours: mornings.filter((c) => typeof c.data.sleep_hours === "number").map((c) => c.data.sleep_hours),
     },
     gate_tests: gateRows,
@@ -96,6 +99,9 @@ export function buildExport(i) {
       week_start: i.start, week_end: i.end, generated_at: i.now, timezone: "America/Chicago",
       app_version: i.appVersion, plan_version: i.levels.plan_version ?? 1,
       levels_sha256: i.hashes.levels_sha256, exercises_sha256: i.hashes.exercises_sha256, config_version: i.config.config_version,
+      ...(i.hashes.tests_sha256 ? { tests_sha256: i.hashes.tests_sha256 } : {}),
+      ...(i.hashes.profile_sha256 ? { profile_sha256: i.hashes.profile_sha256 } : {}),
+      ...(i.hashes.posture_cycle_sha256 ? { posture_cycle_sha256: i.hashes.posture_cycle_sha256 } : {}),
     },
     profile,
     state_start: exportState(i.stateStart), state_end: exportState(i.stateEnd),
@@ -109,7 +115,7 @@ export function buildExport(i) {
 function buildAttention(x) {
   const a = [];
   const add = (severity, code, message, refs) => a.push({ severity, code, message, ...(refs?.length ? { refs } : {}) });
-  if (x.summary.red_flag_events) add("action", "RED_FLAG_EVENT", `${x.summary.red_flag_events} red result(s) this week. David should contact his physician.`, x.checkins.filter((c) => x.evals[c.id]?.color === "red").map((c) => c.id));
+  if (x.summary.red_flag_events) add("action", "RED_FLAG_EVENT", `${x.summary.red_flag_events} red result(s) this week. David should see a clinician.`, x.checkins.filter((c) => x.evals[c.id]?.color === "red").map((c) => c.id));
   if (x.stateEnd.clinician_recommended) add("action", "CLINICIAN_RECOMMENDED", "The engine recommends checking with the physician.");
   if (x.summary.regress_levels) add("action", "LEVEL_REGRESSED", `Level regression this week (${x.summary.level_start} → ${x.summary.level_end}).`);
   const oranges = x.log.filter((e) => e.color === "orange" && (e.rule_id === "R2" || e.rule_id === "R3"));
@@ -164,7 +170,9 @@ export function renderMarkdown(x, i) {
   L.push(`- Daily statuses: green ${s.daily_status_counts.green}, yellow ${s.daily_status_counts.yellow}, orange ${s.daily_status_counts.orange}, red ${s.daily_status_counts.red}`);
   L.push(`- Strength sessions: ${s.strength_sessions_completed} of ${s.strength_sessions_planned} · clean: ${s.clean_sessions} · core days: ${s.core_days_done} · walking: ${s.walk_minutes_total} min · adherence ${s.adherence_pct}%`);
   L.push(`- Trend (morning stiffness min): [${s.trend.morning_stiffness_min.join(", ")}] · (evening pain peak): [${s.trend.evening_pain_peak.join(", ")}] · (first pressure h): [${s.trend.first_pressure_h.map((v) => (v === null ? "censored" : v)).join(", ")}]`);
-  L.push(`- Baselines: stiffness ${e.baselines.stiffness_min} min, standing ${e.baselines.standing_h} h, rest pain ${e.baselines.pain_rest ?? "-"}`);
+  if ((s.trend.first_sitting_pressure_min || []).some((v) => v != null) || (s.trend.stand_block_min || []).some((v) => v != null))
+    L.push(`- Trend (sitting first pressure min): [${(s.trend.first_sitting_pressure_min || []).map((v) => (v === null ? "censored" : v)).join(", ")}] · (stand block min): [${(s.trend.stand_block_min || []).map((v) => v ?? "-").join(", ")}] · (sit block min): [${(s.trend.sit_block_min || []).map((v) => v ?? "-").join(", ")}]`);
+  L.push(`- Baselines: stiffness ${e.baselines.stiffness_min} min, standing ${e.baselines.standing_h} h, sitting ${e.baselines.sitting_min ?? "-"} min, rest pain ${e.baselines.pain_rest ?? "-"}`);
   L.push(`- Lock: ${e.lock.easy_dose ? "easy-dose lock ON" : "off"} · clean streak ${e.level_clean_streak} · gate pending: ${e.gate_pending ? "yes" : "no"}${e.clinician_recommended ? " · **clinician recommended**" : ""}`);
   if (i.sport) L.push(`- Sport goal: ${i.sport}`);
   L.push("", "## Decisions this week", "");
@@ -199,8 +207,61 @@ export function renderMarkdown(x, i) {
   L.push("3. Any app changes that would make check-ins easier or more informative?");
   L.push("", "## What the agent may and may not do", "");
   L.push("- May propose a structured patch against `levels.json`, `exercises.json`, `tests.json` and app change requests.");
-  L.push("- May not touch safety thresholds, red-flag texts, the morning window, decision state, or add loaded flexion; red flags mean contact the physician.");
+  L.push("- May not touch safety thresholds, red-flag texts, the morning window, decision state, or add loaded flexion; red flags mean see a clinician.");
   L.push(`- Reply with ONE JSON document (kind \`pt-plan-patch\`) based on meta: plan_version ${x.meta.plan_version}, levels_sha256 \`${x.meta.levels_sha256}\`, exercises_sha256 \`${x.meta.exercises_sha256}\`.`);
   L.push("");
   return L.join("\n");
+}
+
+/** Pull a pt-plan-patch JSON document out of pasted text (plain JSON, or JSON plus trailing markdown, or a fenced block). */
+export function extractPatch(text) {
+  const raw = String(text || "").trim();
+  if (!raw) return { ok: false, error: "Nothing to read." };
+  const fences = [...raw.matchAll(/```(?:json)?\s*([\s\S]*?)```/gi)].map((m) => m[1].trim());
+  const candidates = [...fences];
+  const brace = raw.indexOf("{");
+  if (brace >= 0) candidates.push(raw.slice(brace));
+  candidates.push(raw);
+  let lastErr = "";
+  for (const c of candidates) {
+    const obj = parseJsonLoose(c);
+    if (!obj) {
+      try { JSON.parse(c); } catch (e) { lastErr = e.message; }
+      continue;
+    }
+    if (obj.kind === "pt-plan-patch" || (obj.schema_version && obj.documents && obj.base)) return { ok: true, patch: obj };
+    lastErr = "That JSON is not a plan patch (kind should be pt-plan-patch).";
+  }
+  return { ok: false, error: lastErr ? `Not valid JSON: ${lastErr}` : "Couldn't find a plan-patch JSON document." };
+}
+function parseJsonLoose(s) {
+  try { return JSON.parse(s); } catch { /* fall through and take the first balanced object */ }
+  let depth = 0, start = -1, inStr = false, esc = false;
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (inStr) { if (esc) esc = false; else if (ch === "\\") esc = true; else if (ch === '"') inStr = false; continue; }
+    if (ch === '"') { inStr = true; continue; }
+    if (ch === "{") { if (depth === 0) start = i; depth++; }
+    else if (ch === "}") {
+      depth--;
+      if (depth === 0 && start >= 0) {
+        try { return JSON.parse(s.slice(start, i + 1)); } catch { start = -1; }
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * The week that just finished is due starting Sunday at the evening reminder time, and stays due
+ * until it is marked exported. Mid-week, the previous complete week can still be due.
+ * hasWeekData(start) is optional; if provided and returns false, we don't nag about an empty week.
+ */
+export function dueExportWeek({ today, timeHM = "00:00", evening = "15:30", exported, hasWeekData } = {}) {
+  const current = weekStart(today);
+  const finished = today === addDays(current, 6) && timeHM >= evening ? current : addDays(current, -7);
+  const end = addDays(finished, 6);
+  if (exported === finished) return { due: false, start: finished, end };
+  if (hasWeekData && !hasWeekData(finished)) return { due: false, start: finished, end };
+  return { due: true, start: finished, end };
 }

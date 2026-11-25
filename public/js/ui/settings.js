@@ -4,6 +4,7 @@ import { DISCLAIMER } from "../defaults.js";
 import { isoLocal, clone } from "../util.js";
 import { activeUser } from "./account.js";
 import { $, esc, today, toast, download, confirmSheet } from "./dom.js";
+import { exportCardHtml } from "./export.js";
 
 const EQUIP_BOOL = [
   ["bands", "Resistance bands"], ["barbell", "Barbell"], ["rack_with_safeties", "Rack with safeties"],
@@ -78,13 +79,17 @@ export function renderSettings(ctx, main) {
     <button class="btn" id="restart" type="button">Restart plan at this level</button>
     <p class="muted small">Resets rungs and progress. Your checklist history is kept.</p>
   </section>
+  <section class="card" id="export-slot"></section>
   <section class="card"><h3>Data</h3>
     <p class="small">Plan v${ctx.docs.levels.plan_version ?? 1} · ${ctx.docs.levels.levels.length} levels · ${ctx.docs.exercises.exercises.length} exercises · ${ctx.docs.tests.tests.length} gate tests</p>
     <p class="muted small">Saved on this device first so it works offline, and synced automatically to your private Firebase database.</p>
+    <p><a class="btn" href="#/export">Weekly export &amp; plan changes</a></p>
     <button class="btn" id="backup" type="button">Download backup (JSON)</button>
     <button class="btn danger" id="wipe" type="button">Erase this device's data</button>
   </section>
   <p class="disclaimer pad">${esc(DISCLAIMER)}</p>`;
+
+  exportCardHtml(ctx).then((html) => { const slot = $("#export-slot", main); if (slot) slot.outerHTML = html || ""; }).catch(() => {});
 
   $("#settings", main).onsubmit = (ev) => saveSettings(ctx, ev);
 
@@ -101,8 +106,12 @@ export function renderSettings(ctx, main) {
         confirmLabel: `Restart at ${id}`,
       });
       if (!ok) return;
-      ctx.state = newState(ctx.docs, ctx.profile, id, isoLocal());
+      const st = newState(ctx.docs, ctx.profile, id, isoLocal());
+      st.x = { ...st.x, restarted_at: isoLocal() };
+      ctx.state = st;
+      ctx.app = { ...ctx.app, start_level: id };
       await ctx.store.kvSet("state", ctx.state);
+      await ctx.store.kvSet("app", ctx.app);
       toast(`Plan restarted at ${id}.`);
       ctx.render();
       return;

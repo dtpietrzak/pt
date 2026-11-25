@@ -4,6 +4,7 @@ import { currentDose } from "../engine.js";
 import { formatDose, missingEquipment } from "../dose.js";
 import { loadView, redBannerHtml, checkinCardHtml, availableTemplates, finishWorkout, WORKOUT_NAMES, refreshBadges } from "./checkins.js";
 import { onClick as checkinClick, statusCardHtml, equipCardHtml, renderRedToday } from "./status.js";
+import { exportCardHtml } from "./export.js";
 import { needsEquipConfirm } from "../status.js";
 import { templateItems, nextStrengthTemplate } from "../pipeline.js";
 import { isoLocal, localTime } from "../util.js";
@@ -119,6 +120,7 @@ export async function renderToday(ctx, main) {
   // Check-ins: shown once the day has started, or earlier when a later one (evening, night, post-workout) is already due.
   if (wake || view.list.some((e) => e.state === "due" && e.type !== "morning")) html += checkinCardHtml(view);
   if (wake) html += statusCardHtml(ctx, view);
+  html += await exportCardHtml(ctx);
   for (const [block, label] of wake ? BLOCKS.filter(([b]) => DAILY.includes(b)) : []) {
     const its = itemsByBlock.get(block);
     if (!its) continue;

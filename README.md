@@ -17,7 +17,7 @@ Data is saved on the device first (IndexedDB), so it works offline and before si
 | 1.6 | Work posture timer (Work tab) + R16 dose progression | **live** |
 | 2 | Four check-ins (morning, post-workout, evening, night), the green/yellow/orange/red rollup, due badges + reminders, a minimal workout log | **live** |
 | 3 | Status page (advance/hold/regress), level-up/regress/settle announcements, gate tests, red-flag screen, L6 equipment reconfirm | **live** |
-| 4 | Weekly export (JSON + markdown) and agent plan-patch import | |
+| 4 | Weekly export (JSON + markdown) and agent plan-patch import | **live** |
 
 `public/js/patch.js` and `public/js/export.js` are already written and tested, but no UI uses them yet (phase 4).
 
@@ -68,6 +68,13 @@ Work tab: **Start work mode** runs Stand 40 → Walk 2 → Sit 20 → Decompress
 - **Red flags** (`#/red`, also linked from the check-in card and every Today): a self-screen with guidance only (see a clinician; saddle numbness or bladder/bowel changes means emergency care). "Pause my plan" uses the `red_report` manual event. A red check-in routes here too. No contact details anywhere.
 - **L6 entry**: before barbell work, Today asks you to reconfirm equipment (`kv.equip_confirmed`); workouts stay hidden until you do.
 
+## Weekly export and plan patches (phase 4)
+
+- **Export** (`#/export`, linked from Settings and from a Today card when a week is due): pick a Monday–Sunday week, add a note, and build a JSON file plus a markdown summary (`public/js/export.js`, tested). Downloads, copy to the clipboard, and (on mobile) the Web Share sheet are all available. The JSON includes posture-cycle hashes and sitting / stand / sit-block trends, and it validates against `weekly-export.schema.json`.
+- A reminder appears Sunday at your evening check-in time once that week has any check-ins or sessions, and stays until you download, copy or share it. The Settings tab gets a due badge too. There is no push server, so it only fires while the app is open.
+- **Plan changes**: paste or upload an agent's `pt-plan-patch` JSON (markdown after the JSON is fine). The app validates the schema, the plan hashes, that every op applies cleanly, document invariants, and the safety rules. You see a before/after preview, why a rejected item failed, and a second confirmation when a safety review is required. Apply writes a snapshot, increments `plan_version`, migrates your progress, and syncs the patched plan (`docs.patched = true`) between devices. Discard stores the patch with the reason. You can undo the most recent applied patch from its snapshot; check-ins and sessions are kept.
+- **Restart at a level** (Settings) now stamps the new state and saves that level as `start_level`, and a stale write from another open device (for example the work timer) will not overwrite it.
+
 ## Layout
 
 - `public/app.js`: UI (hash routes `#/today`, `#/plan`, `#/settings`)
@@ -76,6 +83,7 @@ Work tab: **Start work mode** runs Stand 40 → Walk 2 → Sit 20 → Decompress
 - `public/js/schema.js`: a small JSON Schema validator for the bundled schemas
 - `public/js/checkins.js` (due logic, form -> record), `pipeline.js` (store -> engine -> store), `ui/checkins.js` (forms, Today card, history, reminders)
 - `public/js/status.js` (level status, gate eligibility/results, announcements), `ui/status.js` (status page, gate flow, red screen, announcements, equipment)
+- `public/js/export.js` (weekly JSON + markdown), `patch.js` (validation, safety review, state migration), `ui/export.js` (export page, patch preview/apply/undo)
 - `public/js/db.js`, `data.js`, `dose.js`, `defaults.js`: storage, seed loading and migration, dose text, and fallback defaults
 - `test/`: `node --test "test/*.test.mjs"`
 

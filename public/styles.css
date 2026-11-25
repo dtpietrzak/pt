@@ -1006,3 +1006,29 @@ button.ci-row:active { background: color-mix(in srgb, var(--line) 45%, transpare
 .announce.up h2 { color: var(--green); } .announce.down h2 { color: var(--warn); } .announce.red h2 { color: var(--red); }
 .equip-card h2 { margin-top: 0; }
 .btn.disabled, .btn:disabled { opacity: .5; }
+
+/* ---------------------------------------------------------------- phase 4: weekly export + plan patches */
+.week-nav { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
+.week-nav .week-label { flex: 1; text-align: center; display: flex; flex-direction: column; gap: 2px; }
+.week-nav .btn { min-width: 44px; }
+.row-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; }
+.row-actions.wrap { margin-top: 8px; }
+.md-preview { white-space: pre-wrap; font-size: 12px; line-height: 1.45; background: var(--accent-soft); border-radius: 12px; padding: 12px; max-height: 320px; overflow: auto; }
+.ex-preview { margin-top: 12px; }
+.ex-preview summary { cursor: pointer; color: var(--accent-strong); font-weight: 700; }
+.patch-review { margin-top: 12px; }
+.patch-review .diff { display: flex; flex-direction: column; gap: 10px; margin: 8px 0 14px; }
+.diff-row { background: var(--accent-soft); border-radius: 12px; padding: 10px 12px; }
+.diff-label { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+.diff-before { color: var(--muted); text-decoration: line-through; font-size: 13px; word-break: break-word; }
+.diff-after { color: var(--green); font-size: 13px; word-break: break-word; }
+.safety { background: #fff6e0; border-left: 4px solid var(--blk-conditioning); border-radius: 10px; padding: 10px 12px; margin: 10px 0; }
+.err-box, .err { color: var(--danger); }
+.err-box { background: #f3e8ee; border-radius: 10px; padding: 10px 12px; margin: 10px 0; }
+.compact { margin: 6px 0 10px; padding-left: 18px; }
+.patch-log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.patch-log li { display: flex; flex-direction: column; gap: 4px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.patch-log .pill { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-strong); margin-left: 6px; }
+.patch-log .pill.applied { background: var(--green-soft); color: var(--green); }
+.patch-log .pill.reverted, .patch-log .pill.rejected { background: var(--bar); color: var(--muted); }
+.export-due h3 { margin-top: 0; }

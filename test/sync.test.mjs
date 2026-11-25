@@ -143,3 +143,26 @@ test("nothing is pushed before the first server snapshot (offline start)", async
   assert.equal(pushed, 0);
   assert.equal(engine.ready, false);
 });
+
+test("restart at a level syncs; a later stale write from the other device does not overwrite it", async () => {
+  const { writeState } = await import("../public/js/pipeline.js");
+  const server = fakeServer(), clock = { t: 1_800_000_000_000 };
+  const phone = await device(server, clock, { legacy: { kv: [{ key: "state", value: { level_id: "L2", x: {} } }] } });
+  const laptop = await device(server, clock);
+  await phone.engine.start(); await laptop.engine.start(); await settle();
+  clock.t += 1000;
+  // Phone restarts at L1 (Settings > Restart), stamped after endBoot so it is a real edit.
+  const restarted = { level_id: "L1", mode: "active", x: { restarted_at: "2026-11-25T16:40:00-06:00" } };
+  await phone.store.kvSet("state", restarted);
+  await phone.engine.push(); await settle();
+  assert.deepEqual(await laptop.store.kvGet("state"), restarted, "laptop pulls the restart");
+
+  // Laptop still had L2 in memory (timer / engine mid-write) and tries to save it later.
+  clock.t += 1000;
+  const stale = { level_id: "L2", mode: "active", x: {} };
+  const written = await writeState(laptop.store, stale);
+  assert.equal(written.level_id, "L1", "writeState keeps the newer restart");
+  await laptop.engine.push(); await settle();
+  assert.equal((await phone.store.kvGet("state")).level_id, "L1", "phone is not overwritten");
+  assert.equal(JSON.parse(server.docs.get("kv/state").d).value.level_id, "L1");
+});

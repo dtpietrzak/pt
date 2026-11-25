@@ -6,6 +6,7 @@ import { createTimerUI } from "./js/timer-ui.js";
 import { initCloud, cloudState } from "./js/cloud.js";
 import { boot } from "./js/data.js";
 import { isoLocal } from "./js/util.js";
+import { writeState } from "./js/pipeline.js";
 import { levelById } from "./js/engine.js";
 import { $, esc, toast } from "./js/ui/dom.js";
 import { loadCachedUser, saveCachedUser, activeUser, renderAccount, closeAccountMenu, wireAccountMenu, renderLogin, updateLoginStatus } from "./js/ui/account.js";
@@ -14,8 +15,9 @@ import { renderPlan } from "./js/ui/plan.js";
 import { renderSettings } from "./js/ui/settings.js";
 import { renderHistory, refreshEngine, startReminders } from "./js/ui/checkins.js";
 import { renderStatus, renderRed, maybeShowDecisions } from "./js/ui/status.js";
+import { renderExport, exportDueInfo, markSettingsDue } from "./js/ui/export.js";
 
-const PAGES = { today: "Today", work: "Work", plan: "Plan", settings: "Settings", history: "History", status: "Status", red: "Red flags" };
+const PAGES = { today: "Today", work: "Work", plan: "Plan", settings: "Settings", history: "History", status: "Status", red: "Red flags", export: "Export" };
 const main = $("#main");
 
 let showingLogin = false;
@@ -41,7 +43,7 @@ function renderWork(c, root) {
   c.timerUI.show();
 }
 
-const VIEWS = { today: renderToday, work: renderWork, plan: renderPlan, settings: renderSettings, history: renderHistory, status: renderStatus, red: renderRed };
+const VIEWS = { today: renderToday, work: renderWork, plan: renderPlan, settings: renderSettings, history: renderHistory, status: renderStatus, red: renderRed, export: renderExport };
 
 function route() {
   let r = location.hash.replace(/^#\/?/, "") || "today";
@@ -64,9 +66,9 @@ function render() {
   $("#level-chip").textContent = `${ctx.state.level_id}${ctx.state.mode !== "active" ? " · " + ctx.state.mode : ""}`;
   $("#level-chip").hidden = false;
   renderAccount(ctx);
-  document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("on", a.dataset.page === (["history", "status", "red"].includes(r) ? "today" : r)));
+  document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("on", a.dataset.page === (["history", "status", "red"].includes(r) ? "today" : r === "export" ? "settings" : r)));
   $(".nav").hidden = false;
-  Promise.resolve(VIEWS[r](ctx, main)).then(() => maybeShowDecisions(ctx)).catch((e) => console.warn("View failed:", e));
+  Promise.resolve(VIEWS[r](ctx, main)).then(() => maybeShowDecisions(ctx)).then(() => exportDueInfo(ctx).then((i) => markSettingsDue(i.due)).catch(() => {})).catch((e) => console.warn("View failed:", e));
 }
 
 // Another device changed something: re-read IndexedDB and re-render (never while typing or in a sheet).
@@ -134,9 +136,11 @@ async function start() {
     toast,
     ctx: () => ({ docs: ctx.docs, profile: ctx.profile, app: ctx.app, state: ctx.state, exById: ctx.exById }),
     setState: async (nextState, logEntries = []) => {
-      ctx.state = nextState;
-      await ctx.store.kvSet("state", nextState);
-      for (const entry of logEntries) await ctx.store.put("log", entry);
+      const written = await writeState(ctx.store, nextState);
+      ctx.state = written;
+      if (written === nextState) {
+        for (const entry of logEntries) await ctx.store.put("log", entry);
+      }
       $("#level-chip").textContent = `${ctx.state.level_id}${ctx.state.mode !== "active" ? " · " + ctx.state.mode : ""}`;
     },
   });
