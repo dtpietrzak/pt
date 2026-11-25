@@ -24,19 +24,24 @@ export function renderSettings(ctx, main) {
 
   main.innerHTML = `
   <form id="settings" class="settings">
-    <section class="card"><h3>You</h3>
+    <section class="card"><div class="card-head"><h3>You</h3></div>
+      <div class="card-body">
       <label class="field">Body weight (lb)<input type="number" name="body_weight_lb" min="60" max="400" step="1" value="${p.body_weight_lb ?? 180}" inputmode="decimal"></label>
       <label class="field">Sports<input name="sports" value="${esc((p.sports || []).join(", "))}" placeholder="soccer, football"></label>
+      </div>
     </section>
-    <section class="card"><h3>Check-in reminders</h3>
+    <section class="card"><div class="card-head"><h3>Check-in reminders</h3></div>
+      <div class="card-body">
       <div class="times">
         <label class="field">Morning<input type="time" name="n_morning" value="${esc(p.notify?.morning || "08:00")}"></label>
         <label class="field">Evening<input type="time" name="n_evening" value="${esc(p.notify?.evening || "15:30")}"></label>
         <label class="field">Night<input type="time" name="n_night" value="${esc(p.notify?.night || "21:00")}"></label>
       </div>
       <p class="muted small">Post-workout check-in opens when you finish a session. Times are America/Chicago. Reminders turn on with the check-ins phase.</p>
+      </div>
     </section>
-    <section class="card"><h3>Work timer</h3>
+    <section class="card"><div class="card-head"><h3>Work timer</h3></div>
+      <div class="card-body">
       <label class="toggle"><input type="checkbox" name="pc_enabled" ${pc.enabled !== false ? "checked" : ""}><span>Work timer enabled</span></label>
       <div class="times">
         <label class="field">Work starts<input type="time" name="pc_start" value="${esc(pc.work_start || "08:00")}"></label>
@@ -51,13 +56,17 @@ export function renderSettings(ctx, main) {
       <label class="toggle"><input type="checkbox" name="pc_all" ${ctx.app.timer_alarm_all_devices ? "checked" : ""}><span>Ring on every signed-in device (off = only the device that started work mode)</span></label>
       <button class="btn" id="test-alarm" type="button">Test alarm + notification</button>
       <p class="muted small">Stand ${ctx.state.posture_cycle?.stand_min ?? 40} · walk ${ctx.state.posture_cycle?.walk_min ?? 2} · sit ${ctx.state.posture_cycle?.sit_min ?? 20} · decompress ${ctx.state.posture_cycle?.decomp_min ?? 5} min now. These doses change with your check-ins, not here.</p>
+      </div>
     </section>
-    <section class="card"><h3>Equipment</h3>
+    <section class="card"><div class="card-head"><h3>Equipment</h3></div>
+      <div class="card-body">
       ${EQUIP_BOOL.map(([k, l]) => `<label class="toggle"><input type="checkbox" name="eq_${k}" ${eq[k] ? "checked" : ""}><span>${l}</span></label>`).join("")}
       ${EQUIP_LIST.map(([k, l]) => `<label class="field">${l}<input name="eq_${k}" value="${esc((eq[k] || []).join(", "))}" placeholder="blank = any size"></label>`).join("")}
       <p class="muted small">Loads are shown snapped to 5 lb, or to the nearest size you list.</p>
+      </div>
     </section>
-    <section class="card"><h3>Baselines</h3>
+    <section class="card"><div class="card-head"><h3>Baselines</h3></div>
+      <div class="card-body">
       <div class="grid3">
         <label class="field">Stiffness (min)<input type="number" name="b_stiffness_min" min="0" step="1" value="${B.stiffness_min ?? 30}"></label>
         <label class="field">Standing (h)<input type="number" name="b_standing_h" min="0" step="0.25" value="${B.standing_h ?? 5}"></label>
@@ -65,27 +74,34 @@ export function renderSettings(ctx, main) {
         <label class="field">Sitting (min)<input type="number" name="b_sitting_min" min="5" step="1" value="${B.sitting_min ?? 20}"></label>
       </div>
       <p class="muted small">Changes in the unfavorable direction (more stiffness, less standing, more pain, less sitting) ask you to confirm, so slow drift can't hide a decline.</p>
+      </div>
     </section>
-    <section class="card"><h3>Pacing</h3>
+    <section class="card"><div class="card-head"><h3>Pacing</h3></div>
+      <div class="card-body">
       <label class="field">Max items advanced per session<input type="number" name="cap" min="1" max="6" value="${p.settings?.max_item_changes_per_finalized_session ?? 3}"></label>
       <label class="field">Clean sessions needed to advance<input type="number" name="clean_req" min="1" max="6" value="${p.settings?.clean_exposures_required ?? 2}"></label>
       <label class="toggle"><input type="checkbox" name="layoff" ${p.settings?.layoff_rule_enabled !== false ? "checked" : ""}><span>Layoff rule (step back after 10 days without a strength session)</span></label>
+      </div>
     </section>
     <button class="btn primary wide" type="submit">Save settings</button>
   </form>
-  <section class="card"><h3>Level</h3>
+  <section class="card"><div class="card-head"><h3>Level</h3></div>
+    <div class="card-body">
     <p>Current: <b>${esc(ctx.state.level_id)}</b> · ${esc(ctx.level().name)}</p>
     <label class="field">Restart at<select id="restart-level">${ctx.docs.levels.levels.map((l) => `<option value="${l.id}" ${l.id === ctx.state.level_id ? "selected" : ""}>${l.id} · ${esc(l.name)}</option>`).join("")}</select></label>
     <button class="btn" id="restart" type="button">Restart plan at this level</button>
     <p class="muted small">Resets rungs and progress. Your checklist history is kept.</p>
+    </div>
   </section>
   <section class="card" id="export-slot"></section>
-  <section class="card"><h3>Data</h3>
+  <section class="card"><div class="card-head"><h3>Data</h3></div>
+    <div class="card-body">
     <p class="small">Plan v${ctx.docs.levels.plan_version ?? 1} · ${ctx.docs.levels.levels.length} levels · ${ctx.docs.exercises.exercises.length} exercises · ${ctx.docs.tests.tests.length} gate tests</p>
     <p class="muted small">Saved on this device first so it works offline, and synced automatically to your private Firebase database.</p>
     <p><a class="btn" href="#/export">Weekly export &amp; plan changes</a></p>
     <button class="btn" id="backup" type="button">Download backup (JSON)</button>
     <button class="btn danger" id="wipe" type="button">Erase this device's data</button>
+    </div>
   </section>
   <p class="disclaimer pad">${esc(DISCLAIMER)}</p>`;
 

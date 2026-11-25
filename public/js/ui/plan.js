@@ -58,8 +58,11 @@ function timelineHtml(ctx) {
   }
 
   return `<section class="card timeline">
-    <h3>Rehabilitation milestones</h3>
-    <p class="muted small">Dates are provisional targets, assuming symptoms and functional tests support progression.</p>
+    <div class="card-head">
+      <h3>Rehabilitation milestones</h3>
+      <p class="muted small">Dates are provisional targets, assuming symptoms and functional tests support progression.</p>
+    </div>
+    <div class="card-body">
     ${status ? `<p class="small ms-status">${status}</p>` : ""}
     <div class="tl-bar">${bar}<span class="tl-now" style="left:${nowPct}%" aria-hidden="true"></span></div>
     <div class="ms-rows">${rows}</div>
@@ -72,6 +75,7 @@ function timelineHtml(ctx) {
       <div class="cal-grid cal-dow">${["S", "M", "T", "W", "T", "F", "S"].map((x) => `<span>${x}</span>`).join("")}</div>
       <div class="cal-grid" data-cal-month="${ym}">${cells}</div>
     </div>
+    </div>
   </section>`;
 }
 
@@ -81,7 +85,11 @@ export function renderPlan(ctx, main) {
   const testName = (id) => ctx.docs.tests.tests.find((t) => t.id === id)?.name || id;
 
   let html = `<section class="card">
-    <h2>${esc(lv.id)} · ${esc(lv.name)}</h2><p>${esc(lv.goal)}</p>
+    <div class="card-head">
+      <h2>${esc(lv.id)} · ${esc(lv.name)}</h2>
+      <p>${esc(lv.goal)}</p>
+    </div>
+    <div class="card-body">
     <h4>Leave this level when</h4><ul>
       ${lv.exit?.clean_streak_sessions ? `<li>${lv.exit.clean_streak_sessions} clean strength sessions in a row</li>` : ""}
       ${lv.exit?.all_non_optional_items_at_target ? `<li>All non-optional items at target</li>` : ""}
@@ -89,6 +97,7 @@ export function renderPlan(ctx, main) {
       ${(lv.exit?.extra || []).map((x) => `<li>${esc(x)}</li>`).join("")}
     </ul>
     ${lv.avoid?.length ? `<h4>Avoid</h4><ul class="avoid">${lv.avoid.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>` : ""}
+    </div>
   </section>`;
 
   html += timelineHtml(ctx);

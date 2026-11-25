@@ -45,9 +45,11 @@ export async function exportCardHtml(ctx, now = new Date()) {
   if (!info.due) return "";
   maybeNotifyExport(info);
   return `<section class="card export-due">
-    <h3>Weekly export is ready</h3>
+    <div class="card-head"><h3>Weekly export is ready</h3></div>
+    <div class="card-body">
     <p class="muted small">${fmtWeek(info.start, info.end)} is complete. Download the summary for an agent, or paste a plan-change reply.</p>
     <a class="btn" href="#/export">Open export</a>
+    </div>
   </section>`;
 }
 
@@ -103,8 +105,11 @@ async function draw(ctx, main, start) {
   main.innerHTML = `
     <p class="back"><a href="#/settings">← Settings</a></p>
     <section class="card">
-      <h2>Weekly export</h2>
-      <p class="muted small">A JSON file and a markdown summary of one Monday–Sunday week, for you or an agent to review. Partial weeks are fine.</p>
+      <div class="card-head">
+        <h2>Weekly export</h2>
+        <p class="muted small">A JSON file and a markdown summary of one Monday–Sunday week, for you or an agent to review. Partial weeks are fine.</p>
+      </div>
+      <div class="card-body">
       <div class="week-nav">
         <button class="btn" type="button" data-week="-1" aria-label="Previous week">‹</button>
         <div class="week-label"><b>${esc(fmtWeek(start, end))}</b><span class="muted small">${start === current.start ? "This week" : start === addDays(current.start, -7) ? "Last week" : start}</span></div>
@@ -115,20 +120,27 @@ async function draw(ctx, main, start) {
         <button class="btn primary" type="button" data-build>Build export</button>
       </div>
       <div id="ex-out" hidden></div>
+      </div>
     </section>
     <section class="card">
-      <h2>Plan change from an agent</h2>
-      <p class="muted small">Paste the agent's JSON (markdown after it is fine) or upload a file. You'll see a preview of every change before anything is applied.</p>
+      <div class="card-head">
+        <h2>Plan change from an agent</h2>
+        <p class="muted small">Paste the agent's JSON (markdown after it is fine) or upload a file. You'll see a preview of every change before anything is applied.</p>
+      </div>
+      <div class="card-body">
       <label class="field">Paste the reply<textarea id="patch-text" rows="8" placeholder='{ "kind": "pt-plan-patch", ... }'></textarea></label>
       <div class="row-actions">
         <label class="btn"><input type="file" id="patch-file" accept="application/json,.json,.md,.txt" hidden>Upload file</label>
         <button class="btn primary" type="button" data-review>Review</button>
       </div>
       <div id="patch-out"></div>
+      </div>
     </section>
     <section class="card">
-      <h2>Applied and rejected patches</h2>
+      <div class="card-head"><h2>Applied and rejected patches</h2></div>
+      <div class="card-body">
       ${patches.length ? patchLogHtml(patches) : `<p class="muted small">None yet. A patch you apply or discard is recorded here and syncs between your devices. You can undo the most recent applied patch.</p>`}
+      </div>
     </section>`;
 
   await ctx.store.kvSet("export_week", start);

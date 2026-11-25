@@ -244,12 +244,13 @@ ul, ol { margin: 4px 0; padding-left: 20px; }
   stroke-linejoin: round;
 }
 
-/* Subtle tiled background patterns on cards and sheets.
-   Tune with --pat-opacity (and --pat-ink / --pat-size / --pat). Pure CSS, no image requests. */
+/* Subtle tiled background patterns on cards and sheets, kept to the top corners.
+   Tune with --pat-opacity, --pat-ink, --pat-size, --pat, and --pat-corner. Pure CSS, no image requests. */
 :root {
-  --pat-opacity: 0.09;
+  --pat-opacity: 0.075;
   --pat-ink: var(--accent);
   --pat-size: 18px 18px;
+  --pat-corner: 150px 115px;
   --pat: var(--pat-dots);
   --pat-dots: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%3E%3Ccircle%20cx%3D%222.2%22%20cy%3D%222.2%22%20r%3D%221.15%22%20fill%3D%22black%22%2F%3E%3C%2Fsvg%3E");
   --pat-diag: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2214%22%20height%3D%2214%22%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221%22%20d%3D%22M-2%202l4-4M0%2014L14%200M12%2016l4-4%22%2F%3E%3C%2Fsvg%3E");
@@ -258,10 +259,18 @@ ul, ol { margin: 4px 0; padding-left: 20px; }
   --pat-hatch: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%220.7%22%20d%3D%22M-1%201l2-2M0%2012L12%200M11%2013l2-2M-1%2011l2%202M0%200l12%2012M11-1l2%202%22%2F%3E%3C%2Fsvg%3E");
   --pat-plus: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%220.9%22%20stroke-linecap%3D%22round%22%20d%3D%22M9%204v10M4%209h10%22%2F%3E%3C%2Fsvg%3E");
   --pat-topo: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2248%22%20height%3D%2228%22%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.05%22%20stroke-linecap%3D%22round%22%20d%3D%22M0%208c6%200%206-5%2012-5s6%205%2012%205%206-5%2012-5%206%205%2012%205M0%2020c6%200%206-5%2012-5s6%205%2012%205%206-5%2012-5%206%205%2012%205%22%2F%3E%3C%2Fsvg%3E");
+  --pat-rings: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223.6%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%220.9%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%228%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%220.9%22%2F%3E%3C%2Fsvg%3E");
+  --pat-chevrons: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2212%22%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M2%203l6%206%206-6%22%2F%3E%3C%2Fsvg%3E");
+  --pat-hex: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2228%22%20height%3D%2216%22%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%220.85%22%20d%3D%22M7%200h14l7%208-7%208H7L0%208Z%22%2F%3E%3C%2Fsvg%3E");
+  --pat-zigzag: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2212%22%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22%20d%3D%22M0%209l5-6%205%206%205-6%205%206%22%2F%3E%3C%2Fsvg%3E");
+  --pat-stars: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%3E%3Cpath%20fill%3D%22black%22%20d%3D%22M6%201.2l.85%202.5H9.5L7.8%205.3l.85%202.5L6%206.3%203.85%207.8%204.7%205.3%203%203.7h2.65z%22%2F%3E%3Cpath%20fill%3D%22black%22%20d%3D%22M17.5%2013l.55%201.65H20l-1.15.85.55%201.65L17.5%2016.3l-1.4.85.55-1.65-1.15-.85h1.95z%22%2F%3E%3C%2Fsvg%3E");
+  --pat-brick: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2216%22%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%220.85%22%20d%3D%22M0%200h24v16H0zM0%208h24M12%208v8M6%200v8M18%200v8%22%2F%3E%3C%2Fsvg%3E");
+  --pat-checker: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%3E%3Crect%20width%3D%228%22%20height%3D%228%22%20fill%3D%22black%22%2F%3E%3Crect%20x%3D%228%22%20y%3D%228%22%20width%3D%228%22%20height%3D%228%22%20fill%3D%22black%22%2F%3E%3C%2Fsvg%3E");
+  --pat-halftone: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%3E%3Ccircle%20cx%3D%225%22%20cy%3D%225%22%20r%3D%221.85%22%20fill%3D%22black%22%2F%3E%3Ccircle%20cx%3D%2215%22%20cy%3D%225%22%20r%3D%221.15%22%20fill%3D%22black%22%2F%3E%3Ccircle%20cx%3D%225%22%20cy%3D%2215%22%20r%3D%220.7%22%20fill%3D%22black%22%2F%3E%3Ccircle%20cx%3D%2215%22%20cy%3D%2215%22%20r%3D%222.2%22%20fill%3D%22black%22%2F%3E%3C%2Fsvg%3E");
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --pat-opacity: 0.15;
+    --pat-opacity: 0.12;
   }
 }
 
@@ -270,7 +279,8 @@ ul, ol { margin: 4px 0; padding-left: 20px; }
 .account-menu,
 .sheet-panel,
 .section-body,
-.ci-actions {
+.ci-actions,
+.item {
   position: relative;
   isolation: isolate;
 }
@@ -279,7 +289,8 @@ ul, ol { margin: 4px 0; padding-left: 20px; }
 .account-menu::after,
 .sheet-panel::after,
 .section-body::after,
-.ci-actions::after {
+.ci-actions::after,
+.item::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -287,7 +298,9 @@ ul, ol { margin: 4px 0; padding-left: 20px; }
   pointer-events: none;
   z-index: -1;
   opacity: var(--pat-opacity);
-  background-color: var(--pat-ink);
+  background:
+    radial-gradient(var(--pat-corner) at 0 0, var(--pat-ink) 0%, transparent 72%),
+    radial-gradient(var(--pat-corner) at 100% 0, var(--pat-ink) 0%, transparent 72%);
   -webkit-mask-image: var(--pat);
   mask-image: var(--pat);
   -webkit-mask-size: var(--pat-size);
@@ -296,49 +309,82 @@ ul, ol { margin: 4px 0; padding-left: 20px; }
   mask-repeat: repeat;
 }
 
-/* Per-tab default on generic cards. Section cards override below. */
-body[data-page="today"] .card,
+/* Per-tab fallbacks. Today cards each pick a style below so they don't all match. */
 body[data-page="history"] .card { --pat: var(--pat-dots); --pat-size: 18px 18px; }
 body[data-page="work"] .card { --pat: var(--pat-diag); --pat-size: 14px 14px; }
+body[data-page="work"] .card:nth-of-type(2) { --pat: var(--pat-rings); --pat-size: 24px 24px; }
+body[data-page="work"] .card:nth-of-type(3) { --pat: var(--pat-waves); --pat-size: 32px 16px; }
 body[data-page="plan"] .card { --pat: var(--pat-grid); --pat-size: 20px 20px; }
+body[data-page="plan"] .card:nth-of-type(2) { --pat: var(--pat-hex); --pat-size: 28px 16px; }
+body[data-page="plan"] .card:nth-of-type(3) { --pat: var(--pat-chevrons); --pat-size: 16px 12px; }
 body[data-page="settings"] .card,
 body[data-page="export"] .card { --pat: var(--pat-plus); --pat-size: 18px 18px; }
+body[data-page="settings"] .card:nth-of-type(6n+2),
+body[data-page="export"] .card:nth-of-type(6n+2) { --pat: var(--pat-grid); --pat-size: 20px 20px; }
+body[data-page="settings"] .card:nth-of-type(6n+3),
+body[data-page="export"] .card:nth-of-type(6n+3) { --pat: var(--pat-dots); --pat-size: 18px 18px; }
+body[data-page="settings"] .card:nth-of-type(6n+4),
+body[data-page="export"] .card:nth-of-type(6n+4) { --pat: var(--pat-chevrons); --pat-size: 16px 12px; }
+body[data-page="settings"] .card:nth-of-type(6n+5),
+body[data-page="export"] .card:nth-of-type(6n+5) { --pat: var(--pat-rings); --pat-size: 24px 24px; }
+body[data-page="settings"] .card:nth-of-type(6n+6),
+body[data-page="export"] .card:nth-of-type(6n+6) { --pat: var(--pat-halftone); --pat-size: 20px 20px; }
 body[data-page="status"] .card { --pat: var(--pat-waves); --pat-size: 32px 16px; }
+body[data-page="status"] .card:nth-of-type(3n+2) { --pat: var(--pat-chevrons); --pat-size: 16px 12px; }
+body[data-page="status"] .card:nth-of-type(3n+3) { --pat: var(--pat-rings); --pat-size: 24px 24px; }
 body[data-page="red"] .card { --pat: var(--pat-hatch); --pat-size: 12px 12px; --pat-ink: var(--danger); }
 body[data-page="login"] .card { --pat: var(--pat-topo); --pat-size: 48px 28px; }
+body[data-page="history"] .card:nth-of-type(5n+2) { --pat: var(--pat-halftone); --pat-size: 20px 20px; }
+body[data-page="history"] .card:nth-of-type(5n+3) { --pat: var(--pat-waves); --pat-size: 32px 16px; }
+body[data-page="history"] .card:nth-of-type(5n+4) { --pat: var(--pat-plus); --pat-size: 18px 18px; }
+body[data-page="history"] .card:nth-of-type(5n+5) { --pat: var(--pat-checker); --pat-size: 16px 16px; }
 
-/* Today exercise blocks: a related pattern in the block's own color. */
+/* Today: a distinct, stable style per card (and per session), tinted with the block color.
+   Selectors are at least as specific as any page-level .card rule. */
 .section-card { --pat-ink: var(--blk); }
-.section-card[data-block="daily_mobility"] { --pat: var(--pat-waves); --pat-size: 32px 16px; }
-.section-card[data-block="daily_core"] { --pat: var(--pat-grid); --pat-size: 16px 16px; }
-.section-card[data-block="walking"] { --pat: var(--pat-diag); --pat-size: 14px 14px; }
-.section-card[data-kind="strength"] { --pat: var(--pat-hatch); --pat-size: 12px 12px; }
-.section-card[data-kind="conditioning"] { --pat: var(--pat-plus); --pat-size: 18px 18px; }
+.hero { --pat: var(--pat-topo); --pat-size: 56px 32px; --pat-ink: var(--hero-text); --pat-opacity: 0.08; --pat-corner: 170px 120px; }
+body[data-page="today"] .ci-card { --pat: var(--pat-stars); --pat-size: 24px 24px; --pat-ink: var(--accent); }
+body[data-page="today"] .status-card { --pat: var(--pat-chevrons); --pat-size: 16px 12px; }
+body[data-page="today"] .card.note { --pat: var(--pat-zigzag); --pat-size: 20px 12px; }
+body[data-page="today"] .equip-card { --pat: var(--pat-rings); --pat-size: 24px 24px; }
+.red-banner { --pat: var(--pat-hatch); --pat-size: 12px 12px; --pat-ink: var(--danger); }
+.export-due { --pat: var(--pat-halftone); --pat-size: 20px 20px; }
+body[data-page="today"] .section-card[data-block="daily_mobility"] { --pat: var(--pat-waves); --pat-size: 32px 16px; }
+body[data-page="today"] .section-card[data-block="daily_core"] { --pat: var(--pat-hex); --pat-size: 28px 16px; }
+body[data-page="today"] .section-card[data-block="walking"] { --pat: var(--pat-diag); --pat-size: 14px 14px; }
+body[data-page="today"] .section-card[data-block="wk:strength_A"] { --pat: var(--pat-hatch); --pat-size: 12px 12px; }
+body[data-page="today"] .section-card[data-block="wk:strength_B"] { --pat: var(--pat-brick); --pat-size: 24px 16px; }
+body[data-page="today"] .section-card[data-block="wk:conditioning"] { --pat: var(--pat-plus); --pat-size: 18px 18px; }
+body[data-page="today"] .section-card[data-block="wk:core_only"] { --pat: var(--pat-rings); --pat-size: 24px 24px; }
 
-.hero {
-  --pat: var(--pat-topo);
-  --pat-size: 56px 32px;
-  --pat-ink: var(--hero-text);
-  --pat-opacity: 0.10;
-}
+/* Expanded exercise rows: cycle through styles so a list isn't one pattern. */
+.item { --pat-ink: var(--blk, var(--accent)); --pat-corner: 90px 70px; }
+.item:nth-child(8n+1) { --pat: var(--pat-dots); --pat-size: 16px 16px; }
+.item:nth-child(8n+2) { --pat: var(--pat-stars); --pat-size: 24px 24px; }
+.item:nth-child(8n+3) { --pat: var(--pat-rings); --pat-size: 22px 22px; }
+.item:nth-child(8n+4) { --pat: var(--pat-chevrons); --pat-size: 16px 12px; }
+.item:nth-child(8n+5) { --pat: var(--pat-halftone); --pat-size: 18px 18px; }
+.item:nth-child(8n+6) { --pat: var(--pat-plus); --pat-size: 16px 16px; }
+.item:nth-child(8n+7) { --pat: var(--pat-zigzag); --pat-size: 20px 12px; }
+.item:nth-child(8n+8) { --pat: var(--pat-checker); --pat-size: 14px 14px; }
+
 .sheet-panel,
 .ci-actions {
   --pat: var(--pat-topo);
   --pat-size: 48px 28px;
   --pat-ink: var(--sheet-edge);
-  --pat-opacity: 0.08;
+  --pat-opacity: 0.065;
+  --pat-corner: 180px 130px;
 }
 @media (prefers-color-scheme: dark) {
   .sheet-panel,
-  .ci-actions { --pat-opacity: 0.13; }
-  .hero { --pat-opacity: 0.12; }
+  .ci-actions { --pat-opacity: 0.10; }
+  .hero { --pat-opacity: 0.10; }
 }
-.account-menu { --pat: var(--pat-dots); --pat-size: 16px 16px; }
+.account-menu { --pat: var(--pat-dots); --pat-size: 16px 16px; --pat-corner: 80px 70px; }
 .login-card { --pat: var(--pat-topo); --pat-size: 48px 28px; }
-.timer-card { --pat: var(--pat-diag); --pat-size: 14px 14px; }
-.red-banner { --pat: var(--pat-hatch); --pat-size: 12px 12px; --pat-ink: var(--danger); }
-.timeline { --pat: var(--pat-grid); --pat-size: 20px 20px; }
-.status-card { --pat: var(--pat-waves); --pat-size: 32px 16px; }
+body[data-page="work"] .timer-card { --pat: var(--pat-chevrons); --pat-size: 16px 12px; }
+body[data-page="plan"] .timeline { --pat: var(--pat-hex); --pat-size: 28px 16px; }
 
 /* ---------------------------------------------------------------- cards & controls */
 .card {
@@ -353,6 +399,58 @@ body[data-page="login"] .card { --pat: var(--pat-topo); --pat-size: 48px 28px; }
   background: color-mix(in srgb, var(--yellow) 16%, var(--card));
   border-color: color-mix(in srgb, var(--yellow) 35%, transparent);
   font-weight: 600;
+}
+
+/* Settings, Plan, and Work: patterned header, then a lightly tinted content well (like Today sections). */
+body[data-page="settings"] .card,
+body[data-page="plan"] .card,
+body[data-page="work"] .card,
+body[data-page="export"] .card {
+  --card-tint: var(--accent);
+  padding: 0;
+  overflow: hidden;
+}
+.card-head { padding: 16px 18px 14px; }
+.card-head h2,
+.card-head h3 { margin: 0; }
+.card-head p { margin: 6px 0 0; }
+.card-head .t-phase { margin: 0; }
+.card-body {
+  padding: 12px 16px 16px;
+  border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  background: color-mix(in srgb, var(--card-tint) 9%, var(--card));
+}
+.card > .card-body:first-child { border-top: 0; }
+.card-body > .field:first-child,
+.card-body > .times:first-child,
+.card-body > .toggle:first-child,
+.card-body > .grid3:first-child,
+.card-body > p:first-child,
+.card-body > h4:first-child { margin-top: 0; }
+.card-body > .field:last-child,
+.card-body > p:last-child,
+.card-body > .t-log:last-child,
+.card-body > ul:last-child { margin-bottom: 0; }
+
+body[data-page="work"] .card { --card-tint: var(--blk-walking); }
+body[data-page="work"] .timer-card { --card-tint: var(--accent); }
+body[data-page="plan"] .card { --card-tint: var(--accent); }
+body[data-page="plan"] .timeline { --card-tint: var(--blk-core); }
+body[data-page="settings"] .card:nth-of-type(6n+1),
+body[data-page="export"] .card:nth-of-type(6n+1) { --card-tint: var(--accent); }
+body[data-page="settings"] .card:nth-of-type(6n+2),
+body[data-page="export"] .card:nth-of-type(6n+2) { --card-tint: var(--blk-core); }
+body[data-page="settings"] .card:nth-of-type(6n+3),
+body[data-page="export"] .card:nth-of-type(6n+3) { --card-tint: var(--blk-walking); }
+body[data-page="settings"] .card:nth-of-type(6n+4),
+body[data-page="export"] .card:nth-of-type(6n+4) { --card-tint: var(--blk-mobility); }
+body[data-page="settings"] .card:nth-of-type(6n+5),
+body[data-page="export"] .card:nth-of-type(6n+5) { --card-tint: var(--blk-conditioning); }
+body[data-page="settings"] .card:nth-of-type(6n+6),
+body[data-page="export"] .card:nth-of-type(6n+6) { --card-tint: var(--blk-strength); }
+
+@media (prefers-color-scheme: dark) {
+  .card-body { background: color-mix(in srgb, var(--card-tint) 14%, var(--card)); }
 }
 .block { margin: 18px 0 12px; }
 

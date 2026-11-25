@@ -313,14 +313,18 @@ export function createTimerUI({ store, ctx, setState, toast, root, chip }) {
     if (!timer?.active) {
       const inside = inWorkHours(now, st);
       html += `<section class="card timer-card">
-        <h2>Work mode</h2>
-        <p class="small">Repeats <b>Stand → Walk → Sit → Decompress</b> and checks how you feel after each block to guard against flare-ups.</p>
+        <div class="card-head">
+          <h2>Work mode</h2>
+          <p class="small">Repeats <b>Stand → Walk → Sit → Decompress</b> and checks how you feel after each block to guard against flare-ups.</p>
+        </div>
+        <div class="card-body">
         <p class="timer-doses">${esc(dosesLine())}</p>
         ${inFlare ? `<p class="flare-banner">Settle mode (L0) active — shorter blocks and decompression after each block.</p>` : ""}
         <button class="btn primary wide big" id="t-start" ${st.enabled === false ? "disabled" : ""}>Start work mode</button>
         ${canFlare ? `<button class="btn danger wide" id="t-flare" type="button">I flared — switch to L0 settle mode</button>` : ""}
         <p class="muted small">${st.enabled === false ? "The work timer is turned off in Settings. " : ""}Work hours ${esc(st.work_start)}–${esc(st.work_end)} CT${st.quiet_outside_work_hours ? ` (no alarms outside them). ${inside ? "You're inside them now." : "You're outside them now, so starting by hand overrides quiet hours for this session."}` : "."}</p>
         ${timer?.stopped_at ? `<p class="muted small">Last session ended ${new Date(timer.stopped_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}${timer.stopped_how === "work_end" ? " at work end" : ""}.</p>` : ""}
+        </div>
       </section>`;
     } else {
       const due = isDue(timer, now), mine = isAlarmDevice();
@@ -329,7 +333,8 @@ export function createTimerUI({ store, ctx, setState, toast, root, chip }) {
       const ph = c.phases.find((p) => p.id === timer.phase);
       const decompIds = timer.phase === "decompress" ? (ph.exercise_ids || []) : [];
       html += `<section class="card timer-card ${due ? "due" : ""}">
-        <div class="t-phase">${ICON[timer.phase]} ${esc(phaseName(c, timer.phase))}</div>
+        <div class="card-head"><div class="t-phase">${ICON[timer.phase]} ${esc(phaseName(c, timer.phase))}</div></div>
+        <div class="card-body">
         <div class="t-count" id="t-count" aria-live="off">${due ? "+" + fmtClock(now - deadlineOf(timer)) : fmtClock(remainingMs(timer, now))}</div>
         <div class="t-barwrap"><div class="t-bar" id="t-bar"></div></div>
         <p class="t-next">${due ? `<b>Time to switch.</b> ` : ""}Next: <b>${ICON[next] || ""} ${esc(phaseName(c, next))}</b> · ${fmtMin(phaseMinutes(doses(), next, c))}</p>
@@ -346,20 +351,22 @@ export function createTimerUI({ store, ctx, setState, toast, root, chip }) {
           ${canFlare ? `<button class="btn warn" id="t-flare" type="button">I flared</button>` : ""}
           <button class="btn danger" id="t-stop" type="button">Stop work mode</button>
         </div>
+        </div>
       </section>
       <section class="card">
-        <p class="muted small">${mine ? "Alarms ring on this device." : "Started on another device: it will ring there. You can still switch or stop from here."}
+        <div class="card-body"><p class="muted small">${mine ? "Alarms ring on this device." : "Started on another device: it will ring there. You can still switch or stop from here."}
           ${mine && !audioReady() ? ` <b>Tap anywhere to enable alarm sound</b> (browsers need a tap after a reload).` : ""}
           ${perm === "default" ? ` <button class="btn" id="t-perm" type="button">Allow notifications</button>` : perm === "denied" ? " Notifications are blocked in the browser; the sound and this page still work." : ""}
           ${timer.override_quiet ? "Quiet hours are overridden for this session." : st.quiet_outside_work_hours ? `Work mode stops at ${esc(st.work_end)} CT with one decompress reminder.` : ""}
-          Keep this tab open; avoid browser "memory saver" for pt.davidp.dev.</p>
+          Keep this tab open; avoid browser "memory saver" for pt.davidp.dev.</p></div>
       </section>`;
     }
     const blocks = log?.blocks || [];
     if (blocks.length || timer?.blocks?.length) {
       const sum = summarizeBlocks(blocks, log?.early_switches || []);
       const trend = evaluateSorenessTrend(blocks, log?.early_switches || []);
-      html += `<section class="card"><h3>Today</h3>
+      html += `<section class="card"><div class="card-head"><h3>Today</h3></div>
+        <div class="card-body">
         <div class="fallback-row fallback-${trend.status}">
           <span class="status-pill status-${trend.status}">${esc(trend.status)}</span>
           <span class="small">${esc(trend.next_day)}${trend.reasons.length ? ` · <span class="muted">${esc(trend.reasons[0])}</span>` : ""}</span>
@@ -370,6 +377,7 @@ export function createTimerUI({ store, ctx, setState, toast, root, chip }) {
           const tag = sr ? ` <span class="sore-tag sore-${sr.color}">${esc(sr.label)}</span>` : "";
           return `<li><span>${dlg.hhmm(b.started_at)} ${ICON[b.phase] || ""} ${esc(phaseName(c, b.phase))}</span><span>${b.actual_min}/${b.prescribed_min} min${b.ended_how === "sore_early" ? " · sore early" : b.ended_how === "manual" ? " · early" : b.snoozes ? ` · snoozed ${b.snoozes}×` : ""}${tag}</span></li>`;
         }).join("")}</ul>
+        </div>
       </section>`;
     }
     root.innerHTML = html;
