@@ -1,6 +1,6 @@
 // Cloudflare 307-redirects /index.html to /, so only "./" is precached (offline navigations fall back to it).
 // Bump CACHE whenever any file below changes so installed copies pick up the update.
-const CACHE = "pt-v2";
+const CACHE = "pt-v3";
 const ASSETS = [
   "./", "styles.css", "app.js", "manifest.webmanifest",
   "js/util.js", "js/schema.js", "js/engine.js", "js/patch.js", "js/db.js", "js/dose.js", "js/data.js", "js/defaults.js",

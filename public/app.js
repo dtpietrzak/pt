@@ -101,16 +101,21 @@ async function renderToday() {
     if (hidden) { html += `<p class="muted small pad">After the morning window.</p></section>`; continue; }
     for (const it of its) html += itemRow(it, doneSet.has(it.item_key));
     if (block === "walking") html += `
-      <div class="stepper"><span>Walked today</span>
-        <button class="btn icon" data-walk="-5" aria-label="minus 5">−</button>
-        <b id="walk-min">${log.walk_min || 0}</b> min
-        <button class="btn icon" data-walk="5" aria-label="plus 5">+</button></div>
-      <div class="stepper"><span>Decompression breaks</span>
-        <button class="btn icon" data-count="decomp_breaks_done" data-d="-1">−</button><b>${log.decomp_breaks_done || 0}</b>
-        <button class="btn icon" data-count="decomp_breaks_done" data-d="1">+</button></div>
-      <div class="stepper"><span>Standing breaks</span>
-        <button class="btn icon" data-count="standing_breaks_done" data-d="-1">−</button><b>${log.standing_breaks_done || 0}</b>
-        <button class="btn icon" data-count="standing_breaks_done" data-d="1">+</button></div>`;
+      ${stepper("Walked today", walkHint(lv, walkTarget), [
+        ['data-walk="-5"', "minus 5", "−"],
+        null,
+        ['data-walk="5"', "plus 5", "+"]
+      ], `${log.walk_min || 0}`, "min")}
+      ${stepper("Decompression breaks", decompHint(lv), [
+        ['data-count="decomp_breaks_done" data-d="-1"', "minus 1", "−"],
+        null,
+        ['data-count="decomp_breaks_done" data-d="1"', "plus 1", "+"]
+      ], `${log.decomp_breaks_done || 0}`)}
+      ${stepper("Standing breaks", standingHint(lv), [
+        ['data-count="standing_breaks_done" data-d="-1"', "minus 1", "−"],
+        null,
+        ['data-count="standing_breaks_done" data-d="1"', "plus 1", "+"]
+      ], `${log.standing_breaks_done || 0}`)}`;
     html += `</section>`;
   }
   const strength = lv.items.filter((i) => ["strength_A", "strength_B", "conditioning"].includes(i.block));
@@ -139,6 +144,43 @@ async function renderToday() {
   $("#wake-now")?.addEventListener("click", () => setWake(nowHM()));
   $("#wake-edit")?.addEventListener("click", () => { const t = prompt("Wake time (HH:MM)", wake || nowHM()); if (t && /^\d{1,2}:\d{2}$/.test(t)) setWake(t.padStart(5, "0")); });
 }
+
+function stepper(title, hint, buttons, value, unit = "") {
+  const mid = `<b>${esc(value)}</b>${unit ? " " + unit : ""}`;
+  const btns = buttons.map((b) => b ? `<button class="btn icon" ${b[0]} aria-label="${esc(b[1])}">${b[2]}</button>` : mid).join("\n        ");
+  return `<div class="stepper">
+      <div class="stepper-copy"><span>${esc(title)}</span><small>${esc(hint)}</small></div>
+      <div class="stepper-ctrl">${btns}</div></div>`;
+}
+function rangeMin(pair, fallback) {
+  const [a, b] = pair || [];
+  if (a && b && a !== b) return `${a}–${b} min`;
+  if (a) return `${a} min`;
+  return fallback;
+}
+/** Subtitles for the Today counters, taken from plan.md / the current level. */
+function standingHint(lv) {
+  const every = rangeMin(lv.standing?.break_every_min, "45–60 min");
+  return `Pause standing every ${every}. Sit or change position; don’t try to stand through it.`;
+}
+function decompHint(lv) {
+  const it = lv.items.find((i) => i.exercise_id === "EX_DECOMP_90_90");
+  const start = it?.rungs?.[it.start_rung]?.time_min;
+  const target = it?.rungs?.[it.target_rung]?.time_min;
+  const dur = start && target && start !== target ? `${start}–${target} min` : `${target || start || 5} min`;
+  const kind = String(lv.standing?.decomp || "");
+  let when;
+  if (/as often as needed/i.test(kind)) when = "Use as often as you need.";
+  else if (/optional/i.test(kind) || !it) when = "Optional now; use any time.";
+  else if (/recommend/i.test(kind)) when = "Recommended around 2½–3 hours of being up, before symptoms start.";
+  else when = "Plan one around 2½–3 hours of being up, before symptoms start.";
+  return `Lie on your back, calves on a chair (hips and knees at 90°), ${dur}. ${when}`;
+}
+function walkHint(lv, target) {
+  const bouts = lv.walking?.bouts ? `, in ${lv.walking.bouts} walks` : "";
+  return `Comfortable pace on flat ground${bouts}. Target is ${target} min today.`;
+}
+
 function itemRow(it, done) {
   const ex = exById[it.exercise_id] || { name: it.exercise_id };
   const { dose, rung } = currentDose(state, it);
