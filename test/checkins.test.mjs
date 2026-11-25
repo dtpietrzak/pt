@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { tidyReasons, checklist, dueNow, buildCheckIn, formFromCheckIn, effectiveDate, noFlags, redGuidance, summaryLine } from "../public/js/checkins.js";
+import { tidyReasons, checklist, dueNow, buildCheckIn, formFromCheckIn, effectiveDate, noFlags, redGuidance, summaryLine, eveningFromLogs, keepEveningPressure, eveningLogsNote } from "../public/js/checkins.js";
 import { evaluate, engineConfig, templateItems, nextStrengthTemplate, buildSession, clearRed } from "../public/js/pipeline.js";
 import { evaluateCheckIn, initState } from "../public/js/engine.js";
 import { postureCheckinData } from "../public/js/posture.js";
@@ -210,4 +210,85 @@ test("tidyReasons drops the echoed pain-now line and lists the worst first", () 
   const r = tidyReasons(["Yellow: pain now 3/10", "Yellow: pain on waking 3/10", "Orange: standing tolerance 0.40 of baseline"]);
   assert.deepEqual(r, ["Orange: standing tolerance 0.40 of baseline", "Yellow: pain on waking 3/10"]);
   assert.deepEqual(tidyReasons(["Yellow: pain now 3/10"]), ["Yellow: pain now 3/10"]);
+});
+
+test("eveningFromLogs fills standing, walking and sitting from Today and the work timer, without inventing pressure", () => {
+  const d = "2026-12-01";
+  const blocks = [
+    { phase: "stand", prescribed_min: 40, actual_min: 40, started_at: `${d}T09:00:00-06:00`, ended_at: `${d}T09:40:00-06:00`, ended_how: "alarm", snoozes: 0 },
+    { phase: "walk", prescribed_min: 2, actual_min: 2, started_at: `${d}T09:40:00-06:00`, ended_at: `${d}T09:42:00-06:00`, ended_how: "alarm", snoozes: 0 },
+    { phase: "sit", prescribed_min: 20, actual_min: 20, started_at: `${d}T09:42:00-06:00`, ended_at: `${d}T10:02:00-06:00`, ended_how: "alarm", snoozes: 0 },
+    { phase: "decompress", prescribed_min: 5, actual_min: 5, started_at: `${d}T10:02:00-06:00`, ended_at: `${d}T10:07:00-06:00`, ended_how: "alarm", snoozes: 0 },
+  ];
+  const pc = postureCheckinData(blocks, [], { stand_min: 40, sit_min: 20, walk_min: 2, decomp_min: 5 });
+  const f = eveningFromLogs({ blocks, posture: pc, day: { walk_min: 30, standing_breaks_done: 5, decomp_breaks_done: 2 } }, { pain: 2, forced_rest: 0, leg: "none" });
+  assert.equal(f.upright_h, 1); // 40 + 2 + 30 min, snapped to 0.5 h
+  assert.equal(f.walk_min, 30);
+  assert.equal(f.breaks, 5);
+  assert.equal(f.decomp, 2);
+  assert.equal(f.sit_on, true);
+  assert.equal(f.sit_total_min, 20);
+  assert.equal(f.no_pressure, undefined);
+  assert.equal(f.first_pressure_h, undefined);
+  const rec = buildCheckIn("evening", f, ctx(at(d, "19:00"), { posture: pc }));
+  ok(rec);
+  assert.equal(rec.data.standing.upright_h_total, 1);
+  assert.equal("first_pressure_h" in rec.data.standing, false);
+  assert.equal("censored" in rec.data.standing, false);
+  assert.equal(rec.data.walk_min, 30);
+  assert.equal(rec.data.standing.breaks_taken, 5);
+  assert.equal(rec.data.standing.decomp_breaks_done, 2);
+  assert.equal(rec.data.sitting.seated_min_total, 20);
+  assert.equal("first_pressure_min" in rec.data.sitting, false);
+  assert.equal(rec.data.posture_cycle.work_mode_used, true);
+  assert.equal(evaluateCheckIn(rec, B, config).color, "green");
+  assert.match(eveningLogsNote({ blocks, posture: pc, day: { walk_min: 30, standing_breaks_done: 5, decomp_breaks_done: 2 } }), /walked 30 min/);
+});
+
+test("eveningFromLogs does not invent a 6h comfortable day when nothing was logged", () => {
+  const f = eveningFromLogs({}, { pain: 2, forced_rest: 0, leg: "none" });
+  assert.equal(f.upright_h, 0);
+  assert.equal(f.walk_min, undefined);
+  assert.equal(f.sit_on, undefined);
+  assert.equal(f.breaks, undefined);
+  assert.equal(f.no_pressure, undefined);
+  const rec = buildCheckIn("evening", f, ctx(at("2026-12-01", "19:00")));
+  ok(rec);
+  assert.equal(rec.data.standing.upright_h_total, 0);
+  assert.equal("first_pressure_h" in rec.data.standing, false);
+  assert.equal("censored" in rec.data.standing, false);
+  assert.equal(rec.data.sitting, undefined);
+  assert.equal(rec.data.posture_cycle, undefined);
+  assert.equal(rec.data.walk_min, undefined);
+  const ev = evaluateCheckIn(rec, B, config);
+  assert.equal(ev.color, "green");
+  assert.ok(!/standing|sitting/i.test((ev.reasons || []).join(" ")), JSON.stringify(ev.reasons));
+  assert.match(eveningLogsNote({}), /unreported rather than guessed/);
+});
+
+test("a work-timer day without Today counters still counts relief phases as breaks", () => {
+  const d = "2026-12-01";
+  const blocks = [
+    { phase: "stand", prescribed_min: 40, actual_min: 40, started_at: `${d}T09:00:00-06:00`, ended_at: `${d}T09:40:00-06:00`, ended_how: "alarm", snoozes: 0 },
+    { phase: "walk", prescribed_min: 2, actual_min: 2, started_at: `${d}T09:40:00-06:00`, ended_at: `${d}T09:42:00-06:00`, ended_how: "alarm", snoozes: 0 },
+    { phase: "sit", prescribed_min: 20, actual_min: 20, started_at: `${d}T09:42:00-06:00`, ended_at: `${d}T10:02:00-06:00`, ended_how: "alarm", snoozes: 0 },
+    { phase: "decompress", prescribed_min: 5, actual_min: 5, started_at: `${d}T10:02:00-06:00`, ended_at: `${d}T10:07:00-06:00`, ended_how: "alarm", snoozes: 0 },
+  ];
+  const pc = postureCheckinData(blocks, [], { stand_min: 40, sit_min: 20, walk_min: 2, decomp_min: 5 });
+  const f = eveningFromLogs({ blocks, posture: pc, day: {} }, { pain: 1, leg: "none" });
+  assert.equal(f.breaks, 3);
+  assert.equal(f.decomp, 1);
+  assert.equal(f.upright_h, 0.5); // 42 min, snapped to 0.5 h
+  assert.equal(f.walk_min, undefined);
+});
+
+test("editing an evening check-in keeps a previously entered first-pressure value", () => {
+  const rec = buildCheckIn("evening", { pain: 2, upright_h: 7, no_pressure: false, first_pressure_h: 4, leg: "none" }, ctx(at("2026-12-01", "19:00")));
+  const f = keepEveningPressure(eveningFromLogs({}, { pain: 3, forced_rest: 1, leg: "none" }), rec);
+  assert.equal(f.first_pressure_h, 4);
+  assert.equal(f.upright_h, 0);
+  const again = buildCheckIn("evening", f, ctx(at("2026-12-01", "19:30"), { existing: rec }));
+  assert.equal(again.data.standing.first_pressure_h, 4);
+  assert.equal(again.data.standing.upright_h_total, 0);
+  ok(again);
 });

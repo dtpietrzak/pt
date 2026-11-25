@@ -2,7 +2,7 @@
 // Data goes through ctx.store (the synced store), so everything here syncs like the rest of the app.
 import { evaluateAll, dailyMap } from "../engine.js";
 import { localDate, localTime, ulid } from "../util.js";
-import { checklist, dueNow, buildCheckIn, formFromCheckIn, summaryLine, redGuidance, tidyReasons, RED_FLAGS, TYPES, LABEL, noFlags } from "../checkins.js";
+import { checklist, dueNow, buildCheckIn, formFromCheckIn, summaryLine, redGuidance, tidyReasons, RED_FLAGS, TYPES, LABEL, noFlags, eveningFromLogs, keepEveningPressure, eveningLogsNote } from "../checkins.js";
 import { recordGate, evaluate, engineConfig, templateItems, buildSession, clearRed } from "../pipeline.js";
 import { postureCheckinData, postureLogKey } from "../posture.js";
 import { askNotifications } from "../timer-ui.js";
@@ -13,7 +13,7 @@ const TITLES = { morning: "Morning check-in", post_workout: "Post-workout check-
 const SUBTITLES = {
   morning: "Within about an hour of getting up. Takes a minute.",
   post_workout: "About how the workout felt. Fill it in right after, and you can add the 15-minute pain later.",
-  evening: "How today went: standing, sitting and pain.",
+  evening: "How today went: pain, rest, and how your back felt.",
   night: "Last one of the day, right before bed.",
 };
 
@@ -116,7 +116,7 @@ async function todayExtras(ctx, date) {
   const posture = blocks.length && doses ? postureCheckinData(blocks, early, doses) : null;
   const upMin = blocks.filter((b) => b.phase === "stand" || b.phase === "walk").reduce((a, b) => a + (b.actual_min || 0), 0);
   const sitMin = blocks.filter((b) => b.phase === "sit").reduce((a, b) => a + (b.actual_min || 0), 0);
-  return { posture, day, upH: Math.round((upMin / 60) * 2) / 2, sitMin: Math.round(sitMin) };
+  return { posture, day, blocks, upH: Math.round((upMin / 60) * 2) / 2, sitMin: Math.round(sitMin) };
 }
 
 function formHtml(ctx, type, f) {
@@ -148,21 +148,12 @@ function formHtml(ctx, type, f) {
       + section("What you did", `<p class="ci-hint">Untick anything you skipped. Mark a problem to say what went wrong.</p>${rows || '<p class="ci-hint">No exercises were logged.</p>'}`)
       + safetyHtml(f);
   } else if (type === "evening") {
+    const logsNote = f._logsNote || "";
     body = section("Pain", `${painQ("Worst back pain today")}
         ${qToggle("limited", "My back limited what I wanted to do", f.limited)}
-        ${qStep("forced_rest", "Times you had to stop and rest", f.forced_rest, { step: 1 })}
+        ${qStep("forced_rest", "Times you had to stop and rest outside of scheduled breaks", f.forced_rest, { step: 1 })}
         ${qToggle("hip_shift", "Hips feel shifted to one side", f.hip_shift)}`)
-      + section("Standing and walking", `${qStep("upright_h", "Time on your feet", f.upright_h, { step: 0.5, unit: "h", hint: "Standing and walking, all day." })}
-        ${qChips("std", "Did pressure build in your back?", [["none", "No, stayed comfortable"], ["yes", "Yes, it built up"]], f.no_pressure ? "none" : "yes")}
-        ${when("std=yes", qStep("first_pressure_h", "Hours on your feet when it reached 3/10", f.first_pressure_h, { step: 0.25, unit: "h", hint: `Your usual is about ${B.standing_h} h.` }))}
-        ${qStep("breaks", "Standing breaks taken", f.breaks, { step: 1 })}
-        ${qStep("decomp", "Decompression breaks done", f.decomp, { step: 1 })}
-        ${qStep("walk_min", "Walking", f.walk_min, { step: 5, unit: "min" })}`)
-      + section("Sitting", `${qToggle("sit_on", "I sat for work today", f.sit_on)}
-        ${when("sit_on", `${qStep("sit_total_min", "Total time seated", f.sit_total_min, { step: 15, unit: "min" })}
-          ${qChips("sit_std", "Did pressure build?", [["none", "No, stayed comfortable"], ["yes", "Yes, it built up"]], f.sit_no_pressure ? "none" : "yes")}
-          ${when("sit_std=yes", qStep("sit_first_min", "Minutes seated when it reached 3/10", f.sit_first_min, { step: 5, unit: "min", hint: `Your usual is about ${B.sitting_min ?? 20} min.` }))}
-          ${qToggle("sit_flared", "Sitting flared my symptoms", f.sit_flared)}`)}`)
+      + (logsNote ? `<p class="ci-hint">${esc(logsNote)}</p>` : "")
       + safetyHtml(f);
   } else {
     body = section("Pain", `${painQ("Back pain right now")}
@@ -187,7 +178,7 @@ async function defaultsFor(ctx, type, v, entry) {
   }
   if (type === "evening") {
     const x = await todayExtras(ctx, entry.date);
-    Object.assign(f, { no_pressure: true, upright_h: x.upH || 6, breaks: x.day?.standing_breaks_done ?? 0, decomp: x.day?.decomp_breaks_done ?? 0, walk_min: x.day?.walk_min ?? 0, forced_rest: 0, sit_on: !!x.posture?.actual_blocks?.some((b) => b.phase === "sit"), sit_no_pressure: true, sit_total_min: x.sitMin || undefined });
+    Object.assign(f, { forced_rest: 0, _logsNote: eveningLogsNote(x) });
   }
   if (type === "night") Object.assign(f, { ready: true });
   return f;
@@ -197,6 +188,10 @@ export async function openForm(ctx, type, { existing = null, entry = {}, v = nul
   v = v || await loadView(ctx);
   const f = existing ? formFromCheckIn(existing) : await defaultsFor(ctx, type, v, { date: v.date, ...entry });
   if (existing?.type === "post_workout") f.items = f.items || [];
+  if (type === "evening" && !f._logsNote) {
+    const x = await todayExtras(ctx, entry.date || existing?.local_date || v.date);
+    f._logsNote = eveningLogsNote(x);
+  }
   const root = openSheet(formHtml(ctx, type, f));
   const form = $("#ci-form", root);
   wireForm(ctx, form);
@@ -235,14 +230,13 @@ function readForm(form, type) {
       return { item_key: k, completed: el.checked, rung_done: 0, problem: b(`prob_${k}`), pain_peak: n(`pp_${k}`), sharp: b(`sharp_${k}`), form: b(`form_${k}`) };
     });
   }
-  if (type === "evening") Object.assign(f, { upright_h: n("upright_h"), no_pressure: g("std") !== "yes", first_pressure_h: n("first_pressure_h"), breaks: n("breaks"), decomp: n("decomp"), walk_min: n("walk_min"), forced_rest: n("forced_rest"), limited: b("limited"), hip_shift: b("hip_shift"),
-    sit_on: b("sit_on"), sit_no_pressure: g("sit_std") !== "yes", sit_first_min: n("sit_first_min"), sit_total_min: n("sit_total_min"), sit_flared: b("sit_flared") });
+  if (type === "evening") Object.assign(f, { forced_rest: n("forced_rest"), limited: b("limited"), hip_shift: b("hip_shift") });
   if (type === "night") Object.assign(f, { ready: b("ready") });
   return f;
 }
 
 async function save(ctx, type, form, { existing, session_id, date }) {
-  const f = readForm(form, type);
+  let f = readForm(form, type);
   // Older morning check-ins recorded hours slept; the form no longer asks, so keep the stored value on edit.
   if (type === "morning" && existing?.data?.sleep_hours != null) f.sleep_hours = existing.data.sleep_hours;
   // Keep an existing item's rung when editing a post-workout check-in.
@@ -252,8 +246,9 @@ async function save(ctx, type, form, { existing, session_id, date }) {
     for (const i of f.items) i.rung_done = s?.items.find((x) => x.item_key === i.item_key)?.prescribed_rung ?? 0;
   }
   const x = type === "evening" ? await todayExtras(ctx, date) : {};
+  if (type === "evening") f = keepEveningPressure(eveningFromLogs(x, f), existing);
   const wake = await ctx.store.kvGet(`wake:${date}`);
-  const rec = buildCheckIn(type, f, { now: new Date(), id: ulid(), session_id, wake_time: wake, posture: type === "evening" ? (existing?.data?.posture_cycle ?? x.posture ?? undefined) : undefined, existing });
+  const rec = buildCheckIn(type, f, { now: new Date(), id: ulid(), session_id, wake_time: wake, posture: type === "evening" ? (x.posture ?? existing?.data?.posture_cycle ?? undefined) : undefined, existing });
   // A night check-in done after midnight belongs to the evening before; a day's check-in keeps the date it was opened for.
   if (!existing && type !== "night" && date) rec.local_date = date;
   await ctx.store.put("checkins", rec);
@@ -328,12 +323,16 @@ function answersHtml(ctx, c) {
     html += group("What you did", items);
   } else if (c.type === "evening") {
     const st = d.standing || {}, sit = d.sitting;
-    html += group("Pain", row("Worst back pain today", painV(d.pain_peak_today)) + row("Back limited you", yn(d.activity_limited)) + row("Times you had to rest", txt(d.forced_rest_count)) + row("Hips shifted", yn(d.hip_shift)));
-    html += group("Standing and walking", row("Time on your feet", has(st.upright_h_total) ? fmtH(st.upright_h_total) : "")
-      + row("Pressure reached 3/10", st.first_pressure_h == null ? "Never, stayed comfortable" : `After ${fmtH(st.first_pressure_h)}`)
+    html += group("Pain", row("Worst back pain today", painV(d.pain_peak_today)) + row("Back limited you", yn(d.activity_limited)) + row("Times you had to stop and rest outside of scheduled breaks", txt(d.forced_rest_count)) + row("Hips shifted", yn(d.hip_shift)));
+    const pressH = st.censored === true || st.first_pressure_h === null ? "Never, stayed comfortable" : has(st.first_pressure_h) ? `After ${fmtH(st.first_pressure_h)}` : "";
+    html += group("From Today and the Work timer", row("Time on your feet", has(st.upright_h_total) ? fmtH(st.upright_h_total) : "")
+      + row("Pressure reached 3/10", pressH)
       + row("Standing breaks", txt(st.breaks_taken)) + row("Decompression breaks", txt(st.decomp_breaks_done)) + row("Walking", has(d.walk_min) ? `${esc(d.walk_min)} min` : ""));
-    if (sit) html += group("Sitting", row("Time seated", has(sit.seated_min_total) ? `${esc(sit.seated_min_total)} min` : "")
-      + row("Pressure reached 3/10", sit.first_pressure_min == null ? "Never, stayed comfortable" : `After ${esc(sit.first_pressure_min)} min`) + row("Sitting flared symptoms", yn(sit.flared)));
+    if (sit) {
+      const pressS = sit.censored === true || sit.first_pressure_min === null ? "Never, stayed comfortable" : has(sit.first_pressure_min) ? `After ${esc(sit.first_pressure_min)} min` : "";
+      html += group("Sitting (from the Work timer)", row("Time seated", has(sit.seated_min_total) ? `${esc(sit.seated_min_total)} min` : "")
+        + row("Pressure reached 3/10", pressS) + row("Sitting flared symptoms", yn(sit.flared)));
+    }
   } else {
     html += group("Pain", row("Back pain at bedtime", painV(d.bedtime_pain)) + row("Ready for tomorrow", has(d.ready_for_tomorrow) ? yn(d.ready_for_tomorrow) : ""));
   }

@@ -70,6 +70,7 @@ export const dueNow = (list) => list.filter((e) => e.state === "due");
 // ---------------------------------------------------------------- building records
 const int = (v, d = 0) => { const n = Math.round(Number(v)); return Number.isFinite(n) ? n : d; };
 const num = (v, d = 0) => { const n = Number(v); return Number.isFinite(n) ? n : d; };
+const hasNum = (v) => v !== undefined && v !== null && v !== "" && Number.isFinite(Number(v));
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const pain = (v) => clamp(int(v), 0, 10);
 
@@ -128,10 +129,12 @@ export function buildCheckIn(type, f, ctx) {
     if (f.form_breakdown) data.form_breakdown = true;
   } else if (type === "evening") {
     const standing = { upright_h_total: Math.max(0, num(f.upright_h, 0)) };
+    // first_pressure / censored stay omitted unless actually supplied. Setting censored with
+    // no measurement would make standingRatio treat the day as fully comfortable.
     if (f.no_pressure) { standing.first_pressure_h = null; standing.censored = true; }
-    else standing.first_pressure_h = Math.max(0, num(f.first_pressure_h, 0));
-    if (f.breaks !== undefined) standing.breaks_taken = Math.max(0, int(f.breaks));
-    if (f.decomp !== undefined) standing.decomp_breaks_done = Math.max(0, int(f.decomp));
+    else if (hasNum(f.first_pressure_h)) standing.first_pressure_h = Math.max(0, num(f.first_pressure_h, 0));
+    if (f.breaks !== undefined && f.breaks !== "") standing.breaks_taken = Math.max(0, int(f.breaks));
+    if (f.decomp !== undefined && f.decomp !== "") standing.decomp_breaks_done = Math.max(0, int(f.decomp));
     data = {
       standing,
       pain_peak_today: pain(f.pain),
@@ -140,12 +143,12 @@ export function buildCheckIn(type, f, ctx) {
       hip_shift: !!f.hip_shift,
       symptoms: buildSymptoms(f, f.pain),
     };
-    if (f.walk_min !== undefined && f.walk_min !== "") data.walk_min = Math.max(0, num(f.walk_min));
+    if (hasNum(f.walk_min)) data.walk_min = Math.max(0, num(f.walk_min));
     if (f.sit_on) {
       const sit = { flared: !!f.sit_flared };
       if (f.sit_no_pressure) { sit.first_pressure_min = null; sit.censored = true; }
-      else sit.first_pressure_min = Math.max(0, num(f.sit_first_min, 0));
-      if (f.sit_total_min !== undefined && f.sit_total_min !== "") sit.seated_min_total = Math.max(0, num(f.sit_total_min));
+      else if (hasNum(f.sit_first_min)) sit.first_pressure_min = Math.max(0, num(f.sit_first_min, 0));
+      if (hasNum(f.sit_total_min)) sit.seated_min_total = Math.max(0, num(f.sit_total_min));
       if (ctx.posture?.sit_prescribed_min) sit.prescribed_block_min = ctx.posture.sit_prescribed_min;
       if (ctx.posture?.cycles_completed !== undefined) sit.completed_blocks = ctx.posture.cycles_completed;
       data.sitting = sit;
@@ -181,11 +184,82 @@ export function formFromCheckIn(c) {
   if (c.type === "post_workout") Object.assign(f, { pain: d.pain_peak, pain15: d.pain_15min_after, rpe: d.rpe, settle: d.settle_bucket, form_breakdown: d.form_breakdown, items: (d.completed_items || []).map((i) => ({ ...i, problem: i.pain_peak !== undefined || !!i.sharp_electrical || !!i.form_breakdown, sharp: i.sharp_electrical, form: i.form_breakdown })) });
   if (c.type === "evening") {
     const st = d.standing || {}, sit = d.sitting;
-    Object.assign(f, { pain: d.pain_peak_today, upright_h: st.upright_h_total, no_pressure: st.first_pressure_h === null || st.first_pressure_h === undefined, first_pressure_h: st.first_pressure_h ?? "", breaks: st.breaks_taken, decomp: st.decomp_breaks_done, walk_min: d.walk_min, forced_rest: d.forced_rest_count, limited: d.activity_limited, hip_shift: d.hip_shift,
-      sit_on: !!sit, sit_flared: sit?.flared, sit_no_pressure: sit ? sit.first_pressure_min === null || sit.first_pressure_min === undefined : true, sit_first_min: sit?.first_pressure_min ?? "", sit_total_min: sit?.seated_min_total });
+    Object.assign(f, { pain: d.pain_peak_today, upright_h: st.upright_h_total, no_pressure: st.censored === true || st.first_pressure_h === null, first_pressure_h: st.first_pressure_h ?? "", breaks: st.breaks_taken, decomp: st.decomp_breaks_done, walk_min: d.walk_min, forced_rest: d.forced_rest_count, limited: d.activity_limited, hip_shift: d.hip_shift,
+      sit_on: !!sit, sit_flared: sit?.flared, sit_no_pressure: sit ? (sit.censored === true || sit.first_pressure_min === null) : false, sit_first_min: sit?.first_pressure_min ?? "", sit_total_min: sit?.seated_min_total });
   }
   if (c.type === "night") Object.assign(f, { pain: d.bedtime_pain, ready: d.ready_for_tomorrow });
   return f;
+}
+
+
+/**
+ * Fill evening standing / walking / sitting fields from the Today log and work-timer blocks.
+ * Does not invent first-pressure, a comfortable (censored) day, or a default standing duration.
+ * Schema requires standing.upright_h_total, so that is 0 when nothing was logged (the engine
+ * does not use it for color). Sitting and posture_cycle are omitted when there was no work mode.
+ */
+export function eveningFromLogs(logs = {}, form = {}) {
+  const day = logs.day || {};
+  const blocks = logs.blocks || [];
+  const posture = logs.posture || null;
+  const workUsed = !!(posture?.work_mode_used || blocks.length);
+  const phaseMin = (phase) => blocks.filter((b) => b.phase === phase).reduce((a, b) => a + (b.actual_min || 0), 0);
+  const standWalkMin = phaseMin("stand") + phaseMin("walk");
+  const sitMin = phaseMin("sit");
+  const workBreaks = blocks.filter((b) => b.phase === "walk" || b.phase === "sit" || b.phase === "decompress").length;
+  const workDecomp = blocks.filter((b) => b.phase === "decompress").length;
+  const walk = hasNum(day.walk_min) ? Number(day.walk_min) : undefined;
+  const f = { ...form, upright_h: Math.round(((standWalkMin + (walk || 0)) / 60) * 2) / 2 };
+  delete f.no_pressure;
+  delete f.first_pressure_h;
+  delete f.sit_no_pressure;
+  delete f.sit_first_min;
+  delete f.sit_flared;
+  if (walk !== undefined) f.walk_min = walk;
+  else delete f.walk_min;
+  if (hasNum(day.standing_breaks_done)) f.breaks = Number(day.standing_breaks_done);
+  else if (workUsed) f.breaks = workBreaks;
+  else delete f.breaks;
+  if (hasNum(day.decomp_breaks_done)) f.decomp = Number(day.decomp_breaks_done);
+  else if (workUsed) f.decomp = workDecomp;
+  else delete f.decomp;
+  if (workUsed && blocks.some((b) => b.phase === "sit")) {
+    f.sit_on = true;
+    f.sit_total_min = Math.round(sitMin);
+  } else {
+    delete f.sit_on;
+    delete f.sit_total_min;
+  }
+  return f;
+}
+
+/** When editing, keep first-pressure / flare already stored on the record (those are no longer asked). */
+export function keepEveningPressure(f, existing) {
+  if (!existing || existing.type !== "evening") return f;
+  const out = { ...f };
+  const st = existing.data?.standing || {};
+  if (st.censored === true || st.first_pressure_h === null) out.no_pressure = true;
+  else if (hasNum(st.first_pressure_h)) out.first_pressure_h = st.first_pressure_h;
+  const sit = existing.data?.sitting;
+  if (sit && out.sit_on) {
+    if (sit.censored === true || sit.first_pressure_min === null) out.sit_no_pressure = true;
+    else if (hasNum(sit.first_pressure_min)) out.sit_first_min = sit.first_pressure_min;
+    if (sit.flared) out.sit_flared = true;
+  }
+  return out;
+}
+
+/** One-line read-only summary of what eveningFromLogs will attach. */
+export function eveningLogsNote(logs = {}) {
+  const f = eveningFromLogs(logs);
+  const bits = [];
+  if (f.walk_min !== undefined) bits.push(`walked ${f.walk_min} min`);
+  if (f.breaks !== undefined) bits.push(`${f.breaks} standing break${f.breaks === 1 ? "" : "s"}`);
+  if (f.decomp !== undefined) bits.push(`${f.decomp} decompression break${f.decomp === 1 ? "" : "s"}`);
+  if (f.upright_h) bits.push(`${f.upright_h} h on your feet`);
+  if (f.sit_on) bits.push(`sat ${f.sit_total_min} min at work`);
+  if (!bits.length) return "No walk or work-timer data logged today, so standing, walking and sitting times will be left unreported rather than guessed.";
+  return "From Today and the Work timer: " + bits.join(", ") + ".";
 }
 
 /** Primary pain number and one-line summary of a stored check-in, for lists. */
