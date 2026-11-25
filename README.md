@@ -14,7 +14,7 @@ Data is saved on the device first (IndexedDB), so it works offline and before si
 | --- | --- | --- |
 | 1 | App shell, nav, settings, IndexedDB, plan data and sync, pure engine with test vectors, daily checklist | **live** |
 | 1.5 | Google sign-in + Firestore sync between devices | **live** |
-| 1.6 | Work posture timer (Timer tab) + R16 dose progression | **live** |
+| 1.6 | Work posture timer (Work tab) + R16 dose progression | **live** |
 | 2 | Four check-ins (morning, post-workout, evening, night) and the green/yellow/orange/red rollup | next |
 | 3 | Advance/hold/regress UI, sessions, gate tests, red-flag screen | |
 | 4 | Weekly export (JSON + markdown) and agent plan-patch import | |
@@ -43,10 +43,10 @@ On the next load, the app picks up a changed seed by itself, as long as no agent
 
 ## Work timer (posture cycle)
 
-Timer tab: **Start work mode** runs Stand 40 → Walk 2 → Sit 20 → Decompress 5, repeating (doses come from `public/data/posture-cycle.json` and `state.posture_cycle`). When a phase falls due the alarm rings (synth chime + notification) until you switch, snooze (5 min, max 2 per phase), tap **Sore early** (stand/sit only; logged and reorders the next phases), or skip. Quiet hours: work mode stops at work end (default 17:00 CT) with one decompress reminder; starting by hand outside work hours overrides that session.
+Work tab: **Start work mode** runs Stand 40 → Walk 2 → Sit 20 → Decompress 5, repeating (doses come from `public/data/posture-cycle.json` and `state.posture_cycle`). When a phase falls due the alarm rings (synth chime + notification) until you switch, snooze (5 min, max 2 per phase), tap **Sore early** (stand/sit only; logged and reorders the next phases), or skip. Quiet hours: work mode stops at work end (default 17:00 CT) with one decompress reminder; starting by hand outside work hours overrides that session.
 
 - Time comes from stored wall-clock timestamps (`public/js/posture.js`, pure and tested), so reloads and background tabs don't drift. A worker drives a 1 Hz check so a hidden tab still alarms.
-- Timer state is the synced `kv/timer` record, so other devices see it. Alarms ring only on the device that started work mode unless Settings > Work timer > "Ring on every signed-in device" is on (stored in the `app` setting).
+- Work-timer state is the synced `kv/timer` record, so other devices see it. Alarms ring only on the device that started work mode unless Settings > Work timer > "Ring on every signed-in device" is on (stored in the `app` setting).
 - Blocks are logged to `kv/posture:log:<date>` and summarised in the daily log's `posture_cycle`; `postureCheckinData()` produces the evening check-in `posture_cycle` object for Phase 2.
 - R16 (`applyPosture` in `posture.js`, wired in `engine.js` `processDay`) runs on days whose evening check-in has `posture_cycle.work_mode_used`. Flare / settle exit apply the preset / restore.
 - Browsers need a tap to allow audio: Start unlocks it; after a reload tap anywhere once.

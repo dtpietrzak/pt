@@ -18,7 +18,7 @@ const BLOCKS = [
   ["strength_A", "Strength A"], ["strength_B", "Strength B"], ["conditioning", "Conditioning"],
 ];
 const DAILY = ["daily_mobility", "daily_core", "walking", "relief"];
-const PAGES = { today: "Today", timer: "Timer", plan: "Plan", settings: "Settings" };
+const PAGES = { today: "Today", work: "Work", plan: "Plan", settings: "Settings" };
 const MORNING_WINDOW_MIN = 45;
 
 let store, docs, profile, app, state, exById = {}, timerUI;
@@ -90,7 +90,11 @@ const level = () => levelById(docs.levels, state.level_id);
 const today = () => localDate(new Date());
 
 // ---------------------------------------------------------------- routing / chrome
-function route() { const r = location.hash.replace(/^#\/?/, "") || "today"; return PAGES[r] ? r : "today"; }
+function route() {
+  let r = location.hash.replace(/^#\/?/, "") || "today";
+  if (r === "timer") { location.replace("#/work"); r = "work"; }
+  return PAGES[r] ? r : "today";
+}
 function render() {
   if (!state) return renderWelcome();
   const r = route();
@@ -100,7 +104,7 @@ function render() {
   document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("on", a.dataset.page === r));
   $(".nav").hidden = false;
   timerUI?.hide();
-  ({ today: renderToday, timer: renderTimer, plan: renderPlan, settings: renderSettings })[r]();
+  ({ today: renderToday, work: renderTimer, plan: renderPlan, settings: renderSettings })[r]();
 }
 
 function renderWelcome() {

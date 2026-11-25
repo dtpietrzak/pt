@@ -1,6 +1,6 @@
 // Cloudflare 307-redirects /index.html to /, so only "./" is precached (offline navigations fall back to it).
 // Bump CACHE whenever any file below changes so installed copies pick up the update.
-const CACHE = "pt-v5";
+const CACHE = "pt-v6";
 // Firebase SDK modules from the gstatic CDN (versioned, immutable URLs): cached on first use so a
 // signed-in device still starts offline. Kept across app-cache bumps.
 const SDK_CACHE = "pt-firebase-sdk";
@@ -39,12 +39,12 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-// Tapping a timer notification brings the open PT tab (or a new one) to the front on the Timer screen.
+// Tapping a timer notification brings the open PT tab (or a new one) to the front on the Work screen.
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
   event.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {
     const open = list.find((c) => new URL(c.url).origin === self.location.origin);
-    if (open) { open.navigate && open.navigate(new URL("./#/timer", self.registration.scope).href).catch(() => {}); return open.focus(); }
-    return self.clients.openWindow("./#/timer");
+    if (open) { open.navigate && open.navigate(new URL("./#/work", self.registration.scope).href).catch(() => {}); return open.focus(); }
+    return self.clients.openWindow("./#/work");
   }));
 });
