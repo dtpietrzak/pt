@@ -1,0 +1,43 @@
+rules_version = '2';
+
+// PT is a single-user app. Only David's verified Google account can touch data,
+// and only under his own users/{uid} tree. Everything else is denied.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.email == 'dtpietrzak@gmail.com'
+        && request.auth.token.email_verified == true
+        && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+
+    // IndexedDB object stores mirrored to Firestore (see public/js/sync.js).
+    function knownStore(store) {
+      return store in ['kv', 'days', 'checkins', 'sessions', 'log', 'patches', 'snapshots'];
+    }
+
+    // One synced record: { k: key, d: JSON string | null, u: updatedAt ms, del: tombstone }
+    function validRecord(id) {
+      let r = request.resource.data;
+      return r.keys().hasOnly(['k', 'd', 'u', 'del'])
+        && r.keys().hasAll(['k', 'd', 'u', 'del'])
+        && r.k is string && r.k.size() > 0 && r.k.size() <= 200
+        && (r.d == null || (r.d is string && r.d.size() <= 900000))
+        && r.u is int && r.u > 0 && r.u <= request.time.toMillis() + 86400000
+        && r.del is bool
+        && (r.del == false || r.d == null)
+        && (r.del == true || r.d != null)
+        && id.size() <= 400;
+    }
+
+    match /users/{uid}/{store}/{id} {
+      allow read: if isOwner(uid) && knownStore(store);
+      allow create, update: if isOwner(uid) && knownStore(store) && validRecord(id);
+      allow delete: if isOwner(uid) && knownStore(store);
+    }
+
+    // Default deny: no other path is readable or writable.
+  }
+}

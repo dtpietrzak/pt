@@ -1,5 +1,8 @@
 // PT — personal lumbar-disc rehab tracker. Phase 1: shell, settings, plan data, daily checklist.
+// Phase 1.5: Google sign-in + Firestore sync between phone and laptop (js/sync.js, js/cloud.js).
 import { openDb, createStore } from "./js/db.js";
+import { createSyncedStore } from "./js/sync.js";
+import { initCloud, cloudState, signIn, signOutCloud, syncNow } from "./js/cloud.js";
 import { boot, newState } from "./js/data.js";
 import { isoLocal, localDate, clone, addDays } from "./js/util.js";
 import { currentDose, levelById } from "./js/engine.js";
@@ -20,13 +23,62 @@ let store, docs, profile, app, state, exById = {};
 const main = $("#main");
 
 async function start() {
-  store = createStore(await openDb());
+  store = createSyncedStore(createStore(await openDb()));
   const b = await boot(store, isoLocal());
+  store.endBoot();
   ({ docs, profile, app, state } = b);
   indexExercises();
   if (b.resynced) toast("Plan data updated from the latest seed.");
   window.addEventListener("hashchange", render);
   render();
+  initCloud(store, { onChange: renderSync, onApplied: reloadFromStore })
+    .catch((e) => { console.warn("Sync unavailable:", e); renderSync(); });
+}
+
+// ---------------------------------------------------------------- sync
+// Another device changed something: re-read IndexedDB and re-render (but never under the user's fingers).
+let reloadT, reloadPending = false;
+function reloadFromStore() {
+  clearTimeout(reloadT);
+  reloadT = setTimeout(async () => {
+    const editing = main.contains(document.activeElement) && /^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName);
+    if (editing || !$("#sheet").hidden) { reloadPending = true; return; }
+    reloadPending = false;
+    const [d, p, a, st] = await Promise.all(["docs", "profile", "app", "state"].map((k) => store.kvGet(k)));
+    if (d && d !== docs) { docs = d; indexExercises(); }
+    if (p) profile = p;
+    if (a) app = { ...app, ...a };
+    if (st) state = st;
+    render();
+  }, 150);
+}
+main.addEventListener("focusout", () => { if (reloadPending) setTimeout(reloadFromStore, 300); });
+function syncLine() {
+  const c = cloudState();
+  if (!c.available) return "Sync isn't available right now (offline?). Everything still saves on this device.";
+  if (!c.user) return "Not signed in. Data is saved on this device only.";
+  if (c.error) return c.error;
+  if (!c.ready) return "Connecting…";
+  if (c.pending) return `${c.pending} change${c.pending === 1 ? "" : "s"} waiting to sync.`;
+  return `Synced${c.lastSync ? " · " + c.lastSync.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : ""}.`;
+}
+function syncCardHtml() {
+  const c = cloudState();
+  return `<h3>Sync</h3>
+    ${c.user ? `<p class="small">Signed in as <b>${esc(c.user.email)}</b></p>` : `<p class="small">Sign in with Google to keep your phone and laptop in sync.</p>`}
+    <p class="muted small" id="sync-line">${esc(syncLine())}</p>
+    ${c.user ? `<button class="btn" id="sync-now" type="button">Sync now</button> <button class="btn" id="sign-out" type="button">Sign out</button>`
+      : `<button class="btn primary" id="sign-in" type="button" ${c.available ? "" : "disabled"}>Sign in with Google</button>`}`;
+}
+function wireSync(root) {
+  const si = $("#sign-in", root), so = $("#sign-out", root), sn = $("#sync-now", root);
+  if (si) si.onclick = async () => { try { await signIn(); } catch (e) { toast(e.message); } };
+  if (so) so.onclick = async () => { if (confirm("Sign out? Your data stays on this device and in the cloud.")) { await signOutCloud(); toast("Signed out."); } };
+  if (sn) sn.onclick = () => { syncNow(); toast("Syncing…"); };
+}
+function renderSync() {
+  const card = $("#sync-card");
+  if (card) { card.innerHTML = syncCardHtml(); wireSync(card); }
 }
 function indexExercises() { exById = Object.fromEntries(docs.exercises.exercises.map((e) => [e.id, e])); }
 const level = () => levelById(docs.levels, state.level_id);
@@ -52,14 +104,17 @@ function renderWelcome() {
   main.innerHTML = `
     <section class="card welcome">
       <h2>Welcome, ${esc((profile.name || "David").split(" ")[0])}</h2>
-      <p>Your lower-back rehab plan, tracked on this phone only. Progress is driven by how your back responds, never by the calendar.</p>
+      <p>Your lower-back rehab plan. Progress is driven by how your back responds, never by the calendar.</p>
       <p class="disclaimer">${esc(DISCLAIMER)}</p>
       <label class="field">Start at
         <select id="start-level">${opts}</select>
       </label>
       <p class="muted small">The plan says L1 is where you are today. Pick L0 (Settle) if you're in a flare right now.</p>
       <button class="btn primary" id="go">Start</button>
-    </section>`;
+    </section>
+    <section class="card" id="sync-card">${syncCardHtml()}</section>
+    <p class="muted small center pad">Already using PT on another device? Sign in first and your plan loads here.</p>`;
+  wireSync($("#sync-card"));
   $("#go").onclick = async () => {
     app.start_level = $("#start-level").value;
     state = newState(docs, profile, app.start_level, isoLocal());
@@ -252,6 +307,7 @@ const EQUIP_LIST = [["dumbbells_lb", "Dumbbell sizes (lb)"], ["kettlebells_lb", 
 function renderSettings() {
   const p = profile, eq = p.equipment || {}, B = p.baselines || {};
   main.innerHTML = `
+  <section class="card" id="sync-card">${syncCardHtml()}</section>
   <form id="settings" class="settings">
     <section class="card"><h3>You</h3>
       <label class="field">Body weight (lb)<input type="number" name="body_weight_lb" min="60" max="400" step="1" value="${p.body_weight_lb ?? 180}" inputmode="decimal"></label>
@@ -293,11 +349,12 @@ function renderSettings() {
   </section>
   <section class="card"><h3>Data</h3>
     <p class="small">Plan v${docs.levels.plan_version ?? 1} · ${docs.levels.levels.length} levels · ${docs.exercises.exercises.length} exercises · ${docs.tests.tests.length} gate tests</p>
-    <p class="muted small">Everything is stored on this device only. No accounts, no tracking.</p>
+    <p class="muted small">Saved on this device first, so it works offline. When you're signed in it also syncs to your private Firebase database (only your Google account can read it). No tracking.</p>
     <button class="btn" id="backup">Download backup (JSON)</button>
-    <button class="btn danger" id="wipe">Erase all data</button>
+    <button class="btn danger" id="wipe">Erase this device's data</button>
   </section>
   <p class="disclaimer pad">${esc(DISCLAIMER)}</p>`;
+  wireSync($("#sync-card"));
   $("#settings").onsubmit = saveSettings;
   $("#restart").onclick = async () => {
     const id = $("#restart-level").value;
@@ -307,7 +364,7 @@ function renderSettings() {
   };
   $("#backup").onclick = async () => download(`pt-backup-${today()}.json`, JSON.stringify(await store.dump(), null, 2), "application/json");
   $("#wipe").onclick = async () => {
-    if (!confirm("Erase everything on this device? This cannot be undone.")) return;
+    if (!confirm(cloudState().user ? "Erase this device's copy? Your synced cloud copy is kept and will download again while you're signed in." : "Erase everything on this device? This cannot be undone.")) return;
     await store.clearAll(); location.hash = ""; location.reload();
   };
 }

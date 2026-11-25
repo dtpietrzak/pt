@@ -1,0 +1,20 @@
+{
+  "firestore": {
+    "database": "(default)",
+    "location": "nam5",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "auth": {
+    "providers": {
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "PT",
+        "supportEmail": "dtpietrzak@gmail.com",
+        "authorizedRedirectUris": [
+          "https://pt.davidp.dev",
+          "http://localhost"
+        ]
+      }
+    }
+  }
+}
