@@ -58,11 +58,13 @@ function render() {
   ctx.timerUI?.hide();
   if (!activeUser()) {
     showingLogin = true;
+    document.body.dataset.page = "login";
     renderLogin(main);
     return;
   }
   showingLogin = false;
   const r = route();
+  document.body.dataset.page = r;
   $("#title").textContent = PAGES[r];
   $("#level-chip").textContent = `${ctx.state.level_id}${ctx.state.mode !== "active" ? " · " + ctx.state.mode : ""}`;
   $("#level-chip").hidden = false;
