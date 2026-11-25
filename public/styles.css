@@ -244,13 +244,14 @@ ul, ol { margin: 4px 0; padding-left: 20px; }
   stroke-linejoin: round;
 }
 
-/* Subtle tiled background patterns on cards and sheets, kept to the top corners.
-   Tune with --pat-opacity, --pat-ink, --pat-size, --pat, and --pat-corner. Pure CSS, no image requests. */
+/* Subtle tiled background patterns on cards and sheets: a top band plus the top corners.
+   Tune with --pat-opacity, --pat-ink, --pat-size, --pat, --pat-corner, and --pat-band. Pure CSS, no image requests. */
 :root {
   --pat-opacity: 0.075;
   --pat-ink: var(--accent);
   --pat-size: 18px 18px;
   --pat-corner: 150px 115px;
+  --pat-band: 40px;
   --pat: var(--pat-dots);
   --pat-dots: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%3E%3Ccircle%20cx%3D%222.2%22%20cy%3D%222.2%22%20r%3D%221.15%22%20fill%3D%22black%22%2F%3E%3C%2Fsvg%3E");
   --pat-diag: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2214%22%20height%3D%2214%22%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221%22%20d%3D%22M-2%202l4-4M0%2014L14%200M12%2016l4-4%22%2F%3E%3C%2Fsvg%3E");
@@ -299,6 +300,7 @@ ul, ol { margin: 4px 0; padding-left: 20px; }
   z-index: -1;
   opacity: var(--pat-opacity);
   background:
+    linear-gradient(to bottom, var(--pat-ink) 0, transparent var(--pat-band)),
     radial-gradient(var(--pat-corner) at 0 0, var(--pat-ink) 0%, transparent 72%),
     radial-gradient(var(--pat-corner) at 100% 0, var(--pat-ink) 0%, transparent 72%);
   -webkit-mask-image: var(--pat);
@@ -358,7 +360,7 @@ body[data-page="today"] .section-card[data-block="wk:conditioning"] { --pat: var
 body[data-page="today"] .section-card[data-block="wk:core_only"] { --pat: var(--pat-rings); --pat-size: 24px 24px; }
 
 /* Expanded exercise rows: cycle through styles so a list isn't one pattern. */
-.item { --pat-ink: var(--blk, var(--accent)); --pat-corner: 90px 70px; }
+.item { --pat-ink: var(--blk, var(--accent)); --pat-corner: 90px 70px; --pat-band: 20px; }
 .item:nth-child(8n+1) { --pat: var(--pat-dots); --pat-size: 16px 16px; }
 .item:nth-child(8n+2) { --pat: var(--pat-stars); --pat-size: 24px 24px; }
 .item:nth-child(8n+3) { --pat: var(--pat-rings); --pat-size: 22px 22px; }
@@ -376,6 +378,7 @@ body[data-page="today"] .section-card[data-block="wk:core_only"] { --pat: var(--
   --pat-opacity: 0.065;
   --pat-corner: 180px 130px;
 }
+.ci-actions { --pat-band: 16px; }
 @media (prefers-color-scheme: dark) {
   .sheet-panel,
   .ci-actions { --pat-opacity: 0.10; }
@@ -418,7 +421,7 @@ body[data-page="export"] .card {
 .card-body {
   padding: 12px 16px 16px;
   border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
-  background: color-mix(in srgb, var(--card-tint) 9%, var(--card));
+  background: color-mix(in srgb, var(--card-tint) 3%, var(--card));
 }
 .card > .card-body:first-child { border-top: 0; }
 .card-body > .field:first-child,
@@ -450,7 +453,7 @@ body[data-page="settings"] .card:nth-of-type(6n+6),
 body[data-page="export"] .card:nth-of-type(6n+6) { --card-tint: var(--blk-strength); }
 
 @media (prefers-color-scheme: dark) {
-  .card-body { background: color-mix(in srgb, var(--card-tint) 14%, var(--card)); }
+  .card-body { background: color-mix(in srgb, var(--card-tint) 4%, var(--card)); }
 }
 .block { margin: 18px 0 12px; }
 
