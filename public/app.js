@@ -129,6 +129,12 @@ async function start() {
     chip: $("#timer-chip"),
     toast,
     ctx: () => ({ docs: ctx.docs, profile: ctx.profile, app: ctx.app, state: ctx.state, exById: ctx.exById }),
+    setState: async (nextState, logEntries = []) => {
+      ctx.state = nextState;
+      await ctx.store.kvSet("state", nextState);
+      for (const entry of logEntries) await ctx.store.put("log", entry);
+      $("#level-chip").textContent = `${ctx.state.level_id}${ctx.state.mode !== "active" ? " · " + ctx.state.mode : ""}`;
+    },
   });
   ctx.timerUI.init().catch((e) => console.warn("Timer unavailable:", e));
   if (b.resynced) toast("Plan data updated from the latest seed.");

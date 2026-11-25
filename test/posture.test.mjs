@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   setPostureConfig, initPostureState, startTimer, switchPhase, soreEarly, snooze, stopTimer, tick, isDue, deadlineOf, remainingMs, snoozesLeft,
-  chicagoInstant, timerSettings, postureCheckinData, postureDailyLog, MIN,
+  chicagoInstant, timerSettings, postureCheckinData, postureDailyLog, applyPosture, evaluateSorenessTrend, workDayPostureEvent, MIN,
 } from "../public/js/posture.js";
 import { initState, runEngine, manualEvent, evaluateCheckIn } from "../public/js/engine.js";
 import { validate } from "../public/js/schema.js";
@@ -212,4 +212,55 @@ test("R16 flare preset on 'I flared', and doses restored minus 5 on settle exit"
   assert.equal(state.mode, "active");
   assert.deepEqual([state.posture_cycle.stand_min, state.posture_cycle.sit_min, state.posture_cycle.decomp_frequency], [45, 25, "once_per_cycle"]);
   assert.ok(log.some((e) => e.rule_id === "R16" && e.outcome === "settle_exit"));
+});
+
+test("phase soreness ratings attach to blocks, keep check-in schema valid, and drive next-day fallback", () => {
+  let t = startTimer(doses(), at(0), { cfg, settings });
+  t = switchPhase(t, at(40), doses(), "alarm", cfg, "none");
+  t = switchPhase(t, at(42), doses(), "alarm", cfg, "mild");
+  t = switchPhase(t, at(62), doses(), "alarm", cfg, "moderate");
+  t = switchPhase(t, at(67), doses(), "alarm", cfg, "moderate");
+
+  assert.deepEqual(t.blocks.map((b) => b.soreness), ["none", "mild", "moderate", "moderate"]);
+  assert.deepEqual(t.blocks.map((b) => b.soreness_score), [0, 1, 2, 2]);
+
+  // Check-in schema still validates cleanly when blocks carry soreness metadata
+  const pc = postureCheckinData(t.blocks, t.early_switches, doses());
+  const ci = evening("2026-12-02", { pc });
+  assert.deepEqual(validate(S("checkin"), ci).errors, []);
+
+  // Worsening trend -> orange fallback -> next day steps back 5 min and decompresses after each block
+  const trend = evaluateSorenessTrend(t.blocks, t.early_switches);
+  assert.equal(trend.status, "orange");
+  assert.equal(trend.worsening, true);
+
+  const next = applyPosture(doses(), workDayPostureEvent({ blocks: t.blocks, early_switches: t.early_switches }, doses()), cfg);
+  assert.equal(next.result.outcome, "posture_regress");
+  assert.equal(next.state.stand_min, 35);
+  assert.equal(next.state.sit_min, 15);
+  assert.equal(next.state.decomp_frequency, "after_each_block");
+});
+
+test("evaluateSorenessTrend: calm day stays green, single moderate or mild climb holds yellow, flare is orange", () => {
+  const calm = evaluateSorenessTrend([
+    { phase: "stand", soreness: "none", soreness_score: 0 },
+    { phase: "walk", soreness: "none", soreness_score: 0 },
+    { phase: "sit", soreness: "mild", soreness_score: 1 },
+    { phase: "decompress", soreness: "none", soreness_score: 0 },
+  ]);
+  assert.equal(calm.status, "green");
+
+  const mildClimb = evaluateSorenessTrend([
+    { phase: "stand", soreness: "none", soreness_score: 0 },
+    { phase: "walk", soreness: "none", soreness_score: 0 },
+    { phase: "sit", soreness: "mild", soreness_score: 1 },
+    { phase: "decompress", soreness: "mild", soreness_score: 1 },
+  ]);
+  assert.equal(mildClimb.status, "yellow");
+
+  const flare = evaluateSorenessTrend([
+    { phase: "stand", soreness: "none", soreness_score: 0 },
+    { phase: "sit", soreness: "flare", soreness_score: 3 },
+  ]);
+  assert.equal(flare.status, "orange");
 });

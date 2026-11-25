@@ -302,6 +302,75 @@
           "target_text": "2x20 s hold per side"
         },
         {
+          "item_key": "L1_daily_mobility_EX_HAMSTRING_STRAP_SUPINE",
+          "exercise_id": "EX_HAMSTRING_STRAP_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; low back stays resting, mild stretch only. Skip if it pulls into the buttock or leg.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_QUAD_SIDELYING",
+          "exercise_id": "EX_QUAD_SIDELYING",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; glute squeeze also stretches the front of the hip. Pelvis stacked, no arching.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_FIGURE4_SUPINE",
+          "exercise_id": "EX_FIGURE4_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; evening. Mild hip stretch, low back stays on the floor.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
+        },
+        {
           "item_key": "L1_relief_EX_DECOMP_90_90",
           "exercise_id": "EX_DECOMP_90_90",
           "block": "relief",
@@ -913,6 +982,75 @@
           "target_rung": 0,
           "start_text": "2x20 s hold per side",
           "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L2_daily_mobility_EX_HAMSTRING_STRAP_SUPINE",
+          "exercise_id": "EX_HAMSTRING_STRAP_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; low back stays resting, mild stretch only. Skip if it pulls into the buttock or leg.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
+        },
+        {
+          "item_key": "L2_daily_mobility_EX_QUAD_SIDELYING",
+          "exercise_id": "EX_QUAD_SIDELYING",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; glute squeeze also stretches the front of the hip. Pelvis stacked, no arching.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L2_daily_mobility_EX_FIGURE4_SUPINE",
+          "exercise_id": "EX_FIGURE4_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; evening. Mild hip stretch, low back stays on the floor.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
         },
         {
           "item_key": "L2_relief_EX_DECOMP_90_90",
@@ -1530,6 +1668,98 @@
           "target_rung": 0,
           "start_text": "2x20 s hold per side",
           "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L3_daily_mobility_EX_CALF_STRETCH",
+          "exercise_id": "EX_CALF_STRETCH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional comfort.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L3_daily_mobility_EX_HAMSTRING_STRAP_SUPINE",
+          "exercise_id": "EX_HAMSTRING_STRAP_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; low back stays resting, mild stretch only. Skip if it pulls into the buttock or leg.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
+        },
+        {
+          "item_key": "L3_daily_mobility_EX_QUAD_SIDELYING",
+          "exercise_id": "EX_QUAD_SIDELYING",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; glute squeeze also stretches the front of the hip. Pelvis stacked, no arching.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L3_daily_mobility_EX_FIGURE4_SUPINE",
+          "exercise_id": "EX_FIGURE4_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; evening. Mild hip stretch, low back stays on the floor.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
         },
         {
           "item_key": "L3_relief_EX_DECOMP_90_90",
@@ -2268,6 +2498,98 @@
           "target_rung": 0,
           "start_text": "2x20 s hold per side",
           "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L4_daily_mobility_EX_CALF_STRETCH",
+          "exercise_id": "EX_CALF_STRETCH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional comfort.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L4_daily_mobility_EX_HAMSTRING_STRAP_SUPINE",
+          "exercise_id": "EX_HAMSTRING_STRAP_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; low back stays resting, mild stretch only. Skip if it pulls into the buttock or leg.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
+        },
+        {
+          "item_key": "L4_daily_mobility_EX_QUAD_SIDELYING",
+          "exercise_id": "EX_QUAD_SIDELYING",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; glute squeeze also stretches the front of the hip. Pelvis stacked, no arching.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L4_daily_mobility_EX_FIGURE4_SUPINE",
+          "exercise_id": "EX_FIGURE4_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; evening. Mild hip stretch, low back stays on the floor.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
         },
         {
           "item_key": "L4_relief_EX_DECOMP_90_90",
@@ -3177,6 +3499,98 @@
           "target_rung": 0,
           "start_text": "2x20 s hold per side",
           "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L5_daily_mobility_EX_CALF_STRETCH",
+          "exercise_id": "EX_CALF_STRETCH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional comfort.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L5_daily_mobility_EX_HAMSTRING_STRAP_SUPINE",
+          "exercise_id": "EX_HAMSTRING_STRAP_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; low back stays resting, mild stretch only. Skip if it pulls into the buttock or leg.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
+        },
+        {
+          "item_key": "L5_daily_mobility_EX_QUAD_SIDELYING",
+          "exercise_id": "EX_QUAD_SIDELYING",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; glute squeeze also stretches the front of the hip. Pelvis stacked, no arching.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L5_daily_mobility_EX_FIGURE4_SUPINE",
+          "exercise_id": "EX_FIGURE4_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; evening. Mild hip stretch, low back stays on the floor.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
         },
         {
           "item_key": "L5_relief_EX_DECOMP_90_90",
@@ -4119,6 +4533,121 @@
           "target_text": "5x10 s hold"
         },
         {
+          "item_key": "L6_daily_mobility_EX_CALF_STRETCH",
+          "exercise_id": "EX_CALF_STRETCH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional comfort.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L6_daily_mobility_EX_HAMSTRING_STRAP_SUPINE",
+          "exercise_id": "EX_HAMSTRING_STRAP_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; low back stays resting, mild stretch only. Skip if it pulls into the buttock or leg.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
+        },
+        {
+          "item_key": "L6_daily_mobility_EX_QUAD_SIDELYING",
+          "exercise_id": "EX_QUAD_SIDELYING",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; glute squeeze also stretches the front of the hip. Pelvis stacked, no arching.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L6_daily_mobility_EX_HIP_FLEXOR_HALFKNEEL",
+          "exercise_id": "EX_HIP_FLEXOR_HALFKNEEL",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; upright, glute-led.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L6_daily_mobility_EX_FIGURE4_SUPINE",
+          "exercise_id": "EX_FIGURE4_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; evening. Mild hip stretch, low back stays on the floor.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
+        },
+        {
           "item_key": "L6_relief_EX_DECOMP_90_90",
           "exercise_id": "EX_DECOMP_90_90",
           "block": "relief",
@@ -4998,6 +5527,121 @@
           "target_rung": 0,
           "start_text": "5x10 s hold",
           "target_text": "5x10 s hold"
+        },
+        {
+          "item_key": "L7_daily_mobility_EX_CALF_STRETCH",
+          "exercise_id": "EX_CALF_STRETCH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional comfort.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L7_daily_mobility_EX_HAMSTRING_STRAP_SUPINE",
+          "exercise_id": "EX_HAMSTRING_STRAP_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; low back stays resting, mild stretch only. Skip if it pulls into the buttock or leg.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
+        },
+        {
+          "item_key": "L7_daily_mobility_EX_QUAD_SIDELYING",
+          "exercise_id": "EX_QUAD_SIDELYING",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; glute squeeze also stretches the front of the hip. Pelvis stacked, no arching.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L7_daily_mobility_EX_HIP_FLEXOR_HALFKNEEL",
+          "exercise_id": "EX_HIP_FLEXOR_HALFKNEEL",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; upright, glute-led.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L7_daily_mobility_EX_FIGURE4_SUPINE",
+          "exercise_id": "EX_FIGURE4_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; evening. Mild hip stretch, low back stays on the floor.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
         },
         {
           "item_key": "L7_relief_EX_DECOMP_90_90",
@@ -6135,6 +6779,121 @@
         ]
       },
       "items": [
+        {
+          "item_key": "L8_daily_mobility_EX_CALF_STRETCH",
+          "exercise_id": "EX_CALF_STRETCH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional comfort.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L8_daily_mobility_EX_HAMSTRING_STRAP_SUPINE",
+          "exercise_id": "EX_HAMSTRING_STRAP_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; low back stays resting, mild stretch only. Skip if it pulls into the buttock or leg.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
+        },
+        {
+          "item_key": "L8_daily_mobility_EX_QUAD_SIDELYING",
+          "exercise_id": "EX_QUAD_SIDELYING",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; glute squeeze also stretches the front of the hip. Pelvis stacked, no arching.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L8_daily_mobility_EX_HIP_FLEXOR_HALFKNEEL",
+          "exercise_id": "EX_HIP_FLEXOR_HALFKNEEL",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; upright, glute-led.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L8_daily_mobility_EX_FIGURE4_SUPINE",
+          "exercise_id": "EX_FIGURE4_SUPINE",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; evening. Mild hip stretch, low back stays on the floor.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x30 s hold per side",
+          "target_text": "2x30 s hold per side"
+        },
         {
           "item_key": "L8_daily_core_EX_CURLUP_ELBOWS_UP",
           "exercise_id": "EX_CURLUP_ELBOWS_UP",

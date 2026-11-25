@@ -200,7 +200,17 @@ export function postureEventFromEvening(evening, dailyStatus, baselines, standCo
 // =====================================================================================
 export const MIN = 60000;
 export const TIMER_KEY = "timer";
+export const LAST_FALLBACK_KEY = "posture:last_fallback_date";
 export const postureLogKey = (ymd) => `posture:log:${ymd}`;
+
+export const SORENESS_LEVELS = [
+  { id: "none", score: 0, label: "Good", hint: "0–1 · no soreness", color: "green" },
+  { id: "mild", score: 1, label: "Mild", hint: "2–3 · tight or light ache", color: "yellow" },
+  { id: "moderate", score: 2, label: "Moderate", hint: "4–5 · noticeable soreness", color: "orange" },
+  { id: "flare", score: 3, label: "Flare", hint: "6+ · sharp or flaring up", color: "red" },
+];
+const SORENESS_SCORE = Object.fromEntries(SORENESS_LEVELS.map((s) => [s.id, s.score]));
+const SORENESS_LABEL = Object.fromEntries(SORENESS_LEVELS.map((s) => [s.id, s.label]));
 
 /** The instant (epoch ms) of HH:MM on a YYYY-MM-DD in America/Chicago. */
 export function chicagoInstant(ymd, hm) {
@@ -264,19 +274,24 @@ export const isDue = (t, now) => !!t?.active && now >= deadlineOf(t);
 export const remainingMs = (t, now) => deadlineOf(t) - now;
 export function snoozesLeft(t, settings) { return Math.max(0, (settings.max_snoozes_per_phase ?? 2) - (t.snoozes || 0)); }
 
-function closeBlock(t, now, how) {
+function closeBlock(t, now, how, soreness = null) {
   const actual = round1((now - t.phase_started_at) / MIN);
-  return { phase: t.phase, prescribed_min: t.phase_min, actual_min: actual, started_at: isoAt(t.phase_started_at), ended_at: isoAt(now), ended_how: how, snoozes: t.snoozes || 0 };
+  const b = { phase: t.phase, prescribed_min: t.phase_min, actual_min: actual, started_at: isoAt(t.phase_started_at), ended_at: isoAt(now), ended_how: how, snoozes: t.snoozes || 0 };
+  if (soreness && Object.prototype.hasOwnProperty.call(SORENESS_SCORE, soreness)) {
+    b.soreness = soreness;
+    b.soreness_score = SORENESS_SCORE[soreness];
+  }
+  return b;
 }
 
 /**
  * Leave the current phase. how: "alarm" (switched when it fell due), "manual" (switched early, not sore),
- * "sore_early". Returns a new timer.
+ * "sore_early". Optional soreness: "none" | "mild" | "moderate" | "flare". Returns a new timer.
  */
-export function switchPhase(t, now, doses, how, cfg = CFG) {
+export function switchPhase(t, now, doses, how, cfg = CFG, soreness = null) {
   if (!t.active) return t;
   const ended = how === "alarm" && (t.snoozes || 0) > 0 ? "snooze_then_switch" : how;
-  const block = closeBlock(t, now, ended);
+  const block = closeBlock(t, now, ended, soreness);
   const early = how === "sore_early" || how === "manual";
   const { next, queue } = followingPhase(cfg, t, doses, how);
   return {
@@ -285,7 +300,7 @@ export function switchPhase(t, now, doses, how, cfg = CFG) {
     phase: next, phase_started_at: now, phase_min: phaseMinutes(doses, next, cfg), queue, snoozes: 0, snooze_total_ms: 0, snooze_until: null,
   };
 }
-export const soreEarly = (t, now, doses, cfg = CFG) => switchPhase(t, now, doses, "sore_early", cfg);
+export const soreEarly = (t, now, doses, cfg = CFG, soreness = null) => switchPhase(t, now, doses, "sore_early", cfg, soreness);
 
 /** Snooze the alarm. Only valid while due and with snoozes left. */
 export function snooze(t, now, settings) {
@@ -297,9 +312,9 @@ export function snooze(t, now, settings) {
 }
 
 /** End work mode. how: "manual" | "work_end". */
-export function stopTimer(t, now, how = "manual") {
+export function stopTimer(t, now, how = "manual", soreness = null) {
   if (!t.active) return t;
-  return { ...t, blocks: [...t.blocks, closeBlock(t, now, how === "work_end" ? "work_end" : "manual")], active: false, stopped_at: now, stopped_how: how };
+  return { ...t, blocks: [...t.blocks, closeBlock(t, now, how === "work_end" ? "work_end" : "manual", soreness)], active: false, stopped_at: now, stopped_how: how };
 }
 
 /**
@@ -331,6 +346,109 @@ export function summarizeBlocks(blocks, earlySwitches = []) {
     early_switch_count: earlySwitches.length, stand_early_switches: n("stand"), sit_early_switches: n("sit"),
   };
 }
+/**
+ * Gauge a work day's soreness trajectory across stand/walk/sit/decompress blocks to determine
+ * the fallback status for the next day ("green" | "yellow" | "orange").
+ */
+export function evaluateSorenessTrend(blocks = [], earlySwitches = []) {
+  const rated = blocks
+    .map((b) => ({
+      phase: b.phase,
+      soreness: b.soreness,
+      score: b.soreness_score ?? (b.soreness ? SORENESS_SCORE[b.soreness] : null),
+    }))
+    .filter((b) => b.score !== null && b.score !== undefined);
+
+  const soreEarlyList = earlySwitches.filter((e) => e.reason === "sore_early");
+  const deepSoreEarly = soreEarlyList.some((e) => e.prescribed_min > 0 && e.actual_min / e.prescribed_min < 0.6 - 1e-9);
+
+  if (!rated.length && !soreEarlyList.length) {
+    return {
+      status: "green",
+      worsening: false,
+      rated_count: 0,
+      reasons: [],
+      next_day: "On track",
+    };
+  }
+
+  const scores = rated.map((b) => b.score);
+  const flareBlocks = rated.filter((b) => b.score >= 3);
+  const modBlocks = rated.filter((b) => b.score >= 2);
+  const mildBlocks = rated.filter((b) => b.score === 1);
+  const last = rated[rated.length - 1];
+  const first = rated[0];
+
+  // Detect worsening across the day: second half worse than first half, or climbing into moderate+, or decompress didn't settle it.
+  let worsening = false;
+  if (scores.length >= 3) {
+    const mid = Math.floor(scores.length / 2);
+    const avg1 = scores.slice(0, mid).reduce((a, b) => a + b, 0) / mid;
+    const avg2 = scores.slice(mid).reduce((a, b) => a + b, 0) / (scores.length - mid);
+    if (avg2 >= avg1 + 0.5 && last.score >= 1) worsening = true;
+  }
+  if (!worsening && scores.length >= 2 && last.score >= 2 && last.score > first.score) {
+    worsening = true;
+  }
+  const decompFailed = rated.some((b) => b.phase === "decompress" && b.score >= 2);
+  if (decompFailed) worsening = true;
+
+  const reasons = [];
+  let status = "green";
+
+  if (flareBlocks.length > 0) {
+    status = "orange";
+    reasons.push(`Flare reported after ${flareBlocks[flareBlocks.length - 1].phase}`);
+  } else if (modBlocks.length >= 2 || (worsening && last && last.score >= 2) || decompFailed || deepSoreEarly) {
+    status = "orange";
+    if (decompFailed) reasons.push("Still moderate soreness after decompression");
+    if (modBlocks.length >= 2) reasons.push(`${modBlocks.length} blocks rated Moderate`);
+    else if (worsening && last && last.score >= 2) reasons.push(`Soreness climbed (${SORENESS_LABEL[first.soreness]} → ${SORENESS_LABEL[last.soreness]})`);
+    if (deepSoreEarly) reasons.push("Sore early before 60% of a block");
+  } else if (modBlocks.length === 1 || worsening || mildBlocks.length >= 2 || soreEarlyList.length > 0) {
+    status = "yellow";
+    if (worsening && last) reasons.push(`Soreness ticked up (${SORENESS_LABEL[first.soreness]} → ${SORENESS_LABEL[last.soreness]})`);
+    else if (modBlocks.length === 1) reasons.push(`1 block rated Moderate (${modBlocks[0].phase})`);
+    else if (mildBlocks.length >= 2) reasons.push(`${mildBlocks.length} blocks rated Mild`);
+    if (soreEarlyList.length > 0) reasons.push(`${soreEarlyList.length} sore-early switch${soreEarlyList.length === 1 ? "" : "es"}`);
+  } else {
+    reasons.push(rated.length === 1 ? "Block felt good" : `All ${rated.length} blocks stayed calm`);
+  }
+
+  const next_day = status === "orange"
+    ? "Tomorrow steps back 5 min & decompresses after each block"
+    : status === "yellow"
+      ? "Tomorrow holds current doses"
+      : "On track for tomorrow";
+
+  return { status, worsening, rated_count: rated.length, reasons, next_day };
+}
+
+/** Build an R16 applyPosture event from a previous day's work posture log. */
+export function workDayPostureEvent(log, doses) {
+  const blocks = log?.blocks || [];
+  const early = log?.early_switches || [];
+  const trend = evaluateSorenessTrend(blocks, early);
+  const lastOf = (ph) => [...early].reverse().find((e) => e.phase === ph && e.reason === "sore_early");
+  const standSw = lastOf("stand");
+  const sitSw = lastOf("sit");
+  const hasSitBlock = blocks.some((b) => b.phase === "sit");
+  const sitRatedBad = blocks.some((b) => b.phase === "sit" && (b.soreness_score ?? 0) >= 2);
+  const sitRatedMild = blocks.some((b) => b.phase === "sit" && (b.soreness_score ?? 0) === 1);
+  return {
+    work_mode_used: blocks.length > 0,
+    daily_status: trend.status,
+    standing_color: trend.status,
+    sitting_color: hasSitBlock ? (sitRatedBad ? "orange" : sitRatedMild ? "yellow" : trend.status) : null,
+    sitting: hasSitBlock
+      ? { flared: sitRatedBad, sore_early: !!sitSw, actual_min: sitSw?.actual_min ?? null, prescribed_min: sitSw?.prescribed_min ?? doses.sit_min, missing: false }
+      : { missing: true },
+    standing_block: { sore_early: !!standSw, actual_min: standSw?.actual_min ?? null, prescribed_min: standSw?.prescribed_min ?? doses.stand_min },
+    flare: false,
+    settle_exit: false,
+  };
+}
+
 /** The `posture_cycle` object for an evening check-in (checkin.schema), from a day's blocks and the doses then in force. */
 export function postureCheckinData(blocks, earlySwitches, doses) {
   const s = summarizeBlocks(blocks, earlySwitches);
@@ -338,7 +456,9 @@ export function postureCheckinData(blocks, earlySwitches, doses) {
     work_mode_used: blocks.length > 0, cycles_completed: s.cycles_completed,
     stand_prescribed_min: doses.stand_min, sit_prescribed_min: doses.sit_min, decomp_done: s.decomp_done,
     early_switches: earlySwitches.map((e) => ({ phase: e.phase, prescribed_min: e.prescribed_min, actual_min: e.actual_min, reason: e.reason })),
-    actual_blocks: blocks.map((b) => ({ ...b })),
+    actual_blocks: blocks.map(({ phase, prescribed_min, actual_min, started_at, ended_at, ended_how, snoozes }) => ({
+      phase, prescribed_min, actual_min, started_at, ended_at, ended_how, snoozes,
+    })),
   };
 }
 /** The `posture_cycle` object for the daily log (daily-log.schema). */

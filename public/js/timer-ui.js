@@ -2,13 +2,17 @@
 // audio, notifications and persistence. Timer state lives in IndexedDB (kv "timer") and syncs through Firestore,
 // so every device sees it; alarms ring only on the device that started work mode unless the app setting says otherwise.
 import {
-  TIMER_KEY, postureLogKey, startTimer, switchPhase, soreEarly, snooze, stopTimer, tick, isDue, deadlineOf, remainingMs,
+  TIMER_KEY, LAST_FALLBACK_KEY, SORENESS_LEVELS, postureLogKey, startTimer, switchPhase, soreEarly, snooze, stopTimer, tick, isDue, deadlineOf, remainingMs,
   snoozesLeft, followingPhase, phaseMinutes, phaseName, timerSettings, summarizeBlocks, postureDailyLog, inWorkHours, postureConfig, initPostureState,
+  applyPosture, evaluateSorenessTrend, workDayPostureEvent,
 } from "./posture.js";
-import { localDate } from "./util.js";
+import { manualEvent } from "./engine.js";
+import { localDate, isoLocal } from "./util.js";
+import { openSheet, closeSheet, confirmSheet } from "./ui/dom.js";
 
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const ICON = { stand: "🧍", walk: "🚶", sit: "🪑", decompress: "🛏️" };
+const SORENESS_BY_ID = Object.fromEntries(SORENESS_LEVELS.map((s) => [s.id, s]));
 const REPEAT_MS = 60000, MAX_REPEATS = 15;
 
 export function deviceId() {
@@ -74,8 +78,8 @@ function startClock(fn) {
 }
 
 /** ctx() -> { docs, profile, app, state, exById }. */
-export function createTimerUI({ store, ctx, toast, root, chip }) {
-  let timer = null, loaded = false, ring = { key: null, count: 0, last: 0 };
+export function createTimerUI({ store, ctx, setState, toast, root, chip }) {
+  let timer = null, loaded = false, ring = { key: null, count: 0, last: 0 }, fallbackCheckedFor = null;
   const dev = deviceId();
   const cfg = () => postureConfig() || ctx().docs.posture;
   const settings = () => timerSettings(ctx().profile, cfg());
@@ -96,27 +100,162 @@ export function createTimerUI({ store, ctx, toast, root, chip }) {
     const log = (await store.kvGet(key)) || { local_date: date, blocks: [], early_switches: [] };
     log.blocks = [...log.blocks, ...nb.map((b) => ({ ...b, session_id: t.session_id }))];
     log.early_switches = [...log.early_switches, ...ne];
+    const trend = evaluateSorenessTrend(log.blocks, log.early_switches);
+    log.fallback = trend;
     await store.kvSet(key, log);
     const day = (await store.get("days", date)) || { local_date: date, level_id: ctx().state.level_id, checklist: [] };
     day.posture_cycle = postureDailyLog(log.blocks, log.early_switches, doses());
+    if (trend.rated_count > 0 || log.early_switches.some((e) => e.reason === "sore_early")) {
+      day.daily_status = trend.status;
+      day.daily_status_reasons = trend.reasons;
+    }
     await store.put("days", day);
+  }
+
+  /** Apply any unapplied previous workday's soreness trend to today's posture doses. */
+  async function applyPendingFallback() {
+    const todayStr = localDate(new Date());
+    if (fallbackCheckedFor === todayStr || !ctx().state || !setState) return;
+    fallbackCheckedFor = todayStr;
+    const lastApplied = (await store.kvGet(LAST_FALLBACK_KEY)) || "";
+    const allKv = await store.all("kv");
+    const pending = allKv
+      .filter((r) => typeof r.key === "string" && r.key.startsWith("posture:log:"))
+      .map((r) => ({ date: r.key.slice("posture:log:".length), log: r.value }))
+      .filter((x) => x.date < todayStr && x.date > lastApplied && x.log?.blocks?.length)
+      .sort((a, b) => a.date.localeCompare(b.date));
+    if (!pending.length) return;
+
+    let st = ctx().state;
+    let lastResult = null;
+    for (const item of pending) {
+      if (st.mode === "active" && st.level_id !== "L0") {
+        const cur = st.posture_cycle || initPostureState(cfg(), st.level_id);
+        const ev = workDayPostureEvent(item.log, cur);
+        const r = applyPosture(cur, ev, cfg());
+        st = { ...st, posture_cycle: r.state };
+        lastResult = { date: item.date, ...r.result };
+      }
+      await store.kvSet(LAST_FALLBACK_KEY, item.date);
+    }
+    if (lastResult) {
+      await setState(st);
+      if (lastResult.outcome === "posture_regress") {
+        toast(`Yesterday showed worsening soreness — stepped back to Stand ${st.posture_cycle.stand_min} / Sit ${st.posture_cycle.sit_min} min.`);
+      } else if (lastResult.outcome === "posture_hold") {
+        toast("Yesterday's soreness held today's posture doses steady.");
+      } else if (lastResult.outcome === "posture_advance") {
+        toast(`3 clean work days — advanced to Stand ${st.posture_cycle.stand_min} / Sit ${st.posture_cycle.sit_min} min.`);
+      }
+      update(true);
+    }
+  }
+
+  async function triggerFlare({ confirmFirst = true } = {}) {
+    const { state, docs } = ctx();
+    if (!state || !setState) return false;
+    if (state.mode === "red_stop") { toast("Plan is paused for a red flag."); return false; }
+    if (state.level_id === "L0") { toast("Already in settle mode (L0)."); return false; }
+    if (confirmFirst) {
+      const ok = await confirmSheet({
+        title: "Trigger flare mode (L0)?",
+        body: "Switches to L0 settle mode with shorter blocks (Stand 25 · Sit 10 min) and decompression after every block until you have 2 green days.",
+        confirmLabel: "Enter flare mode",
+        danger: true,
+      });
+      if (!ok) return false;
+    }
+    const { state: nextState, log } = manualEvent(state, docs.levels, docs.config, { type: "flare" }, isoLocal());
+    await setState(nextState, log);
+    toast("Flare mode (L0) active — Stand 25 · Sit 10 min, decompress after each block.");
+    update(true);
+    return true;
+  }
+
+  function promptPhaseSoreness(phaseId, { subtitle = "" } = {}) {
+    return new Promise((resolve) => {
+      let settled = false;
+      const finish = (val) => {
+        if (settled) return;
+        settled = true;
+        resolve(val);
+      };
+      const label = phaseName(cfg(), phaseId);
+      const rootEl = openSheet(`
+        <h2>${ICON[phaseId] || ""} How did ${esc(label)} feel?</h2>
+        <p class="sheet-copy">${esc(subtitle || "Check in so we can spot worsening soreness and adjust tomorrow's blocks.")}</p>
+        <div class="sore-grid">
+          ${SORENESS_LEVELS.map((s) => `
+            <button class="sore-btn sore-${s.color}" type="button" data-sore="${s.id}">
+              <span class="sore-dot" aria-hidden="true"></span>
+              <span class="sore-text"><b>${esc(s.label)}</b><small>${esc(s.hint)}</small></span>
+            </button>`).join("")}
+        </div>
+        <div class="sheet-actions">
+          <button class="btn" type="button" data-skip-sore>Skip rating</button>
+        </div>`, { onClose: () => finish(null) });
+
+      rootEl.onclick = (e) => {
+        const pick = e.target.closest("[data-sore]");
+        if (pick) {
+          finish({ soreness: pick.dataset.sore });
+          closeSheet();
+          return;
+        }
+        if (e.target.closest("[data-skip-sore]")) {
+          finish({ soreness: null });
+          closeSheet();
+        }
+      };
+    });
   }
 
   // ---- actions
   async function start() {
     unlockAudio(); askNotifications();
+    await applyPendingFallback();
     const prev = timer;
     await save(startTimer(doses(), Date.now(), { cfg: cfg(), settings: settings(), deviceId: dev }), prev);
   }
   const withNow = (fn) => async () => { const prev = timer; const next = fn(prev, Date.now()); if (next !== prev) await save(next, prev); };
-  const sw = (how) => withNow((t, now) => switchPhase(t, now, doses(), how, cfg()));
+
+  async function finishAndSwitch(how) {
+    unlockAudio();
+    if (!timer?.active) return;
+    const picked = await promptPhaseSoreness(timer.phase, {
+      subtitle: how === "sore_early"
+        ? "Ending this block early — how sore are you right now?"
+        : "Quick check before moving to the next phase.",
+    });
+    if (!picked) return; // dismissed without switching
+    const prev = timer;
+    const soreness = picked.soreness;
+    const effectiveHow = soreness === "flare" && (prev.phase === "stand" || prev.phase === "sit") ? "sore_early" : how;
+    if (soreness === "flare") {
+      await triggerFlare({ confirmFirst: false });
+    }
+    const next = switchPhase(prev, Date.now(), doses(), effectiveHow, cfg(), soreness);
+    if (next !== prev) await save(next, prev);
+  }
+
   const actions = {
     start,
-    switch: async () => { unlockAudio(); await sw(isDue(timer, Date.now()) ? "alarm" : "manual")(); },
-    skip: sw("manual"),
-    sore: withNow((t, now) => soreEarly(t, now, doses(), cfg())),
+    switch: () => finishAndSwitch(isDue(timer, Date.now()) ? "alarm" : "manual"),
+    skip: () => finishAndSwitch("manual"),
+    sore: () => finishAndSwitch("sore_early"),
     snooze: withNow((t, now) => snooze(t, now, settings())),
-    stop: async () => { if (confirm("Stop work mode?")) await withNow((t, now) => stopTimer(t, now, "manual"))(); },
+    flare: () => triggerFlare({ confirmFirst: true }),
+    stop: async () => {
+      if (!timer?.active) return;
+      const picked = await promptPhaseSoreness(timer.phase, {
+        subtitle: "Stopping work mode — how did this last block feel?",
+      });
+      if (!picked) return;
+      const prev = timer;
+      if (picked.soreness === "flare") await triggerFlare({ confirmFirst: false });
+      const next = stopTimer(prev, Date.now(), "manual", picked.soreness);
+      if (next !== prev) await save(next, prev);
+    },
   };
 
   // ---- the clock loop
@@ -190,14 +329,19 @@ export function createTimerUI({ store, ctx, toast, root, chip }) {
     const log = await todayBlocks();
     if (!root.isConnected) return;
     const perm = "Notification" in window ? Notification.permission : "unsupported";
+    const curState = ctx().state;
+    const inFlare = curState?.level_id === "L0" || curState?.mode === "settle";
+    const canFlare = !!curState && curState.level_id !== "L0" && curState.mode !== "red_stop";
     let html = "";
     if (!timer?.active) {
       const inside = inWorkHours(now, st);
       html += `<section class="card timer-card">
         <h2>Work mode</h2>
-        <p class="small">Repeats <b>Stand → Walk → Sit → Decompress</b> and sounds an alarm at each change, so you break before the soreness builds.</p>
+        <p class="small">Repeats <b>Stand → Walk → Sit → Decompress</b> and checks how you feel after each block to guard against flare-ups.</p>
         <p class="timer-doses">${esc(dosesLine())}</p>
+        ${inFlare ? `<p class="flare-banner">Settle mode (L0) active — shorter blocks and decompression after each block.</p>` : ""}
         <button class="btn primary wide big" id="t-start" ${st.enabled === false ? "disabled" : ""}>Start work mode</button>
+        ${canFlare ? `<button class="btn danger wide" id="t-flare" type="button">I flared — switch to L0 settle mode</button>` : ""}
         <p class="muted small">${st.enabled === false ? "The work timer is turned off in Settings. " : ""}Work hours ${esc(st.work_start)}–${esc(st.work_end)} CT${st.quiet_outside_work_hours ? ` (no alarms outside them). ${inside ? "You're inside them now." : "You're outside them now, so starting by hand overrides quiet hours for this session."}` : "."}</p>
         ${timer?.stopped_at ? `<p class="muted small">Last session ended ${new Date(timer.stopped_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}${timer.stopped_how === "work_end" ? " at work end" : ""}.</p>` : ""}
       </section>`;
@@ -212,6 +356,7 @@ export function createTimerUI({ store, ctx, toast, root, chip }) {
         <div class="t-count" id="t-count" aria-live="off">${due ? "+" + fmtClock(now - deadlineOf(timer)) : fmtClock(remainingMs(timer, now))}</div>
         <div class="t-barwrap"><div class="t-bar" id="t-bar"></div></div>
         <p class="t-next">${due ? `<b>Time to switch.</b> ` : ""}Next: <b>${ICON[next] || ""} ${esc(phaseName(c, next))}</b> · ${fmtMin(phaseMinutes(doses(), next, c))}</p>
+        ${inFlare ? `<p class="flare-banner">Settle mode (L0) active</p>` : ""}
         ${due && timer.snoozes ? `<p class="muted small">Snoozed ${timer.snoozes}×.${left ? "" : " No snoozes left: switch, tap sore early, or skip."}</p>` : ""}
         <div class="t-actions">
           <button class="btn primary big" id="t-switch">${due ? `Start ${esc(phaseName(c, next))}` : `Skip to ${esc(phaseName(c, next))}`}</button>
@@ -220,7 +365,10 @@ export function createTimerUI({ store, ctx, toast, root, chip }) {
         </div>
         <ul class="t-cues">${(ph.cues || []).map((q) => `<li>${esc(q)}</li>`).join("")}</ul>
         ${decompIds.length ? `<p class="muted small">Options: ${decompIds.map((id) => esc(ctx().exById[id]?.name || id)).join(" · ")}</p>` : ""}
-        <button class="btn danger" id="t-stop">Stop work mode</button>
+        <div class="t-secondary">
+          ${canFlare ? `<button class="btn warn" id="t-flare" type="button">I flared</button>` : ""}
+          <button class="btn danger" id="t-stop" type="button">Stop work mode</button>
+        </div>
       </section>
       <section class="card">
         <p class="muted small">${mine ? "Alarms ring on this device." : "Started on another device: it will ring there. You can still switch or stop from here."}
@@ -233,14 +381,23 @@ export function createTimerUI({ store, ctx, toast, root, chip }) {
     const blocks = log?.blocks || [];
     if (blocks.length || timer?.blocks?.length) {
       const sum = summarizeBlocks(blocks, log?.early_switches || []);
+      const trend = evaluateSorenessTrend(blocks, log?.early_switches || []);
       html += `<section class="card"><h3>Today</h3>
+        <div class="fallback-row fallback-${trend.status}">
+          <span class="status-pill status-${trend.status}">${esc(trend.status)}</span>
+          <span class="small">${esc(trend.next_day)}${trend.reasons.length ? ` · <span class="muted">${esc(trend.reasons[0])}</span>` : ""}</span>
+        </div>
         <p class="muted small">${sum.cycles_completed} full cycle${sum.cycles_completed === 1 ? "" : "s"} · ${sum.early_switch_count} early switch${sum.early_switch_count === 1 ? "" : "es"} (${sum.stand_early_switches} stand, ${sum.sit_early_switches} sit sore)</p>
-        <ul class="t-log">${blocks.slice(-12).reverse().map((b) => `<li><span>${dlg.hhmm(b.started_at)} ${ICON[b.phase] || ""} ${esc(phaseName(c, b.phase))}</span><span>${b.actual_min} / ${b.prescribed_min} min${b.ended_how === "sore_early" ? " · sore early" : b.ended_how === "manual" ? " · early" : b.snoozes ? ` · snoozed ${b.snoozes}×` : ""}</span></li>`).join("")}</ul>
+        <ul class="t-log">${blocks.slice(-12).reverse().map((b) => {
+          const sr = b.soreness ? SORENESS_BY_ID[b.soreness] : null;
+          const tag = sr ? ` <span class="sore-tag sore-${sr.color}">${esc(sr.label)}</span>` : "";
+          return `<li><span>${dlg.hhmm(b.started_at)} ${ICON[b.phase] || ""} ${esc(phaseName(c, b.phase))}</span><span>${b.actual_min}/${b.prescribed_min} min${b.ended_how === "sore_early" ? " · sore early" : b.ended_how === "manual" ? " · early" : b.snoozes ? ` · snoozed ${b.snoozes}×` : ""}${tag}</span></li>`;
+        }).join("")}</ul>
       </section>`;
     }
     root.innerHTML = html;
     const on = (id, fn) => { const el = root.querySelector(id); if (el) el.onclick = fn; };
-    on("#t-start", actions.start); on("#t-switch", actions.switch); on("#t-snooze", actions.snooze); on("#t-sore", actions.sore); on("#t-stop", actions.stop);
+    on("#t-start", actions.start); on("#t-switch", actions.switch); on("#t-snooze", actions.snooze); on("#t-sore", actions.sore); on("#t-flare", actions.flare); on("#t-stop", actions.stop);
     on("#t-perm", async () => { await askNotifications(); update(true); });
   }
 
@@ -248,9 +405,9 @@ export function createTimerUI({ store, ctx, toast, root, chip }) {
   document.addEventListener("pointerdown", () => { if (timer?.active && !audioReady()) { unlockAudio(); update(true); } }, { passive: true });
 
   return {
-    async init() { await load(); startClock(onTick); onTick(); },
+    async init() { await load(); await applyPendingFallback(); startClock(onTick); onTick(); },
     async reload() { await load(); onTick(); update(true); },
-    show() { root.dataset.timerPage = "1"; shape = ""; update(true); },
+    show() { root.dataset.timerPage = "1"; shape = ""; applyPendingFallback().catch(() => {}); update(true); },
     hide() { delete root.dataset.timerPage; },
     testAlarm() { unlockAudio(); setTimeout(() => { if (!playAlarm("walk")) toast("Couldn't start audio. Tap again."); notify("Test alarm", "This is what a phase change looks like."); }, 50); },
     get active() { return !!timer?.active; },
