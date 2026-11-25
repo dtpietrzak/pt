@@ -2,7 +2,9 @@
 // Uses event delegation + in-place DOM updates so tapping checkboxes or steppers never flickers.
 import { currentDose } from "../engine.js";
 import { formatDose, missingEquipment } from "../dose.js";
-import { loadView, redBannerHtml, checkinCardHtml, availableTemplates, finishWorkout, WORKOUT_NAMES, onClick as checkinClick, refreshBadges } from "./checkins.js";
+import { loadView, redBannerHtml, checkinCardHtml, availableTemplates, finishWorkout, WORKOUT_NAMES, refreshBadges } from "./checkins.js";
+import { onClick as checkinClick, statusCardHtml, equipCardHtml, renderRedToday } from "./status.js";
+import { needsEquipConfirm } from "../status.js";
 import { templateItems, nextStrengthTemplate } from "../pipeline.js";
 import { isoLocal, localTime } from "../util.js";
 import { $, esc, BLOCKS, today, nowHM, addMin, minutesSince, fmtDate, openSheet, closeSheet, showExercise, toast } from "./dom.js";
@@ -71,6 +73,9 @@ export async function renderToday(ctx, main) {
   const d = today();
   const lv = ctx.level();
   const [log, wake, view, wkSaved] = await Promise.all([dayLog(ctx, d), ctx.store.kvGet(`wake:${d}`), loadView(ctx), ctx.store.kvGet(wkKey(d))]);
+  // A red flag replaces the home screen with the red-flag screen (check-ins stay available).
+  if (ctx.state.mode === "red_stop") return renderRedToday(ctx, main, view);
+  const equipNeeded = needsEquipConfirm(ctx.state, await ctx.store.kvGet("equip_confirmed"));
   const wkTicks = wkSaved || {};
   const inWindow = wake && minutesSince(d, wake) < MORNING_WINDOW_MIN;
   const doneSet = new Set(log.checklist.filter((c) => c.done).map((c) => c.item_key));
@@ -113,6 +118,7 @@ export async function renderToday(ctx, main) {
   }
   // Check-ins: shown once the day has started, or earlier when a later one (evening, night, post-workout) is already due.
   if (wake || view.list.some((e) => e.state === "due" && e.type !== "morning")) html += checkinCardHtml(view);
+  if (wake) html += statusCardHtml(ctx, view);
   for (const [block, label] of wake ? BLOCKS.filter(([b]) => DAILY.includes(b)) : []) {
     const its = itemsByBlock.get(block);
     if (!its) continue;
@@ -154,7 +160,8 @@ export async function renderToday(ctx, main) {
     }
     html += `</div></section>`;
   }
-  const workouts = wake ? workoutPlan(ctx, view, d) : [];
+  if (wake && equipNeeded) html += equipCardHtml(); // barbell work waits for the equipment reconfirm
+  const workouts = wake && !equipNeeded ? workoutPlan(ctx, view, d) : [];
   for (const w of workouts) html += workoutCardHtml(ctx, w, wkTicks[w.template], inWindow, wake);
   main.innerHTML = html;
   refreshBadges(ctx, view);

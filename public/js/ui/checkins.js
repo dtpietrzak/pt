@@ -3,7 +3,7 @@
 import { evaluateAll, dailyMap } from "../engine.js";
 import { localDate, localTime, ulid } from "../util.js";
 import { checklist, dueNow, buildCheckIn, formFromCheckIn, summaryLine, redGuidance, tidyReasons, RED_FLAGS, TYPES, LABEL, noFlags } from "../checkins.js";
-import { evaluate, engineConfig, templateItems, buildSession, clearRed } from "../pipeline.js";
+import { recordGate, evaluate, engineConfig, templateItems, buildSession, clearRed } from "../pipeline.js";
 import { postureCheckinData, postureLogKey } from "../posture.js";
 import { askNotifications } from "../timer-ui.js";
 import { $, esc, openSheet, closeSheet, toast, fmtDate, confirmSheet } from "./dom.js";
@@ -49,13 +49,13 @@ const SETTLE = [["lt_30", "Under 30 min"], ["30_120", "30 to 120 min"], ["gt_120
 const TAGS = [["illness", "Sick or run down"], ["unusual_load", "Unusually heavy day"]];
 const optLabel = (opts, v) => opts.find(([k]) => String(k) === String(v))?.[1] ?? v;
 
-const painBands = (ctx) => ctx.docs.config.pain || { green_max: 2, yellow_max: 4 };
+export const painBands = (ctx) => ctx.docs.config.pain || { green_max: 2, yellow_max: 4 };
 const band = (n, P) => (n <= P.green_max ? "green" : n <= P.yellow_max ? "yellow" : "orange");
 
 // ---------------------------------------------------------------- small form controls
 const pv = (v) => (v === undefined || v === null ? "" : esc(v));
 /** A row of tappable numbers. With `P` the cells are colored by pain band; `required` makes Save insist on an answer. */
-function qScale(name, label, val, { min = 0, max = 10, lo = "None", hi = "Worst", hint = "", P = null, required = false } = {}) {
+export function qScale(name, label, val, { min = 0, max = 10, lo = "None", hi = "Worst", hint = "", P = null, required = false } = {}) {
   const cells = [];
   for (let n = min; n <= max; n++) {
     cells.push(`<label class="ci-cell${P ? ` ${band(n, P)}` : ""}"><input type="radio" name="${name}" value="${n}"${val !== undefined && val !== null && val !== "" && Number(val) === n ? " checked" : ""} /><span>${n}</span></label>`);
@@ -66,7 +66,7 @@ function qScale(name, label, val, { min = 0, max = 10, lo = "None", hi = "Worst"
     <div class="ci-ends"><small>${esc(lo)}</small><small>${esc(hi)}</small></div>
     <small class="ci-missing">Pick a number to save.</small></div>`;
 }
-function qStep(name, label, val, { step = 1, min = 0, unit = "", hint = "" } = {}) {
+export function qStep(name, label, val, { step = 1, min = 0, unit = "", hint = "" } = {}) {
   return `<div class="ci-q ci-step-q"><div class="ci-step-copy"><span class="ci-label">${esc(label)}</span>
     ${hint ? `<small class="ci-hint">${esc(hint)}</small>` : ""}</div>
     <div class="ci-step"><button type="button" class="btn icon" data-ci-step="-${step}" data-for="${name}" aria-label="less">−</button>
@@ -77,7 +77,7 @@ function qChips(name, label, options, val, { hint = "", show = "" } = {}) {
   return `<div class="ci-q"${show ? ` data-show="${show}"` : ""}><span class="ci-label">${esc(label)}</span>${hint ? `<small class="ci-hint">${esc(hint)}</small>` : ""}
     <div class="chips">${options.map(([v, l]) => `<label class="chip-opt"><input type="radio" name="${name}" value="${esc(v)}"${String(v) === String(val) ? " checked" : ""} /><span>${esc(l)}</span></label>`).join("")}</div></div>`;
 }
-function qToggle(name, label, on, { hint = "", show = "" } = {}) {
+export function qToggle(name, label, on, { hint = "", show = "" } = {}) {
   return `<label class="toggle ci-toggle"${show ? ` data-show="${show}"` : ""}><input type="checkbox" name="${name}"${on ? " checked" : ""} /><span>${esc(label)}${hint ? `<small class="ci-hint">${esc(hint)}</small>` : ""}</span></label>`;
 }
 const when = (cond, html) => `<div class="ci-sub" data-show="${cond}">${html}</div>`;
@@ -260,6 +260,8 @@ async function save(ctx, type, form, { existing, session_id, date }) {
   if (type === "post_workout" && session_id) {
     const s = await ctx.store.get("sessions", session_id);
     if (s && s.post_workout_checkin_id !== rec.id) await ctx.store.put("sessions", { ...s, post_workout_checkin_id: rec.id });
+    // A gate-test session's pass depends on this check-in's symptoms, so record the results again with it in hand.
+    if (s?.template === "gate_test") await recordGate(ctx.store, ctx.docs, ctx.profile, session_id);
   }
   closeSheet();
   const was = ctx.state.mode;
@@ -268,12 +270,12 @@ async function save(ctx, type, form, { existing, session_id, date }) {
   const color = v.evals[rec.id]?.color || "green";
   ctx.render();
   refreshBadges(ctx, v);
-  if (ctx.state.mode === "red_stop" && was !== "red_stop") toast("Red check-in: see the notice at the top of Today.");
+  if (ctx.state.mode === "red_stop" && was !== "red_stop") { location.hash = "#/red"; toast("Red check-in: plan frozen. Read what to do next."); }
   else toast(`${LABEL[type]} saved · ${cap(color)}`);
 }
 
 // ---------------------------------------------------------------- form behaviour (delegated per form)
-function wireForm(ctx, form) {
+export function wireForm(ctx, form) {
   const sync = () => {
     for (const el of form.querySelectorAll("[data-show]")) {
       const m = /^([\w-]+)(!?=)?(.*)$/.exec(el.dataset.show);
@@ -396,7 +398,7 @@ export function checkinCardHtml(v) {
   return `<section class="card ci-card"><div class="ci-head"><h2>Check-ins</h2><span class="ci-count">${done} of ${v.list.length} done</span>${pill}</div>
     <div class="ci-rows">${rows}</div>
     ${reasons.length ? `<ul class="reasons">${reasons.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>` : ""}
-    <div class="ci-foot"><a class="link" href="#/history">History</a>${remind}</div></section>`;
+    <div class="ci-foot"><a class="link" href="#/history">History</a><a class="link" href="#/red">Red flags</a>${remind}</div></section>`;
 }
 
 export const WORKOUT_NAMES = { strength_A: "Strength A", strength_B: "Strength B", conditioning: "Conditioning" };
@@ -456,7 +458,7 @@ export async function renderHistory(ctx, main) {
     return `<section class="card hist-day"><div class="ci-head"><h2>${esc(fmtDate(d))}</h2>${day ? `<span class="pill ${day.color}">${cap(day.color)}</span>` : '<span class="pill none">No check-ins</span>'}</div>
       <div class="chips">${cis.map((c) => `<button class="chip-btn ${v.evals[c.id].color}" type="button" data-ci-view="${esc(c.id)}">${esc(LABEL[c.type])}</button>`).join("")}</div>
       ${day?.reasons.length ? `<ul class="reasons">${tidyReasons(day.reasons).map((r) => `<li>${esc(r)}</li>`).join("")}</ul>` : ""}
-      ${ss.map((s) => `<p class="small">🏋️ ${esc(WORKOUT_NAMES[s.template] || s.template)}${s.final_color ? ` · ${cap(s.final_color)}${s.status === "final" ? "" : " so far"}` : " · waiting on check-ins"}${s.clean ? " · counts toward advancing" : ""}</p>`).join("")}
+      ${ss.map((s) => `<p class="small">🏋️ ${esc(WORKOUT_NAMES[s.template] || s.template.replace(/_/g, " "))}${s.final_color ? ` · ${cap(s.final_color)}${s.status === "final" ? "" : " so far"}` : " · waiting on check-ins"}${s.clean ? " · counts toward advancing" : ""}</p>`).join("")}
       ${decisions.length ? `<div class="decisions"><small class="muted">Plan decisions</small>${decisions.map((l) => `<p class="small">${esc(l.message || `${l.rule_id}: ${l.outcome}`)}</p>`).join("")}</div>` : ""}</section>`;
   };
   main.innerHTML = `${redBannerHtml(ctx)}<p><a class="link" href="#/today">← Today</a></p>

@@ -1,6 +1,6 @@
 // Glue between the synced IndexedDB store and the pure engine. No DOM; takes any store with get/all/put/kvGet/kvSet,
 // so Node tests run it against an in-memory store.
-import { runEngine, manualEvent, levelById, SESSION_BLOCKS, currentDose } from "./engine.js";
+import { runEngine, manualEvent, levelById, SESSION_BLOCKS, currentDose, recordGateResults, evaluateCheckIn } from "./engine.js";
 import { isoLocal, ulid, clone } from "./util.js";
 
 const SESSION_MODS = new Set(["poor_sleep", "illness", "unusual_load", "missing_morning_checkin", "pause_mode", "easy_dose"]);
@@ -74,5 +74,38 @@ export async function clearRed(store, docs, profile, note, { now = new Date(), n
   const r = manualEvent(prev, docs.levels, engineConfig(docs, profile), { type: "red_clear", note: note || "" }, isoLocal(now), newId);
   await store.kvSet("state", r.state);
   for (const e of r.log) await store.put("log", e);
+  return r;
+}
+
+/** Any manual engine event (flare, pause, resume, skip_optional_test, red_report). Persists state and log. */
+export async function manual(store, docs, profile, ev, { now = new Date(), newId = () => ulid() } = {}) {
+  const prev = await store.kvGet("state");
+  const r = manualEvent(prev, docs.levels, engineConfig(docs, profile), ev, isoLocal(now), newId);
+  await store.kvSet("state", r.state);
+  for (const e of r.log) await store.put("log", e);
+  return r;
+}
+
+/**
+ * Record a gate-test session's results against the plan state (provisional pass or fail) and save the session with
+ * each result's pass/fail. Call when the session is saved, and again once its post-workout check-in exists (that
+ * check-in's symptoms can turn a pass into a fail). Returns the updated state.
+ */
+export async function recordGate(store, docs, profile, sessionId, { now = new Date(), newId = () => ulid() } = {}) {
+  const session = await store.get("sessions", sessionId);
+  if (!session || session.template !== "gate_test") return null;
+  const state = await store.kvGet("state");
+  // Once the engine has confirmed one of these tests, its result is settled; don't reopen it.
+  if ((session.gate_results || []).some((g) => state.gate_tests?.[g.test_id]?.status === "pass_confirmed" && state.gate_tests[g.test_id].session_id === sessionId)) return null;
+  const cfg = engineConfig(docs, profile);
+  const post = session.post_workout_checkin_id ? await store.get("checkins", session.post_workout_checkin_id) : null;
+  const postEval = post ? evaluateCheckIn(post, state.baselines, cfg, {}) : null;
+  const ss = clone(session);
+  const r = recordGateResults(state, ss, docs.levels, docs.tests, postEval);
+  await store.kvSet("state", r.state);
+  await store.put("sessions", ss);
+  // Called at gate save and again after the post-workout check-in; don't log the same line twice.
+  const seen = new Set((await store.all("log")).filter((l) => (l.session_id ?? sessionId) === sessionId).map((l) => l.message));
+  for (const e of r.log) if (!seen.has(e.message)) await store.put("log", { id: newId(), ts: isoLocal(now), session_id: sessionId, ...e });
   return r;
 }

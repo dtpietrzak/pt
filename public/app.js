@@ -13,8 +13,9 @@ import { renderToday } from "./js/ui/today.js";
 import { renderPlan } from "./js/ui/plan.js";
 import { renderSettings } from "./js/ui/settings.js";
 import { renderHistory, refreshEngine, startReminders } from "./js/ui/checkins.js";
+import { renderStatus, renderRed, maybeShowDecisions } from "./js/ui/status.js";
 
-const PAGES = { today: "Today", work: "Work", plan: "Plan", settings: "Settings", history: "History" };
+const PAGES = { today: "Today", work: "Work", plan: "Plan", settings: "Settings", history: "History", status: "Status", red: "Red flags" };
 const main = $("#main");
 
 let showingLogin = false;
@@ -40,7 +41,7 @@ function renderWork(c, root) {
   c.timerUI.show();
 }
 
-const VIEWS = { today: renderToday, work: renderWork, plan: renderPlan, settings: renderSettings, history: renderHistory };
+const VIEWS = { today: renderToday, work: renderWork, plan: renderPlan, settings: renderSettings, history: renderHistory, status: renderStatus, red: renderRed };
 
 function route() {
   let r = location.hash.replace(/^#\/?/, "") || "today";
@@ -63,9 +64,9 @@ function render() {
   $("#level-chip").textContent = `${ctx.state.level_id}${ctx.state.mode !== "active" ? " · " + ctx.state.mode : ""}`;
   $("#level-chip").hidden = false;
   renderAccount(ctx);
-  document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("on", a.dataset.page === (r === "history" ? "today" : r)));
+  document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("on", a.dataset.page === (["history", "status", "red"].includes(r) ? "today" : r)));
   $(".nav").hidden = false;
-  VIEWS[r](ctx, main);
+  Promise.resolve(VIEWS[r](ctx, main)).then(() => maybeShowDecisions(ctx)).catch((e) => console.warn("View failed:", e));
 }
 
 // Another device changed something: re-read IndexedDB and re-render (never while typing or in a sheet).
@@ -142,6 +143,7 @@ async function start() {
   ctx.timerUI.init().catch((e) => console.warn("Timer unavailable:", e));
   if (b.resynced) toast("Plan data updated from the latest seed.");
   wireAccountMenu(ctx);
+  $("#level-chip").onclick = () => { location.hash = "#/status"; };
   window.addEventListener("hashchange", render);
   window.addEventListener("online", connectCloud);
   render();

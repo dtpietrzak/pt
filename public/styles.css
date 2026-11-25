@@ -971,3 +971,38 @@ button.ci-row:active { background: color-mix(in srgb, var(--line) 45%, transpare
 .cal-grid span.start i { position: absolute; top: 2px; right: 3px; font-size: 8px; font-style: normal; font-weight: 900; line-height: 1; }
 .cal-grid span.out { opacity: .38; font-weight: 600; }
 .cal-grid span.today::after { content: ""; position: absolute; width: 26px; height: 26px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--text); pointer-events: none; }
+
+/* ---------------------------------------------------------------- phase 3: status, gate tests, red screen, announcements */
+#level-chip { cursor: pointer; }
+.meter { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; margin: 4px 0 8px; }
+.meter span { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width .3s ease; }
+.status-card .ci-head h2 { font-size: 17px; }
+.checks { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
+.checks li { display: flex; gap: 10px; align-items: flex-start; }
+.checks .tick { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; font-size: 13px; font-weight: 900; flex: none; color: var(--muted); }
+.checks li.ok .tick { background: var(--green); border-color: var(--green); color: var(--green-ink); }
+.checks span:last-child { display: grid; }
+.checks small, .gate-copy small, .ex-row small { color: var(--muted); font-size: 13px; font-weight: 500; }
+.ex-row { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; border-top: 1px solid var(--line); }
+.ex-row span:last-child { display: grid; }
+.gate { border-top: 1px solid var(--line); padding: 8px 0; }
+.gate summary { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; list-style: none; }
+.gate summary::-webkit-details-marker { display: none; }
+.gate-copy { display: grid; gap: 1px; }
+.dec { border-top: 1px solid var(--line); padding: 6px 0; }
+.dec p { margin: 2px 0 0; }
+.redlist { margin: 8px 0; padding-left: 20px; }
+.redlist li { margin: 4px 0; }
+.rs-result { margin: 12px 0; padding: 12px 14px; border-radius: 16px; border: 2px solid var(--red); background: color-mix(in srgb, var(--red) 10%, var(--card)); }
+.rs-result.clinician { border-color: var(--orange); background: color-mix(in srgb, var(--orange) 12%, var(--card)); }
+.rs-result p { margin: 4px 0 0; font-size: 14px; }
+.gt-result.pass { color: var(--green); font-weight: 700; }
+.gt-result.nopass { color: var(--danger); font-weight: 700; }
+.announce { text-align: center; padding: 8px 4px 4px; }
+.announce + .announce { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 18px; }
+.announce-icon { font-size: 44px; line-height: 1; }
+.announce h2 { padding: 0; margin: 8px 0; }
+.announce ul { text-align: left; margin: 10px 0; padding-left: 20px; font-size: 14px; color: var(--muted); }
+.announce.up h2 { color: var(--green); } .announce.down h2 { color: var(--warn); } .announce.red h2 { color: var(--red); }
+.equip-card h2 { margin-top: 0; }
+.btn.disabled, .btn:disabled { opacity: .5; }

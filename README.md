@@ -16,7 +16,7 @@ Data is saved on the device first (IndexedDB), so it works offline and before si
 | 1.5 | Google sign-in + Firestore sync between devices | **live** |
 | 1.6 | Work posture timer (Work tab) + R16 dose progression | **live** |
 | 2 | Four check-ins (morning, post-workout, evening, night), the green/yellow/orange/red rollup, due badges + reminders, a minimal workout log | **live** |
-| 3 | Advance/hold/regress UI, sessions, gate tests, red-flag screen | |
+| 3 | Status page (advance/hold/regress), level-up/regress/settle announcements, gate tests, red-flag screen, L6 equipment reconfirm | **live** |
 | 4 | Weekly export (JSON + markdown) and agent plan-patch import | |
 
 `public/js/patch.js` and `public/js/export.js` are already written and tested, but no UI uses them yet (phase 4).
@@ -60,6 +60,14 @@ Work tab: **Start work mode** runs Stand 40 → Walk 2 → Sit 20 → Decompress
 - Every save runs the engine (`public/js/pipeline.js`) and persists plan state, decision-log entries and each session's evaluation. A red check-in freezes the plan and shows a notice with guidance (no contact details); the only way out is "Symptoms resolved, or a clinician cleared me", which enters settle mode.
 - All of it goes through the synced store (`checkins`, `sessions`, `log`, `days`, `kv`), so it syncs like everything else. Those stores were already in the Firestore rules allow-list, so no rules change was needed.
 
+## Status, gate tests and red flags (phase 3)
+
+- **Status** (`#/status`, tap the level chip or the card on Today): current level and mode, a checklist of what it takes to move up (exercises at target, clean-session streak, confirmed gate tests), per-exercise rungs, the plan's recent decisions with the reason and rule id, and the day-by-day history. Pure logic is in `public/js/status.js` (tested); the screens are in `public/js/ui/status.js`.
+- **Announcements**: when the engine promotes, steps back, enters or leaves settle mode, or a red happens, a sheet explains what changed and why. It shows once per decision (acknowledged timestamp in `kv`); the first run on a device is silent so old history doesn't pop up.
+- **Gate tests**: unlocked when every required exercise is at target and the clean streak is met. You also need a green yesterday and a green morning. Pick one group per session, how-to text and thresholds are shown, and weight thresholds are recomputed from the profile body weight (rounded to 5 lb). Results go through `recordGate` (pipeline), a pass is provisional until the next morning is green, and the engine promotes when all required tests are confirmed.
+- **Red flags** (`#/red`, also linked from the check-in card and every Today): a self-screen with guidance only (see a clinician; saddle numbness or bladder/bowel changes means emergency care). "Pause my plan" uses the `red_report` manual event. A red check-in routes here too. No contact details anywhere.
+- **L6 entry**: before barbell work, Today asks you to reconfirm equipment (`kv.equip_confirmed`); workouts stay hidden until you do.
+
 ## Layout
 
 - `public/app.js`: UI (hash routes `#/today`, `#/plan`, `#/settings`)
@@ -67,6 +75,7 @@ Work tab: **Start work mode** runs Stand 40 → Walk 2 → Sit 20 → Decompress
 - `public/js/util.js`: Chicago time, ULIDs, and canonical JSON + SHA-256 (matches PT Bot's Python hashes)
 - `public/js/schema.js`: a small JSON Schema validator for the bundled schemas
 - `public/js/checkins.js` (due logic, form -> record), `pipeline.js` (store -> engine -> store), `ui/checkins.js` (forms, Today card, history, reminders)
+- `public/js/status.js` (level status, gate eligibility/results, announcements), `ui/status.js` (status page, gate flow, red screen, announcements, equipment)
 - `public/js/db.js`, `data.js`, `dose.js`, `defaults.js`: storage, seed loading and migration, dose text, and fallback defaults
 - `test/`: `node --test "test/*.test.mjs"`
 

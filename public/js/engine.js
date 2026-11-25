@@ -915,6 +915,12 @@ export function manualEvent(state, levelsDoc, cfg, ev, now, newId = defaultId())
     lockOn(s, cfg); s.x.settle_since = now;
     posturePreset(s, { flare: true }, push, now);
     push({ rule_id: "R1", outcome: "settle_enter", message: `Red cleared (${ev.note || "no note"}). Settle mode (L0); later resume at ${resume}.` });
+  } else if (ev.type === "red_report" && s.mode !== "red_stop") {
+    // David reported a red flag from the red-flag screen (not through a check-in).
+    s.x.pre_red = { level_id: s.level_id, mode: s.mode };
+    s.mode = "red_stop";
+    s.red = { kind: ev.kind === "emergency" ? "emergency" : "clinician", since: now, flags: (ev.flags || []).map((f) => `Red: ${f}`), cleared_at: null, clearance_note: null };
+    push({ rule_id: "R1", outcome: "red", color: "red", message: `Red (${s.red.kind}) reported on the red-flag screen: ${(ev.flags || []).join("; ")}. Plan frozen.` });
   } else if (ev.type === "pause" && s.mode === "active") {
     s.x.pre_pause_mode = s.mode; s.mode = "paused";
     push({ rule_id: "R12", outcome: "none", message: `Paused${ev.note ? ` (${ev.note})` : ""}: no advance, regress or layoff counting.` });
