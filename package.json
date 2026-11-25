@@ -5,8 +5,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "npx --yes serve@14 public -l 5182",
+    "sw": "node scripts/gen-sw.mjs",
     "test": "node --test \"test/*.test.mjs\"",
-    "deploy": "cf deploy ./public",
+    "deploy": "npm run sw && cf deploy ./public",
     "deploy:rules": "npx --yes firebase-tools@latest deploy --only firestore:rules,firestore:indexes",
     "deploy:auth": "npx --yes firebase-tools@latest deploy --only auth",
     "deploy:all": "npm test && npm run deploy:rules && npm run deploy",

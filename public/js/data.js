@@ -77,6 +77,11 @@ export async function boot(store, now) {
     }
     resynced = true;
   }
+  if (docs?.posture) setPostureConfig(docs.posture);
+  if (!state && docs) {
+    state = newState(docs, profile, app.start_level || "L2", now);
+    await store.kvSet("state", state);
+  }
   return { docs, profile, app, state, resynced };
 }
 

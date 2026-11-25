@@ -5,8 +5,8 @@ import { FIREBASE_CONFIG, FIREBASE_VERSION, SELF_HOSTED_AUTH_HOSTS, OWNER_EMAIL 
 import { createSyncEngine } from "./sync.js";
 
 const CDN = `https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}`;
-let A, F, auth, db, engine = null;
-const cloud = { available: false, user: null, ready: false, pending: 0, lastSync: null, error: null };
+let A, F, auth, db, engine = null, initPromise = null;
+const cloud = { available: false, authResolved: false, user: null, ready: false, pending: 0, lastSync: null, error: null };
 let notify = () => {};
 export const cloudState = () => cloud;
 
@@ -21,40 +21,55 @@ export function describeError(e) {
   return e?.message || String(e);
 }
 
-/** Load Firebase and start watching sign-in. Resolves once the SDK is ready (or rejects if it can't load). */
+/** Load Firebase and start watching sign-in. Safe to retry if an earlier offline load failed. */
 export async function initCloud(store, { onChange = () => {}, onApplied = () => {} } = {}) {
   notify = onChange;
-  const [appMod, authMod, fsMod] = await Promise.all([
-    import(`${CDN}/firebase-app.js`), import(`${CDN}/firebase-auth.js`), import(`${CDN}/firebase-firestore.js`),
-  ]);
-  A = authMod; F = fsMod;
-  const app = appMod.initializeApp({ ...FIREBASE_CONFIG, authDomain: selfHosted() ? location.hostname : FIREBASE_CONFIG.authDomain });
-  // Local persistence: each device stays signed in until "Sign out".
-  auth = A.initializeAuth(app, {
-    persistence: [A.indexedDBLocalPersistence, A.browserLocalPersistence],
-    popupRedirectResolver: A.browserPopupRedirectResolver,
-  });
-  db = F.getFirestore(app);
-  cloud.available = true;
-  A.getRedirectResult(auth).catch((e) => { cloud.error = describeError(e); notify(); });
-  A.onAuthStateChanged(auth, async (user) => {
-    if (engine) { engine.stop(); engine = null; }
-    Object.assign(cloud, { user: user ? { email: user.email, name: user.displayName, uid: user.uid } : null, ready: false, pending: 0, error: null });
-    notify();
-    if (!user) return;
-    if (user.email !== OWNER_EMAIL || !user.emailVerified) {
-      cloud.error = `Signed in as ${user.email}, which can't sync. Sign out and use ${OWNER_EMAIL}.`;
-      notify();
-      return;
-    }
-    engine = createSyncEngine(store, firestoreRemote(user.uid), {
-      onApplied,
-      onStatus: (s) => { Object.assign(cloud, { ready: s.ready, pending: s.pending, lastSync: s.lastSync, error: s.error ? describeError(s.error) : null }); notify(); },
+  if (cloud.available) return;
+  if (initPromise) return initPromise;
+  initPromise = (async () => {
+    const [appMod, authMod, fsMod] = await Promise.all([
+      import(`${CDN}/firebase-app.js`), import(`${CDN}/firebase-auth.js`), import(`${CDN}/firebase-firestore.js`),
+    ]);
+    A = authMod; F = fsMod;
+    const app = appMod.initializeApp({ ...FIREBASE_CONFIG, authDomain: selfHosted() ? location.hostname : FIREBASE_CONFIG.authDomain });
+    // Local persistence: each device stays signed in until "Sign out".
+    auth = A.initializeAuth(app, {
+      persistence: [A.indexedDBLocalPersistence, A.browserLocalPersistence],
+      popupRedirectResolver: A.browserPopupRedirectResolver,
     });
-    engine.start().catch((e) => { cloud.error = describeError(e); notify(); });
+    db = F.getFirestore(app);
+    cloud.available = true;
+    notify();
+    A.getRedirectResult(auth).catch((e) => { cloud.error = describeError(e); notify(); });
+    A.onAuthStateChanged(auth, async (user) => {
+      if (engine) { engine.stop(); engine = null; }
+      Object.assign(cloud, {
+        authResolved: true,
+        user: user ? { email: user.email, name: user.displayName, uid: user.uid, photoURL: user.photoURL || null } : null,
+        ready: false,
+        pending: 0,
+        error: null,
+      });
+      notify();
+      if (!user) return;
+      if (user.email !== OWNER_EMAIL || !user.emailVerified) {
+        cloud.error = `Signed in as ${user.email}, which can't sync. Log out and use ${OWNER_EMAIL}.`;
+        notify();
+        return;
+      }
+      engine = createSyncEngine(store, firestoreRemote(user.uid), {
+        onApplied,
+        onStatus: (s) => { Object.assign(cloud, { ready: s.ready, pending: s.pending, lastSync: s.lastSync, error: s.error ? describeError(s.error) : null }); notify(); },
+      });
+      engine.start().catch((e) => { cloud.error = describeError(e); notify(); });
+    });
+    addEventListener("online", () => engine?.push());
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) engine?.push(); });
+  })().catch((e) => {
+    initPromise = null;
+    throw e;
   });
-  addEventListener("online", () => engine?.push());
-  document.addEventListener("visibilitychange", () => { if (!document.hidden) engine?.push(); });
+  return initPromise;
 }
 
 function firestoreRemote(uid) {

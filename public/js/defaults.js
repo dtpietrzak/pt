@@ -15,7 +15,7 @@ export const DEFAULT_PROFILE = {
 };
 // App-only settings that the profile schema has no field for.
 export const DEFAULT_APP = {
-  start_level: "L1",
+  start_level: "L2",
   reminders_enabled: false,
   // Work timer: alarms ring only on the device that started work mode, unless this is on.
   timer_alarm_all_devices: false,

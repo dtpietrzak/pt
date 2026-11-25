@@ -21,7 +21,21 @@
 <body>
   <header class="top">
     <h1 id="title">PT</h1>
-    <div class="top-r"><a id="timer-chip" class="chip timer-chip" href="#/work" hidden></a><span id="level-chip" class="chip" hidden></span></div>
+    <div class="top-right">
+      <a id="timer-chip" class="chip timer-chip" href="#/work" hidden></a>
+      <span id="level-chip" class="chip" hidden></span>
+      <div id="account-wrap" class="account-wrap" hidden>
+        <button id="account-btn" class="avatar-btn" type="button" aria-label="Account" aria-haspopup="menu" aria-expanded="false"></button>
+        <div id="account-menu" class="account-menu" role="menu" hidden>
+          <div class="account-info">
+            <div id="account-name" class="account-name"></div>
+            <div id="account-email" class="muted small"></div>
+          </div>
+          <div id="account-sync" class="account-sync muted small"></div>
+          <button id="sign-out" class="btn danger wide" type="button" role="menuitem">Log out</button>
+        </div>
+      </div>
+    </div>
   </header>
   <main id="main" class="page"><p class="muted center pad">Loading…</p></main>
   <nav class="nav" hidden>
