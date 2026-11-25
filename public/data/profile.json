@@ -30,7 +30,6 @@
     "stiffness_min": 30,
     "standing_h": 5
   },
-  "clinician_contact": "",
   "notify": {
     "morning": "08:00",
     "evening": "15:30",

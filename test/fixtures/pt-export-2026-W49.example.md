@@ -59,4 +59,4 @@ None run this week.
 ## What the agent may and may not do
 
 - May propose a structured patch against `levels.json`, `exercises.json`, `tests.json` and app change requests.
-- May not touch safety thresholds, red-flag texts, the morning window, decision state, or add loaded flexion; red flags mean contact the physician.
+- May not touch safety thresholds, red-flag texts, the morning window, decision state, or add loaded flexion; red flags mean see a clinician.

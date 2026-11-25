@@ -12,7 +12,7 @@
     "Edit decision_state, promote or regress levels, or mark tests as passed.",
     "Remove or weaken a level's avoid list, or add loaded spinal flexion or aggressive end-range stretching to any default block.",
     "Lower a level's clean_streak_sessions or drop a gate test without safety_review_required true.",
-    "Give diagnoses or tell David to ignore a red flag; if the export shows red-flag events or clinician_recommended, say he should contact his physician."
+    "Give diagnoses or tell David to ignore a red flag; if the export shows red-flag events or clinician_recommended, say he should see a clinician."
   ],
   "return_format": "Reply with ONE JSON document that validates against plan-patch.schema.json (kind pt-plan-patch), based on this export's meta hashes, with evidence[] pointing at export fields. Add a short markdown rationale for David after the JSON. If no change is warranted, return a patch with a single test op and say so in summary."
 }

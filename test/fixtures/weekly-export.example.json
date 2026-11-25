@@ -12,7 +12,7 @@
     "levels_sha256": "be46c947501509b7d5c65839444461bc652815cfc573a0e18ac30ffe6340476a",
     "exercises_sha256": "d1f0f7c2d5f2faa56ece014bbb3aad87de109a7705a7b96437c580dfd6c373df",
     "tests_sha256": "e0cc2efc83dcec1d950349e4bcd4f405907865e322935533ef9d2194f7f4e9c9",
-    "profile_sha256": "3cd28d6c578cf1cc01ee24b39d8a8af32acf7cdda23093d8734f754ae10b081a",
+    "profile_sha256": "c14d9c4b0c9a41859aaea9b3a24ef72faac7eb0461f407f0ac05dcd1b0232558",
     "config_version": "1.0.0"
   },
   "profile": {
@@ -47,7 +47,6 @@
       "stiffness_min": 30,
       "standing_h": 5
     },
-    "clinician_contact": "",
     "notify": {
       "morning": "08:00",
       "evening": "15:30",
@@ -1347,7 +1346,7 @@
       "Edit decision_state, promote or regress levels, or mark tests as passed.",
       "Remove or weaken a level's avoid list, or add loaded spinal flexion or aggressive end-range stretching to any default block.",
       "Lower a level's clean_streak_sessions or drop a gate test without safety_review_required true.",
-      "Give diagnoses or tell David to ignore a red flag; if the export shows red-flag events or clinician_recommended, say he should contact his physician."
+      "Give diagnoses or tell David to ignore a red flag; if the export shows red-flag events or clinician_recommended, say he should see a clinician."
     ],
     "return_format": "Reply with ONE JSON document that validates against plan-patch.schema.json (kind pt-plan-patch), based on this export's meta hashes, with evidence[] pointing at export fields. Add a short markdown rationale for David after the JSON. If no change is warranted, return a patch with a single test op and say so in summary."
   }

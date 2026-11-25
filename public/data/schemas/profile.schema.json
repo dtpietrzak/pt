@@ -101,10 +101,6 @@
       },
       "additionalProperties": false
     },
-    "clinician_contact": {
-      "type": "string",
-      "description": "Treating physician name/phone shown on red-flag screens. Empty by default."
-    },
     "notify": {
       "type": "object",
       "properties": {
