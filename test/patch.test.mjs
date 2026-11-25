@@ -17,6 +17,7 @@ test("canonical hashes match the Python generator", async () => {
   assert.equal(await docHash(levels), hashes.levels_sha256);
   assert.equal(await docHash(exercises), hashes.exercises_sha256);
   assert.equal(await docHash(tests), hashes.tests_sha256);
+  if (hashes.posture_cycle_sha256) assert.equal(await docHash(j("../public/data/posture-cycle.json")), hashes.posture_cycle_sha256);
   if (hashes.profile_sha256) assert.equal(await docHash(j("../public/data/profile.json")), hashes.profile_sha256);
 });
 

@@ -2,12 +2,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { applyPosture } from "../public/js/posture.js";
 import { evaluateCheckIn, combineSessionTests, initState, applySessionFinal, summarize } from "../public/js/engine.js";
 
 const j = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url)));
 const vectors = j("./fixtures/test-vectors.json").vectors;
 const config = j("../public/data/decision-config.json");
 const levels = j("../public/data/levels.json");
+const posture = j("../public/data/posture-cycle.json");
 
 test("fixture has vectors", () => assert.ok(vectors.length >= 51, `${vectors.length} vectors`));
 
@@ -36,6 +38,16 @@ for (const v of vectors) {
           if (k === "outcome") assert.equal(outcomes[i].outcome, val, `event ${i} outcome`);
           else assert.deepEqual([...outcomes[i][k]].sort(), [...val].sort(), `event ${i} ${k}`);
         }
+      });
+    } else if (v.kind === "posture_cycle") {
+      let st = structuredClone(v.input.start), last;
+      const results = [];
+      for (const ev of v.input.events) { const r = applyPosture(st, ev, posture); st = r.state; last = r.result; results.push(r.result); }
+      const { outcome, ...doses } = v.expect;
+      assert.deepEqual(Object.fromEntries(Object.keys(doses).map((k) => [k, st[k]])), doses);
+      assert.equal(last.outcome, outcome);
+      (v.per_event_outcomes || []).forEach((exp, i) => {
+        for (const [k, val] of Object.entries(exp)) assert.deepEqual(results[i][k], val, `event ${i} ${k}`);
       });
     } else assert.fail(`unknown vector kind ${v.kind}`);
   });

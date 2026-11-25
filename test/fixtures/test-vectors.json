@@ -10,7 +10,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -60,7 +61,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -110,7 +112,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -160,7 +163,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -210,7 +214,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -360,7 +365,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -410,7 +416,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -460,7 +467,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -510,7 +518,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -560,7 +569,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {
           "prior_hip_shift_checkins": 2
@@ -613,7 +623,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -666,7 +677,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -710,7 +722,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -754,7 +767,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -798,7 +812,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -843,7 +858,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -887,7 +903,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -931,7 +948,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -975,7 +993,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1027,7 +1046,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1079,7 +1099,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1124,7 +1145,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {
           "recent_ordinary_sharp_days": 1
@@ -1172,7 +1194,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1215,7 +1238,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {
           "prior_leg_checkins": 2
@@ -1261,7 +1285,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1305,7 +1330,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1349,7 +1375,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1392,7 +1419,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1443,7 +1471,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1486,7 +1515,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1529,7 +1559,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1572,7 +1603,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1615,7 +1647,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1658,7 +1691,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1701,7 +1735,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1744,7 +1779,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1787,7 +1823,8 @@
         "baselines": {
           "stiffness_min": 30,
           "standing_h": 5,
-          "pain_rest": 1
+          "pain_rest": 1,
+          "sitting_min": 20
         },
         "context": {},
         "checkin": {
@@ -1819,6 +1856,250 @@
       },
       "expect": {
         "color": "yellow"
+      }
+    },
+    {
+      "id": "CC40",
+      "kind": "checkin_color",
+      "description": "Evening: sitting first-pressure 20 min at baseline 20, not flared, standing green: green",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1,
+          "sitting_min": 20
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI040",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 1,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            },
+            "sitting": {
+              "first_pressure_min": 20,
+              "censored": false,
+              "flared": false,
+              "prescribed_block_min": 20
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "green"
+      }
+    },
+    {
+      "id": "CC41",
+      "kind": "checkin_color",
+      "description": "Evening: sitting first-pressure 10 min / 20 min baseline (ratio 0.50) is orange",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1,
+          "sitting_min": 20
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI041",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 1,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            },
+            "sitting": {
+              "first_pressure_min": 10,
+              "censored": false,
+              "flared": false,
+              "prescribed_block_min": 20
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "orange"
+      }
+    },
+    {
+      "id": "CC42",
+      "kind": "checkin_color",
+      "description": "Evening: sitting first-pressure 14 min / 20 min baseline (ratio 0.70) is yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1,
+          "sitting_min": 20
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI042",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 1,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            },
+            "sitting": {
+              "first_pressure_min": 14,
+              "censored": false,
+              "flared": false,
+              "prescribed_block_min": 20
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC43",
+      "kind": "checkin_color",
+      "description": "Evening: sitting completed the 20 min block but flared: yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1,
+          "sitting_min": 20
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI043",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 1,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            },
+            "sitting": {
+              "first_pressure_min": 20,
+              "censored": false,
+              "flared": true,
+              "prescribed_block_min": 20
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC44",
+      "kind": "checkin_color",
+      "description": "Evening: no sitting fields, standing green: still green (sitting is optional)",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1,
+          "sitting_min": 20
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI044",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 1,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "green"
       }
     },
     {
@@ -2686,6 +2967,1635 @@
         },
         {
           "outcome": "regress_level"
+        }
+      ]
+    },
+    {
+      "id": "PC01",
+      "kind": "posture_cycle",
+      "description": "Three green work days advance stand +5 and sit +5",
+      "input": {
+        "start": {
+          "stand_min": 40,
+          "sit_min": 20,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 45,
+        "sit_min": 25,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "once_per_cycle",
+        "stand_clean_days": 0,
+        "sit_clean_days": 0,
+        "outcome": "posture_advance"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 1 of 3",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 2 of 3",
+            "sit clean day 2 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "posture_advance",
+          "changes": {
+            "stand_min": 45,
+            "sit_min": 25
+          },
+          "reasons": [
+            "3 green stand days: stand +5 min",
+            "3 green sit days with no flare: sit +5 min"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        }
+      ]
+    },
+    {
+      "id": "PC02",
+      "kind": "posture_cycle",
+      "description": "A sitting flare on day 2 blocks sit from advancing; stand still advances after 3 green stand days",
+      "input": {
+        "start": {
+          "stand_min": 40,
+          "sit_min": 20,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "yellow",
+            "sitting": {
+              "flared": true,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 45,
+        "sit_min": 20,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "once_per_cycle",
+        "stand_clean_days": 0,
+        "sit_clean_days": 1,
+        "outcome": "posture_advance"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 1 of 3",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "posture_hold",
+          "changes": {},
+          "reasons": [
+            "stand clean day 2 of 3",
+            "sitting flared, was yellow, or was sore early: hold sit dose"
+          ],
+          "stand_color": "green",
+          "sit_color": "yellow"
+        },
+        {
+          "outcome": "posture_advance",
+          "changes": {
+            "stand_min": 45
+          },
+          "reasons": [
+            "3 green stand days: stand +5 min",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        }
+      ]
+    },
+    {
+      "id": "PC03",
+      "kind": "posture_cycle",
+      "description": "A yellow day holds both doses and resets clean-day counts",
+      "input": {
+        "start": {
+          "stand_min": 40,
+          "sit_min": 20,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "yellow",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 40,
+        "sit_min": 20,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "once_per_cycle",
+        "stand_clean_days": 1,
+        "sit_clean_days": 1,
+        "outcome": "none"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 1 of 3",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "posture_hold",
+          "changes": {},
+          "reasons": [
+            "yellow day: hold stand and sit doses, reset clean days"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 1 of 3",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        }
+      ]
+    },
+    {
+      "id": "PC04",
+      "kind": "posture_cycle",
+      "description": "An orange day shortens both blocks 5 min and makes decompression more frequent",
+      "input": {
+        "start": {
+          "stand_min": 40,
+          "sit_min": 20,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "orange",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 35,
+        "sit_min": 15,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "after_each_block",
+        "stand_clean_days": 0,
+        "sit_clean_days": 0,
+        "outcome": "posture_regress"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "posture_regress",
+          "changes": {
+            "stand_min": 35,
+            "sit_min": 15,
+            "decomp_frequency": "after_each_block"
+          },
+          "reasons": [
+            "orange daily status: shorter blocks and more frequent decompression"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        }
+      ]
+    },
+    {
+      "id": "PC05",
+      "kind": "posture_cycle",
+      "description": "Stand will not drop below the 25 min floor",
+      "input": {
+        "start": {
+          "stand_min": 25,
+          "sit_min": 20,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "orange",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 25,
+        "sit_min": 15,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "after_each_block",
+        "stand_clean_days": 0,
+        "sit_clean_days": 0,
+        "outcome": "posture_regress"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "posture_regress",
+          "changes": {
+            "stand_min": 25,
+            "sit_min": 15,
+            "decomp_frequency": "after_each_block"
+          },
+          "reasons": [
+            "orange daily status: shorter blocks and more frequent decompression"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        }
+      ]
+    },
+    {
+      "id": "PC06",
+      "kind": "posture_cycle",
+      "description": "Sit will not go above the 50 min cap; a long block is not a training goal",
+      "input": {
+        "start": {
+          "stand_min": 40,
+          "sit_min": 50,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 45,
+        "sit_min": 50,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "once_per_cycle",
+        "stand_clean_days": 0,
+        "sit_clean_days": 0,
+        "outcome": "posture_advance"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 1 of 3",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 2 of 3",
+            "sit clean day 2 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "posture_advance",
+          "changes": {
+            "stand_min": 45
+          },
+          "reasons": [
+            "3 green stand days: stand +5 min",
+            "sit already at the cap; a long block is not a training goal"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        }
+      ]
+    },
+    {
+      "id": "PC07",
+      "kind": "posture_cycle",
+      "description": "Stand will not go above the 90 min cap",
+      "input": {
+        "start": {
+          "stand_min": 90,
+          "sit_min": 20,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 90,
+        "sit_min": 25,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "once_per_cycle",
+        "stand_clean_days": 0,
+        "sit_clean_days": 0,
+        "outcome": "posture_advance"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 1 of 3",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 2 of 3",
+            "sit clean day 2 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "posture_advance",
+          "changes": {
+            "sit_min": 25
+          },
+          "reasons": [
+            "stand already at the cap; a long block is not a training goal",
+            "3 green sit days with no flare: sit +5 min"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        }
+      ]
+    },
+    {
+      "id": "PC08",
+      "kind": "posture_cycle",
+      "description": "Decompression length never increases, even after many green days",
+      "input": {
+        "start": {
+          "stand_min": 40,
+          "sit_min": 20,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 50,
+        "sit_min": 30,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "once_per_cycle",
+        "stand_clean_days": 0,
+        "sit_clean_days": 0,
+        "outcome": "posture_advance"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 1 of 3",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 2 of 3",
+            "sit clean day 2 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "posture_advance",
+          "changes": {
+            "stand_min": 45,
+            "sit_min": 25
+          },
+          "reasons": [
+            "3 green stand days: stand +5 min",
+            "3 green sit days with no flare: sit +5 min"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 1 of 3",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 2 of 3",
+            "sit clean day 2 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "posture_advance",
+          "changes": {
+            "stand_min": 50,
+            "sit_min": 30
+          },
+          "reasons": [
+            "3 green stand days: stand +5 min",
+            "3 green sit days with no flare: sit +5 min"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        }
+      ]
+    },
+    {
+      "id": "PC09",
+      "kind": "posture_cycle",
+      "description": "After an orange (more frequent decomp), 3 green days restore once-per-cycle decompression and advance the shortened doses",
+      "input": {
+        "start": {
+          "stand_min": 35,
+          "sit_min": 15,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "after_each_block",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 40,
+        "sit_min": 20,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "once_per_cycle",
+        "stand_clean_days": 0,
+        "sit_clean_days": 0,
+        "outcome": "posture_advance"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 1 of 3",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 2 of 3",
+            "sit clean day 2 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "posture_advance",
+          "changes": {
+            "stand_min": 40,
+            "sit_min": 20,
+            "decomp_frequency": "once_per_cycle"
+          },
+          "reasons": [
+            "3 green stand days: stand +5 min",
+            "3 green sit days with no flare: sit +5 min",
+            "3 green days: decompression returns to once per cycle"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        }
+      ]
+    },
+    {
+      "id": "PC10",
+      "kind": "posture_cycle",
+      "description": "Missing sitting data never advances the sit dose; stand can still advance",
+      "input": {
+        "start": {
+          "stand_min": 40,
+          "sit_min": 20,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": null,
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": true,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": null,
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": true,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": null,
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": true,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 45,
+        "sit_min": 20,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "once_per_cycle",
+        "stand_clean_days": 0,
+        "sit_clean_days": 0,
+        "outcome": "posture_advance"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 1 of 3",
+            "missing sitting data: sit dose not advanced"
+          ],
+          "stand_color": "green",
+          "sit_color": null
+        },
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 2 of 3",
+            "missing sitting data: sit dose not advanced"
+          ],
+          "stand_color": "green",
+          "sit_color": null
+        },
+        {
+          "outcome": "posture_advance",
+          "changes": {
+            "stand_min": 45
+          },
+          "reasons": [
+            "3 green stand days: stand +5 min",
+            "missing sitting data: sit dose not advanced"
+          ],
+          "stand_color": "green",
+          "sit_color": null
+        }
+      ]
+    },
+    {
+      "id": "PC11",
+      "kind": "posture_cycle",
+      "description": "Sore-early on stand at 20 of 40 min (ratio 0.50) steps stand back 5 min; sit can still count a clean day",
+      "input": {
+        "start": {
+          "stand_min": 40,
+          "sit_min": 20,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": true,
+              "actual_min": 20,
+              "prescribed_min": 40
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 35,
+        "sit_min": 20,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "once_per_cycle",
+        "stand_clean_days": 0,
+        "sit_clean_days": 1,
+        "outcome": "posture_regress"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "posture_regress",
+          "changes": {
+            "stand_min": 35
+          },
+          "reasons": [
+            "orange standing or early-sore below 60% of the block: stand stepped back 5 min",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "orange",
+          "sit_color": "green"
+        }
+      ]
+    },
+    {
+      "id": "PC12",
+      "kind": "posture_cycle",
+      "description": "Sit advances independently: after a stand-sore day, three later clean sit days raise only sit (stand also rebuilds)",
+      "input": {
+        "start": {
+          "stand_min": 40,
+          "sit_min": 20,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": true,
+              "actual_min": 20,
+              "prescribed_min": 40
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          },
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 40,
+        "sit_min": 25,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "once_per_cycle",
+        "stand_clean_days": 0,
+        "sit_clean_days": 1,
+        "outcome": "posture_advance"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "posture_regress",
+          "changes": {
+            "stand_min": 35
+          },
+          "reasons": [
+            "orange standing or early-sore below 60% of the block: stand stepped back 5 min",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "orange",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "stand clean day 1 of 3",
+            "sit clean day 2 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "posture_advance",
+          "changes": {
+            "sit_min": 25
+          },
+          "reasons": [
+            "stand clean day 2 of 3",
+            "3 green sit days with no flare: sit +5 min"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        },
+        {
+          "outcome": "posture_advance",
+          "changes": {
+            "stand_min": 40
+          },
+          "reasons": [
+            "3 green stand days: stand +5 min",
+            "sit clean day 1 of 3"
+          ],
+          "stand_color": "green",
+          "sit_color": "green"
+        }
+      ]
+    },
+    {
+      "id": "PC13",
+      "kind": "posture_cycle",
+      "description": "Flare / L0 uses the short preset and more frequent decompression",
+      "input": {
+        "start": {
+          "stand_min": 40,
+          "sit_min": 20,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": true,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 25,
+        "sit_min": 10,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "after_each_block",
+        "stand_clean_days": 0,
+        "sit_clean_days": 0,
+        "outcome": "flare_preset"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "flare_preset",
+          "changes": {
+            "stand_min": 25,
+            "sit_min": 10,
+            "decomp_frequency": "after_each_block"
+          },
+          "reasons": [
+            "entered flare / L0; use shorter blocks and more frequent decompression"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PC14",
+      "kind": "posture_cycle",
+      "description": "Settle exit restores the saved doses minus 5 min, not below the floor",
+      "input": {
+        "start": {
+          "stand_min": 25,
+          "sit_min": 10,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "after_each_block",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": {
+            "stand_min": 50,
+            "sit_min": 30,
+            "walk_min": 2,
+            "decomp_min": 5,
+            "decomp_frequency": "once_per_cycle"
+          }
+        },
+        "events": [
+          {
+            "work_mode_used": true,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": true
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 45,
+        "sit_min": 25,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "once_per_cycle",
+        "stand_clean_days": 0,
+        "sit_clean_days": 0,
+        "outcome": "settle_exit"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "settle_exit",
+          "changes": {
+            "stand_min": 45,
+            "sit_min": 25
+          },
+          "reasons": [
+            "settle exit: restore previous doses minus 5 min, not below the floor"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PC15",
+      "kind": "posture_cycle",
+      "description": "Work mode off leaves doses unchanged",
+      "input": {
+        "start": {
+          "stand_min": 40,
+          "sit_min": 20,
+          "walk_min": 2,
+          "decomp_min": 5,
+          "decomp_frequency": "once_per_cycle",
+          "stand_clean_days": 0,
+          "sit_clean_days": 0,
+          "decomp_restore_clean_days": 0,
+          "saved_pre_flare": null
+        },
+        "events": [
+          {
+            "work_mode_used": false,
+            "daily_status": "green",
+            "standing_color": "green",
+            "sitting_color": "green",
+            "sitting": {
+              "flared": false,
+              "sore_early": false,
+              "missing": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "standing_block": {
+              "sore_early": false,
+              "actual_min": null,
+              "prescribed_min": null
+            },
+            "flare": false,
+            "settle_exit": false
+          }
+        ]
+      },
+      "expect": {
+        "stand_min": 40,
+        "sit_min": 20,
+        "walk_min": 2,
+        "decomp_min": 5,
+        "decomp_frequency": "once_per_cycle",
+        "stand_clean_days": 0,
+        "sit_clean_days": 0,
+        "outcome": "none"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none",
+          "changes": {},
+          "reasons": [
+            "work mode was off; posture doses unchanged"
+          ]
         }
       ]
     }

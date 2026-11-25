@@ -31,7 +31,7 @@
     {
       "id": "T_STAND_FUNC",
       "name": "Workday upright tolerance (with breaks)",
-      "protocol": "On a normal day, accumulate the target upright hours while taking the scheduled breaks and decompression rest. Local pressure stays at 2/10 or less at the end of the day and the next morning is no worse. This measures function, it is not a challenge to stand without breaks.",
+      "protocol": "On a normal day, accumulate the target upright hours while using the work posture cycle (stand, walk, sit, decompress) or, away from the timer, changing position before symptoms start. Local pressure stays at 2/10 or less at the end of the day and the next morning is no worse. This measures function, it is not a challenge to stand or sit without breaks. Sitting has its own tolerance.",
       "unit": "hours upright",
       "thresholds": {
         "L1": {

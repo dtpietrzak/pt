@@ -148,7 +148,8 @@
           30,
           45
         ],
-        "decomp": "required, as often as needed"
+        "decomp": "required, as often as needed",
+        "work_cycle": true
       },
       "frequency": {
         "core_days_per_week": "daily if pain-free",
@@ -311,7 +312,7 @@
           "optional": false,
           "maintain": false,
           "requires": [],
-          "note": "Planned: at cumulative upright hour 2.5-3, before symptoms start.",
+          "note": "Preferred decompression in each work cycle (3-5 min); not a single break at hour 2.5-3.",
           "rungs": [
             {
               "time_min": 3
@@ -755,7 +756,8 @@
           60
         ],
         "decomp": "required",
-        "upright_h_target": 5
+        "upright_h_target": 5,
+        "work_cycle": true
       },
       "frequency": {
         "core_days_per_week": "5-6",
@@ -923,7 +925,7 @@
           "optional": false,
           "maintain": true,
           "requires": [],
-          "note": "Planned at cumulative upright hour 2.5-3.",
+          "note": "Once per work cycle (3-5 min), or as needed away from the timer.",
           "rungs": [
             {
               "time_min": 5
@@ -1377,7 +1379,8 @@
           60
         ],
         "decomp": "required",
-        "upright_h_target": 6
+        "upright_h_target": 6,
+        "work_cycle": true
       },
       "frequency": {
         "core_days_per_week": "5-6",
@@ -1539,7 +1542,7 @@
           "optional": false,
           "maintain": true,
           "requires": [],
-          "note": "Planned at cumulative upright hour 2.5-3.",
+          "note": "Once per work cycle (3-5 min), or as needed away from the timer.",
           "rungs": [
             {
               "time_min": 5
@@ -2076,7 +2079,8 @@
           90
         ],
         "decomp": "required",
-        "upright_h_target": 6
+        "upright_h_target": 6,
+        "work_cycle": true
       },
       "frequency": {
         "core_days_per_week": "5-6",
@@ -2276,7 +2280,7 @@
           "optional": false,
           "maintain": true,
           "requires": [],
-          "note": "Planned at cumulative upright hour 2.5-3.",
+          "note": "Once per work cycle (3-5 min), or as needed away from the timer.",
           "rungs": [
             {
               "time_min": 5
@@ -2968,7 +2972,8 @@
           90
         ],
         "decomp": "required",
-        "upright_h_target": 7
+        "upright_h_target": 7,
+        "work_cycle": true
       },
       "frequency": {
         "core_days_per_week": "5-6",
@@ -3184,7 +3189,7 @@
           "optional": false,
           "maintain": true,
           "requires": [],
-          "note": "Recommended; planned at hour 2.5-3.",
+          "note": "Recommended once per work cycle (3-5 min); use as needed away from the timer.",
           "rungs": [
             {
               "time_min": 5
@@ -3942,7 +3947,8 @@
           90
         ],
         "decomp": "recommended",
-        "upright_h_target": 8
+        "upright_h_target": 8,
+        "work_cycle": true
       },
       "frequency": {
         "core_days_per_week": "4-5",
@@ -4123,7 +4129,7 @@
           "optional": false,
           "maintain": true,
           "requires": [],
-          "note": "Recommended; planned at hour 2.5-3.",
+          "note": "Recommended once per work cycle (3-5 min); use as needed away from the timer.",
           "rungs": [
             {
               "time_min": 5
@@ -4814,7 +4820,8 @@
           90
         ],
         "decomp": "recommended",
-        "upright_h_target": 8
+        "upright_h_target": 8,
+        "work_cycle": true
       },
       "frequency": {
         "core_days_per_week": "4-5",
@@ -5972,7 +5979,8 @@
           90
         ],
         "decomp": "optional",
-        "upright_h_target": 8
+        "upright_h_target": 8,
+        "work_cycle": true
       },
       "frequency": {
         "core_days_per_week": "4-5",
@@ -7044,7 +7052,8 @@
           120
         ],
         "decomp": "optional",
-        "upright_h_target": "unrestricted"
+        "upright_h_target": "unrestricted",
+        "work_cycle": true
       },
       "frequency": {
         "core_days_per_week": "3-5",

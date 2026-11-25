@@ -1,5 +1,6 @@
 // Deterministic PT decision engine (plan.md sections 7-8). Pure: no I/O, clock and ids injected.
 // Runs in the browser and in Node (tests reproduce seed/test-vectors.json).
+import { initPostureState, applyPosture, postureColor, postureEventFromEvening, postureConfig } from "./posture.js";
 import { RANK, worst, clone, addDays, dayDiff, hoursBetween, daysBetweenTs, median, round5, localDate } from "./util.js";
 
 export const EMERGENCY_DEFAULT = ["saddle_numbness", "bladder_bowel_change"];
@@ -93,6 +94,8 @@ export function evaluateCheckIn(ci, B, cfg, ctx = {}) {
       const c = r >= cfg.standing.green_ratio - 1e-9 ? "green" : r >= cfg.standing.orange_ratio - 1e-9 ? "yellow" : "orange";
       add(c, `standing tolerance ${r.toFixed(2)} of baseline`);
     }
+    const sc = sittingColor(d, B, cfg);
+    if (sc) add(sc, `sitting tolerance ${sc}${d.sitting?.flared ? " (flared)" : ""}`);
     const f = d.forced_rest_count || 0;
     if (f >= cfg.forced_rest.orange_at) add("orange", `${f} forced rests`);
     else if (f >= cfg.forced_rest.yellow_at) add("yellow", `${f} forced rest(s)`);
@@ -103,6 +106,22 @@ export function evaluateCheckIn(ci, B, cfg, ctx = {}) {
   }
   for (const tag of ci.oddity_tags || []) if (tag === "illness" || tag === "unusual_load") mods.push(tag);
   return { color: worst(cols), red_kind: red, reasons, modifiers: [...new Set(mods)], incident };
+}
+
+/** Sitting tolerance color from the evening check-in's optional sitting{} and posture_cycle{} (null when absent or unknown). */
+export function sittingColor(d, B, cfg) {
+  const sit = d.sitting;
+  if (!sit) return null;
+  const sc = cfg.sitting || {};
+  const bsit = B.sitting_min ?? sc.baseline_min ?? 20;
+  const ratios = { green_ratio: sc.green_ratio ?? 0.9, orange_ratio: sc.orange_ratio ?? 0.6 };
+  const sw = (d.posture_cycle?.early_switches || []).filter((x) => x.phase === "sit" && x.reason === "sore_early");
+  const common = { flared: !!sit.flared, ratios, censored: !!sit.censored, painPeak: d.pain_peak_today };
+  if (sw.length) {
+    const last = sw[sw.length - 1];
+    return postureColor(sit.first_pressure_min ?? null, bsit, { ...common, soreEarly: true, actual: last.actual_min ?? null, prescribed: last.prescribed_min || sit.prescribed_block_min || null });
+  }
+  return postureColor(sit.first_pressure_min ?? null, bsit, { ...common, soreEarly: false, actual: null, prescribed: sit.prescribed_block_min || null });
 }
 
 /** first_pressure_h / B_stand, or 1.0 when censored with low pain; null when unknown */
@@ -254,7 +273,8 @@ export function initState(levelsDoc, levelId, opts = {}) {
     consecutive_yellow_sessions: 0,
     probation_sessions_remaining: 0,
     level_clean_streak: 0,
-    baselines: clone(opts.baselines || { pain_rest: 1, stiffness_min: 30, standing_h: 5 }),
+    baselines: clone(opts.baselines || { pain_rest: 1, stiffness_min: 30, standing_h: 5, sitting_min: 20 }),
+    posture_cycle: postureConfig() ? initPostureState(postureConfig(), levelId) : undefined,
     gate_tests: gateTestsFor(level),
     gate_pending: false,
     settle: { resume_level: null, resume_item_state: null, green_days_in_row: 0 },
@@ -269,6 +289,15 @@ export function initState(levelsDoc, levelId, opts = {}) {
       settle_since: levelId === "L0" ? opts.now || null : null, baseline_proposals: [], start_date: opts.now ? localDate(opts.now) : null,
     },
   };
+}
+/** Flare preset on entering L0 / settle exit restores the previous posture doses minus 5 min (R16). */
+function posturePreset(s, event, push, ts) {
+  const cfg = postureConfig();
+  if (!cfg) return;
+  if (!s.posture_cycle) s.posture_cycle = initPostureState(cfg, "L1");
+  const r = applyPosture(s.posture_cycle, event, cfg);
+  s.posture_cycle = r.state;
+  if (push) push({ rule_id: "R16", outcome: r.result.outcome, message: `Work posture cycle: ${r.result.reasons.join("; ")}. Stand ${s.posture_cycle.stand_min} / sit ${s.posture_cycle.sit_min} min, decompress ${s.posture_cycle.decomp_frequency === "after_each_block" ? "after each block" : "once per cycle"}.` });
 }
 function gateTestsFor(level) {
   return Object.fromEntries((level?.exit?.tests || []).map((t) => [t.test_id, { status: "not_started", value: null, session_id: null, retest_after_clean_sessions: 0 }]));
@@ -473,6 +502,7 @@ export function regressLevel(s, levelsDoc, ts, why, cfg) {
     s.mode = "settle";
     s.settle = { resume_level: resumeLevel, resume_item_state: resumeItems, green_days_in_row: 0 };
     s.x.settle_since = ts;
+    posturePreset(s, { flare: true }, (e) => log.push(e));
   }
   log.unshift({ rule_id: "R8", outcome: "regress_level", color: "orange", session_id: null, message: `Level regression to ${prev}: ${why}. Items reset to one rung below the ${prev} targets; 3 clean sessions needed to advance.` });
   return log;
@@ -648,6 +678,16 @@ function processDay(s, d, data, daily, evals, checkins, docs, cfg, push) {
   const evening = checkins.filter((c) => c.type === "evening" && c.local_date === d).pop();
   if (s.mode === "paused") return s;
 
+  // R16 work posture-cycle doses: after the evening check-in, on days work mode was used. Held at the flare preset while in settle mode.
+  if (evening && evening.data?.posture_cycle?.work_mode_used && postureConfig() && s.mode !== "settle" && s.mode !== "red_stop") {
+    if (!s.posture_cycle) s.posture_cycle = initPostureState(postureConfig(), s.level_id);
+    const sr = standingRatio(evening.data, s.baselines);
+    const standColor = sr === null ? null : sr >= cfg.standing.green_ratio - 1e-9 ? "green" : sr >= cfg.standing.orange_ratio - 1e-9 ? "yellow" : "orange";
+    const r = applyPosture(s.posture_cycle, postureEventFromEvening(evening, status || "green", s.baselines, standColor), postureConfig());
+    s.posture_cycle = r.state;
+    if (r.result.outcome !== "none") push({ rule_id: "R16", outcome: r.result.outcome, color: status || "green", checkin_ids: day?.ids, message: `Work posture cycle: ${r.result.reasons.join("; ")}. Now stand ${s.posture_cycle.stand_min} / walk ${s.posture_cycle.walk_min} / sit ${s.posture_cycle.sit_min} / decompress ${s.posture_cycle.decomp_min} min (${s.posture_cycle.decomp_frequency === "after_each_block" ? "after each block" : "once per cycle"}).` });
+  }
+
   // R2 on an orange day
   if (status === "orange") {
     if (!s.x.orange_dates.includes(d) && !s.x.orange_dates.includes(addDays(d, -1))) {
@@ -758,6 +798,7 @@ function settleExit(s, levelsDoc, cfg, push, ts) {
   s.walk = { current_min: walkStart(lv, s.item_state), clean_days: 0 };
   s.settle = { resume_level: null, resume_item_state: null, green_days_in_row: 0 };
   s.x.settle_since = null; s.x.level_started_on = localDate(ts); s.x.layoff_anchor = localDate(ts); s.x.step_regressed = false;
+  posturePreset(s, { settle_exit: true }, push, ts);
   push({ rule_id: "R9", outcome: "settle_exit", color: "green", message: `Settled: 2 green days and standing at 70%+ of baseline. Back to ${target}, one rung easier, 3 clean sessions needed to advance.` });
 }
 
@@ -859,6 +900,7 @@ export function manualEvent(state, levelsDoc, cfg, ev, now, newId = defaultId())
     s.level_id = "L0"; s.mode = "settle"; s.item_state = freshItemState(l0); s.advance_stack = [];
     s.walk = { current_min: walkStart(l0, s.item_state), clean_days: 0 }; s.gate_tests = {}; s.gate_pending = false;
     s.x.settle_since = now;
+    posturePreset(s, { flare: true }, push, now);
     push({ rule_id: "R9", outcome: "settle_enter", message: `"I flared" pressed: settle mode (L0). Return to ${s.settle.resume_level} one rung easier after 2 green days.` });
   } else if (ev.type === "red_clear" && s.mode === "red_stop") {
     const pre = s.x.pre_red?.level_id || s.level_id;
@@ -871,6 +913,7 @@ export function manualEvent(state, levelsDoc, cfg, ev, now, newId = defaultId())
     s.level_id = "L0"; s.mode = "settle"; s.item_state = freshItemState(l0); s.advance_stack = [];
     s.walk = { current_min: walkStart(l0, s.item_state), clean_days: 0 }; s.gate_tests = {}; s.gate_pending = false;
     lockOn(s, cfg); s.x.settle_since = now;
+    posturePreset(s, { flare: true }, push, now);
     push({ rule_id: "R1", outcome: "settle_enter", message: `Red cleared (${ev.note || "no note"}). Settle mode (L0); later resume at ${resume}.` });
   } else if (ev.type === "pause" && s.mode === "active") {
     s.x.pre_pause_mode = s.mode; s.mode = "paused";

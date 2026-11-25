@@ -85,14 +85,18 @@
       ],
       "cues": [
         "Lie on your back with calves resting on a chair or couch so hips and knees sit near 90 degrees.",
-        "Breathe slowly; let the back soften. 3-5 min planned, 5-10 min after a long day."
+        "Breathe slowly; let the back soften. 3-5 min. Do not lengthen this on purpose."
       ],
-      "stop_if": "Never needed to stop; if lying down does not ease symptoms, log it as an oddity.",
+      "stop_if": "If lying down does not ease symptoms, log it as an oddity and try a standing alternative.",
       "regressions": [
         "EX_SIDELYING_REST"
       ],
-      "progressions": [],
-      "contraindications": "Use around hour 2.5-3 of cumulative upright time, before symptoms start.",
+      "progressions": [
+        "EX_DECOMP_PRONE_ELBOWS",
+        "EX_STAND_EXTENSION",
+        "EX_DOOR_HANG"
+      ],
+      "contraindications": "Preferred decompression in each work posture cycle (not a single break at hour 2.5-3). The goal is to need it less often, not for longer.",
       "in_default_program": true
     },
     {
@@ -112,6 +116,61 @@
         "EX_DECOMP_90_90"
       ],
       "contraindications": "None.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_DECOMP_PRONE_ELBOWS",
+      "name": "Prone on elbows (decompression alternative)",
+      "category": "relief",
+      "equipment": [],
+      "cues": [
+        "Lie face down and prop on your elbows, hips relaxed on the floor, legs long.",
+        "Breathe; stay only if this clearly feels good. This is a rest position, not a repeated press-up."
+      ],
+      "stop_if": "Any increase in back symptoms, or any buttock or leg symptom.",
+      "regressions": [
+        "EX_DECOMP_90_90"
+      ],
+      "progressions": [
+        "EX_STAND_EXTENSION"
+      ],
+      "contraindications": "Optional alternative during the work-cycle decompression if 90/90 is not available or this feels better. Skip it if extension bothers you.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_STAND_EXTENSION",
+      "name": "Standing extension (work-friendly reset)",
+      "category": "relief",
+      "equipment": [],
+      "cues": [
+        "Stand tall, hands on your hips or low back, and gently lean back a little, not to end range.",
+        "Take a few slow breaths, then return to tall standing."
+      ],
+      "stop_if": "Any increase in back symptoms, or any buttock or leg symptom.",
+      "regressions": [
+        "EX_DECOMP_90_90"
+      ],
+      "progressions": [],
+      "contraindications": "Use when you cannot lie down at work. Gentle only; not a stretch to push.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_DOOR_HANG",
+      "name": "Door-frame hang (feet on the floor)",
+      "category": "relief",
+      "equipment": [
+        "door frame"
+      ],
+      "cues": [
+        "Hold the top or sides of a sturdy door frame, keep both feet on the floor, and let the shoulders and back gently unload.",
+        "Bend the knees a little; do not hang from the hands only. Breathe for 3-5 min, or as long as is comfortable within that range."
+      ],
+      "stop_if": "Shoulder pain, wrist pain, or any increase in back symptoms.",
+      "regressions": [
+        "EX_STAND_EXTENSION"
+      ],
+      "progressions": [],
+      "contraindications": "Use when you cannot lie down at work. This is not a pull-up dead hang; feet stay on the floor.",
       "in_default_program": true
     },
     {

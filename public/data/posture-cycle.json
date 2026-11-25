@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "kind": "pt-posture-cycle",
+  "note": "Work-day posture timer. Sitting bothers David sooner than standing, so each posture has its own dose and tolerance. A long unbroken block is never a training goal.",
+  "phases": [
+    {
+      "id": "stand",
+      "name": "Stand",
+      "default_min": 40,
+      "floor_min": 25,
+      "cap_min": 90,
+      "step_min": 5,
+      "fixed": false,
+      "cues": [
+        "Shift your weight around.",
+        "Put a foot up on something low now and then.",
+        "Stay relaxed; this is not a standing challenge."
+      ]
+    },
+    {
+      "id": "walk",
+      "name": "Walk",
+      "default_min": 2,
+      "floor_min": 2,
+      "cap_min": 2,
+      "step_min": 0,
+      "fixed": true,
+      "cues": [
+        "A short lap or a trip to refill water.",
+        "Keep things moving between positions."
+      ]
+    },
+    {
+      "id": "sit",
+      "name": "Sit",
+      "default_min": 20,
+      "floor_min": 10,
+      "cap_min": 50,
+      "step_min": 5,
+      "fixed": false,
+      "cues": [
+        "Sit back with a lumbar roll or a rolled towel behind your lower back so you don't slump forward.",
+        "Sitting has its own tolerance; switch early if it starts to bother you."
+      ]
+    },
+    {
+      "id": "decompress",
+      "name": "Decompress",
+      "default_min": 5,
+      "floor_min": 3,
+      "cap_min": 5,
+      "step_min": 0,
+      "fixed": true,
+      "length_locked": true,
+      "cues": [
+        "Preferred: lie face up with calves on a chair (90/90) for 3-5 minutes.",
+        "Or lie face down propped on your elbows, only if that feels good.",
+        "If you can't lie down at work: a gentle standing extension, or a door-frame hang with your feet still on the floor, and breathe.",
+        "This is a short reset, not a rest to lengthen. The goal is to need it less often, not for longer."
+      ],
+      "exercise_ids": [
+        "EX_DECOMP_90_90",
+        "EX_DECOMP_PRONE_ELBOWS",
+        "EX_STAND_EXTENSION",
+        "EX_DOOR_HANG"
+      ]
+    }
+  ],
+  "order": [
+    "stand",
+    "walk",
+    "sit",
+    "decompress"
+  ],
+  "order_after_stand_sore_early": [
+    "walk",
+    "decompress",
+    "sit"
+  ],
+  "order_after_sit_sore_early": [
+    "decompress",
+    "stand"
+  ],
+  "starting_cycle_min": 67,
+  "progression": {
+    "green_days_to_advance": 3,
+    "hold_on_yellow": true,
+    "orange_step_min": 5,
+    "orange_decomp_frequency": "after_each_block",
+    "default_decomp_frequency": "once_per_cycle",
+    "green_days_to_restore_cycle_decomp": 3,
+    "advance_sit_requires_no_flare": true,
+    "never_advance_on_missing_data": true,
+    "long_block_is_not_a_training_goal": true,
+    "stand_soft_cap_min": 60,
+    "stand_hard_cap_min": 90,
+    "sit_cap_min": 50
+  },
+  "flare_preset": {
+    "stand_min": 25,
+    "sit_min": 10,
+    "walk_min": 2,
+    "decomp_min": 5,
+    "decomp_frequency": "after_each_block"
+  },
+  "settle_exit_step_min": 5,
+  "ratios": {
+    "green_ratio": 0.9,
+    "orange_ratio": 0.6
+  },
+  "baselines": {
+    "sitting_min": 20
+  },
+  "timer": {
+    "enabled": true,
+    "work_start": "08:00",
+    "work_end": "17:00",
+    "timezone": "America/Chicago",
+    "quiet_outside_work_hours": true,
+    "snooze_min": 5,
+    "max_snoozes_per_phase": 2,
+    "alarm_on_phase_change": true,
+    "manual_start_overrides_quiet_hours": true,
+    "at_work_end": "remind_decompress_then_stop",
+    "sore_early_button": "sore_early",
+    "sore_early_logs_as": "tolerance_signal"
+  }
+}

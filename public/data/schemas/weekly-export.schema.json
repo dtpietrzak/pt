@@ -50,6 +50,9 @@
         "profile_sha256": {
           "type": "string"
         },
+        "posture_cycle_sha256": {
+          "type": "string"
+        },
         "config_version": {
           "type": "string"
         }
@@ -162,6 +165,27 @@
                   "number",
                   "null"
                 ]
+              }
+            },
+            "first_sitting_pressure_min": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            },
+            "stand_block_min": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "sit_block_min": {
+              "type": "array",
+              "items": {
+                "type": "number"
               }
             },
             "sleep_hours": {
@@ -392,6 +416,10 @@
             },
             "standing_h": {
               "type": "number"
+            },
+            "sitting_min": {
+              "type": "number",
+              "description": "Minutes of sitting to first pressure; default 20. Sitting has its own tolerance."
             }
           },
           "additionalProperties": false
@@ -437,6 +465,36 @@
               "maximum": 6,
               "default": 2,
               "description": "Clean exposures needed to advance one rung; default 2."
+            },
+            "posture_cycle": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "work_start": {
+                  "type": "string",
+                  "description": "Default 08:00 America/Chicago"
+                },
+                "work_end": {
+                  "type": "string",
+                  "description": "Default 17:00 America/Chicago"
+                },
+                "quiet_outside_work_hours": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "snooze_min": {
+                  "type": "integer",
+                  "default": 5
+                },
+                "max_snoozes_per_phase": {
+                  "type": "integer",
+                  "default": 2
+                }
+              },
+              "additionalProperties": false
             }
           },
           "additionalProperties": false
@@ -509,6 +567,45 @@
             },
             "clean_days": {
               "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "posture_cycle": {
+          "type": "object",
+          "properties": {
+            "stand_min": {
+              "type": "number"
+            },
+            "sit_min": {
+              "type": "number"
+            },
+            "walk_min": {
+              "type": "number"
+            },
+            "decomp_min": {
+              "type": "number"
+            },
+            "decomp_frequency": {
+              "enum": [
+                "once_per_cycle",
+                "after_each_block"
+              ]
+            },
+            "stand_clean_days": {
+              "type": "integer"
+            },
+            "sit_clean_days": {
+              "type": "integer"
+            },
+            "decomp_restore_clean_days": {
+              "type": "integer"
+            },
+            "saved_pre_flare": {
+              "type": [
+                "object",
+                "null"
+              ]
             }
           },
           "additionalProperties": false
@@ -646,6 +743,9 @@
               "type": "number"
             },
             "standing_h": {
+              "type": "number"
+            },
+            "sitting_min": {
               "type": "number"
             }
           },
@@ -812,6 +912,33 @@
         },
         "standing_breaks_done": {
           "type": "integer"
+        },
+        "posture_cycle": {
+          "type": "object",
+          "properties": {
+            "work_mode_used": {
+              "type": "boolean"
+            },
+            "cycles_completed": {
+              "type": "integer"
+            },
+            "stand_prescribed_min": {
+              "type": "number"
+            },
+            "sit_prescribed_min": {
+              "type": "number"
+            },
+            "early_switch_count": {
+              "type": "integer"
+            },
+            "stand_early_switches": {
+              "type": "integer"
+            },
+            "sit_early_switches": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
         },
         "daily_status": {
           "enum": [
@@ -1352,6 +1479,135 @@
                     "upright_h_total"
                   ]
                 },
+                "sitting": {
+                  "type": "object",
+                  "properties": {
+                    "first_pressure_min": {
+                      "type": [
+                        "number",
+                        "null"
+                      ],
+                      "description": "Minutes of sitting when local pressure first reached 3/10"
+                    },
+                    "censored": {
+                      "type": "boolean",
+                      "description": "true if the sit block ended or was switched before pressure appeared"
+                    },
+                    "seated_min_total": {
+                      "type": "number"
+                    },
+                    "flared": {
+                      "type": "boolean",
+                      "description": "true if sitting flared symptoms today"
+                    },
+                    "prescribed_block_min": {
+                      "type": "number"
+                    },
+                    "completed_blocks": {
+                      "type": "integer"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "posture_cycle": {
+                  "type": "object",
+                  "properties": {
+                    "work_mode_used": {
+                      "type": "boolean"
+                    },
+                    "cycles_completed": {
+                      "type": "integer"
+                    },
+                    "stand_prescribed_min": {
+                      "type": "number"
+                    },
+                    "sit_prescribed_min": {
+                      "type": "number"
+                    },
+                    "decomp_done": {
+                      "type": "integer"
+                    },
+                    "early_switches": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "phase": {
+                            "enum": [
+                              "stand",
+                              "walk",
+                              "sit",
+                              "decompress"
+                            ]
+                          },
+                          "prescribed_min": {
+                            "type": "number"
+                          },
+                          "actual_min": {
+                            "type": "number"
+                          },
+                          "reason": {
+                            "enum": [
+                              "sore_early",
+                              "manual"
+                            ]
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "phase",
+                          "actual_min"
+                        ]
+                      }
+                    },
+                    "actual_blocks": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "phase": {
+                            "enum": [
+                              "stand",
+                              "walk",
+                              "sit",
+                              "decompress"
+                            ]
+                          },
+                          "prescribed_min": {
+                            "type": "number"
+                          },
+                          "actual_min": {
+                            "type": "number"
+                          },
+                          "started_at": {
+                            "type": "string"
+                          },
+                          "ended_at": {
+                            "type": "string"
+                          },
+                          "ended_how": {
+                            "enum": [
+                              "alarm",
+                              "sore_early",
+                              "manual",
+                              "snooze_then_switch",
+                              "work_end"
+                            ]
+                          },
+                          "snoozes": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "phase",
+                          "actual_min"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false
+                },
                 "walk_min": {
                   "type": "number"
                 },
@@ -1651,7 +1907,11 @@
             "red",
             "promote",
             "gate_pending",
-            "none"
+            "none",
+            "posture_advance",
+            "posture_hold",
+            "posture_regress",
+            "flare_preset"
           ]
         },
         "color": {

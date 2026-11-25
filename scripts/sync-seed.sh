@@ -6,7 +6,7 @@ SRC="${1:-/workspace/pt-rehab}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DATA="$ROOT/public/data"
 mkdir -p "$DATA/schemas" "$ROOT/test/fixtures"
-for f in levels exercises tests decision-config hashes; do
+for f in levels exercises tests decision-config hashes posture-cycle; do
   [ -f "$SRC/seed/$f.json" ] && cp "$SRC/seed/$f.json" "$DATA/$f.json"
 done
 cp "$SRC"/schemas/*.schema.json "$DATA/schemas/"

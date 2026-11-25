@@ -28,7 +28,8 @@
   "baselines": {
     "pain_rest": 1,
     "stiffness_min": 30,
-    "standing_h": 5
+    "standing_h": 5,
+    "sitting_min": 20
   },
   "notify": {
     "morning": "08:00",
@@ -39,6 +40,14 @@
   "settings": {
     "max_item_changes_per_finalized_session": 3,
     "layoff_rule_enabled": true,
-    "clean_exposures_required": 2
+    "clean_exposures_required": 2,
+    "posture_cycle": {
+      "enabled": true,
+      "work_start": "08:00",
+      "work_end": "17:00",
+      "quiet_outside_work_hours": true,
+      "snooze_min": 5,
+      "max_snoozes_per_phase": 2
+    }
   }
 }

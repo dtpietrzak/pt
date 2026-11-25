@@ -2,6 +2,7 @@
 import { docHash, clone } from "./util.js";
 import { migrateState } from "./patch.js";
 import { initState } from "./engine.js";
+import { setPostureConfig, initPostureState } from "./posture.js";
 import { DEFAULT_PROFILE, DEFAULT_APP } from "./defaults.js";
 
 const FILES = ["levels", "exercises", "tests", "decision-config"];
@@ -13,7 +14,9 @@ async function fetchJson(path) {
 export async function fetchSeed() {
   const [levels, exercises, tests, config] = await Promise.all(FILES.map((f) => fetchJson(`data/${f}.json`)));
   const hash = await docHash({ levels, exercises, tests, config });
-  return { levels, exercises, tests, config, hash };
+  // posture-cycle.json is not part of plan patches, so it stays out of the plan hash and is refreshed on its own.
+  const posture = await fetchJson("data/posture-cycle.json").catch(() => null);
+  return { levels, exercises, tests, config, posture, hash };
 }
 async function seedProfile() {
   try { return await fetchJson("data/profile.json"); } catch { return null; }
@@ -41,6 +44,25 @@ export async function boot(store, now) {
   }
   if (profile && "clinician_contact" in profile) { delete profile.clinician_contact; await store.kvSet("profile", profile); } // dropped by David
   app = { ...DEFAULT_APP, ...(app || {}) };
+  // Posture-cycle config (timer phases and R16): always follows the bundled seed, even when an agent patch was applied to the plan.
+  if (seed?.posture && docs && JSON.stringify(docs.posture) !== JSON.stringify(seed.posture)) { docs = { ...docs, posture: seed.posture }; await store.kvSet("docs", docs); }
+  // Phase B migration for data saved before the work timer existed.
+  const B0 = { sitting_min: DEFAULT_PROFILE.baselines.sitting_min };
+  if (profile) {
+    let dirty = false;
+    if (profile.baselines && profile.baselines.sitting_min === undefined) { profile.baselines.sitting_min = B0.sitting_min; dirty = true; }
+    if (!profile.settings?.posture_cycle) { profile.settings = { ...(profile.settings || {}), posture_cycle: clone(DEFAULT_PROFILE.settings.posture_cycle) }; dirty = true; }
+    if (dirty) await store.kvSet("profile", profile);
+  }
+  if (docs?.posture) {
+    setPostureConfig(docs.posture);
+    if (state) {
+      let dirty = false;
+      if (!state.posture_cycle) { state.posture_cycle = initPostureState(docs.posture, state.level_id); dirty = true; }
+      if (state.baselines && state.baselines.sitting_min === undefined) { state.baselines = { ...state.baselines, sitting_min: profile?.baselines?.sitting_min ?? 20 }; dirty = true; }
+      if (dirty) await store.kvSet("state", state);
+    }
+  }
   if (!docs && seed) {
     docs = { ...seed, seed_hash: seed.hash, patched: false };
     await store.kvSet("docs", docs);
@@ -59,5 +81,7 @@ export async function boot(store, now) {
 }
 
 export function newState(docs, profile, levelId, now) {
-  return initState(docs.levels, levelId, { now, baselines: profile.baselines });
+  const st = initState(docs.levels, levelId, { now, baselines: profile.baselines });
+  if (docs.posture) st.posture_cycle = initPostureState(docs.posture, levelId);
+  return st;
 }

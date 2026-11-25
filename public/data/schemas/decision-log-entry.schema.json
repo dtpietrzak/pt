@@ -30,7 +30,11 @@
             "red",
             "promote",
             "gate_pending",
-            "none"
+            "none",
+            "posture_advance",
+            "posture_hold",
+            "posture_regress",
+            "flare_preset"
           ]
         },
         "color": {

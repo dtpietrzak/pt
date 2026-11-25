@@ -11,7 +11,8 @@
   "defaults": {
     "pain_rest_baseline": 1,
     "stiffness_baseline_min": 30,
-    "standing_baseline_h": 5
+    "standing_baseline_h": 5,
+    "sitting_baseline_min": 20
   },
   "pain": {
     "green_max": 2,
@@ -35,6 +36,11 @@
     "orange_ratio": 0.6,
     "regress_level_ratio": 0.5,
     "settle_exit_ratio": 0.7
+  },
+  "sitting": {
+    "green_ratio": 0.9,
+    "orange_ratio": 0.6,
+    "baseline_min": 20
   },
   "sleep": {
     "block_advance_if_hours_below": 5.5,
@@ -148,6 +154,7 @@
   "baseline_updates": {
     "stiffness_min": "median of last 5 green-morning values; may only DECREASE automatically; increases need David's confirmation",
     "standing_h": "median of last 5 uncensored values from green days; may only INCREASE automatically; decreases need David's confirmation",
+    "sitting_min": "median of last 5 uncensored first-pressure minutes from green work days; may only INCREASE automatically; decreases need David's confirmation",
     "pain_rest": "median of last 5 green evening pain values, rounded; changes need David's confirmation"
   },
   "gate_tests": {

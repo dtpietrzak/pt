@@ -88,3 +88,27 @@ details.lvl summary { cursor: pointer; }
 .field input[type="time"] { padding: 10px 6px; min-width: 0; }
 .times .field { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 6px 0; font-size: 15px; color: var(--text); }
 .times .field input { width: auto; margin: 0; }
+
+/* Work timer */
+.top-r { display: flex; align-items: center; gap: 8px; }
+.timer-chip { text-decoration: none; background: var(--green); color: #fff; font-variant-numeric: tabular-nums; }
+.timer-chip.due { background: var(--danger); animation: pulse 1s ease-in-out infinite; }
+.timer-card { text-align: center; }
+.timer-card h2 { margin-bottom: 6px; }
+.timer-card.due { border-color: var(--danger); box-shadow: 0 0 0 2px var(--danger) inset; }
+.timer-doses { font-size: 14px; color: var(--muted); margin: 8px 0 14px; }
+.t-phase { font-size: 26px; font-weight: 700; margin-top: 4px; }
+.t-count { font-size: 76px; line-height: 1.05; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -.02em; margin: 6px 0 10px; }
+.timer-card.due .t-count { color: var(--danger); animation: pulse 1s ease-in-out infinite; }
+.t-barwrap { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; margin: 0 8px 12px; }
+.t-bar { height: 100%; width: 0; background: var(--accent); transition: width .9s linear; }
+.timer-card.due .t-bar { background: var(--danger); }
+.t-next { font-size: 16px; margin: 6px 0 12px; }
+.t-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 8px; }
+.btn.big { padding: 14px 20px; font-size: 17px; }
+.btn.warn { border-color: var(--warn); }
+.t-cues { text-align: left; font-size: 14px; color: var(--muted); margin: 12px 8px; }
+.t-log { list-style: none; padding: 0; margin: 6px 0 0; font-size: 14px; }
+.t-log li { display: flex; justify-content: space-between; gap: 8px; padding: 5px 0; border-top: 1px solid var(--line); }
+@keyframes pulse { 50% { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .timer-chip.due, .timer-card.due .t-count { animation: none; } }

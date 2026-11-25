@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pt.davidp.dev/schemas/posture-cycle.schema.json",
+  "title": "posture-cycle",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "kind": {
+      "const": "pt-posture-cycle"
+    },
+    "note": {
+      "type": "string"
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Phase"
+      },
+      "minItems": 4
+    },
+    "order": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "order_after_stand_sore_early": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "order_after_sit_sore_early": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "starting_cycle_min": {
+      "type": "number"
+    },
+    "progression": {
+      "type": "object",
+      "properties": {
+        "green_days_to_advance": {
+          "type": "integer"
+        },
+        "hold_on_yellow": {
+          "type": "boolean"
+        },
+        "orange_step_min": {
+          "type": "number"
+        },
+        "orange_decomp_frequency": {
+          "type": "string"
+        },
+        "default_decomp_frequency": {
+          "type": "string"
+        },
+        "green_days_to_restore_cycle_decomp": {
+          "type": "integer"
+        },
+        "advance_sit_requires_no_flare": {
+          "type": "boolean"
+        },
+        "never_advance_on_missing_data": {
+          "type": "boolean"
+        },
+        "long_block_is_not_a_training_goal": {
+          "type": "boolean"
+        },
+        "stand_soft_cap_min": {
+          "type": "number"
+        },
+        "stand_hard_cap_min": {
+          "type": "number"
+        },
+        "sit_cap_min": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "flare_preset": {
+      "type": "object"
+    },
+    "settle_exit_step_min": {
+      "type": "number"
+    },
+    "ratios": {
+      "type": "object",
+      "properties": {
+        "green_ratio": {
+          "type": "number"
+        },
+        "orange_ratio": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "baselines": {
+      "type": "object",
+      "properties": {
+        "sitting_min": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "timer": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "phases",
+    "order",
+    "progression",
+    "timer"
+  ],
+  "$defs": {
+    "Phase": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "default_min": {
+          "type": "number"
+        },
+        "floor_min": {
+          "type": "number"
+        },
+        "cap_min": {
+          "type": "number"
+        },
+        "step_min": {
+          "type": "number"
+        },
+        "fixed": {
+          "type": "boolean"
+        },
+        "length_locked": {
+          "type": "boolean"
+        },
+        "cues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exercise_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "default_min"
+      ]
+    }
+  }
+}

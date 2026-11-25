@@ -69,6 +69,45 @@
           },
           "additionalProperties": false
         },
+        "posture_cycle": {
+          "type": "object",
+          "properties": {
+            "stand_min": {
+              "type": "number"
+            },
+            "sit_min": {
+              "type": "number"
+            },
+            "walk_min": {
+              "type": "number"
+            },
+            "decomp_min": {
+              "type": "number"
+            },
+            "decomp_frequency": {
+              "enum": [
+                "once_per_cycle",
+                "after_each_block"
+              ]
+            },
+            "stand_clean_days": {
+              "type": "integer"
+            },
+            "sit_clean_days": {
+              "type": "integer"
+            },
+            "decomp_restore_clean_days": {
+              "type": "integer"
+            },
+            "saved_pre_flare": {
+              "type": [
+                "object",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
         "advance_stack": {
           "type": "array",
           "items": {
@@ -202,6 +241,9 @@
               "type": "number"
             },
             "standing_h": {
+              "type": "number"
+            },
+            "sitting_min": {
               "type": "number"
             }
           },

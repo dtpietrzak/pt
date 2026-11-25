@@ -2,6 +2,8 @@
 // Phase 1.5: Google sign-in + Firestore sync between phone and laptop (js/sync.js, js/cloud.js).
 import { openDb, createStore } from "./js/db.js";
 import { createSyncedStore } from "./js/sync.js";
+import { createTimerUI } from "./js/timer-ui.js";
+import { TIMER_KEY } from "./js/posture.js";
 import { initCloud, cloudState, signIn, signOutCloud, syncNow } from "./js/cloud.js";
 import { boot, newState } from "./js/data.js";
 import { isoLocal, localDate, clone, addDays } from "./js/util.js";
@@ -16,10 +18,10 @@ const BLOCKS = [
   ["strength_A", "Strength A"], ["strength_B", "Strength B"], ["conditioning", "Conditioning"],
 ];
 const DAILY = ["daily_mobility", "daily_core", "walking", "relief"];
-const PAGES = { today: "Today", plan: "Plan", settings: "Settings" };
+const PAGES = { today: "Today", timer: "Timer", plan: "Plan", settings: "Settings" };
 const MORNING_WINDOW_MIN = 45;
 
-let store, docs, profile, app, state, exById = {};
+let store, docs, profile, app, state, exById = {}, timerUI;
 const main = $("#main");
 
 async function start() {
@@ -28,6 +30,8 @@ async function start() {
   store.endBoot();
   ({ docs, profile, app, state } = b);
   indexExercises();
+  timerUI = createTimerUI({ store, root: main, chip: $("#timer-chip"), toast, ctx: () => ({ docs, profile, app, state, exById }) });
+  timerUI.init().catch((e) => console.warn("Timer unavailable:", e));
   if (b.resynced) toast("Plan data updated from the latest seed.");
   window.addEventListener("hashchange", render);
   render();
@@ -49,6 +53,7 @@ function reloadFromStore() {
     if (p) profile = p;
     if (a) app = { ...app, ...a };
     if (st) state = st;
+    await timerUI?.reload();
     render();
   }, 150);
 }
@@ -94,7 +99,8 @@ function render() {
   $("#level-chip").hidden = false;
   document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("on", a.dataset.page === r));
   $(".nav").hidden = false;
-  ({ today: renderToday, plan: renderPlan, settings: renderSettings })[r]();
+  timerUI?.hide();
+  ({ today: renderToday, timer: renderTimer, plan: renderPlan, settings: renderSettings })[r]();
 }
 
 function renderWelcome() {
@@ -300,12 +306,18 @@ function renderPlan() {
 const testUnit = (id) => docs.tests.tests.find((t) => t.id === id)?.unit || "";
 const testName = (id) => docs.tests.tests.find((t) => t.id === id)?.name || id;
 
+// ---------------------------------------------------------------- Work timer
+function renderTimer() {
+  main.innerHTML = "";
+  timerUI.show();
+}
+
 // ---------------------------------------------------------------- Settings
 const EQUIP_BOOL = [["bands", "Resistance bands"], ["barbell", "Barbell"], ["rack_with_safeties", "Rack with safeties"], ["bench", "Bench"],
   ["pull_up_bar", "Pull-up bar"], ["blocks", "Blocks"], ["cones", "Cones"], ["track_or_field", "Track or field"]];
 const EQUIP_LIST = [["dumbbells_lb", "Dumbbell sizes (lb)"], ["kettlebells_lb", "Kettlebell sizes (lb)"], ["plates_lb", "Plates (lb)"], ["step_box_in", "Step / box heights (in)"]];
 function renderSettings() {
-  const p = profile, eq = p.equipment || {}, B = p.baselines || {};
+  const p = profile, eq = p.equipment || {}, B = p.baselines || {}, pc = p.settings?.posture_cycle || {};
   main.innerHTML = `
   <section class="card" id="sync-card">${syncCardHtml()}</section>
   <form id="settings" class="settings">
@@ -321,6 +333,22 @@ function renderSettings() {
       </div>
       <p class="muted small">Post-workout check-in opens when you finish a session. Times are America/Chicago. Reminders turn on with the check-ins phase.</p>
     </section>
+    <section class="card"><h3>Work timer</h3>
+      <label class="toggle"><input type="checkbox" name="pc_enabled" ${pc.enabled !== false ? "checked" : ""}><span>Work timer enabled</span></label>
+      <div class="times">
+        <label class="field">Work starts<input type="time" name="pc_start" value="${esc(pc.work_start || "08:00")}"></label>
+        <label class="field">Work ends<input type="time" name="pc_end" value="${esc(pc.work_end || "17:00")}"></label>
+      </div>
+      <label class="toggle"><input type="checkbox" name="pc_quiet" ${pc.quiet_outside_work_hours !== false ? "checked" : ""}><span>Quiet outside work hours (stops with one decompress reminder at work end)</span></label>
+      <div class="times">
+        <label class="field">Snooze (min)<input type="number" name="pc_snooze" min="1" max="15" step="1" value="${pc.snooze_min ?? 5}"></label>
+        <label class="field">Max snoozes per phase<input type="number" name="pc_maxsnz" min="0" max="5" step="1" value="${pc.max_snoozes_per_phase ?? 2}"></label>
+      </div>
+      <label class="toggle"><input type="checkbox" name="pc_sound" ${app.timer_sound !== false ? "checked" : ""}><span>Alarm sound</span></label>
+      <label class="toggle"><input type="checkbox" name="pc_all" ${app.timer_alarm_all_devices ? "checked" : ""}><span>Ring on every signed-in device (off = only the device that started work mode)</span></label>
+      <button class="btn" id="test-alarm" type="button">Test alarm + notification</button>
+      <p class="muted small">Stand ${state.posture_cycle?.stand_min ?? 40} · walk ${state.posture_cycle?.walk_min ?? 2} · sit ${state.posture_cycle?.sit_min ?? 20} · decompress ${state.posture_cycle?.decomp_min ?? 5} min now. These doses change with your check-ins, not here.</p>
+    </section>
     <section class="card"><h3>Equipment</h3>
       ${EQUIP_BOOL.map(([k, l]) => `<label class="toggle"><input type="checkbox" name="eq_${k}" ${eq[k] ? "checked" : ""}><span>${l}</span></label>`).join("")}
       ${EQUIP_LIST.map(([k, l]) => `<label class="field">${l}<input name="eq_${k}" value="${esc((eq[k] || []).join(", "))}" placeholder="blank = any size"></label>`).join("")}
@@ -331,6 +359,7 @@ function renderSettings() {
         <label class="field">Stiffness (min)<input type="number" name="b_stiffness_min" min="0" step="1" value="${B.stiffness_min ?? 30}"></label>
         <label class="field">Standing (h)<input type="number" name="b_standing_h" min="0" step="0.25" value="${B.standing_h ?? 5}"></label>
         <label class="field">Rest pain (0-10)<input type="number" name="b_pain_rest" min="0" max="10" step="1" value="${B.pain_rest ?? 1}"></label>
+        <label class="field">Sitting (min)<input type="number" name="b_sitting_min" min="5" step="1" value="${B.sitting_min ?? 20}"></label>
       </div>
       <p class="muted small">Changes in the unfavorable direction (more stiffness, less standing, more pain) ask you to confirm, so slow drift can't hide a decline.</p>
     </section>
@@ -355,6 +384,7 @@ function renderSettings() {
   </section>
   <p class="disclaimer pad">${esc(DISCLAIMER)}</p>`;
   wireSync($("#sync-card"));
+  $("#test-alarm").onclick = () => timerUI.testAlarm();
   $("#settings").onsubmit = saveSettings;
   $("#restart").onclick = async () => {
     const id = $("#restart-level").value;
@@ -379,18 +409,25 @@ async function saveSettings(ev) {
   p.notify = { ...p.notify, morning: f.get("n_morning"), evening: f.get("n_evening"), night: f.get("n_night"), post_workout: "on_session_complete" };
   for (const [k] of EQUIP_BOOL) p.equipment[k] = f.get(`eq_${k}`) === "on";
   for (const [k] of EQUIP_LIST) p.equipment[k] = nums(f.get(`eq_${k}`));
-  const nb = { stiffness_min: +f.get("b_stiffness_min"), standing_h: +f.get("b_standing_h"), pain_rest: Math.round(+f.get("b_pain_rest")) };
+  const nb = { stiffness_min: +f.get("b_stiffness_min"), standing_h: +f.get("b_standing_h"), pain_rest: Math.round(+f.get("b_pain_rest")), sitting_min: Math.max(5, +f.get("b_sitting_min") || B.sitting_min || 20) };
   const B = p.baselines;
   const worse = [];
   if (nb.stiffness_min > B.stiffness_min) worse.push(`stiffness ${B.stiffness_min} → ${nb.stiffness_min} min`);
   if (nb.standing_h < B.standing_h) worse.push(`standing ${B.standing_h} → ${nb.standing_h} h`);
   if (nb.pain_rest > (B.pain_rest ?? 1)) worse.push(`rest pain ${B.pain_rest} → ${nb.pain_rest}`);
+  if (nb.sitting_min < (B.sitting_min ?? 20)) worse.push(`sitting ${B.sitting_min ?? 20} → ${nb.sitting_min} min`);
   if (worse.length && !confirm(`These baseline changes are unfavorable:\n${worse.join("\n")}\n\nThey loosen the limits that flag a decline. Save them anyway?`)) return;
   p.baselines = nb;
   p.settings = { ...p.settings, max_item_changes_per_finalized_session: Math.min(6, Math.max(1, +f.get("cap") || 3)), clean_exposures_required: Math.max(1, +f.get("clean_req") || 2), layoff_rule_enabled: f.get("layoff") === "on" };
+  p.settings.posture_cycle = {
+    enabled: f.get("pc_enabled") === "on", work_start: f.get("pc_start") || "08:00", work_end: f.get("pc_end") || "17:00",
+    quiet_outside_work_hours: f.get("pc_quiet") === "on", snooze_min: Math.min(15, Math.max(1, Math.round(+f.get("pc_snooze")) || 5)),
+    max_snoozes_per_phase: Math.min(5, Math.max(0, Math.round(+f.get("pc_maxsnz") ?? 2))),
+  };
+  app = { ...app, timer_sound: f.get("pc_sound") === "on", timer_alarm_all_devices: f.get("pc_all") === "on" };
   profile = p;
   state = { ...state, baselines: clone(nb) };
-  await store.kvSet("profile", profile); await store.kvSet("state", state);
+  await store.kvSet("profile", profile); await store.kvSet("state", state); await store.kvSet("app", app);
   toast("Settings saved.");
   render();
 }

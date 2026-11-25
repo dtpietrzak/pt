@@ -10,8 +10,8 @@
   "based_on_export_id": "EXAMPLE-2026-W49",
   "base": {
     "plan_version": 1,
-    "levels_sha256": "be46c947501509b7d5c65839444461bc652815cfc573a0e18ac30ffe6340476a",
-    "exercises_sha256": "d1f0f7c2d5f2faa56ece014bbb3aad87de109a7705a7b96437c580dfd6c373df"
+    "levels_sha256": "6557d7232f7b70a8f867428ce40165e5719d48ca2f9e0f4abe7d09d32a12b3b9",
+    "exercises_sha256": "7ea857ceb416683201fe823b0d6f8bd04975270b45c7abe470d57caaebbc2b01"
   },
   "summary": "EXAMPLE: add an optional upright hip flexor stretch to L2 daily mobility and clarify the band-row note.",
   "rationale": "Example only. Illustrates add, replace and test ops. David reported feeling tight through the front of the hips after long standing; an upright, glute-led stretch is allowed in the library and spares the lumbar spine.",

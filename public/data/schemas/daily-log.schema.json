@@ -42,6 +42,33 @@
         "standing_breaks_done": {
           "type": "integer"
         },
+        "posture_cycle": {
+          "type": "object",
+          "properties": {
+            "work_mode_used": {
+              "type": "boolean"
+            },
+            "cycles_completed": {
+              "type": "integer"
+            },
+            "stand_prescribed_min": {
+              "type": "number"
+            },
+            "sit_prescribed_min": {
+              "type": "number"
+            },
+            "early_switch_count": {
+              "type": "integer"
+            },
+            "stand_early_switches": {
+              "type": "integer"
+            },
+            "sit_early_switches": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
         "daily_status": {
           "enum": [
             "green",

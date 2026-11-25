@@ -97,6 +97,10 @@
         },
         "standing_h": {
           "type": "number"
+        },
+        "sitting_min": {
+          "type": "number",
+          "description": "Minutes of sitting to first pressure; default 20. Sitting has its own tolerance."
         }
       },
       "additionalProperties": false
@@ -142,6 +146,36 @@
           "maximum": 6,
           "default": 2,
           "description": "Clean exposures needed to advance one rung; default 2."
+        },
+        "posture_cycle": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "work_start": {
+              "type": "string",
+              "description": "Default 08:00 America/Chicago"
+            },
+            "work_end": {
+              "type": "string",
+              "description": "Default 17:00 America/Chicago"
+            },
+            "quiet_outside_work_hours": {
+              "type": "boolean",
+              "default": true
+            },
+            "snooze_min": {
+              "type": "integer",
+              "default": 5
+            },
+            "max_snoozes_per_phase": {
+              "type": "integer",
+              "default": 2
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false

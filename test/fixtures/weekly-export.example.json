@@ -9,10 +9,11 @@
     "timezone": "America/Chicago",
     "app_version": "0.1.0-example",
     "plan_version": 1,
-    "levels_sha256": "be46c947501509b7d5c65839444461bc652815cfc573a0e18ac30ffe6340476a",
-    "exercises_sha256": "d1f0f7c2d5f2faa56ece014bbb3aad87de109a7705a7b96437c580dfd6c373df",
-    "tests_sha256": "e0cc2efc83dcec1d950349e4bcd4f405907865e322935533ef9d2194f7f4e9c9",
-    "profile_sha256": "c14d9c4b0c9a41859aaea9b3a24ef72faac7eb0461f407f0ac05dcd1b0232558",
+    "levels_sha256": "6557d7232f7b70a8f867428ce40165e5719d48ca2f9e0f4abe7d09d32a12b3b9",
+    "exercises_sha256": "7ea857ceb416683201fe823b0d6f8bd04975270b45c7abe470d57caaebbc2b01",
+    "tests_sha256": "b0676f464991535c3c7fae2ffad82128cfe904604f0aba7246e75b7b934f4493",
+    "profile_sha256": "2b0e83ce841d1c31821ce2b9da551c2406ede44ce08fbe0a93ffa70118a4debc",
+    "posture_cycle_sha256": "4df3c569b62196007bc29eba3f46c9a4b530b10a41a755acb16b8b05ee8a58d1",
     "config_version": "1.0.0"
   },
   "profile": {
@@ -45,7 +46,8 @@
     "baselines": {
       "pain_rest": 1,
       "stiffness_min": 30,
-      "standing_h": 5
+      "standing_h": 5,
+      "sitting_min": 20
     },
     "notify": {
       "morning": "08:00",
@@ -56,7 +58,15 @@
     "settings": {
       "max_item_changes_per_finalized_session": 3,
       "layoff_rule_enabled": true,
-      "clean_exposures_required": 2
+      "clean_exposures_required": 2,
+      "posture_cycle": {
+        "enabled": true,
+        "work_start": "08:00",
+        "work_end": "17:00",
+        "quiet_outside_work_hours": true,
+        "snooze_min": 5,
+        "max_snoozes_per_phase": 2
+      }
     }
   },
   "state_start": {
@@ -179,6 +189,17 @@
       "current_min": 20,
       "clean_days": 0
     },
+    "posture_cycle": {
+      "stand_min": 40,
+      "sit_min": 20,
+      "walk_min": 2,
+      "decomp_min": 5,
+      "decomp_frequency": "once_per_cycle",
+      "stand_clean_days": 0,
+      "sit_clean_days": 0,
+      "decomp_restore_clean_days": 0,
+      "saved_pre_flare": null
+    },
     "advance_stack": [],
     "lock": {
       "easy_dose": false,
@@ -193,7 +214,8 @@
     "baselines": {
       "stiffness_min": 30,
       "standing_h": 5,
-      "pain_rest": 1
+      "pain_rest": 1,
+      "sitting_min": 20
     },
     "gate_tests": {},
     "gate_pending": false,
@@ -332,6 +354,17 @@
       "current_min": 20,
       "clean_days": 0
     },
+    "posture_cycle": {
+      "stand_min": 40,
+      "sit_min": 20,
+      "walk_min": 2,
+      "decomp_min": 5,
+      "decomp_frequency": "once_per_cycle",
+      "stand_clean_days": 0,
+      "sit_clean_days": 0,
+      "decomp_restore_clean_days": 0,
+      "saved_pre_flare": null
+    },
     "advance_stack": [
       {
         "event_id": "E1",
@@ -369,7 +402,8 @@
     "baselines": {
       "stiffness_min": 30,
       "standing_h": 5,
-      "pain_rest": 1
+      "pain_rest": 1,
+      "sitting_min": 20
     },
     "gate_tests": {},
     "gate_pending": false,
@@ -428,6 +462,21 @@
         5.0,
         5.0,
         5.0
+      ],
+      "first_sitting_pressure_min": [
+        20,
+        20,
+        20
+      ],
+      "stand_block_min": [
+        40,
+        40,
+        40
+      ],
+      "sit_block_min": [
+        20,
+        20,
+        20
       ],
       "sleep_hours": [
         7.5,
@@ -776,7 +825,7 @@
           "skipped": false
         }
       ],
-      "post_workout_checkin_id": "CI040",
+      "post_workout_checkin_id": "CI045",
       "status": "final",
       "tests": {
         "exercise": "green",
@@ -828,7 +877,7 @@
           "skipped": false
         }
       ],
-      "post_workout_checkin_id": "CI044",
+      "post_workout_checkin_id": "CI049",
       "status": "final",
       "tests": {
         "exercise": "green",
@@ -900,7 +949,7 @@
           "skipped": false
         }
       ],
-      "post_workout_checkin_id": "CI048",
+      "post_workout_checkin_id": "CI053",
       "status": "final",
       "tests": {
         "exercise": "green",
@@ -916,7 +965,7 @@
   "checkins": [
     {
       "type": "post_workout",
-      "id": "CI040",
+      "id": "CI045",
       "ts": "2026-11-30T18:00:00-06:00",
       "local_date": "2026-11-30",
       "session_id": "S001",
@@ -944,7 +993,7 @@
     },
     {
       "type": "evening",
-      "id": "CI041",
+      "id": "CI046",
       "ts": "2026-11-30T20:30:00-06:00",
       "local_date": "2026-11-30",
       "session_id": null,
@@ -971,7 +1020,7 @@
     },
     {
       "type": "night",
-      "id": "CI042",
+      "id": "CI047",
       "ts": "2026-11-30T22:30:00-06:00",
       "local_date": "2026-11-30",
       "session_id": null,
@@ -997,7 +1046,7 @@
     },
     {
       "type": "morning",
-      "id": "CI043",
+      "id": "CI048",
       "ts": "2026-12-01T08:10:00-06:00",
       "local_date": "2026-12-01",
       "session_id": null,
@@ -1031,7 +1080,7 @@
     },
     {
       "type": "post_workout",
-      "id": "CI044",
+      "id": "CI049",
       "ts": "2026-12-02T18:00:00-06:00",
       "local_date": "2026-12-02",
       "session_id": "S002",
@@ -1068,7 +1117,7 @@
     },
     {
       "type": "evening",
-      "id": "CI045",
+      "id": "CI050",
       "ts": "2026-12-02T20:30:00-06:00",
       "local_date": "2026-12-02",
       "session_id": null,
@@ -1095,7 +1144,7 @@
     },
     {
       "type": "night",
-      "id": "CI046",
+      "id": "CI051",
       "ts": "2026-12-02T22:30:00-06:00",
       "local_date": "2026-12-02",
       "session_id": null,
@@ -1121,7 +1170,7 @@
     },
     {
       "type": "morning",
-      "id": "CI047",
+      "id": "CI052",
       "ts": "2026-12-03T08:10:00-06:00",
       "local_date": "2026-12-03",
       "session_id": null,
@@ -1155,7 +1204,7 @@
     },
     {
       "type": "post_workout",
-      "id": "CI048",
+      "id": "CI053",
       "ts": "2026-12-04T18:00:00-06:00",
       "local_date": "2026-12-04",
       "session_id": "S003",
@@ -1183,7 +1232,7 @@
     },
     {
       "type": "evening",
-      "id": "CI049",
+      "id": "CI054",
       "ts": "2026-12-04T20:30:00-06:00",
       "local_date": "2026-12-04",
       "session_id": null,
@@ -1210,7 +1259,7 @@
     },
     {
       "type": "night",
-      "id": "CI050",
+      "id": "CI055",
       "ts": "2026-12-04T22:30:00-06:00",
       "local_date": "2026-12-04",
       "session_id": null,
@@ -1236,7 +1285,7 @@
     },
     {
       "type": "morning",
-      "id": "CI051",
+      "id": "CI056",
       "ts": "2026-12-05T08:10:00-06:00",
       "local_date": "2026-12-05",
       "session_id": null,
@@ -1278,8 +1327,8 @@
       "color": "green",
       "session_id": "S001",
       "checkin_ids": [
-        "CI040",
-        "CI043"
+        "CI045",
+        "CI048"
       ],
       "changes": [],
       "message": "Session 1 final green and clean. Clean exposure recorded for 5 items (1 of 2 needed)."
@@ -1292,8 +1341,8 @@
       "color": "yellow",
       "session_id": "S002",
       "checkin_ids": [
-        "CI044",
-        "CI047"
+        "CI049",
+        "CI052"
       ],
       "changes": [],
       "message": "Recovery test yellow (morning stiffness 40 min vs 35 min green limit). Hold: repeat session B at the same dose; exposures for B items reset."
@@ -1306,8 +1355,8 @@
       "color": "green",
       "session_id": "S003",
       "checkin_ids": [
-        "CI048",
-        "CI051"
+        "CI053",
+        "CI056"
       ],
       "changes": [
         {
