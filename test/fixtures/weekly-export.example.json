@@ -1,0 +1,1324 @@
+{
+  "schema_version": "1.0",
+  "kind": "pt-weekly-export",
+  "meta": {
+    "export_id": "EXAMPLE-2026-W49",
+    "week_start": "2026-11-30",
+    "week_end": "2026-12-06",
+    "generated_at": "2026-12-06T20:00:00-06:00",
+    "timezone": "America/Chicago",
+    "app_version": "0.1.0-example",
+    "plan_version": 1,
+    "levels_sha256": "b9160a83067fdc379ed3647d3dee42dadc00e46ec8014a13af7769e28f5ed457",
+    "exercises_sha256": "df6f838db2eb129d6cc9152ed251bd380dc15b8d1cf1c37362964c819580dd54",
+    "config_version": "1.0.0"
+  },
+  "profile": {
+    "name": "David Pietrzak",
+    "timezone": "America/Chicago",
+    "baselines": {
+      "stiffness_min": 30,
+      "standing_h": 5,
+      "pain_rest": 1
+    },
+    "equipment": {
+      "bands": true
+    },
+    "clinician_contact": "Treating physician (name and phone to be added)",
+    "settings": {
+      "max_item_changes_per_finalized_session": 3,
+      "layoff_rule_enabled": true
+    }
+  },
+  "state_start": {
+    "schema_version": "1.0",
+    "plan_version": 1,
+    "level_id": "L1",
+    "mode": "active",
+    "item_state": {
+      "L1_daily_mobility_EX_DIAPH_BREATH": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_mobility_EX_NEUTRAL_SPINE_POS": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_mobility_EX_STAND_BRACE": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_mobility_EX_CALF_STRETCH": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_relief_EX_DECOMP_90_90": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_core_EX_CURLUP": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_core_EX_SIDE_BRIDGE_KNEES": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_core_EX_BIRD_DOG": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_core_EX_BRACE_MARCH": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_A_EX_GLUTE_BRIDGE": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_A_EX_BOX_SQUAT_STRAP": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_A_EX_HINGE_DOWEL": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_A_EX_SIDE_STEP_BAND": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_A_EX_CALF_RAISE": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_B_EX_PALLOF_STD": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_B_EX_BAND_ROW": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_B_EX_DEAD_BUG_HEELTAP": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_walking_EX_WALK_EASY": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      }
+    },
+    "core_clean_days": 0,
+    "walk": {
+      "current_min": 20,
+      "clean_days": 0
+    },
+    "advance_stack": [],
+    "lock": {
+      "easy_dose": false,
+      "clean_required": 2
+    },
+    "orange_events": [],
+    "level_regress_events": [],
+    "incident_log": [],
+    "consecutive_yellow_sessions": 0,
+    "probation_sessions_remaining": 0,
+    "level_clean_streak": 0,
+    "baselines": {
+      "stiffness_min": 30,
+      "standing_h": 5,
+      "pain_rest": 1
+    },
+    "gate_tests": {},
+    "gate_pending": false,
+    "settle": {
+      "resume_level": null,
+      "resume_item_state": null,
+      "green_days_in_row": 0
+    },
+    "red": {
+      "kind": null,
+      "since": null,
+      "flags": [],
+      "cleared_at": null,
+      "clearance_note": null
+    },
+    "clinician_recommended": false,
+    "last_evaluated_at": "2026-12-05T08:30:00-06:00"
+  },
+  "state_end": {
+    "schema_version": "1.0",
+    "plan_version": 1,
+    "level_id": "L1",
+    "mode": "active",
+    "item_state": {
+      "L1_daily_mobility_EX_DIAPH_BREATH": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_mobility_EX_NEUTRAL_SPINE_POS": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_mobility_EX_STAND_BRACE": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_mobility_EX_CALF_STRETCH": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_relief_EX_DECOMP_90_90": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_core_EX_CURLUP": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_core_EX_SIDE_BRIDGE_KNEES": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_core_EX_BIRD_DOG": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_daily_core_EX_BRACE_MARCH": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_A_EX_GLUTE_BRIDGE": {
+        "rung": 1,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_A_EX_BOX_SQUAT_STRAP": {
+        "rung": 1,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_A_EX_HINGE_DOWEL": {
+        "rung": 1,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_A_EX_SIDE_STEP_BAND": {
+        "rung": 0,
+        "clean_exposures": 2,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_A_EX_CALF_RAISE": {
+        "rung": 0,
+        "clean_exposures": 2,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_B_EX_PALLOF_STD": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_B_EX_BAND_ROW": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_strength_B_EX_DEAD_BUG_HEELTAP": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      },
+      "L1_walking_EX_WALK_EASY": {
+        "rung": 0,
+        "clean_exposures": 0,
+        "held_out": false,
+        "last_bump_session_id": null
+      }
+    },
+    "core_clean_days": 0,
+    "walk": {
+      "current_min": 20,
+      "clean_days": 0
+    },
+    "advance_stack": [
+      {
+        "event_id": "E1",
+        "session_id": "S003",
+        "track": "strength",
+        "changes": [
+          {
+            "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+            "from_rung": 0,
+            "to_rung": 1
+          },
+          {
+            "item_key": "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "from_rung": 0,
+            "to_rung": 1
+          },
+          {
+            "item_key": "L1_strength_A_EX_HINGE_DOWEL",
+            "from_rung": 0,
+            "to_rung": 1
+          }
+        ]
+      }
+    ],
+    "lock": {
+      "easy_dose": false,
+      "clean_required": 2
+    },
+    "orange_events": [],
+    "level_regress_events": [],
+    "incident_log": [],
+    "consecutive_yellow_sessions": 0,
+    "probation_sessions_remaining": 0,
+    "level_clean_streak": 1,
+    "baselines": {
+      "stiffness_min": 30,
+      "standing_h": 5,
+      "pain_rest": 1
+    },
+    "gate_tests": {},
+    "gate_pending": false,
+    "settle": {
+      "resume_level": null,
+      "resume_item_state": null,
+      "green_days_in_row": 0
+    },
+    "red": {
+      "kind": null,
+      "since": null,
+      "flags": [],
+      "cleared_at": null,
+      "clearance_note": null
+    },
+    "clinician_recommended": false,
+    "last_evaluated_at": "2026-12-05T08:30:00-06:00"
+  },
+  "summary": {
+    "level_start": "L1",
+    "level_end": "L1",
+    "strength_sessions_planned": 3,
+    "strength_sessions_completed": 3,
+    "core_days_done": 6,
+    "walk_minutes_total": 205,
+    "daily_status_counts": {
+      "green": 6,
+      "yellow": 1,
+      "orange": 0,
+      "red": 0
+    },
+    "clean_sessions": 2,
+    "advances": 1,
+    "holds": 1,
+    "regress_steps": 0,
+    "regress_levels": 0,
+    "sharp_incidents": 0,
+    "red_flag_events": 0,
+    "trend": {
+      "morning_stiffness_min": [
+        30,
+        40,
+        28
+      ],
+      "morning_pain": [
+        1,
+        2,
+        1
+      ],
+      "evening_pain_peak": [
+        1,
+        2,
+        1
+      ],
+      "first_pressure_h": [
+        5.0,
+        5.0,
+        5.0
+      ],
+      "sleep_hours": [
+        7.5,
+        7.5,
+        7.5
+      ]
+    },
+    "gate_tests": [],
+    "adherence_pct": 93.0
+  },
+  "days": [
+    {
+      "local_date": "2026-11-30",
+      "level_id": "L1",
+      "checklist": [
+        {
+          "item_key": "L1_daily_mobility_EX_DIAPH_BREATH",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_NEUTRAL_SPINE_POS",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_STAND_BRACE",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_CURLUP",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_SIDE_BRIDGE_KNEES",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BIRD_DOG",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BRACE_MARCH",
+          "done": true
+        }
+      ],
+      "walk_min": 25,
+      "decomp_breaks_done": 1,
+      "standing_breaks_done": 5,
+      "daily_status": "green",
+      "daily_status_reasons": []
+    },
+    {
+      "local_date": "2026-12-01",
+      "level_id": "L1",
+      "checklist": [
+        {
+          "item_key": "L1_daily_mobility_EX_DIAPH_BREATH",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_NEUTRAL_SPINE_POS",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_STAND_BRACE",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_CURLUP",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_SIDE_BRIDGE_KNEES",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BIRD_DOG",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BRACE_MARCH",
+          "done": true
+        }
+      ],
+      "walk_min": 30,
+      "decomp_breaks_done": 1,
+      "standing_breaks_done": 5,
+      "daily_status": "green",
+      "daily_status_reasons": []
+    },
+    {
+      "local_date": "2026-12-02",
+      "level_id": "L1",
+      "checklist": [
+        {
+          "item_key": "L1_daily_mobility_EX_DIAPH_BREATH",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_NEUTRAL_SPINE_POS",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_STAND_BRACE",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_CURLUP",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_SIDE_BRIDGE_KNEES",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BIRD_DOG",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BRACE_MARCH",
+          "done": true
+        }
+      ],
+      "walk_min": 35,
+      "decomp_breaks_done": 1,
+      "standing_breaks_done": 5,
+      "daily_status": "green",
+      "daily_status_reasons": []
+    },
+    {
+      "local_date": "2026-12-03",
+      "level_id": "L1",
+      "checklist": [
+        {
+          "item_key": "L1_daily_mobility_EX_DIAPH_BREATH",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_NEUTRAL_SPINE_POS",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_STAND_BRACE",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_CURLUP",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_SIDE_BRIDGE_KNEES",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BIRD_DOG",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BRACE_MARCH",
+          "done": true
+        }
+      ],
+      "walk_min": 25,
+      "decomp_breaks_done": 1,
+      "standing_breaks_done": 5,
+      "daily_status": "yellow",
+      "daily_status_reasons": [
+        "morning stiffness 40 min is above the 35 min green limit"
+      ]
+    },
+    {
+      "local_date": "2026-12-04",
+      "level_id": "L1",
+      "checklist": [
+        {
+          "item_key": "L1_daily_mobility_EX_DIAPH_BREATH",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_NEUTRAL_SPINE_POS",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_STAND_BRACE",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_CURLUP",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_SIDE_BRIDGE_KNEES",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BIRD_DOG",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BRACE_MARCH",
+          "done": true
+        }
+      ],
+      "walk_min": 30,
+      "decomp_breaks_done": 1,
+      "standing_breaks_done": 5,
+      "daily_status": "green",
+      "daily_status_reasons": []
+    },
+    {
+      "local_date": "2026-12-05",
+      "level_id": "L1",
+      "checklist": [
+        {
+          "item_key": "L1_daily_mobility_EX_DIAPH_BREATH",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_NEUTRAL_SPINE_POS",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_STAND_BRACE",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_CURLUP",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_SIDE_BRIDGE_KNEES",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BIRD_DOG",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BRACE_MARCH",
+          "done": true
+        }
+      ],
+      "walk_min": 35,
+      "decomp_breaks_done": 1,
+      "standing_breaks_done": 5,
+      "daily_status": "green",
+      "daily_status_reasons": []
+    },
+    {
+      "local_date": "2026-12-06",
+      "level_id": "L1",
+      "checklist": [
+        {
+          "item_key": "L1_daily_mobility_EX_DIAPH_BREATH",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_NEUTRAL_SPINE_POS",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_STAND_BRACE",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_CURLUP",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_SIDE_BRIDGE_KNEES",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BIRD_DOG",
+          "done": true
+        },
+        {
+          "item_key": "L1_daily_core_EX_BRACE_MARCH",
+          "done": false
+        }
+      ],
+      "walk_min": 25,
+      "decomp_breaks_done": 1,
+      "standing_breaks_done": 5,
+      "daily_status": "green",
+      "daily_status_reasons": []
+    }
+  ],
+  "sessions": [
+    {
+      "id": "S001",
+      "local_date": "2026-11-30",
+      "started_at": "2026-11-30T17:15:00-06:00",
+      "ended_at": "2026-11-30T17:55:00-06:00",
+      "template": "strength_A",
+      "level_id": "L1",
+      "items": [
+        {
+          "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 10,
+            "hold_s": 3
+          },
+          "completed": true,
+          "skipped": false
+        },
+        {
+          "item_key": "L1_strength_A_EX_BOX_SQUAT_STRAP",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 8
+          },
+          "completed": true,
+          "skipped": false
+        },
+        {
+          "item_key": "L1_strength_A_EX_HINGE_DOWEL",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 8
+          },
+          "completed": true,
+          "skipped": false
+        },
+        {
+          "item_key": "L1_strength_A_EX_SIDE_STEP_BAND",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 8
+          },
+          "completed": true,
+          "skipped": false
+        },
+        {
+          "item_key": "L1_strength_A_EX_CALF_RAISE",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 10
+          },
+          "completed": true,
+          "skipped": false
+        }
+      ],
+      "post_workout_checkin_id": "CI040",
+      "status": "final",
+      "tests": {
+        "exercise": "green",
+        "recovery": "green",
+        "functional": "green"
+      },
+      "final_color": "green",
+      "clean": true,
+      "modifiers": [],
+      "probation": false
+    },
+    {
+      "id": "S002",
+      "local_date": "2026-12-02",
+      "started_at": "2026-12-02T17:15:00-06:00",
+      "ended_at": "2026-12-02T17:55:00-06:00",
+      "template": "strength_B",
+      "level_id": "L1",
+      "items": [
+        {
+          "item_key": "L1_strength_B_EX_PALLOF_STD",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 6,
+            "hold_s": 3
+          },
+          "completed": true,
+          "skipped": false
+        },
+        {
+          "item_key": "L1_strength_B_EX_BAND_ROW",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 10
+          },
+          "completed": true,
+          "skipped": false
+        },
+        {
+          "item_key": "L1_strength_B_EX_DEAD_BUG_HEELTAP",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 6
+          },
+          "completed": true,
+          "skipped": false
+        }
+      ],
+      "post_workout_checkin_id": "CI044",
+      "status": "final",
+      "tests": {
+        "exercise": "green",
+        "recovery": "yellow",
+        "functional": "green"
+      },
+      "final_color": "yellow",
+      "clean": false,
+      "modifiers": [],
+      "probation": false
+    },
+    {
+      "id": "S003",
+      "local_date": "2026-12-04",
+      "started_at": "2026-12-04T17:15:00-06:00",
+      "ended_at": "2026-12-04T17:55:00-06:00",
+      "template": "strength_A",
+      "level_id": "L1",
+      "items": [
+        {
+          "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 10,
+            "hold_s": 3
+          },
+          "completed": true,
+          "skipped": false
+        },
+        {
+          "item_key": "L1_strength_A_EX_BOX_SQUAT_STRAP",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 8
+          },
+          "completed": true,
+          "skipped": false
+        },
+        {
+          "item_key": "L1_strength_A_EX_HINGE_DOWEL",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 8
+          },
+          "completed": true,
+          "skipped": false
+        },
+        {
+          "item_key": "L1_strength_A_EX_SIDE_STEP_BAND",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 8
+          },
+          "completed": true,
+          "skipped": false
+        },
+        {
+          "item_key": "L1_strength_A_EX_CALF_RAISE",
+          "prescribed_rung": 0,
+          "actual": {
+            "sets": 2,
+            "reps": 10
+          },
+          "completed": true,
+          "skipped": false
+        }
+      ],
+      "post_workout_checkin_id": "CI048",
+      "status": "final",
+      "tests": {
+        "exercise": "green",
+        "recovery": "green",
+        "functional": "green"
+      },
+      "final_color": "green",
+      "clean": true,
+      "modifiers": [],
+      "probation": false
+    }
+  ],
+  "checkins": [
+    {
+      "type": "post_workout",
+      "id": "CI040",
+      "ts": "2026-11-30T18:00:00-06:00",
+      "local_date": "2026-11-30",
+      "session_id": "S001",
+      "data": {
+        "completed_items": [
+          {
+            "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+            "rung_done": 0,
+            "completed": true,
+            "pain_peak": 2
+          }
+        ],
+        "pain_peak": 2,
+        "pain_15min_after": 2,
+        "rpe": 5,
+        "settle_bucket": "lt_30",
+        "form_breakdown": false,
+        "symptoms": {
+          "pain_now": 2,
+          "sharp_electrical": false,
+          "leg_symptoms": "none",
+          "numbness_tingling": false
+        }
+      }
+    },
+    {
+      "type": "evening",
+      "id": "CI041",
+      "ts": "2026-11-30T20:30:00-06:00",
+      "local_date": "2026-11-30",
+      "session_id": null,
+      "data": {
+        "standing": {
+          "first_pressure_h": 5.0,
+          "censored": false,
+          "upright_h_total": 7.0,
+          "breaks_taken": 5,
+          "decomp_breaks_done": 1
+        },
+        "walk_min": 30,
+        "pain_peak_today": 1,
+        "forced_rest_count": 0,
+        "activity_limited": false,
+        "hip_shift": false,
+        "symptoms": {
+          "pain_now": 1,
+          "sharp_electrical": false,
+          "leg_symptoms": "none",
+          "numbness_tingling": false
+        }
+      }
+    },
+    {
+      "type": "night",
+      "id": "CI042",
+      "ts": "2026-11-30T22:30:00-06:00",
+      "local_date": "2026-11-30",
+      "session_id": null,
+      "data": {
+        "bedtime_pain": 1,
+        "symptoms": {
+          "pain_now": 1,
+          "sharp_electrical": false,
+          "leg_symptoms": "none",
+          "numbness_tingling": false
+        }
+      },
+      "red_flags": {
+        "saddle_numbness": false,
+        "bladder_bowel_change": false,
+        "new_leg_weakness": false,
+        "new_numbness_tingling": false,
+        "fever_with_back_pain": false,
+        "night_pain_unrelieved": false,
+        "bilateral_leg_symptoms": false,
+        "trauma_since_last_checkin": false
+      }
+    },
+    {
+      "type": "morning",
+      "id": "CI043",
+      "ts": "2026-12-01T08:10:00-06:00",
+      "local_date": "2026-12-01",
+      "session_id": null,
+      "data": {
+        "wake_time": "07:00",
+        "protection_window_respected": true,
+        "pain_on_waking": 1,
+        "stiffness_min": 30,
+        "stiffness_still_present": false,
+        "sleep_hours": 7.5,
+        "sleep_quality": 4,
+        "woke_from_pain_count": 0,
+        "hip_shift": false,
+        "symptoms": {
+          "pain_now": 1,
+          "sharp_electrical": false,
+          "leg_symptoms": "none",
+          "numbness_tingling": false
+        }
+      },
+      "red_flags": {
+        "saddle_numbness": false,
+        "bladder_bowel_change": false,
+        "new_leg_weakness": false,
+        "new_numbness_tingling": false,
+        "fever_with_back_pain": false,
+        "night_pain_unrelieved": false,
+        "bilateral_leg_symptoms": false,
+        "trauma_since_last_checkin": false
+      }
+    },
+    {
+      "type": "post_workout",
+      "id": "CI044",
+      "ts": "2026-12-02T18:00:00-06:00",
+      "local_date": "2026-12-02",
+      "session_id": "S002",
+      "data": {
+        "completed_items": [
+          {
+            "item_key": "L1_strength_B_EX_PALLOF_STD",
+            "rung_done": 0,
+            "completed": true
+          },
+          {
+            "item_key": "L1_strength_B_EX_BAND_ROW",
+            "rung_done": 0,
+            "completed": true
+          },
+          {
+            "item_key": "L1_strength_B_EX_DEAD_BUG_HEELTAP",
+            "rung_done": 0,
+            "completed": true
+          }
+        ],
+        "pain_peak": 2,
+        "pain_15min_after": 2,
+        "rpe": 6,
+        "settle_bucket": "lt_30",
+        "form_breakdown": false,
+        "symptoms": {
+          "pain_now": 2,
+          "sharp_electrical": false,
+          "leg_symptoms": "none",
+          "numbness_tingling": false
+        }
+      }
+    },
+    {
+      "type": "evening",
+      "id": "CI045",
+      "ts": "2026-12-02T20:30:00-06:00",
+      "local_date": "2026-12-02",
+      "session_id": null,
+      "data": {
+        "standing": {
+          "first_pressure_h": 5.0,
+          "censored": false,
+          "upright_h_total": 7.0,
+          "breaks_taken": 5,
+          "decomp_breaks_done": 1
+        },
+        "walk_min": 30,
+        "pain_peak_today": 2,
+        "forced_rest_count": 0,
+        "activity_limited": false,
+        "hip_shift": false,
+        "symptoms": {
+          "pain_now": 2,
+          "sharp_electrical": false,
+          "leg_symptoms": "none",
+          "numbness_tingling": false
+        }
+      }
+    },
+    {
+      "type": "night",
+      "id": "CI046",
+      "ts": "2026-12-02T22:30:00-06:00",
+      "local_date": "2026-12-02",
+      "session_id": null,
+      "data": {
+        "bedtime_pain": 2,
+        "symptoms": {
+          "pain_now": 2,
+          "sharp_electrical": false,
+          "leg_symptoms": "none",
+          "numbness_tingling": false
+        }
+      },
+      "red_flags": {
+        "saddle_numbness": false,
+        "bladder_bowel_change": false,
+        "new_leg_weakness": false,
+        "new_numbness_tingling": false,
+        "fever_with_back_pain": false,
+        "night_pain_unrelieved": false,
+        "bilateral_leg_symptoms": false,
+        "trauma_since_last_checkin": false
+      }
+    },
+    {
+      "type": "morning",
+      "id": "CI047",
+      "ts": "2026-12-03T08:10:00-06:00",
+      "local_date": "2026-12-03",
+      "session_id": null,
+      "data": {
+        "wake_time": "07:00",
+        "protection_window_respected": true,
+        "pain_on_waking": 2,
+        "stiffness_min": 40,
+        "stiffness_still_present": false,
+        "sleep_hours": 7.5,
+        "sleep_quality": 4,
+        "woke_from_pain_count": 0,
+        "hip_shift": false,
+        "symptoms": {
+          "pain_now": 2,
+          "sharp_electrical": false,
+          "leg_symptoms": "none",
+          "numbness_tingling": false
+        }
+      },
+      "red_flags": {
+        "saddle_numbness": false,
+        "bladder_bowel_change": false,
+        "new_leg_weakness": false,
+        "new_numbness_tingling": false,
+        "fever_with_back_pain": false,
+        "night_pain_unrelieved": false,
+        "bilateral_leg_symptoms": false,
+        "trauma_since_last_checkin": false
+      }
+    },
+    {
+      "type": "post_workout",
+      "id": "CI048",
+      "ts": "2026-12-04T18:00:00-06:00",
+      "local_date": "2026-12-04",
+      "session_id": "S003",
+      "data": {
+        "completed_items": [
+          {
+            "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+            "rung_done": 0,
+            "completed": true,
+            "pain_peak": 1
+          }
+        ],
+        "pain_peak": 1,
+        "pain_15min_after": 1,
+        "rpe": 5,
+        "settle_bucket": "lt_30",
+        "form_breakdown": false,
+        "symptoms": {
+          "pain_now": 1,
+          "sharp_electrical": false,
+          "leg_symptoms": "none",
+          "numbness_tingling": false
+        }
+      }
+    },
+    {
+      "type": "evening",
+      "id": "CI049",
+      "ts": "2026-12-04T20:30:00-06:00",
+      "local_date": "2026-12-04",
+      "session_id": null,
+      "data": {
+        "standing": {
+          "first_pressure_h": 5.0,
+          "censored": false,
+          "upright_h_total": 7.0,
+          "breaks_taken": 5,
+          "decomp_breaks_done": 1
+        },
+        "walk_min": 30,
+        "pain_peak_today": 1,
+        "forced_rest_count": 0,
+        "activity_limited": false,
+        "hip_shift": false,
+        "symptoms": {
+          "pain_now": 1,
+          "sharp_electrical": false,
+          "leg_symptoms": "none",
+          "numbness_tingling": false
+        }
+      }
+    },
+    {
+      "type": "night",
+      "id": "CI050",
+      "ts": "2026-12-04T22:30:00-06:00",
+      "local_date": "2026-12-04",
+      "session_id": null,
+      "data": {
+        "bedtime_pain": 1,
+        "symptoms": {
+          "pain_now": 1,
+          "sharp_electrical": false,
+          "leg_symptoms": "none",
+          "numbness_tingling": false
+        }
+      },
+      "red_flags": {
+        "saddle_numbness": false,
+        "bladder_bowel_change": false,
+        "new_leg_weakness": false,
+        "new_numbness_tingling": false,
+        "fever_with_back_pain": false,
+        "night_pain_unrelieved": false,
+        "bilateral_leg_symptoms": false,
+        "trauma_since_last_checkin": false
+      }
+    },
+    {
+      "type": "morning",
+      "id": "CI051",
+      "ts": "2026-12-05T08:10:00-06:00",
+      "local_date": "2026-12-05",
+      "session_id": null,
+      "data": {
+        "wake_time": "07:00",
+        "protection_window_respected": true,
+        "pain_on_waking": 1,
+        "stiffness_min": 28,
+        "stiffness_still_present": false,
+        "sleep_hours": 7.5,
+        "sleep_quality": 4,
+        "woke_from_pain_count": 0,
+        "hip_shift": false,
+        "symptoms": {
+          "pain_now": 1,
+          "sharp_electrical": false,
+          "leg_symptoms": "none",
+          "numbness_tingling": false
+        }
+      },
+      "red_flags": {
+        "saddle_numbness": false,
+        "bladder_bowel_change": false,
+        "new_leg_weakness": false,
+        "new_numbness_tingling": false,
+        "fever_with_back_pain": false,
+        "night_pain_unrelieved": false,
+        "bilateral_leg_symptoms": false,
+        "trauma_since_last_checkin": false
+      }
+    }
+  ],
+  "decision_log": [
+    {
+      "id": "LOG001",
+      "ts": "2026-12-01T08:15:00-06:00",
+      "rule_id": "R5",
+      "outcome": "none",
+      "color": "green",
+      "session_id": "S001",
+      "checkin_ids": [
+        "CI040",
+        "CI043"
+      ],
+      "changes": [],
+      "message": "Session 1 final green and clean. Clean exposure recorded for 5 items (1 of 2 needed)."
+    },
+    {
+      "id": "LOG002",
+      "ts": "2026-12-03T08:15:00-06:00",
+      "rule_id": "R4",
+      "outcome": "hold",
+      "color": "yellow",
+      "session_id": "S002",
+      "checkin_ids": [
+        "CI044",
+        "CI047"
+      ],
+      "changes": [],
+      "message": "Recovery test yellow (morning stiffness 40 min vs 35 min green limit). Hold: repeat session B at the same dose; exposures for B items reset."
+    },
+    {
+      "id": "LOG003",
+      "ts": "2026-12-05T08:15:00-06:00",
+      "rule_id": "R5",
+      "outcome": "advance",
+      "color": "green",
+      "session_id": "S003",
+      "checkin_ids": [
+        "CI048",
+        "CI051"
+      ],
+      "changes": [
+        {
+          "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+          "from_rung": 0,
+          "to_rung": 1
+        },
+        {
+          "item_key": "L1_strength_A_EX_BOX_SQUAT_STRAP",
+          "from_rung": 0,
+          "to_rung": 1
+        },
+        {
+          "item_key": "L1_strength_A_EX_HINGE_DOWEL",
+          "from_rung": 0,
+          "to_rung": 1
+        }
+      ],
+      "message": "Session 3 final green and clean; second clean exposure for A items. Advanced 3 items by one rung each (cap 3): EX_GLUTE_BRIDGE, EX_BOX_SQUAT_STRAP, EX_HINGE_DOWEL."
+    }
+  ],
+  "attention": [],
+  "user_notes": "EXAMPLE ONLY (fabricated data). Felt fine overall; a little stiff on Thursday morning.",
+  "markdown_summary_file": "pt-export-2026-W49.md",
+  "agent_brief": {
+    "role": "You review one week of a personal lumbar-disc self-management program and propose small, evidence-aligned changes to the plan documents and app. You are not a clinician and must not give medical advice.",
+    "may": [
+      "Propose ladder tweaks (doses, steps, order) for exercises that stalled or were tolerated easily, citing export fields.",
+      "Propose swapping an exercise for a regression or alternative from the library, or adding an optional library exercise with cues, regressions, progressions and contraindications.",
+      "Propose changes to cues, notes, rest times, session composition, and optional items.",
+      "Propose raising or lowering gate-test thresholds, with safety_review_required set to true and a clear rationale.",
+      "Suggest app changes (UI, reminders, new fields) as app_change_requests."
+    ],
+    "may_not": [
+      "Edit decision-config.json, red-flag texts, or the morning-window rule.",
+      "Edit decision_state, promote or regress levels, or mark tests as passed.",
+      "Remove or weaken a level's avoid list, or add loaded spinal flexion or aggressive end-range stretching to any default block.",
+      "Lower a level's clean_streak_sessions or drop a gate test without safety_review_required true.",
+      "Give diagnoses or tell David to ignore a red flag; if the export shows red-flag events or clinician_recommended, say he should contact his physician."
+    ],
+    "return_format": "Reply with ONE JSON document that validates against plan-patch.schema.json (kind pt-plan-patch), based on this export's meta hashes, with evidence[] pointing at export fields. Add a short markdown rationale for David after the JSON. If no change is warranted, return a patch with a single test op and say so in summary."
+  }
+}

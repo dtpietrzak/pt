@@ -1,0 +1,553 @@
+{
+  "schema_version": "1.0",
+  "tests": [
+    {
+      "id": "T_WALK_CONT",
+      "name": "Continuous walk",
+      "protocol": "Walk continuously on flat ground at a comfortable pace. Pain stays 0-2, no leg symptoms, next morning no worse.",
+      "unit": "min",
+      "thresholds": {
+        "L1": {
+          "value": 30
+        },
+        "L2": {
+          "value": 40
+        },
+        "L3": {
+          "value": 45
+        },
+        "L4": {
+          "value": 60
+        },
+        "L5": {
+          "value": 60,
+          "note": "include 5 x 2 min brisk"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "function"
+    },
+    {
+      "id": "T_STAND_FUNC",
+      "name": "Workday upright tolerance (with breaks)",
+      "protocol": "On a normal day, accumulate the target upright hours while taking the scheduled breaks and decompression rest. Local pressure stays at 2/10 or less at the end of the day and the next morning is no worse. This measures function, it is not a challenge to stand without breaks.",
+      "unit": "hours upright",
+      "thresholds": {
+        "L1": {
+          "value": 5
+        },
+        "L2": {
+          "value": 6
+        },
+        "L3": {
+          "value": 6
+        },
+        "L4": {
+          "value": 7
+        },
+        "L5": {
+          "value": 8
+        }
+      },
+      "safety": "Never stand without breaks just to pass this test.",
+      "optional": false,
+      "category": "function"
+    },
+    {
+      "id": "T_HINGE_DOWEL",
+      "name": "Pain-free dowel hinge",
+      "protocol": "10 reps of the dowel hip hinge with head, upper back and tailbone staying in contact on every rep, no pain.",
+      "unit": "reps",
+      "thresholds": {
+        "L1": {
+          "value": 10
+        },
+        "L2": {
+          "value": 10
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "pattern"
+    },
+    {
+      "id": "T_SQUAT_BW",
+      "name": "Box squat pattern",
+      "protocol": "L1: box squat with strap/counter support. L2: unsupported chair-tap box squat. No rounding at the bottom (side-view phone video).",
+      "unit": "reps",
+      "thresholds": {
+        "L1": {
+          "value": 10,
+          "note": "supported"
+        },
+        "L2": {
+          "value": 12,
+          "note": "unsupported chair tap"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "pattern"
+    },
+    {
+      "id": "T_SIDE_BRIDGE",
+      "name": "Side bridge endurance (each side)",
+      "protocol": "Hold the side bridge until the hips sag or the cap is reached. L2 from knees, L3+ from feet. The two sides should differ by no more than 15% (10% at L8).",
+      "unit": "s",
+      "thresholds": {
+        "L2": {
+          "value": 40,
+          "note": "knees"
+        },
+        "L3": {
+          "value": 30,
+          "note": "feet"
+        },
+        "L4": {
+          "value": 45
+        },
+        "L5": {
+          "value": 60
+        },
+        "L6": {
+          "value": 75
+        },
+        "L7": {
+          "value": 90
+        },
+        "L8": {
+          "value": 90,
+          "note": "side difference <=10%"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green. Cap: stop at the target.",
+      "optional": false,
+      "category": "strength"
+    },
+    {
+      "id": "T_BIRDDOG",
+      "name": "Bird dog endurance",
+      "protocol": "Reps of 10 s holds per side with level pelvis and no low-back arching (the cup-on-the-back test).",
+      "unit": "reps/side",
+      "thresholds": {
+        "L2": {
+          "value": 6
+        },
+        "L4": {
+          "value": 10
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "core"
+    },
+    {
+      "id": "T_DEADBUG",
+      "name": "Dead bug quality",
+      "protocol": "3 sets of 10 per side of opposite arm/leg reach with ribs down and the back flat on its natural curve (no arch).",
+      "unit": "reps/side",
+      "thresholds": {
+        "L2": {
+          "value": 10,
+          "note": "3 sets, heel taps or reach"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "core"
+    },
+    {
+      "id": "T_BALANCE_SL",
+      "name": "Single-leg balance, eyes open",
+      "protocol": "Stand on one leg on a firm surface, arms folded or hands at hips. Each side.",
+      "unit": "s",
+      "thresholds": {
+        "L2": {
+          "value": 20
+        },
+        "L3": {
+          "value": 30
+        }
+      },
+      "safety": "Stand next to a wall.",
+      "optional": false,
+      "category": "balance"
+    },
+    {
+      "id": "T_BALANCE_SL_EC",
+      "name": "Single-leg balance, eyes closed",
+      "protocol": "Stand on one leg on a firm surface with eyes closed. Each side.",
+      "unit": "s",
+      "thresholds": {
+        "L4": {
+          "value": 10
+        },
+        "L5": {
+          "value": 20
+        },
+        "L6": {
+          "value": 30
+        }
+      },
+      "safety": "Stand next to a wall.",
+      "optional": false,
+      "category": "balance"
+    },
+    {
+      "id": "T_DL_LOAD",
+      "name": "Pain-free loaded hinge",
+      "protocol": "Perform the level's hinge lift for the stated reps, with neutral spine, RPE 7 or less, pain 0-2. L3 and L4: kettlebell from the block. L5: from the floor. L6: barbell from blocks. L7 and L8: barbell from the floor.",
+      "unit": "3 sets; load",
+      "thresholds": {
+        "L3": {
+          "value": "8 reps @ 20 lb",
+          "note": "KB block"
+        },
+        "L4": {
+          "value": "3x8 @ 25% BW",
+          "note": "KB block"
+        },
+        "L5": {
+          "value": "3x8 @ 30% BW",
+          "note": "KB floor"
+        },
+        "L6": {
+          "value": "3x5 @ 75% BW",
+          "note": "barbell from blocks"
+        },
+        "L7": {
+          "value": "3x5 @ 125% BW",
+          "note": "barbell from the floor"
+        },
+        "L8": {
+          "value": "3x5 @ 150% BW",
+          "note": "barbell from the floor; proposed target, David to confirm"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "strength"
+    },
+    {
+      "id": "T_FLOOR_LIFT",
+      "name": "Floor-to-waist practice lift",
+      "protocol": "2 sets of 5 lifts of a laundry basket or kettlebell from a floor-level (L5) or 8-10 in raised (L4) start to waist height, hinge or squat, no rounding.",
+      "unit": "2x5; load",
+      "thresholds": {
+        "L4": {
+          "value": "20 lb",
+          "note": "raised start"
+        },
+        "L5": {
+          "value": "25 lb",
+          "note": "floor start"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "function"
+    },
+    {
+      "id": "T_CARRY",
+      "name": "Carry without lean",
+      "protocol": "Walk 45-60 s per side (suitcase) or both hands (farmer) with a tall trunk and level shoulders; no visible lean.",
+      "unit": "load",
+      "thresholds": {
+        "L3": {
+          "value": "20 lb suitcase x 40 s/side"
+        },
+        "L4": {
+          "value": "20% BW per hand x 60 s"
+        },
+        "L5": {
+          "value": "25% BW per hand x 60 s"
+        },
+        "L6": {
+          "value": "40% BW per hand x 60 s"
+        },
+        "L7": {
+          "value": "50% BW per hand x 60 s"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "strength"
+    },
+    {
+      "id": "T_STEPDOWN",
+      "name": "Slow step-down",
+      "protocol": "8 step-downs per leg with 3 s lowering, knee tracking over the toes, pelvis level. L4 step height 6 in, L5 8 in.",
+      "unit": "reps/leg",
+      "thresholds": {
+        "L4": {
+          "value": 8,
+          "note": "6 in step"
+        },
+        "L5": {
+          "value": 8,
+          "note": "8 in step"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "balance"
+    },
+    {
+      "id": "T_PUSHUP",
+      "name": "Push-up capacity",
+      "protocol": "Strict reps with a straight body line, no sag. L4 counter incline, L5 floor, L6 floor.",
+      "unit": "reps",
+      "thresholds": {
+        "L4": {
+          "value": 10,
+          "note": "incline"
+        },
+        "L5": {
+          "value": 10,
+          "note": "floor"
+        },
+        "L6": {
+          "value": 15,
+          "note": "floor"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "strength"
+    },
+    {
+      "id": "T_PULL",
+      "name": "Pulling standard",
+      "protocol": "L5: inverted row 3x8. L6: band-assisted pull-up 3x5. L7: 5 strict pull-ups. L8: 8 strict pull-ups.",
+      "unit": "reps",
+      "thresholds": {
+        "L5": {
+          "value": "3x8 inverted row"
+        },
+        "L6": {
+          "value": "3x5 assisted pull-up"
+        },
+        "L7": {
+          "value": "5 strict pull-ups"
+        },
+        "L8": {
+          "value": "8 strict pull-ups"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "strength"
+    },
+    {
+      "id": "T_BENCH_LOAD",
+      "name": "Bench press standard",
+      "protocol": "L6: dumbbell bench 3x8 at 22% BW per hand. L7: barbell 3x5 at 75% BW. L8: barbell 3x5 at 100% BW. Always with safeties or a spotter.",
+      "unit": "3 sets; load",
+      "thresholds": {
+        "L6": {
+          "value": "3x8 @ 22% BW per hand"
+        },
+        "L7": {
+          "value": "3x5 @ 75% BW"
+        },
+        "L8": {
+          "value": "3x5 @ 100% BW"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "strength"
+    },
+    {
+      "id": "T_FLEXOR_ENDURANCE",
+      "name": "McGill trunk flexor endurance",
+      "protocol": "Sit reclined at 60 degrees against a wedge/cushions, knees bent, feet anchored, arms crossed; hold until the trunk drops from the line or the target time. Isometric only; pain 0-2.",
+      "unit": "s",
+      "thresholds": {
+        "L4": {
+          "value": 60
+        },
+        "L5": {
+          "value": 90
+        },
+        "L6": {
+          "value": 110
+        },
+        "L7": {
+          "value": 130
+        },
+        "L8": {
+          "value": 130,
+          "note": "flexor:extensor ratio <1.0 if both tested"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "core"
+    },
+    {
+      "id": "T_EXTENSOR_ENDURANCE",
+      "name": "Trunk extensor endurance (Biering-Sorensen style)",
+      "protocol": "OPTIONAL. Prone with hips on a bench edge and legs anchored, arms crossed, hold the trunk horizontal. Skip permanently if extension reproduces symptoms.",
+      "unit": "s",
+      "thresholds": {
+        "L5": {
+          "value": 60
+        },
+        "L6": {
+          "value": 90
+        },
+        "L7": {
+          "value": 120
+        },
+        "L8": {
+          "value": 150
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green. Stop at the target. Side-bridge average should be at least 75% of extensor time.",
+      "optional": true,
+      "category": "core"
+    },
+    {
+      "id": "T_POGO",
+      "name": "Pogo hops pain-free",
+      "protocol": "3 sets of 20 small ankle hops, quiet landings, pain 0-2, next morning no worse.",
+      "unit": "contacts",
+      "thresholds": {
+        "L5": {
+          "value": 20,
+          "note": "3 sets"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "impact"
+    },
+    {
+      "id": "T_SL_HOP_INPLACE",
+      "name": "Single-leg hops in place",
+      "protocol": "3 sets of 10 hops per leg, pelvis level, quiet landings.",
+      "unit": "hops/leg",
+      "thresholds": {
+        "L6": {
+          "value": 10,
+          "note": "3 sets"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "impact"
+    },
+    {
+      "id": "T_JOG",
+      "name": "Continuous jog",
+      "protocol": "Jog continuously at a conversational pace on a flat soft surface; pain 0-2 and next morning no worse.",
+      "unit": "min",
+      "thresholds": {
+        "L6": {
+          "value": 20
+        },
+        "L7": {
+          "value": 30
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "impact"
+    },
+    {
+      "id": "T_HOP_BATTERY",
+      "name": "Hop battery (limb symmetry index)",
+      "protocol": "Single-leg hop for distance, triple hop for distance, 6 m timed hop, crossover hop; best of 2 per leg. Symmetry = involved/uninvolved. Landings must be stuck cleanly.",
+      "unit": "LSI %",
+      "thresholds": {
+        "L7": {
+          "value": 90
+        },
+        "L8": {
+          "value": 95
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "impact"
+    },
+    {
+      "id": "T_STRIDES",
+      "name": "Strides",
+      "protocol": "6 x 60 m accelerations at about 80% effort with walk-back recovery; relaxed form; no pulling or back symptoms.",
+      "unit": "reps",
+      "thresholds": {
+        "L7": {
+          "value": 6,
+          "note": "x 60 m at 80%"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "speed"
+    },
+    {
+      "id": "T_ACCEL",
+      "name": "Acceleration runs",
+      "protocol": "6 x 30 m at about 90% effort with full recovery; no hamstring, groin or back symptoms.",
+      "unit": "reps",
+      "thresholds": {
+        "L7": {
+          "value": 6,
+          "note": "x 30 m at 90%"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "speed"
+    },
+    {
+      "id": "T_COD",
+      "name": "Change of direction (5-10-5)",
+      "protocol": "5-10-5 shuttle at the stated effort, smooth plants, no twisting pain.",
+      "unit": "effort",
+      "thresholds": {
+        "L7": {
+          "value": "80% effort"
+        },
+        "L8": {
+          "value": "100% effort"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "speed"
+    },
+    {
+      "id": "T_SPRINT_MAX",
+      "name": "Maximal sprints",
+      "protocol": "6 x 40 m at 100% after a long warm-up and stride build-ups; no pulling, no back or leg symptoms.",
+      "unit": "reps",
+      "thresholds": {
+        "L8": {
+          "value": 6,
+          "note": "x 40 m at 100%"
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "speed"
+    },
+    {
+      "id": "T_ATHLETIC_CIRCUIT",
+      "name": "Athletic circuit",
+      "protocol": "Complete a 40 min mixed circuit (lifts, jumps, runs, change of direction) at sport-like intensity with controlled technique and symptom-free the next morning.",
+      "unit": "min",
+      "thresholds": {
+        "L8": {
+          "value": 40
+        }
+      },
+      "safety": "Run only on a day when yesterday's and this morning's check-ins are green. Stop at the first form breakdown or any symptom. A pass is provisional until the next-morning check-in is green.",
+      "optional": false,
+      "category": "speed"
+    }
+  ]
+}

@@ -1,0 +1,2693 @@
+{
+  "schema_version": "1.0",
+  "note": "Check-in vectors validate against schemas/checkin.schema.json. Engine sequences use reference/ref_engine.py semantics (plan.md R2-R5 and R8a).",
+  "vectors": [
+    {
+      "id": "CC01",
+      "kind": "checkin_color",
+      "description": "Morning: stiffness at baseline (30), pain 1",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI001",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 1,
+            "stiffness_min": 30,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "green"
+      }
+    },
+    {
+      "id": "CC02",
+      "kind": "checkin_color",
+      "description": "Morning: stiffness 35 is the green limit (B+5)",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI002",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 1,
+            "stiffness_min": 35,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "green"
+      }
+    },
+    {
+      "id": "CC03",
+      "kind": "checkin_color",
+      "description": "Morning: stiffness 40 is yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI003",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 1,
+            "stiffness_min": 40,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC04",
+      "kind": "checkin_color",
+      "description": "Morning: stiffness 45 is the yellow limit",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI004",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 1,
+            "stiffness_min": 45,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC05",
+      "kind": "checkin_color",
+      "description": "Morning: stiffness 46 is orange",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI005",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 1,
+            "stiffness_min": 46,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "orange"
+      }
+    },
+    {
+      "id": "CC06",
+      "kind": "checkin_color",
+      "description": "Morning: stiffness 25 with baseline 15 (yellow limit max(22.5,30)=30)",
+      "input": {
+        "baselines": {
+          "stiffness_min": 15,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI006",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 1,
+            "stiffness_min": 25,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC07",
+      "kind": "checkin_color",
+      "description": "Morning: stiffness 31 with baseline 15 is orange",
+      "input": {
+        "baselines": {
+          "stiffness_min": 15,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI007",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 1,
+            "stiffness_min": 31,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "orange"
+      }
+    },
+    {
+      "id": "CC08",
+      "kind": "checkin_color",
+      "description": "Morning: pain on waking 3 is yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI008",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 3,
+            "stiffness_min": 30,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 3,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC09",
+      "kind": "checkin_color",
+      "description": "Morning: pain on waking 5 is orange",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI009",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 5,
+            "stiffness_min": 30,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 5,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "orange"
+      }
+    },
+    {
+      "id": "CC10",
+      "kind": "checkin_color",
+      "description": "Morning: woke from pain once is yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI010",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 1,
+            "stiffness_min": 30,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 1,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC11",
+      "kind": "checkin_color",
+      "description": "Morning: lateral hip shift returns is orange",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI011",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 1,
+            "stiffness_min": 30,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": true,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "orange"
+      }
+    },
+    {
+      "id": "CC12",
+      "kind": "checkin_color",
+      "description": "Morning: hip shift in third consecutive check-in is red (clinician)",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {
+          "prior_hip_shift_checkins": 2
+        },
+        "checkin": {
+          "type": "morning",
+          "id": "CI012",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 1,
+            "stiffness_min": 30,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": true,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "red",
+        "red_kind": "clinician"
+      }
+    },
+    {
+      "id": "CC13",
+      "kind": "checkin_color",
+      "description": "Morning: poor sleep (5 h) stays green but blocks advance",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI013",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 1,
+            "stiffness_min": 30,
+            "stiffness_still_present": false,
+            "sleep_hours": 5.0,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "green",
+        "modifiers": [
+          "poor_sleep"
+        ]
+      }
+    },
+    {
+      "id": "CC14",
+      "kind": "checkin_color",
+      "description": "Post-workout: peak 2, settles fast, good form",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "post_workout",
+          "id": "CI014",
+          "ts": "2026-11-30T18:00:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": "S001",
+          "data": {
+            "completed_items": [
+              {
+                "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+                "rung_done": 0,
+                "completed": true,
+                "pain_peak": 2
+              }
+            ],
+            "pain_peak": 2,
+            "pain_15min_after": 2,
+            "rpe": 5,
+            "settle_bucket": "lt_30",
+            "form_breakdown": false,
+            "symptoms": {
+              "pain_now": 2,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "green"
+      }
+    },
+    {
+      "id": "CC15",
+      "kind": "checkin_color",
+      "description": "Post-workout: peak 4 is yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "post_workout",
+          "id": "CI015",
+          "ts": "2026-11-30T18:00:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": "S001",
+          "data": {
+            "completed_items": [
+              {
+                "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+                "rung_done": 0,
+                "completed": true,
+                "pain_peak": 2
+              }
+            ],
+            "pain_peak": 4,
+            "pain_15min_after": 4,
+            "rpe": 5,
+            "settle_bucket": "lt_30",
+            "form_breakdown": false,
+            "symptoms": {
+              "pain_now": 4,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC16",
+      "kind": "checkin_color",
+      "description": "Post-workout: peak 5 is orange",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "post_workout",
+          "id": "CI016",
+          "ts": "2026-11-30T18:00:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": "S001",
+          "data": {
+            "completed_items": [
+              {
+                "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+                "rung_done": 0,
+                "completed": true,
+                "pain_peak": 2
+              }
+            ],
+            "pain_peak": 5,
+            "pain_15min_after": 5,
+            "rpe": 5,
+            "settle_bucket": "lt_30",
+            "form_breakdown": false,
+            "symptoms": {
+              "pain_now": 5,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "orange"
+      }
+    },
+    {
+      "id": "CC17",
+      "kind": "checkin_color",
+      "description": "Post-workout: sharp/electrical during exercise is orange even at pain 2",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "post_workout",
+          "id": "CI017",
+          "ts": "2026-11-30T18:00:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": "S001",
+          "data": {
+            "completed_items": [
+              {
+                "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+                "rung_done": 0,
+                "completed": true,
+                "pain_peak": 2
+              }
+            ],
+            "pain_peak": 2,
+            "pain_15min_after": 2,
+            "rpe": 5,
+            "settle_bucket": "lt_30",
+            "form_breakdown": false,
+            "symptoms": {
+              "pain_now": 2,
+              "sharp_electrical": true,
+              "leg_symptoms": "none",
+              "numbness_tingling": false,
+              "sharp_context": "exercise"
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "orange"
+      }
+    },
+    {
+      "id": "CC18",
+      "kind": "checkin_color",
+      "description": "Post-workout: settle over 120 min is yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "post_workout",
+          "id": "CI018",
+          "ts": "2026-11-30T18:00:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": "S001",
+          "data": {
+            "completed_items": [
+              {
+                "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+                "rung_done": 0,
+                "completed": true,
+                "pain_peak": 2
+              }
+            ],
+            "pain_peak": 2,
+            "pain_15min_after": 2,
+            "rpe": 5,
+            "settle_bucket": "gt_120",
+            "form_breakdown": false,
+            "symptoms": {
+              "pain_now": 2,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC19",
+      "kind": "checkin_color",
+      "description": "Post-workout: form breakdown is yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "post_workout",
+          "id": "CI019",
+          "ts": "2026-11-30T18:00:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": "S001",
+          "data": {
+            "completed_items": [
+              {
+                "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+                "rung_done": 0,
+                "completed": true,
+                "pain_peak": 2
+              }
+            ],
+            "pain_peak": 2,
+            "pain_15min_after": 2,
+            "rpe": 5,
+            "settle_bucket": "lt_30",
+            "form_breakdown": true,
+            "symptoms": {
+              "pain_now": 2,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC20",
+      "kind": "checkin_color",
+      "description": "Post-workout: effort 8/10 above plan is yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "post_workout",
+          "id": "CI020",
+          "ts": "2026-11-30T18:00:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": "S001",
+          "data": {
+            "completed_items": [
+              {
+                "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+                "rung_done": 0,
+                "completed": true,
+                "pain_peak": 2
+              }
+            ],
+            "pain_peak": 2,
+            "pain_15min_after": 2,
+            "rpe": 8,
+            "settle_bucket": "lt_30",
+            "form_breakdown": false,
+            "symptoms": {
+              "pain_now": 2,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC21",
+      "kind": "checkin_color",
+      "description": "Accidental sharp catch, settled in 10 min, pain 4, no leg symptoms: yellow incident",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI021",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 4,
+            "stiffness_min": 30,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 4,
+              "sharp_electrical": true,
+              "leg_symptoms": "none",
+              "numbness_tingling": false,
+              "sharp_context": "accidental_bend_twist",
+              "sharp_settle_min": 10
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC22",
+      "kind": "checkin_color",
+      "description": "Accidental sharp catch that took 45 min to settle is orange",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI022",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 3,
+            "stiffness_min": 30,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 3,
+              "sharp_electrical": true,
+              "leg_symptoms": "none",
+              "numbness_tingling": false,
+              "sharp_context": "accidental_bend_twist",
+              "sharp_settle_min": 45
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "orange"
+      }
+    },
+    {
+      "id": "CC23",
+      "kind": "checkin_color",
+      "description": "Sharp/electrical with ordinary movement, first time: orange",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI023",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 2,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 2,
+              "sharp_electrical": true,
+              "leg_symptoms": "none",
+              "numbness_tingling": false,
+              "sharp_context": "ordinary_movement",
+              "sharp_settle_min": 5
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "orange"
+      }
+    },
+    {
+      "id": "CC24",
+      "kind": "checkin_color",
+      "description": "Sharp/electrical with ordinary movement again within 3 days: red (clinician)",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {
+          "recent_ordinary_sharp_days": 1
+        },
+        "checkin": {
+          "type": "evening",
+          "id": "CI024",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 2,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 2,
+              "sharp_electrical": true,
+              "leg_symptoms": "none",
+              "numbness_tingling": false,
+              "sharp_context": "ordinary_movement",
+              "sharp_settle_min": 5
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "red",
+        "red_kind": "clinician"
+      }
+    },
+    {
+      "id": "CC25",
+      "kind": "checkin_color",
+      "description": "Leg symptoms in the buttock: orange",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI025",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 2,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 2,
+              "sharp_electrical": false,
+              "leg_symptoms": "buttock",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "orange"
+      }
+    },
+    {
+      "id": "CC26",
+      "kind": "checkin_color",
+      "description": "Leg symptoms in the buttock in 3 consecutive check-ins: red (clinician)",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {
+          "prior_leg_checkins": 2
+        },
+        "checkin": {
+          "type": "evening",
+          "id": "CI026",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 2,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 2,
+              "sharp_electrical": false,
+              "leg_symptoms": "buttock",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "red",
+        "red_kind": "clinician"
+      }
+    },
+    {
+      "id": "CC27",
+      "kind": "checkin_color",
+      "description": "Leg symptoms below the knee: red (clinician)",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI027",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 2,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 2,
+              "sharp_electrical": false,
+              "leg_symptoms": "below_knee",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "red",
+        "red_kind": "clinician"
+      }
+    },
+    {
+      "id": "CC28",
+      "kind": "checkin_color",
+      "description": "New numbness or tingling: red (clinician)",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI028",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 1,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": true
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "red",
+        "red_kind": "clinician"
+      }
+    },
+    {
+      "id": "CC29",
+      "kind": "checkin_color",
+      "description": "Saddle numbness in the red-flag screen: red (emergency)",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "night",
+          "id": "CI029",
+          "ts": "2026-11-30T22:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "bedtime_pain": 1,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": true,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "red",
+        "red_kind": "emergency"
+      }
+    },
+    {
+      "id": "CC30",
+      "kind": "checkin_color",
+      "description": "Bladder or bowel change: red (emergency)",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "morning",
+          "id": "CI030",
+          "ts": "2026-12-01T08:10:00-06:00",
+          "local_date": "2026-12-01",
+          "session_id": null,
+          "data": {
+            "wake_time": "07:00",
+            "protection_window_respected": true,
+            "pain_on_waking": 1,
+            "stiffness_min": 30,
+            "stiffness_still_present": false,
+            "sleep_hours": 7.5,
+            "sleep_quality": 4,
+            "woke_from_pain_count": 0,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": true,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "red",
+        "red_kind": "emergency"
+      }
+    },
+    {
+      "id": "CC31",
+      "kind": "checkin_color",
+      "description": "Unrelieved night pain: red (clinician)",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "night",
+          "id": "CI031",
+          "ts": "2026-11-30T22:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "bedtime_pain": 6,
+            "symptoms": {
+              "pain_now": 6,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": true,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "red",
+        "red_kind": "clinician"
+      }
+    },
+    {
+      "id": "CC32",
+      "kind": "checkin_color",
+      "description": "Evening: first pressure at 4.5 h with baseline 5 h (ratio 0.90) is green",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI032",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 4.5,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 1,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "green"
+      }
+    },
+    {
+      "id": "CC33",
+      "kind": "checkin_color",
+      "description": "Evening: first pressure at 4.4 h (ratio 0.88) is yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI033",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 4.4,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 1,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC34",
+      "kind": "checkin_color",
+      "description": "Evening: first pressure at 3.0 h (ratio 0.60) is yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI034",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 3.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 1,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC35",
+      "kind": "checkin_color",
+      "description": "Evening: first pressure at 2.9 h (ratio 0.58) is orange",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI035",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 2.9,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 1,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "orange"
+      }
+    },
+    {
+      "id": "CC36",
+      "kind": "checkin_color",
+      "description": "Evening: breaks taken before any pressure appeared (censored), pain peak 2: green",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI036",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": null,
+              "censored": true,
+              "upright_h_total": 6.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 2,
+            "forced_rest_count": 0,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 2,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "green"
+      }
+    },
+    {
+      "id": "CC37",
+      "kind": "checkin_color",
+      "description": "Evening: one forced rest is yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI037",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 1,
+            "forced_rest_count": 1,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "CC38",
+      "kind": "checkin_color",
+      "description": "Evening: three forced rests is orange",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "evening",
+          "id": "CI038",
+          "ts": "2026-11-30T20:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "standing": {
+              "first_pressure_h": 5.0,
+              "censored": false,
+              "upright_h_total": 7.0,
+              "breaks_taken": 5,
+              "decomp_breaks_done": 1
+            },
+            "walk_min": 30,
+            "pain_peak_today": 1,
+            "forced_rest_count": 3,
+            "activity_limited": false,
+            "hip_shift": false,
+            "symptoms": {
+              "pain_now": 1,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "color": "orange"
+      }
+    },
+    {
+      "id": "CC39",
+      "kind": "checkin_color",
+      "description": "Night: bedtime pain 4 is yellow",
+      "input": {
+        "baselines": {
+          "stiffness_min": 30,
+          "standing_h": 5,
+          "pain_rest": 1
+        },
+        "context": {},
+        "checkin": {
+          "type": "night",
+          "id": "CI039",
+          "ts": "2026-11-30T22:30:00-06:00",
+          "local_date": "2026-11-30",
+          "session_id": null,
+          "data": {
+            "bedtime_pain": 4,
+            "symptoms": {
+              "pain_now": 4,
+              "sharp_electrical": false,
+              "leg_symptoms": "none",
+              "numbness_tingling": false
+            }
+          },
+          "red_flags": {
+            "saddle_numbness": false,
+            "bladder_bowel_change": false,
+            "new_leg_weakness": false,
+            "new_numbness_tingling": false,
+            "fever_with_back_pain": false,
+            "night_pain_unrelieved": false,
+            "bilateral_leg_symptoms": false,
+            "trauma_since_last_checkin": false
+          }
+        }
+      },
+      "expect": {
+        "color": "yellow"
+      }
+    },
+    {
+      "id": "SC01",
+      "kind": "session_color",
+      "description": "Session color is the worst of exercise/recovery/functional (green/green/green)",
+      "input": {
+        "exercise": "green",
+        "recovery": "green",
+        "functional": "green"
+      },
+      "expect": {
+        "final_color": "green",
+        "clean": true
+      }
+    },
+    {
+      "id": "SC02",
+      "kind": "session_color",
+      "description": "Session color is the worst of exercise/recovery/functional (green/yellow/green)",
+      "input": {
+        "exercise": "green",
+        "recovery": "yellow",
+        "functional": "green"
+      },
+      "expect": {
+        "final_color": "yellow",
+        "clean": false
+      }
+    },
+    {
+      "id": "SC03",
+      "kind": "session_color",
+      "description": "Session color is the worst of exercise/recovery/functional (green/green/orange)",
+      "input": {
+        "exercise": "green",
+        "recovery": "green",
+        "functional": "orange"
+      },
+      "expect": {
+        "final_color": "orange",
+        "clean": false
+      }
+    },
+    {
+      "id": "SC04",
+      "kind": "session_color",
+      "description": "Session color is the worst of exercise/recovery/functional (yellow/orange/green)",
+      "input": {
+        "exercise": "yellow",
+        "recovery": "orange",
+        "functional": "green"
+      },
+      "expect": {
+        "final_color": "orange",
+        "clean": false
+      }
+    },
+    {
+      "id": "ES01",
+      "kind": "engine_sequence",
+      "description": "Two clean A sessions advance the three items with the most rungs left, one rung each; the other two stay eligible with 2 exposures",
+      "initial": {
+        "level": "L1",
+        "item_state": "every item at start_rung, 0 exposures, no lock",
+        "config": {
+          "max_item_changes_per_finalized_session": 3
+        }
+      },
+      "events": [
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        }
+      ],
+      "expect": {
+        "level": "L1",
+        "mode": "active",
+        "rungs": {
+          "L1_strength_A_EX_GLUTE_BRIDGE": 1,
+          "L1_strength_A_EX_BOX_SQUAT_STRAP": 1,
+          "L1_strength_A_EX_HINGE_DOWEL": 1
+        },
+        "exposures": {
+          "L1_strength_A_EX_SIDE_STEP_BAND": 2,
+          "L1_strength_A_EX_CALF_RAISE": 2
+        },
+        "held_out": [],
+        "lock": false,
+        "stack_depth": 1,
+        "consecutive_yellow": 0,
+        "clean_streak": 2,
+        "orange_events": 0,
+        "level_regress": null
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none"
+        },
+        {
+          "outcome": "advance",
+          "bumped": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ES02",
+      "kind": "engine_sequence",
+      "description": "A yellow session resets exposures: clean, yellow, clean, clean advances only on the third clean exposure after the yellow",
+      "initial": {
+        "level": "L1",
+        "item_state": "every item at start_rung, 0 exposures, no lock",
+        "config": {
+          "max_item_changes_per_finalized_session": 3
+        }
+      },
+      "events": [
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "yellow",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        }
+      ],
+      "expect": {
+        "level": "L1",
+        "mode": "active",
+        "rungs": {
+          "L1_strength_A_EX_GLUTE_BRIDGE": 1,
+          "L1_strength_A_EX_BOX_SQUAT_STRAP": 1,
+          "L1_strength_A_EX_HINGE_DOWEL": 1
+        },
+        "exposures": {
+          "L1_strength_A_EX_SIDE_STEP_BAND": 2,
+          "L1_strength_A_EX_CALF_RAISE": 2
+        },
+        "held_out": [],
+        "lock": false,
+        "stack_depth": 1,
+        "consecutive_yellow": 0,
+        "clean_streak": 2,
+        "orange_events": 0,
+        "level_regress": null
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none"
+        },
+        {
+          "outcome": "hold"
+        },
+        {
+          "outcome": "none"
+        },
+        {
+          "outcome": "advance",
+          "bumped": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ES03",
+      "kind": "engine_sequence",
+      "description": "Orange after an advance: the last advance group is undone (a culprit inside it is not dropped again), all exposures reset",
+      "initial": {
+        "level": "L1",
+        "item_state": "every item at start_rung, 0 exposures, no lock",
+        "config": {
+          "max_item_changes_per_finalized_session": 3
+        }
+      },
+      "events": [
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "orange",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-04T12:00:00-06:00",
+          "culprits": [
+            "L1_strength_A_EX_BOX_SQUAT_STRAP"
+          ]
+        }
+      ],
+      "expect": {
+        "level": "L1",
+        "mode": "active",
+        "rungs": {},
+        "exposures": {},
+        "held_out": [],
+        "lock": false,
+        "stack_depth": 0,
+        "consecutive_yellow": 0,
+        "clean_streak": 0,
+        "orange_events": 1,
+        "level_regress": null
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none"
+        },
+        {
+          "outcome": "advance",
+          "bumped": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL"
+          ]
+        },
+        {
+          "outcome": "regress_step",
+          "popped": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ES03B",
+      "kind": "engine_sequence",
+      "description": "Orange with a culprit outside the undone group: group undone, culprit at rung 0 is held out until two clean days",
+      "initial": {
+        "level": "L1",
+        "item_state": "every item at start_rung, 0 exposures, no lock",
+        "config": {
+          "max_item_changes_per_finalized_session": 3
+        }
+      },
+      "events": [
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "orange",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-04T12:00:00-06:00",
+          "culprits": [
+            "L1_strength_A_EX_CALF_RAISE"
+          ]
+        }
+      ],
+      "expect": {
+        "level": "L1",
+        "mode": "active",
+        "rungs": {
+          "L1_strength_A_EX_CALF_RAISE": 0
+        },
+        "exposures": {},
+        "held_out": [
+          "L1_strength_A_EX_CALF_RAISE"
+        ],
+        "lock": false,
+        "stack_depth": 0,
+        "consecutive_yellow": 0,
+        "clean_streak": 0,
+        "orange_events": 1,
+        "level_regress": null
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none"
+        },
+        {
+          "outcome": "advance",
+          "bumped": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL"
+          ]
+        },
+        {
+          "outcome": "regress_step",
+          "popped": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ES04",
+      "kind": "engine_sequence",
+      "description": "Three consecutive yellow sessions are a stall: regress one step by undoing the last advance group",
+      "initial": {
+        "level": "L1",
+        "item_state": "every item at start_rung, 0 exposures, no lock",
+        "config": {
+          "max_item_changes_per_finalized_session": 3
+        }
+      },
+      "events": [
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "yellow",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "yellow",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "yellow",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        }
+      ],
+      "expect": {
+        "level": "L1",
+        "mode": "active",
+        "rungs": {},
+        "exposures": {},
+        "held_out": [],
+        "lock": false,
+        "stack_depth": 0,
+        "consecutive_yellow": 0,
+        "clean_streak": 0,
+        "orange_events": 0,
+        "level_regress": null
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none"
+        },
+        {
+          "outcome": "advance",
+          "bumped": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL"
+          ]
+        },
+        {
+          "outcome": "hold"
+        },
+        {
+          "outcome": "hold"
+        },
+        {
+          "outcome": "regress_step",
+          "popped": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ES05",
+      "kind": "engine_sequence",
+      "description": "Two oranges within 7 days: second step regression plus the easy-dose lock (3 clean exposures needed)",
+      "initial": {
+        "level": "L1",
+        "item_state": "every item at start_rung, 0 exposures, no lock",
+        "config": {
+          "max_item_changes_per_finalized_session": 3
+        }
+      },
+      "events": [
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "orange",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-02T12:00:00-06:00",
+          "culprits": [
+            "L1_strength_A_EX_GLUTE_BRIDGE"
+          ]
+        },
+        {
+          "type": "session_final",
+          "color": "orange",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-05T12:00:00-06:00",
+          "culprits": [
+            "L1_strength_A_EX_HINGE_DOWEL"
+          ]
+        }
+      ],
+      "expect": {
+        "level": "L1",
+        "mode": "active",
+        "rungs": {},
+        "exposures": {},
+        "held_out": [],
+        "lock": true,
+        "stack_depth": 0,
+        "consecutive_yellow": 0,
+        "clean_streak": 0,
+        "orange_events": 2,
+        "level_regress": null
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "none"
+        },
+        {
+          "outcome": "advance",
+          "bumped": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL"
+          ]
+        },
+        {
+          "outcome": "advance",
+          "bumped": [
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ]
+        },
+        {
+          "outcome": "regress_step",
+          "popped": [
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ]
+        },
+        {
+          "outcome": "regress_step",
+          "popped": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ES06",
+      "kind": "engine_sequence",
+      "description": "While locked, advancing needs 3 clean exposures; the lock clears after 3 consecutive clean sessions",
+      "initial": {
+        "level": "L1",
+        "item_state": "every item at start_rung, 0 exposures, no lock",
+        "config": {
+          "max_item_changes_per_finalized_session": 3
+        }
+      },
+      "events": [
+        {
+          "type": "session_final",
+          "color": "orange",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-02T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "orange",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-04T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "green",
+          "clean": true,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        }
+      ],
+      "expect": {
+        "level": "L1",
+        "mode": "active",
+        "rungs": {
+          "L1_strength_A_EX_GLUTE_BRIDGE": 1,
+          "L1_strength_A_EX_BOX_SQUAT_STRAP": 1,
+          "L1_strength_A_EX_HINGE_DOWEL": 1
+        },
+        "exposures": {
+          "L1_strength_A_EX_SIDE_STEP_BAND": 3,
+          "L1_strength_A_EX_CALF_RAISE": 3
+        },
+        "held_out": [],
+        "lock": false,
+        "stack_depth": 1,
+        "consecutive_yellow": 0,
+        "clean_streak": 3,
+        "orange_events": 2,
+        "level_regress": null
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "regress_step"
+        },
+        {
+          "outcome": "regress_step"
+        },
+        {
+          "outcome": "none"
+        },
+        {
+          "outcome": "none"
+        },
+        {
+          "outcome": "advance",
+          "bumped": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ES07",
+      "kind": "engine_sequence",
+      "description": "Three orange events within 14 days from L1: level regression to L0 (settle mode)",
+      "initial": {
+        "level": "L1",
+        "item_state": "every item at start_rung, 0 exposures, no lock",
+        "config": {
+          "max_item_changes_per_finalized_session": 3
+        }
+      },
+      "events": [
+        {
+          "type": "session_final",
+          "color": "orange",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-01T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "orange",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-06T12:00:00-06:00"
+        },
+        {
+          "type": "session_final",
+          "color": "orange",
+          "clean": false,
+          "items": [
+            "L1_strength_A_EX_GLUTE_BRIDGE",
+            "L1_strength_A_EX_BOX_SQUAT_STRAP",
+            "L1_strength_A_EX_HINGE_DOWEL",
+            "L1_strength_A_EX_SIDE_STEP_BAND",
+            "L1_strength_A_EX_CALF_RAISE"
+          ],
+          "ts": "2026-12-12T12:00:00-06:00"
+        }
+      ],
+      "expect": {
+        "level": "L0",
+        "mode": "settle",
+        "rungs": {},
+        "exposures": {},
+        "held_out": [],
+        "lock": true,
+        "stack_depth": 0,
+        "consecutive_yellow": 0,
+        "clean_streak": 0,
+        "orange_events": 0,
+        "level_regress": "L0"
+      },
+      "per_event_outcomes": [
+        {
+          "outcome": "regress_step"
+        },
+        {
+          "outcome": "regress_step"
+        },
+        {
+          "outcome": "regress_level"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1629 @@
+{
+  "schema_version": "1.0",
+  "exercises": [
+    {
+      "id": "EX_DIAPH_BREATH",
+      "name": "Hooklying diaphragmatic breathing",
+      "category": "breath",
+      "equipment": [],
+      "cues": [
+        "Lie on your back, knees bent, feet flat, hands on the lower ribs.",
+        "Breathe into belly and lower ribs; shoulders stay relaxed.",
+        "Do not force the back flat."
+      ],
+      "stop_if": "Dizziness, or any rise in familiar back symptoms.",
+      "regressions": [],
+      "progressions": [
+        "EX_STAND_BRACE"
+      ],
+      "contraindications": "Not in the first 45-60 min after waking. Floor transfers wait until the morning window has passed.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_NEUTRAL_SPINE_POS",
+      "name": "Neutral-spine positioning (hooklying)",
+      "category": "mobility",
+      "equipment": [],
+      "cues": [
+        "Find a comfortable mid-range lumbar position (small natural curve).",
+        "Tighten the abdominals lightly, hold 2 s, release; repeat.",
+        "Never an aggressive tilt or flattening of the back."
+      ],
+      "stop_if": "Pain, or any pull at end range.",
+      "regressions": [
+        "EX_DIAPH_BREATH"
+      ],
+      "progressions": [
+        "EX_STAND_BRACE"
+      ],
+      "contraindications": "Not in the first 45-60 min after waking. This is motor-control practice, not a stretch.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_STAND_BRACE",
+      "name": "Standing brace practice",
+      "category": "mobility",
+      "equipment": [],
+      "cues": [
+        "Stand tall, ribs stacked over pelvis, natural low-back curve.",
+        "Stiffen the midsection to about 20-30% effort, as if bracing for a light poke in the stomach.",
+        "Do not suck in or push out; keep breathing normally."
+      ],
+      "stop_if": "Breath-holding, dizziness, or back symptoms.",
+      "regressions": [
+        "EX_DIAPH_BREATH"
+      ],
+      "progressions": [
+        "EX_PALLOF_STD"
+      ],
+      "contraindications": "Light brace only; no hard Valsalva.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_CAT_CAMEL_MID",
+      "name": "Cat-camel (mid-range only)",
+      "category": "mobility",
+      "equipment": [],
+      "cues": [
+        "On hands and knees, slowly round and then gently arch in the middle of the range.",
+        "You are moving, not stretching; stop well short of either end."
+      ],
+      "stop_if": "Any pull, pinch or pressure at the ends of range.",
+      "regressions": [
+        "EX_DIAPH_BREATH"
+      ],
+      "progressions": [],
+      "contraindications": "Not in the first 45-60 min after waking. Optional warm-up only; never pushed to end range; drop it if it increases symptoms.",
+      "in_default_program": false
+    },
+    {
+      "id": "EX_DECOMP_90_90",
+      "name": "Planned decompression rest (90/90)",
+      "category": "relief",
+      "equipment": [
+        "chair or couch"
+      ],
+      "cues": [
+        "Lie on your back with calves resting on a chair or couch so hips and knees sit near 90 degrees.",
+        "Breathe slowly; let the back soften. 3-5 min planned, 5-10 min after a long day."
+      ],
+      "stop_if": "Never needed to stop; if lying down does not ease symptoms, log it as an oddity.",
+      "regressions": [
+        "EX_SIDELYING_REST"
+      ],
+      "progressions": [],
+      "contraindications": "Use around hour 2.5-3 of cumulative upright time, before symptoms start.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SIDELYING_REST",
+      "name": "Side-lying rest with pillow",
+      "category": "relief",
+      "equipment": [
+        "pillow"
+      ],
+      "cues": [
+        "Lie on your side with a pillow between the knees; hips and knees comfortably bent.",
+        "Breathe slowly for 3-10 min."
+      ],
+      "stop_if": "None.",
+      "regressions": [],
+      "progressions": [
+        "EX_DECOMP_90_90"
+      ],
+      "contraindications": "None.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_KNEE_TO_CHEST_RELIEF",
+      "name": "Single knee-to-chest (relief only)",
+      "category": "relief",
+      "equipment": [],
+      "cues": [
+        "Lie on your back; gently draw one knee toward the chest, other leg supported (not hanging).",
+        "Hold 10 s, 3-5 reps, only if it eases symptoms; stop short of end range."
+      ],
+      "stop_if": "Any compressive feeling, pinch, sharp or electrical pain.",
+      "regressions": [],
+      "progressions": [],
+      "contraindications": "Flexion drill: relief only, later in the day, never in the first 45-60 min after waking, never counted toward the checklist, never pushed to end range. Drop it if it does not clearly help.",
+      "in_default_program": false,
+      "verdict": "relief-only"
+    },
+    {
+      "id": "EX_CALF_STRETCH",
+      "name": "Standing calf stretch",
+      "category": "stretch",
+      "equipment": [
+        "wall"
+      ],
+      "cues": [
+        "Hands on wall, back leg straight, heel down, trunk upright.",
+        "20 s per side, mild."
+      ],
+      "stop_if": "Any back symptom.",
+      "regressions": [],
+      "progressions": [],
+      "contraindications": "Spine stays tall; spares the lumbar spine. Optional.",
+      "in_default_program": false,
+      "verdict": "keep-optional"
+    },
+    {
+      "id": "EX_HAMSTRING_STRAP_SUPINE",
+      "name": "Supine strap hamstring stretch",
+      "category": "stretch",
+      "equipment": [
+        "strap"
+      ],
+      "cues": [
+        "Lie on your back, low back resting in its natural position, strap around the foot.",
+        "Raise the leg until a mild hamstring stretch; 2 x 20-30 s per side."
+      ],
+      "stop_if": "Pull into the buttock or leg, or low-back pressure.",
+      "regressions": [],
+      "progressions": [],
+      "contraindications": "Only if hamstrings feel specifically tight and it causes zero lasting symptoms. Replaces the elevated (foot-on-step) version.",
+      "in_default_program": false,
+      "verdict": "change-optional"
+    },
+    {
+      "id": "EX_FIGURE4_SUPINE",
+      "name": "Figure-4 hip stretch (supine, mild)",
+      "category": "stretch",
+      "equipment": [],
+      "cues": [
+        "On your back, ankle over opposite knee; draw in only until a mild hip stretch.",
+        "Low back stays on the floor; 2 x 20-30 s per side; evening only."
+      ],
+      "stop_if": "Low-back rounding or pull, or any buttock/leg symptom.",
+      "regressions": [],
+      "progressions": [],
+      "contraindications": "Optional comfort tool only; skip if it feels like a back stretch.",
+      "in_default_program": false,
+      "verdict": "keep-optional"
+    },
+    {
+      "id": "EX_QUAD_SIDELYING",
+      "name": "Side-lying quad stretch",
+      "category": "stretch",
+      "equipment": [],
+      "cues": [
+        "Lie on your side, hips stacked, hold the top ankle, lightly squeeze the glute.",
+        "Pelvis stays stacked; do not arch the back; 2 x 20 s per side."
+      ],
+      "stop_if": "Arching or pinching in the low back.",
+      "regressions": [],
+      "progressions": [],
+      "contraindications": "Replaces the prone strap quad stretch (which can push the back into extension).",
+      "in_default_program": false,
+      "verdict": "change-optional"
+    },
+    {
+      "id": "EX_HIP_FLEXOR_HALFKNEEL",
+      "name": "Half-kneeling hip flexor stretch (upright)",
+      "category": "stretch",
+      "equipment": [
+        "pad"
+      ],
+      "cues": [
+        "Half-kneel, squeeze the back-leg glute, ribs down, tall spine.",
+        "Shift forward only a little; 2 x 20 s per side."
+      ],
+      "stop_if": "Low-back pinching or arching.",
+      "regressions": [],
+      "progressions": [],
+      "contraindications": "Upright and glute-led; never let the back arch to get more stretch. Optional from L3.",
+      "in_default_program": false,
+      "verdict": "optional"
+    },
+    {
+      "id": "EX_CURLUP",
+      "name": "McGill modified curl-up",
+      "category": "core",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "One knee bent, other leg straight; palms flat under the natural arch of the low back (do not flatten into the floor).",
+        "Brace lightly (20-30%). Lift only the head and shoulder blades 1-2 in (a few cm) as one unit, chin neutral.",
+        "Hold, breathe, lower; swap the bent leg halfway through."
+      ],
+      "stop_if": "STOP THE SET if you feel pressure, pinch or pull in the low back, or the back flattens onto your hands. This is not a crunch.",
+      "regressions": [
+        "EX_BRACE_MARCH",
+        "EX_DEAD_BUG_HEELTAP"
+      ],
+      "progressions": [
+        "EX_CURLUP_ELBOWS_UP"
+      ],
+      "contraindications": "Not in the first 45-60 min after waking. If it reproduces symptoms even with perfect form, drop it and use dead bug instead. Never substitute sit-ups or crunches. Check form on side-view phone video in the first sessions.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_CURLUP_ELBOWS_UP",
+      "name": "McGill curl-up, elbows off the floor",
+      "category": "core",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "Same setup as the curl-up; lift the elbows a few cm off the floor to increase the load.",
+        "Still only head and shoulder blades 1-2 in; no back flattening."
+      ],
+      "stop_if": "Same as curl-up; also stop if the neck strains.",
+      "regressions": [
+        "EX_CURLUP"
+      ],
+      "progressions": [],
+      "contraindications": "Same as curl-up. Do not move on to any loaded or full sit-up.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SIDE_BRIDGE_KNEES",
+      "name": "Side bridge from knees",
+      "category": "core",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "Elbow under shoulder, knees bent 90 degrees; lift hips so knees, hips and shoulders make a line.",
+        "Ribs stacked over pelvis; breathe through the hold; no sag or rotation."
+      ],
+      "stop_if": "Hip sag, rotation, or low-back/shoulder pain.",
+      "regressions": [],
+      "progressions": [
+        "EX_SIDE_BRIDGE_FEET"
+      ],
+      "contraindications": "Shoulder pain: elevate the forearm on a cushion or use a wall-supported version.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SIDE_BRIDGE_FEET",
+      "name": "Side bridge from feet",
+      "category": "core",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "Elbow under shoulder, legs straight (feet staggered is fine).",
+        "Push hips forward into one line; do not let the top hip roll forward or back."
+      ],
+      "stop_if": "Hip sag, rotation, or any low-back symptom.",
+      "regressions": [
+        "EX_SIDE_BRIDGE_KNEES"
+      ],
+      "progressions": [],
+      "contraindications": "Regress to knees at the first sign of sag.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BIRD_DOG",
+      "name": "Bird dog",
+      "category": "core",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "Hands under shoulders, knees under hips, neutral spine; brace lightly.",
+        "Reach one arm and the opposite leg to body height, no higher; hold; hips stay level (balance a cup on the low back).",
+        "Sweep hand and knee gently toward the floor between reps."
+      ],
+      "stop_if": "Low back arching or pelvis rotating; any back symptom.",
+      "regressions": [
+        "EX_BRACE_MARCH"
+      ],
+      "progressions": [
+        "EX_BIRD_DOG_SQUARE"
+      ],
+      "contraindications": "Wrist pain: use fists or forearms. Leg never above hip height.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BIRD_DOG_SQUARE",
+      "name": "Bird dog with small square trace",
+      "category": "core",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "Clenched fist; from the held position trace a small square with hand and foot while the trunk stays still.",
+        "Keep the reach at body height."
+      ],
+      "stop_if": "Any loss of pelvic control or back symptom.",
+      "regressions": [
+        "EX_BIRD_DOG"
+      ],
+      "progressions": [],
+      "contraindications": "Same as bird dog.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BRACE_MARCH",
+      "name": "Brace march (hooklying)",
+      "category": "core",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "On your back, knees bent; brace lightly.",
+        "Lift one foot a few cm, set it down, alternate; no pelvic rocking."
+      ],
+      "stop_if": "Pelvis rocks or back arches.",
+      "regressions": [
+        "EX_DIAPH_BREATH"
+      ],
+      "progressions": [
+        "EX_DEAD_BUG_HEELTAP"
+      ],
+      "contraindications": "None specific. Keeps your current home drill.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_DEAD_BUG_HEELTAP",
+      "name": "Dead bug, heel taps",
+      "category": "core",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "On your back, hips and knees at 90 degrees, arms up; ribs down, back still.",
+        "Slowly lower one heel toward the floor to tap, return; alternate. Only as far as the back stays still."
+      ],
+      "stop_if": "Back arches off the floor or ribs flare.",
+      "regressions": [
+        "EX_BRACE_MARCH"
+      ],
+      "progressions": [
+        "EX_DEAD_BUG_REACH"
+      ],
+      "contraindications": "Do not rush to fully extended legs.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_DEAD_BUG_REACH",
+      "name": "Dead bug, opposite arm and leg reach",
+      "category": "core",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "From tabletop, exhale and lower the opposite arm and leg a few inches, 3 s, keeping the back still; return.",
+        "Range grows only while the back does not arch."
+      ],
+      "stop_if": "Back arching, rib flare, any symptom.",
+      "regressions": [
+        "EX_DEAD_BUG_HEELTAP"
+      ],
+      "progressions": [],
+      "contraindications": "Stay within the range where the lumbar spine does not move.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_PALLOF_STD",
+      "name": "Pallof press (standing)",
+      "category": "core",
+      "equipment": [
+        "band",
+        "anchor"
+      ],
+      "cues": [
+        "Stand sideways to a chest-height anchor, band at the sternum, feet shoulder-width, knees soft.",
+        "Press straight out and hold; do not let the torso rotate; return slowly."
+      ],
+      "stop_if": "Torso twists or back symptom.",
+      "regressions": [
+        "EX_STAND_BRACE"
+      ],
+      "progressions": [
+        "EX_PALLOF_STEPOUT"
+      ],
+      "contraindications": "Increase band tension, never rotation range. This is your clinic anti-rotation band drill.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_PALLOF_STEPOUT",
+      "name": "Pallof press with step-out",
+      "category": "core",
+      "equipment": [
+        "band",
+        "anchor"
+      ],
+      "cues": [
+        "As the Pallof press, but step one pace farther from the anchor before the press.",
+        "Hips and shoulders stay square."
+      ],
+      "stop_if": "Torso rotation or back symptom.",
+      "regressions": [
+        "EX_PALLOF_STD"
+      ],
+      "progressions": [
+        "EX_PALLOF_HALFKNEEL"
+      ],
+      "contraindications": "Same as Pallof press.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_PALLOF_HALFKNEEL",
+      "name": "Half-kneeling Pallof press",
+      "category": "core",
+      "equipment": [
+        "band",
+        "anchor",
+        "pad"
+      ],
+      "cues": [
+        "Half-kneel with the inside knee down, glute squeezed, ribs down.",
+        "Press and hold without rotating or leaning."
+      ],
+      "stop_if": "Rotation, leaning, or back symptom.",
+      "regressions": [
+        "EX_PALLOF_STEPOUT"
+      ],
+      "progressions": [],
+      "contraindications": "Same as Pallof press.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_GLUTE_BRIDGE",
+      "name": "Glute bridge",
+      "category": "hip",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "Feet flat, knees bent, brace lightly.",
+        "Drive through the heels and squeeze glutes until shoulders, hips and knees line up; hold; lower slowly.",
+        "Stop before the low back arches."
+      ],
+      "stop_if": "Low back arching or hamstring cramp; any back symptom.",
+      "regressions": [
+        "EX_BRACE_MARCH"
+      ],
+      "progressions": [
+        "EX_BRIDGE_MARCH"
+      ],
+      "contraindications": "Do not hyperextend at the top.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BRIDGE_MARCH",
+      "name": "Marching glute bridge",
+      "category": "hip",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "Hold the bridge, lift one foot a few cm, set down, alternate; pelvis stays level."
+      ],
+      "stop_if": "Pelvis drops or back arches.",
+      "regressions": [
+        "EX_GLUTE_BRIDGE"
+      ],
+      "progressions": [
+        "EX_BRIDGE_SL"
+      ],
+      "contraindications": "Same as glute bridge.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BRIDGE_SL",
+      "name": "Single-leg glute bridge",
+      "category": "hip",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "One foot flat, other knee drawn up (no pull on the lower back); lift with the glute; pelvis level."
+      ],
+      "stop_if": "Pelvis rotates, back arches, hamstring cramp.",
+      "regressions": [
+        "EX_BRIDGE_MARCH"
+      ],
+      "progressions": [
+        "EX_HIP_THRUST"
+      ],
+      "contraindications": "Same as glute bridge.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_HIP_THRUST",
+      "name": "Hip thrust (upper back on couch/bench)",
+      "category": "hip",
+      "equipment": [
+        "couch or bench",
+        "dumbbell/barbell (later)"
+      ],
+      "cues": [
+        "Upper back on the edge of a couch, feet flat, chin tucked, ribs down.",
+        "Drive hips up until hips line up with knees and shoulders; do not arch the low back to get higher."
+      ],
+      "stop_if": "Back arching, or any back symptom.",
+      "regressions": [
+        "EX_BRIDGE_SL"
+      ],
+      "progressions": [],
+      "contraindications": "Load only after bodyweight sets are clean; no rib flare.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SIDE_STEP_BAND",
+      "name": "Banded side-steps",
+      "category": "hip",
+      "equipment": [
+        "mini band"
+      ],
+      "cues": [
+        "Band just above the knees (easier) or ankles (harder); half-squat, toes forward.",
+        "Short controlled steps; shoulders level; trunk quiet. May add arms-out/in as in clinic."
+      ],
+      "stop_if": "Trunk sway or knee collapse; back symptom.",
+      "regressions": [],
+      "progressions": [
+        "EX_MONSTER_WALK"
+      ],
+      "contraindications": "Your clinic drill; keep it.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_MONSTER_WALK",
+      "name": "Banded monster walks (forward/back)",
+      "category": "hip",
+      "equipment": [
+        "mini band"
+      ],
+      "cues": [
+        "Band above knees or ankles, half-squat, toes forward.",
+        "Walk forward and back in short steps without trunk sway."
+      ],
+      "stop_if": "Trunk sway or back symptom.",
+      "regressions": [
+        "EX_SIDE_STEP_BAND"
+      ],
+      "progressions": [],
+      "contraindications": "Same as side-steps.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_CALF_RAISE",
+      "name": "Calf raise",
+      "category": "hip",
+      "equipment": [
+        "wall"
+      ],
+      "cues": [
+        "Light hand support; rise slowly, lower for 3 s; trunk tall."
+      ],
+      "stop_if": "Calf cramp or back symptom.",
+      "regressions": [],
+      "progressions": [],
+      "contraindications": "None specific.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BOX_SQUAT_STRAP",
+      "name": "Box squat to chair with T-strap or counter support",
+      "category": "squat",
+      "equipment": [
+        "chair",
+        "T-straps or counter"
+      ],
+      "cues": [
+        "Hold straps or counter for balance; feet hip-width; push hips back, sit lightly to chair height; stand tall.",
+        "Keep chest-to-pelvis angle the same; do not go below chair height."
+      ],
+      "stop_if": "Low-back rounding at the bottom or any symptom.",
+      "regressions": [],
+      "progressions": [
+        "EX_BOX_SQUAT"
+      ],
+      "contraindications": "Your clinic T-strap squat, made into a home box squat.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BOX_SQUAT",
+      "name": "Box squat (chair tap), unsupported",
+      "category": "squat",
+      "equipment": [
+        "chair"
+      ],
+      "cues": [
+        "Feet slightly wider than hips; brace; sit hips back to lightly tap the chair without relaxing or rounding.",
+        "Stand by driving through the whole foot."
+      ],
+      "stop_if": "Rounding at the bottom, or any symptom.",
+      "regressions": [
+        "EX_BOX_SQUAT_STRAP"
+      ],
+      "progressions": [
+        "EX_GOBLET_BOX_SQUAT"
+      ],
+      "contraindications": "Depth is capped where the low back would round.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_GOBLET_BOX_SQUAT",
+      "name": "Goblet box squat",
+      "category": "squat",
+      "equipment": [
+        "chair",
+        "dumbbell or kettlebell"
+      ],
+      "cues": [
+        "Hold the weight at the chest, elbows in; same box squat mechanics.",
+        "Weight goes up only in 5 lb steps."
+      ],
+      "stop_if": "Rounding, or any symptom.",
+      "regressions": [
+        "EX_BOX_SQUAT"
+      ],
+      "progressions": [
+        "EX_GOBLET_SQUAT"
+      ],
+      "contraindications": "Start light (5-10 lb) and only after green check-ins.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_GOBLET_SQUAT",
+      "name": "Goblet squat",
+      "category": "squat",
+      "equipment": [
+        "dumbbell or kettlebell"
+      ],
+      "cues": [
+        "Weight at the chest, brace, squat to a depth where the low back stays neutral (not 'butt wink').",
+        "Drive up through the heels."
+      ],
+      "stop_if": "Pelvic tuck/rounding at the bottom, or any symptom.",
+      "regressions": [
+        "EX_GOBLET_BOX_SQUAT"
+      ],
+      "progressions": [
+        "EX_BARBELL_SQUAT"
+      ],
+      "contraindications": "Depth set by the point where the back would round.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BARBELL_SQUAT",
+      "name": "Barbell squat (box, then full)",
+      "category": "squat",
+      "equipment": [
+        "barbell",
+        "rack with safeties"
+      ],
+      "cues": [
+        "Bar on the upper back, brace, hips and knees break together; keep chest-to-pelvis angle constant.",
+        "Start to a box; always inside safety pins."
+      ],
+      "stop_if": "Rounding, shift, or any symptom.",
+      "regressions": [
+        "EX_GOBLET_SQUAT"
+      ],
+      "progressions": [],
+      "contraindications": "Optional strength-sport item (L7). Requires rack with safeties. Heavy axial load: only after hinge and goblet tests are clean.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SPLIT_SQUAT_SUP",
+      "name": "Split squat, hand supported",
+      "category": "lunge",
+      "equipment": [
+        "wall or chair"
+      ],
+      "cues": [
+        "Staggered stance, one hand on a wall or chair; torso tall; lower the back knee straight down; push through the front heel.",
+        "Front knee tracks over toes."
+      ],
+      "stop_if": "Torso leaning forward with back rounding; front-knee pain; back symptom.",
+      "regressions": [],
+      "progressions": [
+        "EX_SPLIT_SQUAT_LOADED"
+      ],
+      "contraindications": "Upright torso only.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SPLIT_SQUAT_LOADED",
+      "name": "Split squat, loaded",
+      "category": "lunge",
+      "equipment": [
+        "dumbbells"
+      ],
+      "cues": [
+        "Same as the supported version, holding weights at the sides; no hand support."
+      ],
+      "stop_if": "Torso lean/rounding or back symptom.",
+      "regressions": [
+        "EX_SPLIT_SQUAT_SUP"
+      ],
+      "progressions": [],
+      "contraindications": "Load only after bodyweight sets are clean.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_STEP_UP_LOW",
+      "name": "Step-up (low, 4-6 in)",
+      "category": "lunge",
+      "equipment": [
+        "step"
+      ],
+      "cues": [
+        "Whole foot on the step; drive through the front heel; control the way down; pelvis level."
+      ],
+      "stop_if": "Pelvic drop, push off the back foot, or back symptom.",
+      "regressions": [
+        "EX_SPLIT_SQUAT_SUP"
+      ],
+      "progressions": [
+        "EX_STEP_UP"
+      ],
+      "contraindications": "Keep steps low until balance tests pass.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_STEP_UP",
+      "name": "Step-up (8-12 in)",
+      "category": "lunge",
+      "equipment": [
+        "step",
+        "dumbbells (later)"
+      ],
+      "cues": [
+        "Same mechanics on a higher step, optional weights at the sides."
+      ],
+      "stop_if": "Pelvic drop or back symptom.",
+      "regressions": [
+        "EX_STEP_UP_LOW"
+      ],
+      "progressions": [],
+      "contraindications": "Same as low step-up.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_STEP_DOWN_ECC",
+      "name": "Slow step-down (3 s lowering)",
+      "category": "lunge",
+      "equipment": [
+        "step"
+      ],
+      "cues": [
+        "Stand on a step, lower the other foot slowly to tap the floor over 3 s; knee tracks over toes; pelvis level."
+      ],
+      "stop_if": "Knee collapse, pelvic drop, or back symptom.",
+      "regressions": [
+        "EX_STEP_UP_LOW"
+      ],
+      "progressions": [],
+      "contraindications": "Landing-control prerequisite for impact work.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_HINGE_DOWEL",
+      "name": "Hip hinge with dowel",
+      "category": "hinge",
+      "equipment": [
+        "broomstick"
+      ],
+      "cues": [
+        "Hold a dowel down the spine touching head, upper back and tailbone.",
+        "Soften the knees and push hips straight back until you feel hamstring tension or a contact point lifts; squeeze glutes to stand."
+      ],
+      "stop_if": "A contact point lifts, or any symptom.",
+      "regressions": [],
+      "progressions": [
+        "EX_KB_DL_BLOCK"
+      ],
+      "contraindications": "Hips move, spine stays neutral.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_KB_DL_BLOCK",
+      "name": "Kettlebell deadlift from a block (6-8 in)",
+      "category": "hinge",
+      "equipment": [
+        "kettlebell",
+        "block or step"
+      ],
+      "cues": [
+        "Bell between feet on a block; hinge back, brace, stand by driving hips forward; do not lean back at the top.",
+        "Start light; +5 lb steps only."
+      ],
+      "stop_if": "Rounding at the bottom, or any symptom.",
+      "regressions": [
+        "EX_HINGE_DOWEL"
+      ],
+      "progressions": [
+        "EX_KB_DL_FLOOR"
+      ],
+      "contraindications": "Stay on the block until floor tests pass.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_KB_DL_FLOOR",
+      "name": "Kettlebell deadlift from the floor",
+      "category": "hinge",
+      "equipment": [
+        "kettlebell"
+      ],
+      "cues": [
+        "Same mechanics from floor height.",
+        "Return to the block immediately if the back rounds."
+      ],
+      "stop_if": "Rounding or any symptom.",
+      "regressions": [
+        "EX_KB_DL_BLOCK"
+      ],
+      "progressions": [
+        "EX_BARBELL_DL_BLOCK"
+      ],
+      "contraindications": "Gate: clean block deadlift at target load.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SL_RDL",
+      "name": "Single-leg Romanian deadlift (hand supported, then free)",
+      "category": "hinge",
+      "equipment": [
+        "wall",
+        "dumbbell (later)"
+      ],
+      "cues": [
+        "One hand on a wall; hinge on one leg, back leg and torso move as one plank; hips stay square."
+      ],
+      "stop_if": "Rotation of the pelvis, rounding, or any symptom.",
+      "regressions": [
+        "EX_HINGE_DOWEL"
+      ],
+      "progressions": [],
+      "contraindications": "Needs single-leg balance test first.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BARBELL_DL_BLOCK",
+      "name": "Barbell deadlift from blocks (raised bar)",
+      "category": "hinge",
+      "equipment": [
+        "barbell",
+        "plates",
+        "blocks",
+        "rack with safeties"
+      ],
+      "cues": [
+        "Bar raised on blocks to about mid-shin; brace, hinge, push the floor away; lock out with glutes."
+      ],
+      "stop_if": "Rounding, bar drifting forward, or any symptom.",
+      "regressions": [
+        "EX_KB_DL_FLOOR"
+      ],
+      "progressions": [
+        "EX_BARBELL_DL_FLOOR"
+      ],
+      "contraindications": "No heavy lifting alone without a safe bail-out plan.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BARBELL_DL_FLOOR",
+      "name": "Barbell deadlift from the floor",
+      "category": "hinge",
+      "equipment": [
+        "barbell",
+        "plates"
+      ],
+      "cues": [
+        "Bar over mid-foot, hinge, brace, push the floor away; no hitching or leaning back."
+      ],
+      "stop_if": "Rounding or any symptom.",
+      "regressions": [
+        "EX_BARBELL_DL_BLOCK"
+      ],
+      "progressions": [],
+      "contraindications": "Raise the bar again at the first sign of rounding.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_KB_SWING",
+      "name": "Kettlebell swing",
+      "category": "hinge",
+      "equipment": [
+        "kettlebell"
+      ],
+      "cues": [
+        "Hinge, hike the bell back, snap the hips forward; arms are hooks, the bell floats to chest height.",
+        "Spine stays neutral throughout."
+      ],
+      "stop_if": "Any rounding, any back symptom.",
+      "regressions": [
+        "EX_KB_DL_FLOOR"
+      ],
+      "progressions": [],
+      "contraindications": "Ballistic hinge: L7 or later and only with clean floor deadlifts.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_NORDIC_ECC",
+      "name": "Nordic hamstring curl (eccentric)",
+      "category": "hinge",
+      "equipment": [
+        "anchor"
+      ],
+      "cues": [
+        "Kneel, ankles anchored; lower the torso as slowly as you can in a straight line from knees to head; catch with hands."
+      ],
+      "stop_if": "Back symptom or hamstring pain.",
+      "regressions": [
+        "EX_BRIDGE_SL"
+      ],
+      "progressions": [],
+      "contraindications": "Sprint-preparation hamstring work; start with short ranges.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_FLOOR_TO_WAIST_LIFT",
+      "name": "Floor-to-waist practice lift",
+      "category": "hinge",
+      "equipment": [
+        "laundry basket or kettlebell"
+      ],
+      "cues": [
+        "Hinge or squat to the load, hold it close, brace, stand tall; turn with the feet."
+      ],
+      "stop_if": "Rounding or any symptom.",
+      "regressions": [
+        "EX_KB_DL_BLOCK"
+      ],
+      "progressions": [],
+      "contraindications": "Everyday-lift practice, same rules as deadlifts.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_WALL_PUSHUP",
+      "name": "Wall push-up",
+      "category": "push",
+      "equipment": [
+        "wall"
+      ],
+      "cues": [
+        "Hands at chest height on a wall, body in a straight line, ribs down; lower chest to the wall with elbows ~45 degrees."
+      ],
+      "stop_if": "Back sag or symptoms.",
+      "regressions": [],
+      "progressions": [
+        "EX_INCLINE_PUSHUP"
+      ],
+      "contraindications": "None specific.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_INCLINE_PUSHUP",
+      "name": "Incline push-up (counter/bench)",
+      "category": "push",
+      "equipment": [
+        "counter or bench"
+      ],
+      "cues": [
+        "Hands on an elevated surface, body straight from head to heels; brace; lower the chest under control."
+      ],
+      "stop_if": "Back sag or symptoms.",
+      "regressions": [
+        "EX_WALL_PUSHUP"
+      ],
+      "progressions": [
+        "EX_PUSHUP"
+      ],
+      "contraindications": "Lower the incline in small steps.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_PUSHUP",
+      "name": "Push-up",
+      "category": "push",
+      "equipment": [
+        "floor"
+      ],
+      "cues": [
+        "Hands under shoulders, body straight, ribs down, glutes on; chest to just above the floor."
+      ],
+      "stop_if": "Hips sag or pike, or any back symptom.",
+      "regressions": [
+        "EX_INCLINE_PUSHUP"
+      ],
+      "progressions": [
+        "EX_DB_FLOOR_PRESS"
+      ],
+      "contraindications": "Use incline if the trunk cannot hold a plank line.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_DB_FLOOR_PRESS",
+      "name": "Dumbbell floor press",
+      "category": "push",
+      "equipment": [
+        "dumbbells",
+        "floor"
+      ],
+      "cues": [
+        "Lie on the floor, knees bent, feet flat; press from elbows resting on the floor; back stays in its natural position."
+      ],
+      "stop_if": "Back arching or shoulder pain.",
+      "regressions": [
+        "EX_PUSHUP"
+      ],
+      "progressions": [
+        "EX_DB_BENCH"
+      ],
+      "contraindications": "Floor limits shoulder range and back arching.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_DB_BENCH",
+      "name": "Dumbbell bench press",
+      "category": "push",
+      "equipment": [
+        "dumbbells",
+        "bench"
+      ],
+      "cues": [
+        "Feet flat on the floor, shoulder blades set, small natural arch only; lower with control; press up."
+      ],
+      "stop_if": "Excess low-back arching, shoulder pain, or any back symptom.",
+      "regressions": [
+        "EX_DB_FLOOR_PRESS"
+      ],
+      "progressions": [
+        "EX_BARBELL_BENCH"
+      ],
+      "contraindications": "Feet planted; no exaggerated arch.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BARBELL_BENCH",
+      "name": "Barbell bench press",
+      "category": "push",
+      "equipment": [
+        "barbell",
+        "bench",
+        "rack with safeties"
+      ],
+      "cues": [
+        "Feet planted, shoulder blades set, bar path over the shoulders; control down, press up.",
+        "Always inside safeties or with a spotter."
+      ],
+      "stop_if": "Back arching, shoulder pain, or any back symptom.",
+      "regressions": [
+        "EX_DB_BENCH"
+      ],
+      "progressions": [],
+      "contraindications": "Never bench alone without safeties or a spotter.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BAND_ROW",
+      "name": "Standing band row",
+      "category": "pull",
+      "equipment": [
+        "band",
+        "anchor"
+      ],
+      "cues": [
+        "Stand tall; pull the elbow back toward the hip and squeeze the shoulder blade; trunk stays still."
+      ],
+      "stop_if": "Trunk sway or back symptom.",
+      "regressions": [],
+      "progressions": [
+        "EX_DB_ROW_SUPPORTED"
+      ],
+      "contraindications": "None specific.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_DB_ROW_SUPPORTED",
+      "name": "One-arm dumbbell row (supported)",
+      "category": "pull",
+      "equipment": [
+        "dumbbell",
+        "bench or chair"
+      ],
+      "cues": [
+        "Hand and knee on a bench, flat back, pull the elbow toward the hip; no trunk rotation."
+      ],
+      "stop_if": "Rotation, rounding, or back symptom.",
+      "regressions": [
+        "EX_BAND_ROW"
+      ],
+      "progressions": [
+        "EX_INVERTED_ROW"
+      ],
+      "contraindications": "Support the torso; no unsupported bent-over rows early on.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_INVERTED_ROW",
+      "name": "Inverted row (table or low bar)",
+      "category": "pull",
+      "equipment": [
+        "sturdy table or bar"
+      ],
+      "cues": [
+        "Body straight, heels on the floor, pull the chest to the bar; hips stay up."
+      ],
+      "stop_if": "Hips sag or back symptom.",
+      "regressions": [
+        "EX_DB_ROW_SUPPORTED"
+      ],
+      "progressions": [
+        "EX_PULLUP_ASSISTED"
+      ],
+      "contraindications": "Check the table/bar is strong enough.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_DEAD_HANG",
+      "name": "Dead hang (scapula set)",
+      "category": "pull",
+      "equipment": [
+        "pull-up bar"
+      ],
+      "cues": [
+        "Hang from a bar with a gentle shoulder-blade set; no swinging or twisting.",
+        "Step down; do not drop."
+      ],
+      "stop_if": "Shoulder pain, swinging, or back symptom.",
+      "regressions": [],
+      "progressions": [
+        "EX_PULLUP_ASSISTED"
+      ],
+      "contraindications": "Optional; no swinging or twisting; feet-supported if needed.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_PULLUP_ASSISTED",
+      "name": "Band-assisted pull-up / slow lowering",
+      "category": "pull",
+      "equipment": [
+        "pull-up bar",
+        "band or box"
+      ],
+      "cues": [
+        "Band or box under the feet; pull the chest to the bar; lower for 3 s.",
+        "Ribs down, no swinging."
+      ],
+      "stop_if": "Swinging, back arching, shoulder pain.",
+      "regressions": [
+        "EX_INVERTED_ROW",
+        "EX_DEAD_HANG"
+      ],
+      "progressions": [
+        "EX_PULLUP"
+      ],
+      "contraindications": "Use a lighter band step by step.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_PULLUP",
+      "name": "Pull-up",
+      "category": "pull",
+      "equipment": [
+        "pull-up bar"
+      ],
+      "cues": [
+        "Full hang, ribs down, pull the chest to the bar; no kipping."
+      ],
+      "stop_if": "Swinging, arching, shoulder pain, or back symptom.",
+      "regressions": [
+        "EX_PULLUP_ASSISTED"
+      ],
+      "progressions": [],
+      "contraindications": "Strict only.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SUITCASE_CARRY",
+      "name": "Suitcase carry (one weight)",
+      "category": "carry",
+      "equipment": [
+        "dumbbell or kettlebell"
+      ],
+      "cues": [
+        "Stand tall with one weight; do not lean away; shoulders level; walk slowly."
+      ],
+      "stop_if": "Leaning or hip hike; back symptom.",
+      "regressions": [],
+      "progressions": [
+        "EX_FARMER_CARRY"
+      ],
+      "contraindications": "Light start; anti-lateral-flexion drill.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_FARMER_CARRY",
+      "name": "Farmer carry (two weights)",
+      "category": "carry",
+      "equipment": [
+        "dumbbells or kettlebells"
+      ],
+      "cues": [
+        "Tall posture, braced, short controlled steps; weights close to the body."
+      ],
+      "stop_if": "Leaning or back symptom.",
+      "regressions": [
+        "EX_SUITCASE_CARRY"
+      ],
+      "progressions": [],
+      "contraindications": "Same as suitcase carry.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_WALK_EASY",
+      "name": "Walking (comfortable pace)",
+      "category": "walk",
+      "equipment": [],
+      "cues": [
+        "Flat route, upright posture, natural arm swing, comfortable stride.",
+        "Split into two bouts before cutting the total."
+      ],
+      "stop_if": "Leg symptoms, sharp pain, or a limp.",
+      "regressions": [],
+      "progressions": [
+        "EX_WALK_BRISK_INTERVALS"
+      ],
+      "contraindications": "Daily; the backbone of the plan.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_WALK_BRISK_INTERVALS",
+      "name": "Brisk walking intervals",
+      "category": "walk",
+      "equipment": [],
+      "cues": [
+        "Alternate 2 min brisk with 2 min easy; gentle hills only if flat walking is clean the next day."
+      ],
+      "stop_if": "Any symptom increase.",
+      "regressions": [
+        "EX_WALK_EASY"
+      ],
+      "progressions": [
+        "EX_WALK_JOG"
+      ],
+      "contraindications": "Hills only after flat walks are green.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_MARCH_TALL",
+      "name": "Marching drills (tall posture)",
+      "category": "impact",
+      "equipment": [
+        "flat space"
+      ],
+      "cues": [
+        "Tall posture, brace lightly, opposite arm and knee drive to hip height, quiet landings."
+      ],
+      "stop_if": "Heavy landings or back symptom.",
+      "regressions": [
+        "EX_WALK_EASY"
+      ],
+      "progressions": [
+        "EX_SKIP_LOW"
+      ],
+      "contraindications": "First step of the impact ladder.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SKIP_LOW",
+      "name": "Low skips",
+      "category": "impact",
+      "equipment": [
+        "flat space"
+      ],
+      "cues": [
+        "Small, light, rhythmic skips on the balls of the feet; relaxed trunk."
+      ],
+      "stop_if": "Stiff or heavy landings, or any symptom.",
+      "regressions": [
+        "EX_MARCH_TALL"
+      ],
+      "progressions": [
+        "EX_POGO"
+      ],
+      "contraindications": "Stop if landings feel jarring.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_STEPOFF_LANDING",
+      "name": "Step-off soft landing",
+      "category": "impact",
+      "equipment": [
+        "low box or step"
+      ],
+      "cues": [
+        "Step off a low box (6-8 in) and land softly on both feet, hips back, knees tracking, chest tall; stick for 2 s."
+      ],
+      "stop_if": "Stiff landing, knee collapse, or back symptom.",
+      "regressions": [
+        "EX_STEP_DOWN_ECC"
+      ],
+      "progressions": [
+        "EX_POGO"
+      ],
+      "contraindications": "Landing skill before any jumping.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_POGO",
+      "name": "Pogo hops (small ankle hops)",
+      "category": "impact",
+      "equipment": [
+        "flat space"
+      ],
+      "cues": [
+        "Stiff ankles, tiny hops, tall posture, minimal knee bend; quick, quiet contacts."
+      ],
+      "stop_if": "Jarring or back symptom.",
+      "regressions": [
+        "EX_SKIP_LOW"
+      ],
+      "progressions": [
+        "EX_LINE_HOP"
+      ],
+      "contraindications": "Low amplitude; stop at the first jarring landing.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_LINE_HOP",
+      "name": "Line hops (forward/back and side-to-side)",
+      "category": "impact",
+      "equipment": [
+        "line or tape"
+      ],
+      "cues": [
+        "Hop over a line with both feet, quick contacts, soft knees, tall trunk."
+      ],
+      "stop_if": "Jarring landings or back symptom.",
+      "regressions": [
+        "EX_POGO"
+      ],
+      "progressions": [
+        "EX_SL_HOP_INPLACE"
+      ],
+      "contraindications": "Low amplitude.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SL_HOP_INPLACE",
+      "name": "Single-leg hops in place",
+      "category": "impact",
+      "equipment": [
+        "flat space"
+      ],
+      "cues": [
+        "Hop on one leg in place, small amplitude, stick or rebound, pelvis level."
+      ],
+      "stop_if": "Jarring, pelvic drop, or back symptom.",
+      "regressions": [
+        "EX_LINE_HOP"
+      ],
+      "progressions": [
+        "EX_BOX_JUMP_LOW"
+      ],
+      "contraindications": "Needs balance and step-down tests first.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_WALK_JOG",
+      "name": "Walk-jog intervals",
+      "category": "impact",
+      "equipment": [
+        "flat soft surface"
+      ],
+      "cues": [
+        "Alternate jog and walk (e.g. 1:2, then 1:1, then 2:1); conversational pace; short quiet steps."
+      ],
+      "stop_if": "Jarring or any symptom.",
+      "regressions": [
+        "EX_WALK_BRISK_INTERVALS"
+      ],
+      "progressions": [
+        "EX_JOG"
+      ],
+      "contraindications": "Soft surfaces; not on consecutive days at first.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_JOG",
+      "name": "Continuous jog",
+      "category": "impact",
+      "equipment": [
+        "flat soft surface"
+      ],
+      "cues": [
+        "Easy conversational pace; tall posture; quiet landings."
+      ],
+      "stop_if": "Any symptom increase, or leg symptoms.",
+      "regressions": [
+        "EX_WALK_JOG"
+      ],
+      "progressions": [
+        "EX_STRIDES"
+      ],
+      "contraindications": "Separate from heavy hinge days.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_STRIDES",
+      "name": "Strides (relaxed accelerations)",
+      "category": "speed",
+      "equipment": [
+        "flat soft surface"
+      ],
+      "cues": [
+        "Build smoothly to 70-80% over 60 m, hold relaxed, then ease off; walk back."
+      ],
+      "stop_if": "Pulling in the hamstring, or any back symptom.",
+      "regressions": [
+        "EX_JOG"
+      ],
+      "progressions": [
+        "EX_ACCEL_RUN"
+      ],
+      "contraindications": "Gentle build, relaxed shoulders.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_ACCEL_RUN",
+      "name": "Acceleration runs (20-30 m)",
+      "category": "speed",
+      "equipment": [
+        "flat surface"
+      ],
+      "cues": [
+        "Lean forward, drive the arms and legs, rise gradually to upright; 80-90% effort first."
+      ],
+      "stop_if": "Hamstring or groin pain, or any back symptom.",
+      "regressions": [
+        "EX_STRIDES"
+      ],
+      "progressions": [
+        "EX_SPRINT"
+      ],
+      "contraindications": "Warm up thoroughly.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BOX_JUMP_LOW",
+      "name": "Low box jump (12-18 in) with step-down",
+      "category": "impact",
+      "equipment": [
+        "box"
+      ],
+      "cues": [
+        "Jump up, land softly with hips back; step down, do not jump down."
+      ],
+      "stop_if": "Hard landing, or back symptom.",
+      "regressions": [
+        "EX_SL_HOP_INPLACE"
+      ],
+      "progressions": [
+        "EX_BROAD_JUMP"
+      ],
+      "contraindications": "Step down every rep.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BROAD_JUMP",
+      "name": "Broad jump (stick landing)",
+      "category": "impact",
+      "equipment": [
+        "flat space"
+      ],
+      "cues": [
+        "Swing the arms, jump forward, land softly on both feet and hold 2 s."
+      ],
+      "stop_if": "Hard landing, rounding, or back symptom.",
+      "regressions": [
+        "EX_BOX_JUMP_LOW"
+      ],
+      "progressions": [
+        "EX_LATERAL_BOUND"
+      ],
+      "contraindications": "Stick every landing.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_LATERAL_BOUND",
+      "name": "Lateral bounds (skater jumps)",
+      "category": "impact",
+      "equipment": [
+        "flat space"
+      ],
+      "cues": [
+        "Bound sideways from one leg to the other, stick the landing, hips back, trunk tall."
+      ],
+      "stop_if": "Landing collapse or back symptom.",
+      "regressions": [
+        "EX_BROAD_JUMP"
+      ],
+      "progressions": [
+        "EX_COD_DRILL"
+      ],
+      "contraindications": "Short distances first.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_COD_DRILL",
+      "name": "Change-of-direction drill (cones, 5-10-5)",
+      "category": "speed",
+      "equipment": [
+        "cones"
+      ],
+      "cues": [
+        "Plant and push on the outside foot, hips low, trunk braced; 60% speed first."
+      ],
+      "stop_if": "Twisting pain, sharp pain, or leg symptoms.",
+      "regressions": [
+        "EX_LATERAL_BOUND"
+      ],
+      "progressions": [
+        "EX_SPRINT"
+      ],
+      "contraindications": "Staged speeds: 60%, 80%, then 100%.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SPRINT",
+      "name": "Sprints (30-60 m, near-maximal)",
+      "category": "speed",
+      "equipment": [
+        "flat track or field"
+      ],
+      "cues": [
+        "Long warm-up with strides; build the speed over several sessions; full recovery between reps."
+      ],
+      "stop_if": "Pain, tightness, leg symptoms, or loss of form.",
+      "regressions": [
+        "EX_ACCEL_RUN"
+      ],
+      "progressions": [
+        "EX_ATHLETIC_CIRCUIT"
+      ],
+      "contraindications": "Final speed step; only after all earlier tests.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_ATHLETIC_CIRCUIT",
+      "name": "Athletic circuit (mixed lifting, jumping, running)",
+      "category": "speed",
+      "equipment": [
+        "gym or field"
+      ],
+      "cues": [
+        "Planned circuit at sport-like intensity with controlled technique."
+      ],
+      "stop_if": "Pain, leg symptoms, or technical breakdown.",
+      "regressions": [
+        "EX_SPRINT"
+      ],
+      "progressions": [
+        "EX_SPORT_DRILLS"
+      ],
+      "contraindications": "Only at the final level.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SPORT_DRILLS",
+      "name": "Sport-specific drills (non-contact, then full)",
+      "category": "speed",
+      "equipment": [
+        "sport equipment"
+      ],
+      "cues": [
+        "Progress from individual non-contact drills to practice at full intensity."
+      ],
+      "stop_if": "Pain, leg symptoms, or technique breakdown.",
+      "regressions": [
+        "EX_ATHLETIC_CIRCUIT"
+      ],
+      "progressions": [],
+      "contraindications": "Return to sport is staged and symptom-led.",
+      "in_default_program": true
+    }
+  ]
+}

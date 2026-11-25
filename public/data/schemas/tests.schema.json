@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pt.davidp.dev/schemas/tests.schema.json",
+  "title": "tests",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "tests": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Test"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "tests"
+  ],
+  "$defs": {
+    "Test": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^T_[A-Z0-9_]+$"
+        },
+        "name": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "thresholds": {
+          "type": "object",
+          "patternProperties": {
+            "^L[0-8]$": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": [
+                    "number",
+                    "string"
+                  ]
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "value"
+              ]
+            }
+          }
+        },
+        "safety": {
+          "type": "string"
+        },
+        "optional": {
+          "type": "boolean"
+        },
+        "category": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "protocol",
+        "unit",
+        "thresholds",
+        "optional"
+      ]
+    }
+  }
+}

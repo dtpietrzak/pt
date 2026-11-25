@@ -1,0 +1,272 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pt.davidp.dev/schemas/levels.schema.json",
+  "title": "levels",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "plan_version": {
+      "type": "integer"
+    },
+    "levels": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Level"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "plan_version",
+    "levels"
+  ],
+  "$defs": {
+    "Level": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^L[0-8]$"
+        },
+        "number": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8
+        },
+        "name": {
+          "type": "string"
+        },
+        "goal": {
+          "type": "string"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exit": {
+          "type": "object",
+          "properties": {
+            "clean_streak_sessions": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "all_non_optional_items_at_target": {
+              "type": "boolean"
+            },
+            "tests": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "test_id": {
+                    "type": "string"
+                  },
+                  "threshold": {
+                    "type": "object"
+                  },
+                  "optional": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "test_id",
+                  "threshold"
+                ]
+              }
+            },
+            "extra": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "clean_streak_sessions",
+            "tests"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Item"
+          }
+        },
+        "walking": {
+          "type": "object"
+        },
+        "standing": {
+          "type": "object"
+        },
+        "frequency": {
+          "type": "object"
+        },
+        "avoid": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unlocks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "regress_to": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "number",
+        "name",
+        "goal",
+        "entry",
+        "exit",
+        "items",
+        "walking",
+        "standing",
+        "frequency",
+        "avoid",
+        "regress_to"
+      ]
+    },
+    "Item": {
+      "type": "object",
+      "properties": {
+        "item_key": {
+          "type": "string"
+        },
+        "exercise_id": {
+          "type": "string",
+          "pattern": "^EX_[A-Z0-9_]+$"
+        },
+        "block": {
+          "enum": [
+            "daily_mobility",
+            "daily_core",
+            "strength_A",
+            "strength_B",
+            "conditioning",
+            "walking",
+            "relief"
+          ]
+        },
+        "rest_s": {
+          "type": "integer"
+        },
+        "per_side": {
+          "type": "boolean"
+        },
+        "reps_label": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "load_note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "optional": {
+          "type": "boolean"
+        },
+        "maintain": {
+          "type": "boolean"
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "item_keys that must be at target rung first"
+        },
+        "note": {
+          "type": "string"
+        },
+        "rungs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Dose"
+          },
+          "minItems": 1
+        },
+        "start_rung": {
+          "type": "integer"
+        },
+        "target_rung": {
+          "type": "integer"
+        },
+        "start_text": {
+          "type": "string"
+        },
+        "target_text": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "item_key",
+        "exercise_id",
+        "block",
+        "rungs",
+        "start_rung",
+        "target_rung"
+      ]
+    },
+    "Dose": {
+      "type": "object",
+      "properties": {
+        "sets": {
+          "type": "number"
+        },
+        "reps": {
+          "type": "number"
+        },
+        "hold_s": {
+          "type": "number"
+        },
+        "pyr_top": {
+          "type": "number"
+        },
+        "pyr_gap": {
+          "type": "number"
+        },
+        "time_s": {
+          "type": "number"
+        },
+        "time_min": {
+          "type": "number"
+        },
+        "distance_m": {
+          "type": "number"
+        },
+        "effort_pct": {
+          "type": "number"
+        },
+        "load_lb": {
+          "type": "number"
+        },
+        "load_bw": {
+          "type": "number",
+          "description": "fraction of body weight (0.75 = 75% BW); per hand when load_note says so"
+        }
+      },
+      "additionalProperties": false,
+      "description": "One rung of a ladder. Exactly one field differs between consecutive rungs."
+    }
+  }
+}

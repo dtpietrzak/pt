@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "kind": "pt-plan-patch",
+  "patch_id": "EXAMPLE-PATCH-001",
+  "created_at": "2026-12-07T09:00:00-06:00",
+  "author": {
+    "kind": "agent",
+    "name": "example-agent"
+  },
+  "based_on_export_id": "EXAMPLE-2026-W49",
+  "base": {
+    "plan_version": 1,
+    "levels_sha256": "b9160a83067fdc379ed3647d3dee42dadc00e46ec8014a13af7769e28f5ed457",
+    "exercises_sha256": "df6f838db2eb129d6cc9152ed251bd380dc15b8d1cf1c37362964c819580dd54"
+  },
+  "summary": "EXAMPLE: add an optional upright hip flexor stretch to L2 daily mobility and clarify the band-row note.",
+  "rationale": "Example only. Illustrates add, replace and test ops. David reported feeling tight through the front of the hips after long standing; an upright, glute-led stretch is allowed in the library and spares the lumbar spine.",
+  "evidence": [
+    {
+      "export_ref": "user_notes",
+      "note": "Example note about stiffness."
+    },
+    {
+      "export_ref": "summary.trend.morning_stiffness_min",
+      "note": "One yellow morning at 40 min; otherwise at baseline."
+    }
+  ],
+  "risk": "low",
+  "safety_review_required": false,
+  "documents": [
+    {
+      "target": "levels",
+      "ops": [
+        {
+          "op": "test",
+          "path": "/levels/2/id",
+          "value": "L2"
+        },
+        {
+          "op": "add",
+          "path": "/levels/2/items/-",
+          "value": {
+            "item_key": "L2_daily_mobility_EX_HIP_FLEXOR_HALFKNEEL",
+            "exercise_id": "EX_HIP_FLEXOR_HALFKNEEL",
+            "block": "daily_mobility",
+            "rest_s": 60,
+            "per_side": true,
+            "reps_label": null,
+            "load_note": null,
+            "optional": true,
+            "maintain": true,
+            "requires": [],
+            "note": "Optional; upright, glute-led.",
+            "rungs": [
+              {
+                "sets": 2,
+                "hold_s": 20
+              }
+            ],
+            "start_rung": 0,
+            "target_rung": 0,
+            "start_text": "2x20 s hold per side",
+            "target_text": "2x20 s hold per side"
+          }
+        },
+        {
+          "op": "test",
+          "path": "/levels/2/items/14/note",
+          "value": "Move to a stronger band at target."
+        },
+        {
+          "op": "replace",
+          "path": "/levels/2/items/14/note",
+          "value": "Move to a stronger band at target; keep the shoulder blade pulling back, not the low back arching."
+        }
+      ]
+    }
+  ],
+  "expected_effect": "Gives David an optional comfort drill for the front of the hip; no change to loading or gates.",
+  "app_change_requests": [
+    {
+      "title": "One-tap incident button",
+      "description": "Add a quick-log button for accidental sharp catches that opens only the sharp/electrical fields.",
+      "priority": "medium"
+    }
+  ]
+}

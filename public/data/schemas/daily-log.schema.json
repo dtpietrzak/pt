@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pt.davidp.dev/schemas/daily-log.schema.json",
+  "title": "daily-log",
+  "$ref": "#/$defs/DailyLog",
+  "$defs": {
+    "DailyLog": {
+      "type": "object",
+      "properties": {
+        "local_date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "level_id": {
+          "type": "string"
+        },
+        "checklist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item_key": {
+                "type": "string"
+              },
+              "done": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "item_key",
+              "done"
+            ]
+          }
+        },
+        "walk_min": {
+          "type": "number"
+        },
+        "decomp_breaks_done": {
+          "type": "integer"
+        },
+        "standing_breaks_done": {
+          "type": "integer"
+        },
+        "daily_status": {
+          "enum": [
+            "green",
+            "yellow",
+            "orange",
+            "red"
+          ]
+        },
+        "daily_status_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "local_date",
+        "level_id",
+        "checklist"
+      ]
+    }
+  }
+}

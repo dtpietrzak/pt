@@ -1,0 +1,1679 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pt.davidp.dev/schemas/weekly-export.schema.json",
+  "title": "weekly-export",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "kind": {
+      "const": "pt-weekly-export"
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "export_id": {
+          "type": "string"
+        },
+        "week_start": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "week_end": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 with offset, America/Chicago"
+        },
+        "timezone": {
+          "const": "America/Chicago"
+        },
+        "app_version": {
+          "type": "string"
+        },
+        "plan_version": {
+          "type": "integer"
+        },
+        "levels_sha256": {
+          "type": "string"
+        },
+        "exercises_sha256": {
+          "type": "string"
+        },
+        "config_version": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "export_id",
+        "week_start",
+        "week_end",
+        "generated_at",
+        "plan_version",
+        "levels_sha256",
+        "exercises_sha256"
+      ]
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "state_start": {
+      "$ref": "#/$defs/DecisionState"
+    },
+    "state_end": {
+      "$ref": "#/$defs/DecisionState"
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "level_start": {
+          "type": "string"
+        },
+        "level_end": {
+          "type": "string"
+        },
+        "strength_sessions_planned": {
+          "type": "integer"
+        },
+        "strength_sessions_completed": {
+          "type": "integer"
+        },
+        "core_days_done": {
+          "type": "integer"
+        },
+        "walk_minutes_total": {
+          "type": "number"
+        },
+        "daily_status_counts": {
+          "type": "object",
+          "properties": {
+            "green": {
+              "type": "integer"
+            },
+            "yellow": {
+              "type": "integer"
+            },
+            "orange": {
+              "type": "integer"
+            },
+            "red": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "clean_sessions": {
+          "type": "integer"
+        },
+        "advances": {
+          "type": "integer"
+        },
+        "holds": {
+          "type": "integer"
+        },
+        "regress_steps": {
+          "type": "integer"
+        },
+        "regress_levels": {
+          "type": "integer"
+        },
+        "sharp_incidents": {
+          "type": "integer"
+        },
+        "red_flag_events": {
+          "type": "integer"
+        },
+        "trend": {
+          "type": "object",
+          "properties": {
+            "morning_stiffness_min": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "morning_pain": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "evening_pain_peak": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "first_pressure_h": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            },
+            "sleep_hours": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "gate_tests": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "adherence_pct": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "days": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/DailyLog"
+      }
+    },
+    "sessions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Session"
+      }
+    },
+    "checkins": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CheckIn"
+      }
+    },
+    "decision_log": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/DecisionLogEntry"
+      }
+    },
+    "attention": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "severity": {
+            "enum": [
+              "info",
+              "watch",
+              "action"
+            ]
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "severity",
+          "code",
+          "message"
+        ]
+      }
+    },
+    "user_notes": {
+      "type": "string"
+    },
+    "markdown_summary_file": {
+      "type": "string"
+    },
+    "agent_brief": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string"
+        },
+        "may": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "may_not": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "return_format": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "may",
+        "may_not",
+        "return_format"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "meta",
+    "profile",
+    "state_start",
+    "state_end",
+    "summary",
+    "days",
+    "sessions",
+    "checkins",
+    "decision_log",
+    "attention",
+    "agent_brief"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "timezone": {
+          "const": "America/Chicago"
+        },
+        "body_weight_lb": {
+          "type": "number"
+        },
+        "equipment": {
+          "type": "object",
+          "properties": {
+            "bands": {
+              "type": "boolean"
+            },
+            "dumbbells_lb": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "kettlebells_lb": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "barbell": {
+              "type": "boolean"
+            },
+            "plates_lb": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "rack_with_safeties": {
+              "type": "boolean"
+            },
+            "bench": {
+              "type": "boolean"
+            },
+            "pull_up_bar": {
+              "type": "boolean"
+            },
+            "step_box_in": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "blocks": {
+              "type": "boolean"
+            },
+            "cones": {
+              "type": "boolean"
+            },
+            "track_or_field": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "baselines": {
+          "type": "object",
+          "properties": {
+            "pain_rest": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "stiffness_min": {
+              "type": "number"
+            },
+            "standing_h": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
+        },
+        "clinician_contact": {
+          "type": "string",
+          "description": "Treating physician name/phone shown on red-flag screens"
+        },
+        "notify": {
+          "type": "object",
+          "properties": {
+            "morning": {
+              "type": "string"
+            },
+            "evening": {
+              "type": "string"
+            },
+            "night": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "settings": {
+          "type": "object",
+          "properties": {
+            "max_item_changes_per_finalized_session": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            },
+            "layoff_rule_enabled": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "timezone",
+        "baselines"
+      ]
+    },
+    "DecisionState": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "string"
+        },
+        "plan_version": {
+          "type": "integer"
+        },
+        "level_id": {
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "active",
+            "settle",
+            "red_stop",
+            "maintenance",
+            "paused"
+          ]
+        },
+        "item_state": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "rung": {
+                "type": "integer"
+              },
+              "clean_exposures": {
+                "type": "integer"
+              },
+              "held_out": {
+                "type": "boolean"
+              },
+              "last_bump_session_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "rung",
+              "clean_exposures",
+              "held_out"
+            ]
+          }
+        },
+        "core_clean_days": {
+          "type": "integer"
+        },
+        "walk": {
+          "type": "object",
+          "properties": {
+            "current_min": {
+              "type": "number"
+            },
+            "clean_days": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "advance_stack": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string"
+              },
+              "session_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "track": {
+                "enum": [
+                  "strength",
+                  "core"
+                ]
+              },
+              "changes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "item_key": {
+                      "type": "string"
+                    },
+                    "from_rung": {
+                      "type": "integer"
+                    },
+                    "to_rung": {
+                      "type": "integer"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "item_key",
+                    "from_rung",
+                    "to_rung"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "event_id",
+              "changes"
+            ]
+          }
+        },
+        "lock": {
+          "type": "object",
+          "properties": {
+            "easy_dose": {
+              "type": "boolean"
+            },
+            "clean_required": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "easy_dose",
+            "clean_required"
+          ]
+        },
+        "orange_events": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 with offset, America/Chicago"
+          }
+        },
+        "level_regress_events": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 with offset, America/Chicago"
+          }
+        },
+        "incident_log": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ts": {
+                "type": "string",
+                "format": "date-time",
+                "description": "ISO 8601 with offset, America/Chicago"
+              },
+              "context": {
+                "type": "string"
+              },
+              "color": {
+                "enum": [
+                  "green",
+                  "yellow",
+                  "orange",
+                  "red"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "ts",
+              "context"
+            ]
+          }
+        },
+        "consecutive_yellow_sessions": {
+          "type": "integer"
+        },
+        "probation_sessions_remaining": {
+          "type": "integer"
+        },
+        "level_clean_streak": {
+          "type": "integer"
+        },
+        "baselines": {
+          "type": "object",
+          "properties": {
+            "pain_rest": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "stiffness_min": {
+              "type": "number"
+            },
+            "standing_h": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "stiffness_min",
+            "standing_h"
+          ]
+        },
+        "gate_tests": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "not_started",
+                  "pass_provisional",
+                  "pass_confirmed",
+                  "fail",
+                  "skipped_optional"
+                ]
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "string",
+                  "null"
+                ]
+              },
+              "session_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "retest_after_clean_sessions": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "status"
+            ]
+          }
+        },
+        "gate_pending": {
+          "type": "boolean"
+        },
+        "settle": {
+          "type": "object",
+          "properties": {
+            "resume_level": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "resume_item_state": {
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "green_days_in_row": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "red": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                null,
+                "emergency",
+                "clinician"
+              ]
+            },
+            "since": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "flags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "cleared_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "clearance_note": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "clinician_recommended": {
+          "type": "boolean"
+        },
+        "last_evaluated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 with offset, America/Chicago"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "plan_version",
+        "level_id",
+        "mode",
+        "item_state",
+        "advance_stack",
+        "lock",
+        "baselines",
+        "gate_tests"
+      ]
+    },
+    "DailyLog": {
+      "type": "object",
+      "properties": {
+        "local_date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "level_id": {
+          "type": "string"
+        },
+        "checklist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item_key": {
+                "type": "string"
+              },
+              "done": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "item_key",
+              "done"
+            ]
+          }
+        },
+        "walk_min": {
+          "type": "number"
+        },
+        "decomp_breaks_done": {
+          "type": "integer"
+        },
+        "standing_breaks_done": {
+          "type": "integer"
+        },
+        "daily_status": {
+          "enum": [
+            "green",
+            "yellow",
+            "orange",
+            "red"
+          ]
+        },
+        "daily_status_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "local_date",
+        "level_id",
+        "checklist"
+      ]
+    },
+    "Session": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "local_date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 with offset, America/Chicago"
+        },
+        "ended_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 with offset, America/Chicago"
+        },
+        "template": {
+          "enum": [
+            "strength_A",
+            "strength_B",
+            "gate_test",
+            "conditioning",
+            "core_only"
+          ]
+        },
+        "level_id": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item_key": {
+                "type": "string"
+              },
+              "prescribed_rung": {
+                "type": "integer"
+              },
+              "actual": {
+                "$ref": "#/$defs/Dose"
+              },
+              "completed": {
+                "type": "boolean"
+              },
+              "skipped": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "item_key",
+              "prescribed_rung"
+            ]
+          }
+        },
+        "gate_test_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gate_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "test_id": {
+                "type": "string"
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "string"
+                ]
+              },
+              "form_ok": {
+                "type": "boolean"
+              },
+              "pain_peak": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 10
+              },
+              "passed": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "test_id",
+              "value"
+            ]
+          }
+        },
+        "post_workout_checkin_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "provisional",
+            "final",
+            "unevaluated"
+          ]
+        },
+        "tests": {
+          "type": "object",
+          "properties": {
+            "exercise": {
+              "enum": [
+                "green",
+                "yellow",
+                "orange",
+                "red"
+              ]
+            },
+            "recovery": {
+              "enum": [
+                "green",
+                "yellow",
+                "orange",
+                "red"
+              ]
+            },
+            "functional": {
+              "enum": [
+                "green",
+                "yellow",
+                "orange",
+                "red"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "final_color": {
+          "enum": [
+            "green",
+            "yellow",
+            "orange",
+            "red"
+          ]
+        },
+        "clean": {
+          "type": "boolean"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "poor_sleep",
+              "illness",
+              "unusual_load",
+              "missing_morning_checkin",
+              "pause_mode",
+              "easy_dose"
+            ]
+          }
+        },
+        "probation": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "local_date",
+        "template",
+        "level_id",
+        "items",
+        "status"
+      ]
+    },
+    "Dose": {
+      "type": "object",
+      "properties": {
+        "sets": {
+          "type": "number"
+        },
+        "reps": {
+          "type": "number"
+        },
+        "hold_s": {
+          "type": "number"
+        },
+        "pyr_top": {
+          "type": "number"
+        },
+        "pyr_gap": {
+          "type": "number"
+        },
+        "time_s": {
+          "type": "number"
+        },
+        "time_min": {
+          "type": "number"
+        },
+        "distance_m": {
+          "type": "number"
+        },
+        "effort_pct": {
+          "type": "number"
+        },
+        "load_lb": {
+          "type": "number"
+        },
+        "load_bw": {
+          "type": "number",
+          "description": "fraction of body weight (0.75 = 75% BW); per hand when load_note says so"
+        }
+      },
+      "additionalProperties": false,
+      "description": "One rung of a ladder. Exactly one field differs between consecutive rungs."
+    },
+    "CheckIn": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "morning"
+            },
+            "id": {
+              "type": "string"
+            },
+            "ts": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 with offset, America/Chicago"
+            },
+            "local_date": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "session_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "red_flags": {
+              "$ref": "#/$defs/RedFlags"
+            },
+            "anything_new_or_scary": {
+              "type": "boolean"
+            },
+            "oddities": {
+              "type": "string"
+            },
+            "oddity_tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "wake_time": {
+                  "type": "string",
+                  "pattern": "^\\d{2}:\\d{2}$"
+                },
+                "protection_window_respected": {
+                  "type": "boolean"
+                },
+                "pain_on_waking": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "stiffness_min": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "stiffness_still_present": {
+                  "type": "boolean"
+                },
+                "sleep_hours": {
+                  "type": "number"
+                },
+                "sleep_quality": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "woke_from_pain_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "hip_shift": {
+                  "type": "boolean"
+                },
+                "symptoms": {
+                  "$ref": "#/$defs/Symptoms"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "pain_on_waking",
+                "symptoms"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "id",
+            "ts",
+            "local_date",
+            "data",
+            "red_flags"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "post_workout"
+            },
+            "id": {
+              "type": "string"
+            },
+            "ts": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 with offset, America/Chicago"
+            },
+            "local_date": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "session_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "red_flags": {
+              "$ref": "#/$defs/RedFlags"
+            },
+            "anything_new_or_scary": {
+              "type": "boolean"
+            },
+            "oddities": {
+              "type": "string"
+            },
+            "oddity_tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "completed_items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "item_key": {
+                        "type": "string"
+                      },
+                      "rung_done": {
+                        "type": "integer"
+                      },
+                      "completed": {
+                        "type": "boolean"
+                      },
+                      "pain_peak": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 10
+                      },
+                      "sharp_electrical": {
+                        "type": "boolean"
+                      },
+                      "form_breakdown": {
+                        "type": "boolean"
+                      },
+                      "skipped_reason": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "item_key",
+                      "completed"
+                    ]
+                  }
+                },
+                "pain_peak": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "pain_15min_after": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "rpe": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "settle_bucket": {
+                  "enum": [
+                    "lt_30",
+                    "30_120",
+                    "gt_120",
+                    "not_yet"
+                  ]
+                },
+                "form_breakdown": {
+                  "type": "boolean"
+                },
+                "symptoms": {
+                  "$ref": "#/$defs/Symptoms"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "pain_peak",
+                "symptoms",
+                "completed_items"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "id",
+            "ts",
+            "local_date",
+            "data"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "evening"
+            },
+            "id": {
+              "type": "string"
+            },
+            "ts": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 with offset, America/Chicago"
+            },
+            "local_date": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "session_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "red_flags": {
+              "$ref": "#/$defs/RedFlags"
+            },
+            "anything_new_or_scary": {
+              "type": "boolean"
+            },
+            "oddities": {
+              "type": "string"
+            },
+            "oddity_tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "standing": {
+                  "type": "object",
+                  "properties": {
+                    "first_pressure_h": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "censored": {
+                      "type": "boolean",
+                      "description": "true if breaks were taken before pressure appeared"
+                    },
+                    "upright_h_total": {
+                      "type": "number"
+                    },
+                    "breaks_taken": {
+                      "type": "integer"
+                    },
+                    "decomp_breaks_done": {
+                      "type": "integer"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "upright_h_total"
+                  ]
+                },
+                "walk_min": {
+                  "type": "number"
+                },
+                "pain_peak_today": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "forced_rest_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "activity_limited": {
+                  "type": "boolean"
+                },
+                "hip_shift": {
+                  "type": "boolean"
+                },
+                "session_symptoms_settled": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "symptoms": {
+                  "$ref": "#/$defs/Symptoms"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "standing",
+                "pain_peak_today",
+                "symptoms"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "id",
+            "ts",
+            "local_date",
+            "data"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "night"
+            },
+            "id": {
+              "type": "string"
+            },
+            "ts": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 with offset, America/Chicago"
+            },
+            "local_date": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "session_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "red_flags": {
+              "$ref": "#/$defs/RedFlags"
+            },
+            "anything_new_or_scary": {
+              "type": "boolean"
+            },
+            "oddities": {
+              "type": "string"
+            },
+            "oddity_tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "bedtime_pain": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "symptoms": {
+                  "$ref": "#/$defs/Symptoms"
+                },
+                "ready_for_tomorrow": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "bedtime_pain",
+                "symptoms"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "id",
+            "ts",
+            "local_date",
+            "data",
+            "red_flags"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "weekly"
+            },
+            "id": {
+              "type": "string"
+            },
+            "ts": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 with offset, America/Chicago"
+            },
+            "local_date": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "session_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "red_flags": {
+              "$ref": "#/$defs/RedFlags"
+            },
+            "anything_new_or_scary": {
+              "type": "boolean"
+            },
+            "oddities": {
+              "type": "string"
+            },
+            "oddity_tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "body_weight_lb": {
+                  "type": "number"
+                },
+                "overall_confidence": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "goals_notes": {
+                  "type": "string"
+                },
+                "equipment_changes": {
+                  "type": "string"
+                },
+                "plan_feedback": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "id",
+            "ts",
+            "local_date",
+            "data"
+          ]
+        }
+      ]
+    },
+    "Symptoms": {
+      "type": "object",
+      "properties": {
+        "pain_now": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "sharp_electrical": {
+          "type": "boolean"
+        },
+        "sharp_context": {
+          "enum": [
+            "exercise",
+            "accidental_bend_twist",
+            "ordinary_movement",
+            "at_rest"
+          ]
+        },
+        "sharp_settle_min": {
+          "type": "number"
+        },
+        "leg_symptoms": {
+          "enum": [
+            "none",
+            "buttock",
+            "thigh",
+            "below_knee",
+            "foot"
+          ]
+        },
+        "leg_trend": {
+          "enum": [
+            "centralizing",
+            "same",
+            "peripheralizing"
+          ]
+        },
+        "numbness_tingling": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "pain_now",
+        "sharp_electrical",
+        "leg_symptoms",
+        "numbness_tingling"
+      ]
+    },
+    "RedFlags": {
+      "type": "object",
+      "properties": {
+        "saddle_numbness": {
+          "type": "boolean"
+        },
+        "bladder_bowel_change": {
+          "type": "boolean"
+        },
+        "new_leg_weakness": {
+          "type": "boolean"
+        },
+        "new_numbness_tingling": {
+          "type": "boolean"
+        },
+        "fever_with_back_pain": {
+          "type": "boolean"
+        },
+        "night_pain_unrelieved": {
+          "type": "boolean"
+        },
+        "bilateral_leg_symptoms": {
+          "type": "boolean"
+        },
+        "trauma_since_last_checkin": {
+          "type": "boolean"
+        },
+        "unexplained_weight_loss": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "DecisionLogEntry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "ts": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 with offset, America/Chicago"
+        },
+        "rule_id": {
+          "type": "string",
+          "pattern": "^R\\d+$"
+        },
+        "outcome": {
+          "enum": [
+            "advance",
+            "hold",
+            "regress_step",
+            "regress_level",
+            "settle_enter",
+            "settle_exit",
+            "red",
+            "promote",
+            "gate_pending",
+            "none"
+          ]
+        },
+        "color": {
+          "enum": [
+            "green",
+            "yellow",
+            "orange",
+            "red"
+          ]
+        },
+        "session_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "checkin_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item_key": {
+                "type": "string"
+              },
+              "from_rung": {
+                "type": "integer"
+              },
+              "to_rung": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "item_key",
+              "from_rung",
+              "to_rung"
+            ]
+          }
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "ts",
+        "rule_id",
+        "outcome",
+        "message"
+      ]
+    }
+  }
+}

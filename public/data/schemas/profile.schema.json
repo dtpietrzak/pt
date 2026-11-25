@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pt.davidp.dev/schemas/profile.schema.json",
+  "title": "profile",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "timezone": {
+      "const": "America/Chicago"
+    },
+    "body_weight_lb": {
+      "type": "number"
+    },
+    "equipment": {
+      "type": "object",
+      "properties": {
+        "bands": {
+          "type": "boolean"
+        },
+        "dumbbells_lb": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "kettlebells_lb": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "barbell": {
+          "type": "boolean"
+        },
+        "plates_lb": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "rack_with_safeties": {
+          "type": "boolean"
+        },
+        "bench": {
+          "type": "boolean"
+        },
+        "pull_up_bar": {
+          "type": "boolean"
+        },
+        "step_box_in": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "blocks": {
+          "type": "boolean"
+        },
+        "cones": {
+          "type": "boolean"
+        },
+        "track_or_field": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "baselines": {
+      "type": "object",
+      "properties": {
+        "pain_rest": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "stiffness_min": {
+          "type": "number"
+        },
+        "standing_h": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "clinician_contact": {
+      "type": "string",
+      "description": "Treating physician name/phone shown on red-flag screens"
+    },
+    "notify": {
+      "type": "object",
+      "properties": {
+        "morning": {
+          "type": "string"
+        },
+        "evening": {
+          "type": "string"
+        },
+        "night": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "max_item_changes_per_finalized_session": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6
+        },
+        "layoff_rule_enabled": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "timezone",
+    "baselines"
+  ]
+}

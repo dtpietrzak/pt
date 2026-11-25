@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pt.davidp.dev/schemas/session.schema.json",
+  "title": "session",
+  "$ref": "#/$defs/Session",
+  "$defs": {
+    "Session": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "local_date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 with offset, America/Chicago"
+        },
+        "ended_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 with offset, America/Chicago"
+        },
+        "template": {
+          "enum": [
+            "strength_A",
+            "strength_B",
+            "gate_test",
+            "conditioning",
+            "core_only"
+          ]
+        },
+        "level_id": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item_key": {
+                "type": "string"
+              },
+              "prescribed_rung": {
+                "type": "integer"
+              },
+              "actual": {
+                "$ref": "#/$defs/Dose"
+              },
+              "completed": {
+                "type": "boolean"
+              },
+              "skipped": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "item_key",
+              "prescribed_rung"
+            ]
+          }
+        },
+        "gate_test_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gate_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "test_id": {
+                "type": "string"
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "string"
+                ]
+              },
+              "form_ok": {
+                "type": "boolean"
+              },
+              "pain_peak": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 10
+              },
+              "passed": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "test_id",
+              "value"
+            ]
+          }
+        },
+        "post_workout_checkin_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "provisional",
+            "final",
+            "unevaluated"
+          ]
+        },
+        "tests": {
+          "type": "object",
+          "properties": {
+            "exercise": {
+              "enum": [
+                "green",
+                "yellow",
+                "orange",
+                "red"
+              ]
+            },
+            "recovery": {
+              "enum": [
+                "green",
+                "yellow",
+                "orange",
+                "red"
+              ]
+            },
+            "functional": {
+              "enum": [
+                "green",
+                "yellow",
+                "orange",
+                "red"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "final_color": {
+          "enum": [
+            "green",
+            "yellow",
+            "orange",
+            "red"
+          ]
+        },
+        "clean": {
+          "type": "boolean"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "poor_sleep",
+              "illness",
+              "unusual_load",
+              "missing_morning_checkin",
+              "pause_mode",
+              "easy_dose"
+            ]
+          }
+        },
+        "probation": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "local_date",
+        "template",
+        "level_id",
+        "items",
+        "status"
+      ]
+    },
+    "Dose": {
+      "type": "object",
+      "properties": {
+        "sets": {
+          "type": "number"
+        },
+        "reps": {
+          "type": "number"
+        },
+        "hold_s": {
+          "type": "number"
+        },
+        "pyr_top": {
+          "type": "number"
+        },
+        "pyr_gap": {
+          "type": "number"
+        },
+        "time_s": {
+          "type": "number"
+        },
+        "time_min": {
+          "type": "number"
+        },
+        "distance_m": {
+          "type": "number"
+        },
+        "effort_pct": {
+          "type": "number"
+        },
+        "load_lb": {
+          "type": "number"
+        },
+        "load_bw": {
+          "type": "number",
+          "description": "fraction of body weight (0.75 = 75% BW); per hand when load_note says so"
+        }
+      },
+      "additionalProperties": false,
+      "description": "One rung of a ladder. Exactly one field differs between consecutive rungs."
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pt.davidp.dev/schemas/decision-log-entry.schema.json",
+  "title": "decision-log-entry",
+  "$ref": "#/$defs/DecisionLogEntry",
+  "$defs": {
+    "DecisionLogEntry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "ts": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 with offset, America/Chicago"
+        },
+        "rule_id": {
+          "type": "string",
+          "pattern": "^R\\d+$"
+        },
+        "outcome": {
+          "enum": [
+            "advance",
+            "hold",
+            "regress_step",
+            "regress_level",
+            "settle_enter",
+            "settle_exit",
+            "red",
+            "promote",
+            "gate_pending",
+            "none"
+          ]
+        },
+        "color": {
+          "enum": [
+            "green",
+            "yellow",
+            "orange",
+            "red"
+          ]
+        },
+        "session_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "checkin_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item_key": {
+                "type": "string"
+              },
+              "from_rung": {
+                "type": "integer"
+              },
+              "to_rung": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "item_key",
+              "from_rung",
+              "to_rung"
+            ]
+          }
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "ts",
+        "rule_id",
+        "outcome",
+        "message"
+      ]
+    }
+  }
+}

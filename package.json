@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "python3 -m http.server 5182 --directory public",
-    "deploy": "cf deploy ./public"
+    "deploy": "cf deploy ./public",
+    "test": "node --test \"test/*.test.mjs\"",
+    "sync-seed": "scripts/sync-seed.sh"
   },
   "devDependencies": {
     "cf": "^1.0.0-rc.1"

@@ -1,0 +1,117 @@
+[
+  {
+    "type": "morning",
+    "id": "CI052",
+    "ts": "2026-12-01T08:10:00-06:00",
+    "local_date": "2026-12-01",
+    "session_id": null,
+    "data": {
+      "wake_time": "07:00",
+      "protection_window_respected": true,
+      "pain_on_waking": 1,
+      "stiffness_min": 30,
+      "stiffness_still_present": false,
+      "sleep_hours": 7.5,
+      "sleep_quality": 4,
+      "woke_from_pain_count": 0,
+      "hip_shift": false,
+      "symptoms": {
+        "pain_now": 1,
+        "sharp_electrical": false,
+        "leg_symptoms": "none",
+        "numbness_tingling": false
+      }
+    },
+    "red_flags": {
+      "saddle_numbness": false,
+      "bladder_bowel_change": false,
+      "new_leg_weakness": false,
+      "new_numbness_tingling": false,
+      "fever_with_back_pain": false,
+      "night_pain_unrelieved": false,
+      "bilateral_leg_symptoms": false,
+      "trauma_since_last_checkin": false
+    }
+  },
+  {
+    "type": "post_workout",
+    "id": "CI053",
+    "ts": "2026-11-30T18:00:00-06:00",
+    "local_date": "2026-11-30",
+    "session_id": "S001",
+    "data": {
+      "completed_items": [
+        {
+          "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+          "rung_done": 0,
+          "completed": true,
+          "pain_peak": 2
+        }
+      ],
+      "pain_peak": 2,
+      "pain_15min_after": 2,
+      "rpe": 5,
+      "settle_bucket": "lt_30",
+      "form_breakdown": false,
+      "symptoms": {
+        "pain_now": 2,
+        "sharp_electrical": false,
+        "leg_symptoms": "none",
+        "numbness_tingling": false
+      }
+    }
+  },
+  {
+    "type": "evening",
+    "id": "CI054",
+    "ts": "2026-11-30T20:30:00-06:00",
+    "local_date": "2026-11-30",
+    "session_id": null,
+    "data": {
+      "standing": {
+        "first_pressure_h": 5.0,
+        "censored": false,
+        "upright_h_total": 7.0,
+        "breaks_taken": 5,
+        "decomp_breaks_done": 1
+      },
+      "walk_min": 30,
+      "pain_peak_today": 1,
+      "forced_rest_count": 0,
+      "activity_limited": false,
+      "hip_shift": false,
+      "symptoms": {
+        "pain_now": 1,
+        "sharp_electrical": false,
+        "leg_symptoms": "none",
+        "numbness_tingling": false
+      }
+    }
+  },
+  {
+    "type": "night",
+    "id": "CI055",
+    "ts": "2026-11-30T22:30:00-06:00",
+    "local_date": "2026-11-30",
+    "session_id": null,
+    "data": {
+      "bedtime_pain": 1,
+      "symptoms": {
+        "pain_now": 1,
+        "sharp_electrical": false,
+        "leg_symptoms": "none",
+        "numbness_tingling": false
+      }
+    },
+    "red_flags": {
+      "saddle_numbness": false,
+      "bladder_bowel_change": false,
+      "new_leg_weakness": false,
+      "new_numbness_tingling": false,
+      "fever_with_back_pain": false,
+      "night_pain_unrelieved": false,
+      "bilateral_leg_symptoms": false,
+      "trauma_since_last_checkin": false
+    }
+  }
+]

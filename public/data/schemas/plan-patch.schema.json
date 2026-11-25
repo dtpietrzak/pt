@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pt.davidp.dev/schemas/plan-patch.schema.json",
+  "title": "plan-patch",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "kind": {
+      "const": "pt-plan-patch"
+    },
+    "patch_id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 with offset, America/Chicago"
+    },
+    "author": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "agent",
+            "human"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "name"
+      ]
+    },
+    "based_on_export_id": {
+      "type": "string"
+    },
+    "base": {
+      "type": "object",
+      "properties": {
+        "plan_version": {
+          "type": "integer"
+        },
+        "levels_sha256": {
+          "type": "string"
+        },
+        "exercises_sha256": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "plan_version",
+        "levels_sha256",
+        "exercises_sha256"
+      ]
+    },
+    "summary": {
+      "type": "string"
+    },
+    "rationale": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "export_ref": {
+            "type": "string",
+            "description": "e.g. sessions[3].tests or summary.trend.morning_stiffness_min"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "export_ref",
+          "note"
+        ]
+      },
+      "minItems": 1
+    },
+    "risk": {
+      "enum": [
+        "low",
+        "moderate",
+        "high"
+      ]
+    },
+    "safety_review_required": {
+      "type": "boolean"
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "enum": [
+              "levels",
+              "exercises",
+              "tests"
+            ]
+          },
+          "ops": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Op"
+            },
+            "minItems": 1
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "target",
+          "ops"
+        ]
+      },
+      "minItems": 1
+    },
+    "expected_effect": {
+      "type": "string"
+    },
+    "app_change_requests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priority": {
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "description"
+        ]
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "patch_id",
+    "created_at",
+    "author",
+    "base",
+    "summary",
+    "rationale",
+    "evidence",
+    "risk",
+    "safety_review_required",
+    "documents"
+  ],
+  "$defs": {
+    "Op": {
+      "type": "object",
+      "properties": {
+        "op": {
+          "enum": [
+            "add",
+            "replace",
+            "remove",
+            "test"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "description": "RFC 6901 JSON Pointer into the target document"
+        },
+        "value": {}
+      },
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "path"
+      ]
+    }
+  }
+}

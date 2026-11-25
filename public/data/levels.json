@@ -1,0 +1,6455 @@
+{
+  "schema_version": "1.0",
+  "plan_version": 1,
+  "levels": [
+    {
+      "id": "L0",
+      "number": 0,
+      "name": "Settle (flare mode)",
+      "goal": "Calm a flare with short walks, relief positions and only the easiest pain-free drills; then return to training one step easier than before.",
+      "entry": [
+        "Entered automatically by an orange streak, a level regression, or manually with the 'I flared' button. Never entered for a red flag: red freezes the plan."
+      ],
+      "exit": {
+        "clean_streak_sessions": 0,
+        "all_non_optional_items_at_target": true,
+        "tests": [],
+        "extra": [
+          "Two consecutive daily statuses are green, with no sharp/electrical pain, no leg symptoms, and standing tolerance at 70% of baseline or better. Then return to the saved level, one rung easier, needing 3 clean sessions to advance."
+        ]
+      },
+      "items": [
+        {
+          "item_key": "L0_daily_mobility_EX_DIAPH_BREATH",
+          "exercise_id": "EX_DIAPH_BREATH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "8 reps",
+          "target_text": "8 reps"
+        },
+        {
+          "item_key": "L0_daily_core_EX_BRACE_MARCH",
+          "exercise_id": "EX_BRACE_MARCH",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "Only if pain-free.",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x8 per side",
+          "target_text": "2x8 per side"
+        },
+        {
+          "item_key": "L0_daily_core_EX_GLUTE_BRIDGE",
+          "exercise_id": "EX_GLUTE_BRIDGE",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Only if pain-free.",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8,
+              "hold_s": 3
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x8 (3 s hold)",
+          "target_text": "2x8 (3 s hold)"
+        },
+        {
+          "item_key": "L0_walking_EX_WALK_EASY",
+          "exercise_id": "EX_WALK_EASY",
+          "block": "walking",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "3-6 bouts a day, 5-10 min each, in place of one long walk.",
+          "rungs": [
+            {
+              "time_min": 5
+            },
+            {
+              "time_min": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "5 min",
+          "target_text": "10 min"
+        },
+        {
+          "item_key": "L0_relief_EX_DECOMP_90_90",
+          "exercise_id": "EX_DECOMP_90_90",
+          "block": "relief",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "As often as needed.",
+          "rungs": [
+            {
+              "time_min": 5
+            },
+            {
+              "time_min": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "5 min",
+          "target_text": "10 min"
+        }
+      ],
+      "walking": {
+        "daily_total_min": "15-45 in several 5-10 min bouts",
+        "bouts": "3-6"
+      },
+      "standing": {
+        "break_every_min": [
+          30,
+          45
+        ],
+        "decomp": "required, as often as needed"
+      },
+      "frequency": {
+        "core_days_per_week": "daily if pain-free",
+        "strength_sessions_per_week": 0
+      },
+      "avoid": [
+        "Loaded or repeated spinal flexion (sit-ups, crunches, toe touches, seated forward folds, rounded-back lifting).",
+        "Twisting under load and any end-range stretch that brings symptoms on.",
+        "Bending, floor work or flexion stretches in the first 45-60 minutes after waking.",
+        "No strength sessions, no stretching that provokes symptoms."
+      ],
+      "unlocks": [],
+      "regress_to": null
+    },
+    {
+      "id": "L1",
+      "number": 1,
+      "name": "Control and consistency",
+      "goal": "Groove neutral-spine patterns, build the daily habit, protect mornings, and keep walking every day.",
+      "entry": [
+        "Starting level: baseline pain about 0-1/10, standing tolerance about 5 h, mild morning soreness ~30 min, no leg symptoms or weakness, hip alignment normal (per history through Nov 24, 2026)."
+      ],
+      "exit": {
+        "clean_streak_sessions": 4,
+        "all_non_optional_items_at_target": true,
+        "tests": [
+          {
+            "test_id": "T_WALK_CONT",
+            "threshold": {
+              "value": 30
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_STAND_FUNC",
+            "threshold": {
+              "value": 5
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_HINGE_DOWEL",
+            "threshold": {
+              "value": 10
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_SQUAT_BW",
+            "threshold": {
+              "value": 10,
+              "note": "supported"
+            },
+            "optional": false
+          }
+        ],
+        "extra": [
+          "No sharp/electrical incident across the final clean streak."
+        ]
+      },
+      "items": [
+        {
+          "item_key": "L1_daily_mobility_EX_DIAPH_BREATH",
+          "exercise_id": "EX_DIAPH_BREATH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "8 reps",
+          "target_text": "8 reps"
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_NEUTRAL_SPINE_POS",
+          "exercise_id": "EX_NEUTRAL_SPINE_POS",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "reps": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "10 reps",
+          "target_text": "10 reps"
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_STAND_BRACE",
+          "exercise_id": "EX_STAND_BRACE",
+          "block": "daily_mobility",
+          "rest_s": 10,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 5,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5x10 s hold",
+          "target_text": "5x10 s hold"
+        },
+        {
+          "item_key": "L1_daily_mobility_EX_CALF_STRETCH",
+          "exercise_id": "EX_CALF_STRETCH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional comfort.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L1_relief_EX_DECOMP_90_90",
+          "exercise_id": "EX_DECOMP_90_90",
+          "block": "relief",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Planned: at cumulative upright hour 2.5-3, before symptoms start.",
+          "rungs": [
+            {
+              "time_min": 3
+            },
+            {
+              "time_min": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3 min",
+          "target_text": "5 min"
+        },
+        {
+          "item_key": "L1_daily_core_EX_CURLUP",
+          "exercise_id": "EX_CURLUP",
+          "block": "daily_core",
+          "rest_s": 25,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "pyr_top": 4,
+              "hold_s": 8
+            },
+            {
+              "pyr_top": 4,
+              "hold_s": 10
+            },
+            {
+              "pyr_top": 5,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "4-2-1 x 8 s hold",
+          "target_text": "5-3-1 x 10 s hold"
+        },
+        {
+          "item_key": "L1_daily_core_EX_SIDE_BRIDGE_KNEES",
+          "exercise_id": "EX_SIDE_BRIDGE_KNEES",
+          "block": "daily_core",
+          "rest_s": 25,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "pyr_top": 3,
+              "pyr_gap": 1,
+              "hold_s": 8
+            },
+            {
+              "pyr_top": 3,
+              "pyr_gap": 1,
+              "hold_s": 10
+            },
+            {
+              "pyr_top": 4,
+              "pyr_gap": 1,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3-2-1 x 8 s hold per side",
+          "target_text": "4-3-2 x 10 s hold per side"
+        },
+        {
+          "item_key": "L1_daily_core_EX_BIRD_DOG",
+          "exercise_id": "EX_BIRD_DOG",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 6,
+              "hold_s": 5
+            },
+            {
+              "sets": 2,
+              "reps": 6,
+              "hold_s": 7
+            },
+            {
+              "sets": 2,
+              "reps": 6,
+              "hold_s": 8
+            },
+            {
+              "sets": 2,
+              "reps": 8,
+              "hold_s": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "2x6 (5 s hold) per side",
+          "target_text": "2x8 (8 s hold) per side"
+        },
+        {
+          "item_key": "L1_daily_core_EX_BRACE_MARCH",
+          "exercise_id": "EX_BRACE_MARCH",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 2,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x8 per side",
+          "target_text": "2x12 per side"
+        },
+        {
+          "item_key": "L1_strength_A_EX_GLUTE_BRIDGE",
+          "exercise_id": "EX_GLUTE_BRIDGE",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 10,
+              "hold_s": 3
+            },
+            {
+              "sets": 2,
+              "reps": 12,
+              "hold_s": 3
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "hold_s": 3
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x10 (3 s hold)",
+          "target_text": "3x12 (3 s hold)"
+        },
+        {
+          "item_key": "L1_strength_A_EX_BOX_SQUAT_STRAP",
+          "exercise_id": "EX_BOX_SQUAT_STRAP",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x8",
+          "target_text": "3x10"
+        },
+        {
+          "item_key": "L1_strength_A_EX_HINGE_DOWEL",
+          "exercise_id": "EX_HINGE_DOWEL",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x8",
+          "target_text": "3x10"
+        },
+        {
+          "item_key": "L1_strength_A_EX_SIDE_STEP_BAND",
+          "exercise_id": "EX_SIDE_STEP_BAND",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": "steps each way",
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x8 steps each way",
+          "target_text": "3x10 steps each way"
+        },
+        {
+          "item_key": "L1_strength_A_EX_CALF_RAISE",
+          "exercise_id": "EX_CALF_RAISE",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 2,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "2x10",
+          "target_text": "2x12"
+        },
+        {
+          "item_key": "L1_strength_B_EX_PALLOF_STD",
+          "exercise_id": "EX_PALLOF_STD",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 6,
+              "hold_s": 3
+            },
+            {
+              "sets": 2,
+              "reps": 8,
+              "hold_s": 3
+            },
+            {
+              "sets": 2,
+              "reps": 10,
+              "hold_s": 3
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "hold_s": 3
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "2x6 (3 s hold) per side",
+          "target_text": "3x10 (3 s hold) per side"
+        },
+        {
+          "item_key": "L1_strength_B_EX_BAND_ROW",
+          "exercise_id": "EX_BAND_ROW",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 2,
+              "reps": 12
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x10",
+          "target_text": "3x12"
+        },
+        {
+          "item_key": "L1_strength_B_EX_DEAD_BUG_HEELTAP",
+          "exercise_id": "EX_DEAD_BUG_HEELTAP",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 6
+            },
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x6 per side",
+          "target_text": "3x8 per side"
+        },
+        {
+          "item_key": "L1_walking_EX_WALK_EASY",
+          "exercise_id": "EX_WALK_EASY",
+          "block": "walking",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "1-2 walks, flat ground, comfortable pace, natural arm swing.",
+          "rungs": [
+            {
+              "time_min": 20
+            },
+            {
+              "time_min": 25
+            },
+            {
+              "time_min": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "20 min",
+          "target_text": "30 min"
+        }
+      ],
+      "walking": {
+        "daily_total_min": "20-30",
+        "bouts": "1-2",
+        "brisk": "none"
+      },
+      "standing": {
+        "break_every_min": [
+          45,
+          60
+        ],
+        "decomp": "required",
+        "upright_h_target": 5
+      },
+      "frequency": {
+        "core_days_per_week": "5-6",
+        "strength_sessions_per_week": 3,
+        "session_minutes": "25-35",
+        "effort": "4-5/10; finish able to do more"
+      },
+      "avoid": [
+        "Loaded or repeated spinal flexion (sit-ups, crunches, toe touches, seated forward folds, rounded-back lifting).",
+        "Twisting under load and any end-range stretch that brings symptoms on.",
+        "Bending, floor work or flexion stretches in the first 45-60 minutes after waking.",
+        "No external load beyond bands. No dumbbells or kettlebells yet."
+      ],
+      "unlocks": [
+        "Core block daily, two strength templates, planned decompression."
+      ],
+      "regress_to": "L0"
+    },
+    {
+      "id": "L2",
+      "number": 2,
+      "name": "Endurance base (bodyweight)",
+      "goal": "Build trunk endurance and hip strength with bodyweight and bands; prove clean squat, hinge, balance and core quality.",
+      "entry": [
+        "Level 1 exit: all non-optional items at target, 4 consecutive clean strength sessions, L1 tests passed and confirmed."
+      ],
+      "exit": {
+        "clean_streak_sessions": 5,
+        "all_non_optional_items_at_target": true,
+        "tests": [
+          {
+            "test_id": "T_WALK_CONT",
+            "threshold": {
+              "value": 40
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_STAND_FUNC",
+            "threshold": {
+              "value": 6
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_SIDE_BRIDGE",
+            "threshold": {
+              "value": 40,
+              "note": "knees"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_BIRDDOG",
+            "threshold": {
+              "value": 6
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_DEADBUG",
+            "threshold": {
+              "value": 10,
+              "note": "3 sets, heel taps or reach"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_BALANCE_SL",
+            "threshold": {
+              "value": 20
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_SQUAT_BW",
+            "threshold": {
+              "value": 12,
+              "note": "unsupported chair tap"
+            },
+            "optional": false
+          }
+        ],
+        "extra": [
+          "No sharp/electrical incident across the final clean streak."
+        ]
+      },
+      "items": [
+        {
+          "item_key": "L2_daily_mobility_EX_DIAPH_BREATH",
+          "exercise_id": "EX_DIAPH_BREATH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "8 reps",
+          "target_text": "8 reps"
+        },
+        {
+          "item_key": "L2_daily_mobility_EX_STAND_BRACE",
+          "exercise_id": "EX_STAND_BRACE",
+          "block": "daily_mobility",
+          "rest_s": 10,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 5,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5x10 s hold",
+          "target_text": "5x10 s hold"
+        },
+        {
+          "item_key": "L2_daily_mobility_EX_CALF_STRETCH",
+          "exercise_id": "EX_CALF_STRETCH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L2_relief_EX_DECOMP_90_90",
+          "exercise_id": "EX_DECOMP_90_90",
+          "block": "relief",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "Planned at cumulative upright hour 2.5-3.",
+          "rungs": [
+            {
+              "time_min": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5 min",
+          "target_text": "5 min"
+        },
+        {
+          "item_key": "L2_daily_core_EX_CURLUP",
+          "exercise_id": "EX_CURLUP",
+          "block": "daily_core",
+          "rest_s": 25,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "pyr_top": 5,
+              "hold_s": 10
+            },
+            {
+              "pyr_top": 6,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "5-3-1 x 10 s hold",
+          "target_text": "6-4-2 x 10 s hold"
+        },
+        {
+          "item_key": "L2_daily_core_EX_SIDE_BRIDGE_KNEES",
+          "exercise_id": "EX_SIDE_BRIDGE_KNEES",
+          "block": "daily_core",
+          "rest_s": 25,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "pyr_top": 4,
+              "pyr_gap": 1,
+              "hold_s": 10
+            },
+            {
+              "pyr_top": 5,
+              "pyr_gap": 1,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "4-3-2 x 10 s hold per side",
+          "target_text": "5-4-3 x 10 s hold per side"
+        },
+        {
+          "item_key": "L2_daily_core_EX_BIRD_DOG",
+          "exercise_id": "EX_BIRD_DOG",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8,
+              "hold_s": 8
+            },
+            {
+              "sets": 2,
+              "reps": 8,
+              "hold_s": 10
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x8 (8 s hold) per side",
+          "target_text": "3x8 (10 s hold) per side"
+        },
+        {
+          "item_key": "L2_daily_core_EX_DEAD_BUG_HEELTAP",
+          "exercise_id": "EX_DEAD_BUG_HEELTAP",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x8 per side",
+          "target_text": "3x10 per side"
+        },
+        {
+          "item_key": "L2_strength_A_EX_BRIDGE_MARCH",
+          "exercise_id": "EX_BRIDGE_MARCH",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 6
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            },
+            {
+              "sets": 3,
+              "reps": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x6 per side",
+          "target_text": "3x10 per side"
+        },
+        {
+          "item_key": "L2_strength_A_EX_BOX_SQUAT",
+          "exercise_id": "EX_BOX_SQUAT",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 2,
+              "reps": 12
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "2x8",
+          "target_text": "3x12"
+        },
+        {
+          "item_key": "L2_strength_A_EX_HINGE_DOWEL",
+          "exercise_id": "EX_HINGE_DOWEL",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3x10",
+          "target_text": "3x12"
+        },
+        {
+          "item_key": "L2_strength_A_EX_SIDE_STEP_BAND",
+          "exercise_id": "EX_SIDE_STEP_BAND",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": "steps each way",
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3x10 steps each way",
+          "target_text": "3x12 steps each way"
+        },
+        {
+          "item_key": "L2_strength_A_EX_CALF_RAISE",
+          "exercise_id": "EX_CALF_RAISE",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 12
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "2x12",
+          "target_text": "3x12"
+        },
+        {
+          "item_key": "L2_strength_B_EX_PALLOF_STD",
+          "exercise_id": "EX_PALLOF_STD",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "hold_s": 3
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "hold_s": 5
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "hold_s": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x8 (3 s hold) per side",
+          "target_text": "3x10 (5 s hold) per side"
+        },
+        {
+          "item_key": "L2_strength_B_EX_BAND_ROW",
+          "exercise_id": "EX_BAND_ROW",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Move to a stronger band at target.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "sets": 3,
+              "reps": 14
+            },
+            {
+              "sets": 3,
+              "reps": 15
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x12",
+          "target_text": "3x15"
+        },
+        {
+          "item_key": "L2_strength_B_EX_MONSTER_WALK",
+          "exercise_id": "EX_MONSTER_WALK",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": "steps each way",
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 2,
+              "reps": 12
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "2x8 steps each way",
+          "target_text": "3x12 steps each way"
+        },
+        {
+          "item_key": "L2_strength_B_EX_WALL_PUSHUP",
+          "exercise_id": "EX_WALL_PUSHUP",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 2,
+              "reps": 12
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "2x8",
+          "target_text": "3x12"
+        },
+        {
+          "item_key": "L2_walking_EX_WALK_EASY",
+          "exercise_id": "EX_WALK_EASY",
+          "block": "walking",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "1-2 walks, flat ground.",
+          "rungs": [
+            {
+              "time_min": 30
+            },
+            {
+              "time_min": 35
+            },
+            {
+              "time_min": 40
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "30 min",
+          "target_text": "40 min"
+        }
+      ],
+      "walking": {
+        "daily_total_min": "30-40",
+        "bouts": "1-2",
+        "brisk": "none"
+      },
+      "standing": {
+        "break_every_min": [
+          45,
+          60
+        ],
+        "decomp": "required",
+        "upright_h_target": 6
+      },
+      "frequency": {
+        "core_days_per_week": "5-6",
+        "strength_sessions_per_week": 3,
+        "session_minutes": "25-35",
+        "effort": "4-6/10"
+      },
+      "avoid": [
+        "Loaded or repeated spinal flexion (sit-ups, crunches, toe touches, seated forward folds, rounded-back lifting).",
+        "Twisting under load and any end-range stretch that brings symptoms on.",
+        "Bending, floor work or flexion stretches in the first 45-60 minutes after waking.",
+        "No dumbbells or kettlebells yet. Bodyweight and bands only."
+      ],
+      "unlocks": [
+        "Unsupported box squat, marching bridge, monster walks, wall push-ups."
+      ],
+      "regress_to": "L1"
+    },
+    {
+      "id": "L3",
+      "number": 3,
+      "name": "First loads and single-leg patterns",
+      "goal": "Introduce light external load on squat, hinge and carry patterns, only after green check-ins; begin single-leg work.",
+      "entry": [
+        "Level 2 exit: all non-optional items at target, 5 consecutive clean strength sessions, L2 tests passed and confirmed."
+      ],
+      "exit": {
+        "clean_streak_sessions": 5,
+        "all_non_optional_items_at_target": true,
+        "tests": [
+          {
+            "test_id": "T_WALK_CONT",
+            "threshold": {
+              "value": 45
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_STAND_FUNC",
+            "threshold": {
+              "value": 6
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_SIDE_BRIDGE",
+            "threshold": {
+              "value": 30,
+              "note": "feet"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_BALANCE_SL",
+            "threshold": {
+              "value": 30
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_DL_LOAD",
+            "threshold": {
+              "value": "8 reps @ 20 lb",
+              "note": "KB block"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_CARRY",
+            "threshold": {
+              "value": "20 lb suitcase x 40 s/side"
+            },
+            "optional": false
+          }
+        ],
+        "extra": [
+          "No sharp/electrical incident across the final clean streak."
+        ]
+      },
+      "items": [
+        {
+          "item_key": "L3_daily_mobility_EX_DIAPH_BREATH",
+          "exercise_id": "EX_DIAPH_BREATH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "8 reps",
+          "target_text": "8 reps"
+        },
+        {
+          "item_key": "L3_daily_mobility_EX_STAND_BRACE",
+          "exercise_id": "EX_STAND_BRACE",
+          "block": "daily_mobility",
+          "rest_s": 10,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 5,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5x10 s hold",
+          "target_text": "5x10 s hold"
+        },
+        {
+          "item_key": "L3_daily_mobility_EX_HIP_FLEXOR_HALFKNEEL",
+          "exercise_id": "EX_HIP_FLEXOR_HALFKNEEL",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional; upright, glute-led.",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L3_relief_EX_DECOMP_90_90",
+          "exercise_id": "EX_DECOMP_90_90",
+          "block": "relief",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "Planned at cumulative upright hour 2.5-3.",
+          "rungs": [
+            {
+              "time_min": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5 min",
+          "target_text": "5 min"
+        },
+        {
+          "item_key": "L3_daily_core_EX_CURLUP_ELBOWS_UP",
+          "exercise_id": "EX_CURLUP_ELBOWS_UP",
+          "block": "daily_core",
+          "rest_s": 25,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "pyr_top": 6,
+              "hold_s": 10
+            },
+            {
+              "pyr_top": 7,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "6-4-2 x 10 s hold",
+          "target_text": "7-5-3 x 10 s hold"
+        },
+        {
+          "item_key": "L3_daily_core_EX_SIDE_BRIDGE_FEET",
+          "exercise_id": "EX_SIDE_BRIDGE_FEET",
+          "block": "daily_core",
+          "rest_s": 25,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "pyr_top": 3,
+              "pyr_gap": 1,
+              "hold_s": 8
+            },
+            {
+              "pyr_top": 3,
+              "pyr_gap": 1,
+              "hold_s": 10
+            },
+            {
+              "pyr_top": 4,
+              "pyr_gap": 1,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3-2-1 x 8 s hold per side",
+          "target_text": "4-3-2 x 10 s hold per side"
+        },
+        {
+          "item_key": "L3_daily_core_EX_BIRD_DOG_SQUARE",
+          "exercise_id": "EX_BIRD_DOG_SQUARE",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 6,
+              "hold_s": 8
+            },
+            {
+              "sets": 2,
+              "reps": 6,
+              "hold_s": 10
+            },
+            {
+              "sets": 2,
+              "reps": 8,
+              "hold_s": 10
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "2x6 (8 s hold) per side",
+          "target_text": "3x8 (10 s hold) per side"
+        },
+        {
+          "item_key": "L3_daily_core_EX_DEAD_BUG_REACH",
+          "exercise_id": "EX_DEAD_BUG_REACH",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 6
+            },
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "2x6 per side",
+          "target_text": "3x10 per side"
+        },
+        {
+          "item_key": "L3_strength_A_EX_GOBLET_BOX_SQUAT",
+          "exercise_id": "EX_GOBLET_BOX_SQUAT",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 15
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x8 with 10 lb",
+          "target_text": "3x10 with 20 lb"
+        },
+        {
+          "item_key": "L3_strength_A_EX_KB_DL_BLOCK",
+          "exercise_id": "EX_KB_DL_BLOCK",
+          "block": "strength_A",
+          "rest_s": 75,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 6,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 15
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 20
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 25
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "3x6 with 10 lb",
+          "target_text": "3x8 with 25 lb"
+        },
+        {
+          "item_key": "L3_strength_A_EX_SPLIT_SQUAT_SUP",
+          "exercise_id": "EX_SPLIT_SQUAT_SUP",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 6
+            },
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x6 per side",
+          "target_text": "3x8 per side"
+        },
+        {
+          "item_key": "L3_strength_A_EX_BRIDGE_SL",
+          "exercise_id": "EX_BRIDGE_SL",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 6
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3x6 per side",
+          "target_text": "3x8 per side"
+        },
+        {
+          "item_key": "L3_strength_B_EX_SUITCASE_CARRY",
+          "exercise_id": "EX_SUITCASE_CARRY",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "time_s": 20,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "time_s": 30,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "time_s": 40,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "time_s": 40,
+              "load_lb": 15
+            },
+            {
+              "sets": 3,
+              "time_s": 40,
+              "load_lb": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "3x20 s per side with 10 lb",
+          "target_text": "3x40 s per side with 20 lb"
+        },
+        {
+          "item_key": "L3_strength_B_EX_PALLOF_STEPOUT",
+          "exercise_id": "EX_PALLOF_STEPOUT",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "hold_s": 5
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "hold_s": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3x8 (5 s hold) per side",
+          "target_text": "3x10 (5 s hold) per side"
+        },
+        {
+          "item_key": "L3_strength_B_EX_INCLINE_PUSHUP",
+          "exercise_id": "EX_INCLINE_PUSHUP",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Counter height.",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x8",
+          "target_text": "3x10"
+        },
+        {
+          "item_key": "L3_strength_B_EX_DB_ROW_SUPPORTED",
+          "exercise_id": "EX_DB_ROW_SUPPORTED",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8,
+              "load_lb": 10
+            },
+            {
+              "sets": 2,
+              "reps": 10,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 15
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "2x8 per side with 10 lb",
+          "target_text": "3x10 per side with 20 lb"
+        },
+        {
+          "item_key": "L3_strength_B_EX_STEP_UP_LOW",
+          "exercise_id": "EX_STEP_UP_LOW",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 6
+            },
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x6 per side",
+          "target_text": "3x8 per side"
+        },
+        {
+          "item_key": "L3_strength_B_EX_MONSTER_WALK",
+          "exercise_id": "EX_MONSTER_WALK",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": "steps each way",
+          "load_note": null,
+          "optional": true,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "sets": 3,
+              "reps": 14
+            },
+            {
+              "sets": 3,
+              "reps": 15
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x12 steps each way",
+          "target_text": "3x15 steps each way"
+        },
+        {
+          "item_key": "L3_walking_EX_WALK_EASY",
+          "exercise_id": "EX_WALK_EASY",
+          "block": "walking",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Add a few 1-2 min brisker stretches; flat route.",
+          "rungs": [
+            {
+              "time_min": 35
+            },
+            {
+              "time_min": 40
+            },
+            {
+              "time_min": 45
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "35 min",
+          "target_text": "45 min"
+        }
+      ],
+      "walking": {
+        "daily_total_min": "35-45",
+        "bouts": "1-2",
+        "brisk": "a few 1-2 min brisk stretches"
+      },
+      "standing": {
+        "break_every_min": [
+          60,
+          90
+        ],
+        "decomp": "required",
+        "upright_h_target": 6
+      },
+      "frequency": {
+        "core_days_per_week": "5-6",
+        "strength_sessions_per_week": 3,
+        "session_minutes": "30-40",
+        "effort": "5-6/10; 3+ reps in reserve"
+      },
+      "avoid": [
+        "Loaded or repeated spinal flexion (sit-ups, crunches, toe touches, seated forward folds, rounded-back lifting).",
+        "Twisting under load and any end-range stretch that brings symptoms on.",
+        "Bending, floor work or flexion stretches in the first 45-60 minutes after waking.",
+        "No floor deadlifts, no barbell, no impact."
+      ],
+      "unlocks": [
+        "Goblet box squat, block deadlift (light), suitcase carry, split squat, incline push-up, supported row, low step-ups."
+      ],
+      "regress_to": "L2"
+    },
+    {
+      "id": "L4",
+      "number": 4,
+      "name": "Loaded capacity",
+      "goal": "Build moderate-load squat, hinge, lunge, carry, push and pull capacity; walk longer and begin the impact ladder with marching.",
+      "entry": [
+        "Level 3 exit: all non-optional items at target, 5 consecutive clean sessions, L3 tests passed and confirmed."
+      ],
+      "exit": {
+        "clean_streak_sessions": 6,
+        "all_non_optional_items_at_target": true,
+        "tests": [
+          {
+            "test_id": "T_WALK_CONT",
+            "threshold": {
+              "value": 60
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_STAND_FUNC",
+            "threshold": {
+              "value": 7
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_SIDE_BRIDGE",
+            "threshold": {
+              "value": 45
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_BIRDDOG",
+            "threshold": {
+              "value": 10
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_BALANCE_SL_EC",
+            "threshold": {
+              "value": 10
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_DL_LOAD",
+            "threshold": {
+              "value": "3x8 @ 25% BW",
+              "note": "KB block"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_FLOOR_LIFT",
+            "threshold": {
+              "value": "20 lb",
+              "note": "raised start"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_CARRY",
+            "threshold": {
+              "value": "20% BW per hand x 60 s"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_STEPDOWN",
+            "threshold": {
+              "value": 8,
+              "note": "6 in step"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_PUSHUP",
+            "threshold": {
+              "value": 10,
+              "note": "incline"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_FLEXOR_ENDURANCE",
+            "threshold": {
+              "value": 60
+            },
+            "optional": false
+          }
+        ],
+        "extra": [
+          "No sharp/electrical incident across the final clean streak, including accidental bends or twists."
+        ]
+      },
+      "items": [
+        {
+          "item_key": "L4_daily_mobility_EX_DIAPH_BREATH",
+          "exercise_id": "EX_DIAPH_BREATH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "8 reps",
+          "target_text": "8 reps"
+        },
+        {
+          "item_key": "L4_daily_mobility_EX_STAND_BRACE",
+          "exercise_id": "EX_STAND_BRACE",
+          "block": "daily_mobility",
+          "rest_s": 10,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 5,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5x10 s hold",
+          "target_text": "5x10 s hold"
+        },
+        {
+          "item_key": "L4_daily_mobility_EX_HIP_FLEXOR_HALFKNEEL",
+          "exercise_id": "EX_HIP_FLEXOR_HALFKNEEL",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L4_relief_EX_DECOMP_90_90",
+          "exercise_id": "EX_DECOMP_90_90",
+          "block": "relief",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "Planned at cumulative upright hour 2.5-3.",
+          "rungs": [
+            {
+              "time_min": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5 min",
+          "target_text": "5 min"
+        },
+        {
+          "item_key": "L4_daily_core_EX_CURLUP_ELBOWS_UP",
+          "exercise_id": "EX_CURLUP_ELBOWS_UP",
+          "block": "daily_core",
+          "rest_s": 25,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "pyr_top": 7,
+              "hold_s": 10
+            },
+            {
+              "pyr_top": 8,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "7-5-3 x 10 s hold",
+          "target_text": "8-6-4 x 10 s hold"
+        },
+        {
+          "item_key": "L4_daily_core_EX_SIDE_BRIDGE_FEET",
+          "exercise_id": "EX_SIDE_BRIDGE_FEET",
+          "block": "daily_core",
+          "rest_s": 25,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "pyr_top": 4,
+              "pyr_gap": 1,
+              "hold_s": 10
+            },
+            {
+              "pyr_top": 5,
+              "pyr_gap": 1,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "4-3-2 x 10 s hold per side",
+          "target_text": "5-4-3 x 10 s hold per side"
+        },
+        {
+          "item_key": "L4_daily_core_EX_BIRD_DOG_SQUARE",
+          "exercise_id": "EX_BIRD_DOG_SQUARE",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "hold_s": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3x8 (10 s hold) per side",
+          "target_text": "3x10 (10 s hold) per side"
+        },
+        {
+          "item_key": "L4_daily_core_EX_DEAD_BUG_REACH",
+          "exercise_id": "EX_DEAD_BUG_REACH",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3x10 per side",
+          "target_text": "3x12 per side"
+        },
+        {
+          "item_key": "L4_strength_A_EX_GOBLET_SQUAT",
+          "exercise_id": "EX_GOBLET_SQUAT",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 15
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 15
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 20
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 25
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 30
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 35
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 5,
+          "start_text": "3x8 with 15 lb",
+          "target_text": "3x10 with 35 lb"
+        },
+        {
+          "item_key": "L4_strength_A_EX_KB_DL_BLOCK",
+          "exercise_id": "EX_KB_DL_BLOCK",
+          "block": "strength_A",
+          "rest_s": 90,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 20
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 20
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 25
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 30
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 35
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 40
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 45
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 6,
+          "start_text": "3x8 with 20 lb",
+          "target_text": "3x10 with 45 lb"
+        },
+        {
+          "item_key": "L4_strength_A_EX_SPLIT_SQUAT_LOADED",
+          "exercise_id": "EX_SPLIT_SQUAT_LOADED",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 8,
+              "load_lb": 5
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 5
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 15
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "2x8 per side with 5 lb per hand",
+          "target_text": "3x8 per side with 15 lb per hand"
+        },
+        {
+          "item_key": "L4_strength_A_EX_STEP_UP",
+          "exercise_id": "EX_STEP_UP",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 6
+            },
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 5
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "2x6 per side",
+          "target_text": "3x8 per side with 10 lb per hand"
+        },
+        {
+          "item_key": "L4_strength_A_EX_SL_RDL",
+          "exercise_id": "EX_SL_RDL",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Hand on wall.",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 6
+            },
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x6 per side",
+          "target_text": "3x8 per side"
+        },
+        {
+          "item_key": "L4_strength_A_EX_HIP_THRUST",
+          "exercise_id": "EX_HIP_THRUST",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_lb": 5
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_lb": 15
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_lb": 20
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_lb": 25
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 6,
+          "start_text": "3x10",
+          "target_text": "3x12 with 25 lb"
+        },
+        {
+          "item_key": "L4_strength_B_EX_FARMER_CARRY",
+          "exercise_id": "EX_FARMER_CARRY",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "time_s": 30,
+              "load_lb": 15
+            },
+            {
+              "sets": 4,
+              "time_s": 30,
+              "load_lb": 15
+            },
+            {
+              "sets": 4,
+              "time_s": 40,
+              "load_lb": 15
+            },
+            {
+              "sets": 4,
+              "time_s": 50,
+              "load_lb": 15
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_lb": 15
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_lb": 20
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_lb": 25
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_lb": 30
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_lb": 35
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 8,
+          "start_text": "3x30 s with 15 lb per hand",
+          "target_text": "4x60 s with 35 lb per hand"
+        },
+        {
+          "item_key": "L4_strength_B_EX_PALLOF_HALFKNEEL",
+          "exercise_id": "EX_PALLOF_HALFKNEEL",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "hold_s": 5
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "hold_s": 5
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "hold_s": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x8 (5 s hold) per side",
+          "target_text": "3x12 (5 s hold) per side"
+        },
+        {
+          "item_key": "L4_strength_B_EX_INCLINE_PUSHUP",
+          "exercise_id": "EX_INCLINE_PUSHUP",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Lower the incline when 3x12 is clean.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8
+            },
+            {
+              "sets": 3,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x8",
+          "target_text": "3x12"
+        },
+        {
+          "item_key": "L4_strength_B_EX_DB_ROW_SUPPORTED",
+          "exercise_id": "EX_DB_ROW_SUPPORTED",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_lb": 20
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_lb": 20
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_lb": 20
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_lb": 25
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_lb": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "3x8 per side with 20 lb",
+          "target_text": "3x12 per side with 30 lb"
+        },
+        {
+          "item_key": "L4_strength_B_EX_STEP_DOWN_ECC",
+          "exercise_id": "EX_STEP_DOWN_ECC",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 6
+            },
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x6 per side",
+          "target_text": "3x8 per side"
+        },
+        {
+          "item_key": "L4_conditioning_EX_MARCH_TALL",
+          "exercise_id": "EX_MARCH_TALL",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Impact ladder step 1; use as the warm-up.",
+          "rungs": [
+            {
+              "sets": 2,
+              "distance_m": 20
+            },
+            {
+              "sets": 3,
+              "distance_m": 20
+            },
+            {
+              "sets": 3,
+              "distance_m": 25
+            },
+            {
+              "sets": 3,
+              "distance_m": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "2x20 m",
+          "target_text": "3x30 m"
+        },
+        {
+          "item_key": "L4_conditioning_EX_WALK_BRISK_INTERVALS",
+          "exercise_id": "EX_WALK_BRISK_INTERVALS",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": "x 2 min brisk / 2 min easy",
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "reps": 3
+            },
+            {
+              "reps": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3 reps",
+          "target_text": "5 reps"
+        },
+        {
+          "item_key": "L4_walking_EX_WALK_EASY",
+          "exercise_id": "EX_WALK_EASY",
+          "block": "walking",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Gentle hills only if flat walks are clean the next day.",
+          "rungs": [
+            {
+              "time_min": 45
+            },
+            {
+              "time_min": 50
+            },
+            {
+              "time_min": 55
+            },
+            {
+              "time_min": 60
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "45 min",
+          "target_text": "60 min"
+        }
+      ],
+      "walking": {
+        "daily_total_min": "45-60",
+        "bouts": "1-2",
+        "brisk": "3-5 x 2 min brisk",
+        "hills": "gentle, if next day clean"
+      },
+      "standing": {
+        "break_every_min": [
+          60,
+          90
+        ],
+        "decomp": "required",
+        "upright_h_target": 7
+      },
+      "frequency": {
+        "core_days_per_week": "5-6",
+        "strength_sessions_per_week": 3,
+        "session_minutes": "35-45",
+        "effort": "6/10 or easier; 3+ reps in reserve"
+      },
+      "avoid": [
+        "Loaded or repeated spinal flexion (sit-ups, crunches, toe touches, seated forward folds, rounded-back lifting).",
+        "Twisting under load and any end-range stretch that brings symptoms on.",
+        "Bending, floor work or flexion stretches in the first 45-60 minutes after waking.",
+        "No floor deadlifts, no barbell, no jumping or running."
+      ],
+      "unlocks": [
+        "Goblet squat, loaded split squat, step-up, single-leg RDL (supported), hip thrust, farmer carry, marching."
+      ],
+      "regress_to": "L3"
+    },
+    {
+      "id": "L5",
+      "number": 5,
+      "name": "Floor hinge, press and pull; impact preparation",
+      "goal": "Deadlift from the floor with kettlebells, add floor press, push-ups and rows, and prepare the body for impact with skipping, soft landings and pogo hops.",
+      "entry": [
+        "Level 4 exit: all non-optional items at target, 6 consecutive clean sessions, L4 tests passed and confirmed, no sharp incident in the clean streak."
+      ],
+      "exit": {
+        "clean_streak_sessions": 6,
+        "all_non_optional_items_at_target": true,
+        "tests": [
+          {
+            "test_id": "T_WALK_CONT",
+            "threshold": {
+              "value": 60,
+              "note": "include 5 x 2 min brisk"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_STAND_FUNC",
+            "threshold": {
+              "value": 8
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_SIDE_BRIDGE",
+            "threshold": {
+              "value": 60
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_BALANCE_SL_EC",
+            "threshold": {
+              "value": 20
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_DL_LOAD",
+            "threshold": {
+              "value": "3x8 @ 30% BW",
+              "note": "KB floor"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_FLOOR_LIFT",
+            "threshold": {
+              "value": "25 lb",
+              "note": "floor start"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_CARRY",
+            "threshold": {
+              "value": "25% BW per hand x 60 s"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_STEPDOWN",
+            "threshold": {
+              "value": 8,
+              "note": "8 in step"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_PUSHUP",
+            "threshold": {
+              "value": 10,
+              "note": "floor"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_PULL",
+            "threshold": {
+              "value": "3x8 inverted row"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_FLEXOR_ENDURANCE",
+            "threshold": {
+              "value": 90
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_EXTENSOR_ENDURANCE",
+            "threshold": {
+              "value": 60
+            },
+            "optional": true
+          },
+          {
+            "test_id": "T_POGO",
+            "threshold": {
+              "value": 20,
+              "note": "3 sets"
+            },
+            "optional": false
+          }
+        ],
+        "extra": [
+          "No sharp/electrical incident across the final clean streak."
+        ]
+      },
+      "items": [
+        {
+          "item_key": "L5_daily_mobility_EX_DIAPH_BREATH",
+          "exercise_id": "EX_DIAPH_BREATH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "8 reps",
+          "target_text": "8 reps"
+        },
+        {
+          "item_key": "L5_daily_mobility_EX_STAND_BRACE",
+          "exercise_id": "EX_STAND_BRACE",
+          "block": "daily_mobility",
+          "rest_s": 10,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 5,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5x10 s hold",
+          "target_text": "5x10 s hold"
+        },
+        {
+          "item_key": "L5_daily_mobility_EX_HIP_FLEXOR_HALFKNEEL",
+          "exercise_id": "EX_HIP_FLEXOR_HALFKNEEL",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "2x20 s hold per side",
+          "target_text": "2x20 s hold per side"
+        },
+        {
+          "item_key": "L5_relief_EX_DECOMP_90_90",
+          "exercise_id": "EX_DECOMP_90_90",
+          "block": "relief",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "Recommended; planned at hour 2.5-3.",
+          "rungs": [
+            {
+              "time_min": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5 min",
+          "target_text": "5 min"
+        },
+        {
+          "item_key": "L5_daily_core_EX_CURLUP_ELBOWS_UP",
+          "exercise_id": "EX_CURLUP_ELBOWS_UP",
+          "block": "daily_core",
+          "rest_s": 25,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "pyr_top": 8,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "8-6-4 x 10 s hold",
+          "target_text": "8-6-4 x 10 s hold"
+        },
+        {
+          "item_key": "L5_daily_core_EX_SIDE_BRIDGE_FEET",
+          "exercise_id": "EX_SIDE_BRIDGE_FEET",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "hold_s": 20
+            },
+            {
+              "sets": 3,
+              "hold_s": 25
+            },
+            {
+              "sets": 3,
+              "hold_s": 30
+            },
+            {
+              "sets": 3,
+              "hold_s": 35
+            },
+            {
+              "sets": 3,
+              "hold_s": 40
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "3x20 s hold per side",
+          "target_text": "3x40 s hold per side"
+        },
+        {
+          "item_key": "L5_daily_core_EX_BIRD_DOG_SQUARE",
+          "exercise_id": "EX_BIRD_DOG_SQUARE",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x10 (10 s hold) per side",
+          "target_text": "3x10 (10 s hold) per side"
+        },
+        {
+          "item_key": "L5_daily_core_EX_DEAD_BUG_REACH",
+          "exercise_id": "EX_DEAD_BUG_REACH",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x12 per side",
+          "target_text": "3x12 per side"
+        },
+        {
+          "item_key": "L5_strength_A_EX_KB_DL_FLOOR",
+          "exercise_id": "EX_KB_DL_FLOOR",
+          "block": "strength_A",
+          "rest_s": 90,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Return to the block at the first sign of rounding.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 6,
+              "load_bw": 0.15
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.15
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.2
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.25
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.3
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "3x6 at 15% BW",
+          "target_text": "3x8 at 30% BW"
+        },
+        {
+          "item_key": "L5_strength_A_EX_GOBLET_SQUAT",
+          "exercise_id": "EX_GOBLET_SQUAT",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.15
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.15
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.2
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.25
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x8 at 15% BW",
+          "target_text": "3x10 at 25% BW"
+        },
+        {
+          "item_key": "L5_strength_A_EX_SPLIT_SQUAT_LOADED",
+          "exercise_id": "EX_SPLIT_SQUAT_LOADED",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.05
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.05
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.1
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x8 per side at 5% BW per hand",
+          "target_text": "3x10 per side at 10% BW per hand"
+        },
+        {
+          "item_key": "L5_strength_A_EX_STEP_UP",
+          "exercise_id": "EX_STEP_UP",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "8-12 in step.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.05
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.05
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.1
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x8 per side at 5% BW per hand",
+          "target_text": "3x10 per side at 10% BW per hand"
+        },
+        {
+          "item_key": "L5_strength_A_EX_SL_RDL",
+          "exercise_id": "EX_SL_RDL",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Hand support first; free when clean.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 6
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.05
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x6 per side",
+          "target_text": "3x8 per side at 5% BW per hand"
+        },
+        {
+          "item_key": "L5_strength_A_EX_HIP_THRUST",
+          "exercise_id": "EX_HIP_THRUST",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.15
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_bw": 0.15
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_bw": 0.25
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_bw": 0.35
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x10 at 15% BW",
+          "target_text": "3x12 at 35% BW"
+        },
+        {
+          "item_key": "L5_strength_B_EX_DB_FLOOR_PRESS",
+          "exercise_id": "EX_DB_FLOOR_PRESS",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.08
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.08
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.13
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.15
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x8 at 8% BW per hand",
+          "target_text": "3x10 at 15% BW per hand"
+        },
+        {
+          "item_key": "L5_strength_B_EX_PUSHUP",
+          "exercise_id": "EX_PUSHUP",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 5
+            },
+            {
+              "sets": 3,
+              "reps": 7
+            },
+            {
+              "sets": 3,
+              "reps": 9
+            },
+            {
+              "sets": 3,
+              "reps": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x5",
+          "target_text": "3x10"
+        },
+        {
+          "item_key": "L5_strength_B_EX_INVERTED_ROW",
+          "exercise_id": "EX_INVERTED_ROW",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 6
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            },
+            {
+              "sets": 3,
+              "reps": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x6",
+          "target_text": "3x10"
+        },
+        {
+          "item_key": "L5_strength_B_EX_FARMER_CARRY",
+          "exercise_id": "EX_FARMER_CARRY",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "time_s": 45,
+              "load_bw": 0.1
+            },
+            {
+              "sets": 4,
+              "time_s": 45,
+              "load_bw": 0.1
+            },
+            {
+              "sets": 4,
+              "time_s": 55,
+              "load_bw": 0.1
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_bw": 0.1
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_bw": 0.15
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_bw": 0.2
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_bw": 0.25
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 6,
+          "start_text": "3x45 s at 10% BW per hand",
+          "target_text": "4x60 s at 25% BW per hand"
+        },
+        {
+          "item_key": "L5_strength_B_EX_PALLOF_HALFKNEEL",
+          "exercise_id": "EX_PALLOF_HALFKNEEL",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 12,
+              "hold_s": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x12 (5 s hold) per side",
+          "target_text": "3x12 (5 s hold) per side"
+        },
+        {
+          "item_key": "L5_strength_B_EX_DEAD_HANG",
+          "exercise_id": "EX_DEAD_HANG",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "hold_s": 10
+            },
+            {
+              "sets": 2,
+              "hold_s": 15
+            },
+            {
+              "sets": 2,
+              "hold_s": 20
+            },
+            {
+              "sets": 3,
+              "hold_s": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "2x10 s hold",
+          "target_text": "3x20 s hold"
+        },
+        {
+          "item_key": "L5_conditioning_EX_MARCH_TALL",
+          "exercise_id": "EX_MARCH_TALL",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "Warm-up.",
+          "rungs": [
+            {
+              "sets": 3,
+              "distance_m": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x30 m",
+          "target_text": "3x30 m"
+        },
+        {
+          "item_key": "L5_conditioning_EX_SKIP_LOW",
+          "exercise_id": "EX_SKIP_LOW",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L5_conditioning_EX_MARCH_TALL"
+          ],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "distance_m": 20
+            },
+            {
+              "sets": 4,
+              "distance_m": 20
+            },
+            {
+              "sets": 4,
+              "distance_m": 25
+            },
+            {
+              "sets": 4,
+              "distance_m": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x20 m",
+          "target_text": "4x30 m"
+        },
+        {
+          "item_key": "L5_conditioning_EX_STEPOFF_LANDING",
+          "exercise_id": "EX_STEPOFF_LANDING",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 5
+            },
+            {
+              "sets": 3,
+              "reps": 7
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x5",
+          "target_text": "3x8"
+        },
+        {
+          "item_key": "L5_conditioning_EX_POGO",
+          "exercise_id": "EX_POGO",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L5_conditioning_EX_SKIP_LOW",
+            "L5_conditioning_EX_STEPOFF_LANDING"
+          ],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 2,
+              "reps": 12
+            },
+            {
+              "sets": 2,
+              "reps": 14
+            },
+            {
+              "sets": 2,
+              "reps": 16
+            },
+            {
+              "sets": 2,
+              "reps": 18
+            },
+            {
+              "sets": 2,
+              "reps": 20
+            },
+            {
+              "sets": 3,
+              "reps": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 6,
+          "start_text": "2x10",
+          "target_text": "3x20"
+        },
+        {
+          "item_key": "L5_conditioning_EX_WALK_BRISK_INTERVALS",
+          "exercise_id": "EX_WALK_BRISK_INTERVALS",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": "x 2 min brisk / 2 min easy",
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "reps": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5 reps",
+          "target_text": "5 reps"
+        },
+        {
+          "item_key": "L5_walking_EX_WALK_EASY",
+          "exercise_id": "EX_WALK_EASY",
+          "block": "walking",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "time_min": 60
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "60 min",
+          "target_text": "60 min"
+        }
+      ],
+      "walking": {
+        "daily_total_min": "45-60",
+        "bouts": "1-2",
+        "brisk": "5 x 2 min brisk",
+        "hills": "gentle"
+      },
+      "standing": {
+        "break_every_min": [
+          60,
+          90
+        ],
+        "decomp": "recommended",
+        "upright_h_target": 8
+      },
+      "frequency": {
+        "core_days_per_week": "4-5",
+        "strength_sessions_per_week": 3,
+        "conditioning_sessions_per_week": 2,
+        "session_minutes": "40-50",
+        "effort": "6/10; 3 reps in reserve"
+      },
+      "avoid": [
+        "Loaded or repeated spinal flexion (sit-ups, crunches, toe touches, seated forward folds, rounded-back lifting).",
+        "Twisting under load and any end-range stretch that brings symptoms on.",
+        "Bending, floor work or flexion stretches in the first 45-60 minutes after waking.",
+        "No barbell lifts, no running or jogging, no jumping from height."
+      ],
+      "unlocks": [
+        "Floor kettlebell deadlift, floor press, push-up, inverted row, skipping, soft landings, pogo hops."
+      ],
+      "regress_to": "L4"
+    },
+    {
+      "id": "L6",
+      "number": 6,
+      "name": "Barbell introduction and jogging",
+      "goal": "Start barbell deadlifts from blocks, dumbbell bench and assisted pull-ups, and start jogging with first plyometrics.",
+      "entry": [
+        "Level 5 exit: all non-optional items at target, 6 consecutive clean sessions, L5 tests passed and confirmed, pogo hops pain-free."
+      ],
+      "exit": {
+        "clean_streak_sessions": 6,
+        "all_non_optional_items_at_target": true,
+        "tests": [
+          {
+            "test_id": "T_SIDE_BRIDGE",
+            "threshold": {
+              "value": 75
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_BALANCE_SL_EC",
+            "threshold": {
+              "value": 30
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_DL_LOAD",
+            "threshold": {
+              "value": "3x5 @ 75% BW",
+              "note": "barbell from blocks"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_CARRY",
+            "threshold": {
+              "value": "40% BW per hand x 60 s"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_PUSHUP",
+            "threshold": {
+              "value": 15,
+              "note": "floor"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_PULL",
+            "threshold": {
+              "value": "3x5 assisted pull-up"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_BENCH_LOAD",
+            "threshold": {
+              "value": "3x8 @ 22% BW per hand"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_FLEXOR_ENDURANCE",
+            "threshold": {
+              "value": 110
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_EXTENSOR_ENDURANCE",
+            "threshold": {
+              "value": 90
+            },
+            "optional": true
+          },
+          {
+            "test_id": "T_JOG",
+            "threshold": {
+              "value": 20
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_SL_HOP_INPLACE",
+            "threshold": {
+              "value": 10,
+              "note": "3 sets"
+            },
+            "optional": false
+          }
+        ],
+        "extra": [
+          "No sharp/electrical incident across the final clean streak.",
+          "Jog sessions and heavy hinge sessions are on different days."
+        ]
+      },
+      "items": [
+        {
+          "item_key": "L6_daily_mobility_EX_DIAPH_BREATH",
+          "exercise_id": "EX_DIAPH_BREATH",
+          "block": "daily_mobility",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "8 reps",
+          "target_text": "8 reps"
+        },
+        {
+          "item_key": "L6_daily_mobility_EX_STAND_BRACE",
+          "exercise_id": "EX_STAND_BRACE",
+          "block": "daily_mobility",
+          "rest_s": 10,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 5,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5x10 s hold",
+          "target_text": "5x10 s hold"
+        },
+        {
+          "item_key": "L6_relief_EX_DECOMP_90_90",
+          "exercise_id": "EX_DECOMP_90_90",
+          "block": "relief",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "Recommended; planned at hour 2.5-3.",
+          "rungs": [
+            {
+              "time_min": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5 min",
+          "target_text": "5 min"
+        },
+        {
+          "item_key": "L6_daily_core_EX_CURLUP_ELBOWS_UP",
+          "exercise_id": "EX_CURLUP_ELBOWS_UP",
+          "block": "daily_core",
+          "rest_s": 25,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "pyr_top": 8,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "8-6-4 x 10 s hold",
+          "target_text": "8-6-4 x 10 s hold"
+        },
+        {
+          "item_key": "L6_daily_core_EX_SIDE_BRIDGE_FEET",
+          "exercise_id": "EX_SIDE_BRIDGE_FEET",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "hold_s": 30
+            },
+            {
+              "sets": 3,
+              "hold_s": 35
+            },
+            {
+              "sets": 3,
+              "hold_s": 40
+            },
+            {
+              "sets": 3,
+              "hold_s": 45
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x30 s hold per side",
+          "target_text": "3x45 s hold per side"
+        },
+        {
+          "item_key": "L6_daily_core_EX_BIRD_DOG_SQUARE",
+          "exercise_id": "EX_BIRD_DOG_SQUARE",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x10 (10 s hold) per side",
+          "target_text": "3x10 (10 s hold) per side"
+        },
+        {
+          "item_key": "L6_daily_core_EX_DEAD_BUG_REACH",
+          "exercise_id": "EX_DEAD_BUG_REACH",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x12 per side",
+          "target_text": "3x12 per side"
+        },
+        {
+          "item_key": "L6_strength_A_EX_BARBELL_DL_BLOCK",
+          "exercise_id": "EX_BARBELL_DL_BLOCK",
+          "block": "strength_A",
+          "rest_s": 120,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Empty bar first if starting weight feels heavy; use rack safeties.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.4
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.5
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.6
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.7
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.75
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "3x5 at 40% BW",
+          "target_text": "3x5 at 75% BW"
+        },
+        {
+          "item_key": "L6_strength_A_EX_GOBLET_SQUAT",
+          "exercise_id": "EX_GOBLET_SQUAT",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.25
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.3
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3x10 at 25% BW",
+          "target_text": "3x10 at 30% BW"
+        },
+        {
+          "item_key": "L6_strength_A_EX_SPLIT_SQUAT_LOADED",
+          "exercise_id": "EX_SPLIT_SQUAT_LOADED",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.1
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.15
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3x10 per side at 10% BW per hand",
+          "target_text": "3x10 per side at 15% BW per hand"
+        },
+        {
+          "item_key": "L6_strength_A_EX_SL_RDL",
+          "exercise_id": "EX_SL_RDL",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.08
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.13
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.15
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x8 per side at 8% BW per hand",
+          "target_text": "3x8 per side at 15% BW per hand"
+        },
+        {
+          "item_key": "L6_strength_A_EX_HIP_THRUST",
+          "exercise_id": "EX_HIP_THRUST",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.35
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.45
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.55
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.6
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x10 at 35% BW",
+          "target_text": "3x10 at 60% BW"
+        },
+        {
+          "item_key": "L6_strength_B_EX_DB_BENCH",
+          "exercise_id": "EX_DB_BENCH",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 6,
+              "load_bw": 0.12
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.12
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.17
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.22
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x6 at 12% BW per hand",
+          "target_text": "3x8 at 22% BW per hand"
+        },
+        {
+          "item_key": "L6_strength_B_EX_PUSHUP",
+          "exercise_id": "EX_PUSHUP",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "sets": 3,
+              "reps": 14
+            },
+            {
+              "sets": 3,
+              "reps": 15
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x10",
+          "target_text": "3x15"
+        },
+        {
+          "item_key": "L6_strength_B_EX_PULLUP_ASSISTED",
+          "exercise_id": "EX_PULLUP_ASSISTED",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Lighter band as reps hit target.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 3
+            },
+            {
+              "sets": 3,
+              "reps": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3x3",
+          "target_text": "3x5"
+        },
+        {
+          "item_key": "L6_strength_B_EX_INVERTED_ROW",
+          "exercise_id": "EX_INVERTED_ROW",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Feet elevated when 3x12 is clean.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8
+            },
+            {
+              "sets": 3,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x8",
+          "target_text": "3x12"
+        },
+        {
+          "item_key": "L6_strength_B_EX_FARMER_CARRY",
+          "exercise_id": "EX_FARMER_CARRY",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_bw": 0.25
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_bw": 0.3
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_bw": 0.35
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_bw": 0.4
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "4x60 s at 25% BW per hand",
+          "target_text": "4x60 s at 40% BW per hand"
+        },
+        {
+          "item_key": "L6_strength_B_EX_PALLOF_HALFKNEEL",
+          "exercise_id": "EX_PALLOF_HALFKNEEL",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 12,
+              "hold_s": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x12 (5 s hold) per side",
+          "target_text": "3x12 (5 s hold) per side"
+        },
+        {
+          "item_key": "L6_conditioning_EX_POGO",
+          "exercise_id": "EX_POGO",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "Warm-up.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x20",
+          "target_text": "3x20"
+        },
+        {
+          "item_key": "L6_conditioning_EX_LINE_HOP",
+          "exercise_id": "EX_LINE_HOP",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "sets": 3,
+              "reps": 14
+            },
+            {
+              "sets": 3,
+              "reps": 16
+            },
+            {
+              "sets": 3,
+              "reps": 18
+            },
+            {
+              "sets": 3,
+              "reps": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 5,
+          "start_text": "3x10",
+          "target_text": "3x20"
+        },
+        {
+          "item_key": "L6_conditioning_EX_SL_HOP_INPLACE",
+          "exercise_id": "EX_SL_HOP_INPLACE",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L6_conditioning_EX_LINE_HOP"
+          ],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 6
+            },
+            {
+              "sets": 2,
+              "reps": 8
+            },
+            {
+              "sets": 2,
+              "reps": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "2x6 per side",
+          "target_text": "3x10 per side"
+        },
+        {
+          "item_key": "L6_conditioning_EX_WALK_JOG",
+          "exercise_id": "EX_WALK_JOG",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": "jog intervals, walk 2 min between",
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "reps": 6,
+              "time_s": 60
+            },
+            {
+              "reps": 7,
+              "time_s": 60
+            },
+            {
+              "reps": 8,
+              "time_s": 60
+            },
+            {
+              "reps": 8,
+              "time_s": 90
+            },
+            {
+              "reps": 8,
+              "time_s": 120
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "6 reps",
+          "target_text": "8 reps"
+        },
+        {
+          "item_key": "L6_conditioning_EX_JOG",
+          "exercise_id": "EX_JOG",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L6_conditioning_EX_WALK_JOG"
+          ],
+          "note": "",
+          "rungs": [
+            {
+              "time_min": 10
+            },
+            {
+              "time_min": 15
+            },
+            {
+              "time_min": 20
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "10 min",
+          "target_text": "20 min"
+        },
+        {
+          "item_key": "L6_walking_EX_WALK_EASY",
+          "exercise_id": "EX_WALK_EASY",
+          "block": "walking",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "Daily; recovery walking.",
+          "rungs": [
+            {
+              "time_min": 40
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "40 min",
+          "target_text": "40 min"
+        }
+      ],
+      "walking": {
+        "daily_total_min": "40 easy walking",
+        "bouts": "1-2"
+      },
+      "standing": {
+        "break_every_min": [
+          60,
+          90
+        ],
+        "decomp": "recommended",
+        "upright_h_target": 8
+      },
+      "frequency": {
+        "core_days_per_week": "4-5",
+        "strength_sessions_per_week": 3,
+        "conditioning_sessions_per_week": "2-3 (jog on non-consecutive days)",
+        "session_minutes": "45-55",
+        "effort": "6-7/10"
+      },
+      "avoid": [
+        "Loaded or repeated spinal flexion (sit-ups, crunches, toe touches, seated forward folds, rounded-back lifting).",
+        "Twisting under load and any end-range stretch that brings symptoms on.",
+        "Bending, floor work or flexion stretches in the first 45-60 minutes after waking.",
+        "No sprinting, no box jumps, no loaded flexion."
+      ],
+      "unlocks": [
+        "Barbell deadlift from blocks, DB bench, assisted pull-ups, walk-jog then jog, line hops, single-leg hops in place."
+      ],
+      "regress_to": "L5"
+    },
+    {
+      "id": "L7",
+      "number": 7,
+      "name": "Strength build and speed introduction",
+      "goal": "Barbell deadlift from the floor, barbell bench, strict pull-ups, and the first speed work: strides, accelerations, bounds, and submaximal change of direction.",
+      "entry": [
+        "Level 6 exit: all non-optional items at target, 6 consecutive clean sessions, L6 tests passed and confirmed (including jog and single-leg hops)."
+      ],
+      "exit": {
+        "clean_streak_sessions": 6,
+        "all_non_optional_items_at_target": true,
+        "tests": [
+          {
+            "test_id": "T_SIDE_BRIDGE",
+            "threshold": {
+              "value": 90
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_DL_LOAD",
+            "threshold": {
+              "value": "3x5 @ 125% BW",
+              "note": "barbell from the floor"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_CARRY",
+            "threshold": {
+              "value": "50% BW per hand x 60 s"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_BENCH_LOAD",
+            "threshold": {
+              "value": "3x5 @ 75% BW"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_PULL",
+            "threshold": {
+              "value": "5 strict pull-ups"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_FLEXOR_ENDURANCE",
+            "threshold": {
+              "value": 130
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_EXTENSOR_ENDURANCE",
+            "threshold": {
+              "value": 120
+            },
+            "optional": true
+          },
+          {
+            "test_id": "T_JOG",
+            "threshold": {
+              "value": 30
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_HOP_BATTERY",
+            "threshold": {
+              "value": 90
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_STRIDES",
+            "threshold": {
+              "value": 6,
+              "note": "x 60 m at 80%"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_ACCEL",
+            "threshold": {
+              "value": 6,
+              "note": "x 30 m at 90%"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_COD",
+            "threshold": {
+              "value": "80% effort"
+            },
+            "optional": false
+          }
+        ],
+        "extra": [
+          "No sharp/electrical incident across the final clean streak.",
+          "Sprint-type sessions and heavy deadlift sessions are on different days."
+        ]
+      },
+      "items": [
+        {
+          "item_key": "L7_daily_mobility_EX_STAND_BRACE",
+          "exercise_id": "EX_STAND_BRACE",
+          "block": "daily_mobility",
+          "rest_s": 10,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 5,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5x10 s hold",
+          "target_text": "5x10 s hold"
+        },
+        {
+          "item_key": "L7_relief_EX_DECOMP_90_90",
+          "exercise_id": "EX_DECOMP_90_90",
+          "block": "relief",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": true,
+          "requires": [],
+          "note": "Optional now; use any time.",
+          "rungs": [
+            {
+              "time_min": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "5 min",
+          "target_text": "5 min"
+        },
+        {
+          "item_key": "L7_daily_core_EX_CURLUP_ELBOWS_UP",
+          "exercise_id": "EX_CURLUP_ELBOWS_UP",
+          "block": "daily_core",
+          "rest_s": 25,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "pyr_top": 8,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "8-6-4 x 10 s hold",
+          "target_text": "8-6-4 x 10 s hold"
+        },
+        {
+          "item_key": "L7_daily_core_EX_SIDE_BRIDGE_FEET",
+          "exercise_id": "EX_SIDE_BRIDGE_FEET",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "hold_s": 40
+            },
+            {
+              "sets": 3,
+              "hold_s": 45
+            },
+            {
+              "sets": 3,
+              "hold_s": 50
+            },
+            {
+              "sets": 3,
+              "hold_s": 55
+            },
+            {
+              "sets": 3,
+              "hold_s": 60
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "3x40 s hold per side",
+          "target_text": "3x60 s hold per side"
+        },
+        {
+          "item_key": "L7_daily_core_EX_BIRD_DOG_SQUARE",
+          "exercise_id": "EX_BIRD_DOG_SQUARE",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x10 (10 s hold) per side",
+          "target_text": "3x10 (10 s hold) per side"
+        },
+        {
+          "item_key": "L7_strength_A_EX_BARBELL_DL_FLOOR",
+          "exercise_id": "EX_BARBELL_DL_FLOOR",
+          "block": "strength_A",
+          "rest_s": 150,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Raise to blocks at the first sign of rounding; use safeties.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.75
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.85
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.95
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.05
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.15
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.25
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 5,
+          "start_text": "3x5 at 75% BW",
+          "target_text": "3x5 at 125% BW"
+        },
+        {
+          "item_key": "L7_strength_A_EX_BARBELL_SQUAT",
+          "exercise_id": "EX_BARBELL_SQUAT",
+          "block": "strength_A",
+          "rest_s": 150,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": false,
+          "requires": [],
+          "note": "Optional; box first; inside safeties.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.5
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.6
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.7
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.8
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.9
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.0
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 5,
+          "start_text": "3x5 at 50% BW",
+          "target_text": "3x5 at 100% BW"
+        },
+        {
+          "item_key": "L7_strength_A_EX_KB_SWING",
+          "exercise_id": "EX_KB_SWING",
+          "block": "strength_A",
+          "rest_s": 90,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L7_strength_A_EX_BARBELL_DL_FLOOR"
+          ],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10,
+              "load_bw": 0.15
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_bw": 0.15
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_bw": 0.2
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_bw": 0.25
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_bw": 0.3
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "3x10 at 15% BW",
+          "target_text": "3x12 at 30% BW"
+        },
+        {
+          "item_key": "L7_strength_A_EX_STEP_UP",
+          "exercise_id": "EX_STEP_UP",
+          "block": "strength_A",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.1
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.15
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.2
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.25
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x8 per side at 10% BW per hand",
+          "target_text": "3x8 per side at 25% BW per hand"
+        },
+        {
+          "item_key": "L7_strength_A_EX_NORDIC_ECC",
+          "exercise_id": "EX_NORDIC_ECC",
+          "block": "strength_A",
+          "rest_s": 90,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 2,
+              "reps": 3
+            },
+            {
+              "sets": 2,
+              "reps": 5
+            },
+            {
+              "sets": 3,
+              "reps": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "2x3",
+          "target_text": "3x5"
+        },
+        {
+          "item_key": "L7_strength_B_EX_BARBELL_BENCH",
+          "exercise_id": "EX_BARBELL_BENCH",
+          "block": "strength_B",
+          "rest_s": 120,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Always inside safeties or with a spotter.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.4
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.5
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.6
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.7
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.75
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "3x5 at 40% BW",
+          "target_text": "3x5 at 75% BW"
+        },
+        {
+          "item_key": "L7_strength_B_EX_PULLUP",
+          "exercise_id": "EX_PULLUP",
+          "block": "strength_B",
+          "rest_s": 120,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 2
+            },
+            {
+              "sets": 3,
+              "reps": 4
+            },
+            {
+              "sets": 3,
+              "reps": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x2",
+          "target_text": "3x5"
+        },
+        {
+          "item_key": "L7_strength_B_EX_DB_ROW_SUPPORTED",
+          "exercise_id": "EX_DB_ROW_SUPPORTED",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.15
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.2
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.25
+            },
+            {
+              "sets": 3,
+              "reps": 8,
+              "load_bw": 0.3
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x8 per side at 15% BW per hand",
+          "target_text": "3x8 per side at 30% BW per hand"
+        },
+        {
+          "item_key": "L7_strength_B_EX_FARMER_CARRY",
+          "exercise_id": "EX_FARMER_CARRY",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_bw": 0.4
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_bw": 0.45
+            },
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_bw": 0.5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "4x60 s at 40% BW per hand",
+          "target_text": "4x60 s at 50% BW per hand"
+        },
+        {
+          "item_key": "L7_strength_B_EX_PALLOF_HALFKNEEL",
+          "exercise_id": "EX_PALLOF_HALFKNEEL",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 12,
+              "hold_s": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x12 (5 s hold) per side",
+          "target_text": "3x12 (5 s hold) per side"
+        },
+        {
+          "item_key": "L7_conditioning_EX_JOG",
+          "exercise_id": "EX_JOG",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "time_min": 20
+            },
+            {
+              "time_min": 25
+            },
+            {
+              "time_min": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "20 min",
+          "target_text": "30 min"
+        },
+        {
+          "item_key": "L7_conditioning_EX_STRIDES",
+          "exercise_id": "EX_STRIDES",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 4,
+              "distance_m": 40,
+              "effort_pct": 70
+            },
+            {
+              "sets": 5,
+              "distance_m": 40,
+              "effort_pct": 70
+            },
+            {
+              "sets": 6,
+              "distance_m": 40,
+              "effort_pct": 70
+            },
+            {
+              "sets": 6,
+              "distance_m": 50,
+              "effort_pct": 70
+            },
+            {
+              "sets": 6,
+              "distance_m": 60,
+              "effort_pct": 70
+            },
+            {
+              "sets": 6,
+              "distance_m": 60,
+              "effort_pct": 80
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 5,
+          "start_text": "4x40 m at 70% effort",
+          "target_text": "6x60 m at 80% effort"
+        },
+        {
+          "item_key": "L7_conditioning_EX_ACCEL_RUN",
+          "exercise_id": "EX_ACCEL_RUN",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L7_conditioning_EX_STRIDES"
+          ],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 4,
+              "distance_m": 20,
+              "effort_pct": 80
+            },
+            {
+              "sets": 5,
+              "distance_m": 20,
+              "effort_pct": 80
+            },
+            {
+              "sets": 6,
+              "distance_m": 20,
+              "effort_pct": 80
+            },
+            {
+              "sets": 6,
+              "distance_m": 25,
+              "effort_pct": 80
+            },
+            {
+              "sets": 6,
+              "distance_m": 30,
+              "effort_pct": 80
+            },
+            {
+              "sets": 6,
+              "distance_m": 30,
+              "effort_pct": 90
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 5,
+          "start_text": "4x20 m at 80% effort",
+          "target_text": "6x30 m at 90% effort"
+        },
+        {
+          "item_key": "L7_conditioning_EX_BOX_JUMP_LOW",
+          "exercise_id": "EX_BOX_JUMP_LOW",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 3
+            },
+            {
+              "sets": 3,
+              "reps": 5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3x3",
+          "target_text": "3x5"
+        },
+        {
+          "item_key": "L7_conditioning_EX_BROAD_JUMP",
+          "exercise_id": "EX_BROAD_JUMP",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L7_conditioning_EX_BOX_JUMP_LOW"
+          ],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 2
+            },
+            {
+              "sets": 3,
+              "reps": 3
+            },
+            {
+              "sets": 3,
+              "reps": 4
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x2",
+          "target_text": "3x4"
+        },
+        {
+          "item_key": "L7_conditioning_EX_LATERAL_BOUND",
+          "exercise_id": "EX_LATERAL_BOUND",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L7_conditioning_EX_BROAD_JUMP"
+          ],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 4
+            },
+            {
+              "sets": 3,
+              "reps": 6
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3x4 per side",
+          "target_text": "3x6 per side"
+        },
+        {
+          "item_key": "L7_conditioning_EX_COD_DRILL",
+          "exercise_id": "EX_COD_DRILL",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L7_conditioning_EX_ACCEL_RUN"
+          ],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 4,
+              "effort_pct": 60
+            },
+            {
+              "sets": 4,
+              "effort_pct": 70
+            },
+            {
+              "sets": 4,
+              "effort_pct": 80
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "4 sets at 60% effort",
+          "target_text": "4 sets at 80% effort"
+        },
+        {
+          "item_key": "L7_walking_EX_WALK_EASY",
+          "exercise_id": "EX_WALK_EASY",
+          "block": "walking",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "Daily recovery walking.",
+          "rungs": [
+            {
+              "time_min": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "30 min",
+          "target_text": "30 min"
+        }
+      ],
+      "walking": {
+        "daily_total_min": "30 recovery walking",
+        "bouts": "1-2"
+      },
+      "standing": {
+        "break_every_min": [
+          60,
+          90
+        ],
+        "decomp": "optional",
+        "upright_h_target": 8
+      },
+      "frequency": {
+        "core_days_per_week": "4-5",
+        "strength_sessions_per_week": 3,
+        "conditioning_sessions_per_week": "2 speed + 1 jog",
+        "session_minutes": "50-60",
+        "effort": "up to 7-8/10 on main lifts"
+      },
+      "avoid": [
+        "Loaded or repeated spinal flexion (sit-ups, crunches, toe touches, seated forward folds, rounded-back lifting).",
+        "Twisting under load and any end-range stretch that brings symptoms on.",
+        "Bending, floor work or flexion stretches in the first 45-60 minutes after waking.",
+        "No maximal sprints, no loaded flexion, no good-mornings or heavy bent-over barbell rows."
+      ],
+      "unlocks": [
+        "Barbell floor deadlift, barbell bench, pull-ups, kettlebell swings, Nordics, strides, accelerations, box and broad jumps, bounds, submax change of direction."
+      ],
+      "regress_to": "L6"
+    },
+    {
+      "id": "L8",
+      "number": 8,
+      "name": "Return to sport (full athletic training)",
+      "goal": "Maximal sprints, full-speed change of direction, athletic circuits, and sport-specific work at full intensity; then maintenance with weekly review.",
+      "entry": [
+        "Level 7 exit: all non-optional items at target, 6 consecutive clean sessions, L7 tests passed and confirmed (including hop battery LSI >= 90%, strides and accelerations)."
+      ],
+      "exit": {
+        "clean_streak_sessions": 8,
+        "all_non_optional_items_at_target": true,
+        "tests": [
+          {
+            "test_id": "T_SIDE_BRIDGE",
+            "threshold": {
+              "value": 90,
+              "note": "side difference <=10%"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_DL_LOAD",
+            "threshold": {
+              "value": "3x5 @ 150% BW",
+              "note": "barbell from the floor; proposed target, David to confirm"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_BENCH_LOAD",
+            "threshold": {
+              "value": "3x5 @ 100% BW"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_PULL",
+            "threshold": {
+              "value": "8 strict pull-ups"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_FLEXOR_ENDURANCE",
+            "threshold": {
+              "value": 130,
+              "note": "flexor:extensor ratio <1.0 if both tested"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_EXTENSOR_ENDURANCE",
+            "threshold": {
+              "value": 150
+            },
+            "optional": true
+          },
+          {
+            "test_id": "T_HOP_BATTERY",
+            "threshold": {
+              "value": 95
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_COD",
+            "threshold": {
+              "value": "100% effort"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_SPRINT_MAX",
+            "threshold": {
+              "value": 6,
+              "note": "x 40 m at 100%"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_ATHLETIC_CIRCUIT",
+            "threshold": {
+              "value": 40
+            },
+            "optional": false
+          }
+        ],
+        "extra": [
+          "Exit means entering maintenance mode: keep strength 2-3 days, speed 1-2 days, core 3-5 days; check-ins reduce to morning and post-workout; the weekly export continues."
+        ]
+      },
+      "items": [
+        {
+          "item_key": "L8_daily_core_EX_CURLUP_ELBOWS_UP",
+          "exercise_id": "EX_CURLUP_ELBOWS_UP",
+          "block": "daily_core",
+          "rest_s": 25,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "pyr_top": 8,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "8-6-4 x 10 s hold",
+          "target_text": "8-6-4 x 10 s hold"
+        },
+        {
+          "item_key": "L8_daily_core_EX_SIDE_BRIDGE_FEET",
+          "exercise_id": "EX_SIDE_BRIDGE_FEET",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "hold_s": 60
+            },
+            {
+              "sets": 3,
+              "hold_s": 65
+            },
+            {
+              "sets": 3,
+              "hold_s": 70
+            },
+            {
+              "sets": 3,
+              "hold_s": 75
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x60 s hold per side",
+          "target_text": "3x75 s hold per side"
+        },
+        {
+          "item_key": "L8_daily_core_EX_BIRD_DOG_SQUARE",
+          "exercise_id": "EX_BIRD_DOG_SQUARE",
+          "block": "daily_core",
+          "rest_s": 30,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 10,
+              "hold_s": 10
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x10 (10 s hold) per side",
+          "target_text": "3x10 (10 s hold) per side"
+        },
+        {
+          "item_key": "L8_strength_A_EX_BARBELL_DL_FLOOR",
+          "exercise_id": "EX_BARBELL_DL_FLOOR",
+          "block": "strength_A",
+          "rest_s": 150,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.25
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.35
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.45
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x5 at 125% BW",
+          "target_text": "3x5 at 150% BW"
+        },
+        {
+          "item_key": "L8_strength_A_EX_BARBELL_SQUAT",
+          "exercise_id": "EX_BARBELL_SQUAT",
+          "block": "strength_A",
+          "rest_s": 150,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.0
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.1
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.2
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.25
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x5 at 100% BW",
+          "target_text": "3x5 at 125% BW"
+        },
+        {
+          "item_key": "L8_strength_A_EX_KB_SWING",
+          "exercise_id": "EX_KB_SWING",
+          "block": "strength_A",
+          "rest_s": 90,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_bw": 0.3
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x12 at 30% BW",
+          "target_text": "3x12 at 30% BW"
+        },
+        {
+          "item_key": "L8_strength_A_EX_NORDIC_ECC",
+          "exercise_id": "EX_NORDIC_ECC",
+          "block": "strength_A",
+          "rest_s": 90,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 5
+            },
+            {
+              "sets": 3,
+              "reps": 6
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 1,
+          "start_text": "3x5",
+          "target_text": "3x6"
+        },
+        {
+          "item_key": "L8_strength_B_EX_BARBELL_BENCH",
+          "exercise_id": "EX_BARBELL_BENCH",
+          "block": "strength_B",
+          "rest_s": 120,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Safeties or spotter.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.75
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.85
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 0.95
+            },
+            {
+              "sets": 3,
+              "reps": 5,
+              "load_bw": 1.0
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 3,
+          "start_text": "3x5 at 75% BW",
+          "target_text": "3x5 at 100% BW"
+        },
+        {
+          "item_key": "L8_strength_B_EX_PULLUP",
+          "exercise_id": "EX_PULLUP",
+          "block": "strength_B",
+          "rest_s": 120,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 5
+            },
+            {
+              "sets": 3,
+              "reps": 7
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x5",
+          "target_text": "3x8"
+        },
+        {
+          "item_key": "L8_strength_B_EX_FARMER_CARRY",
+          "exercise_id": "EX_FARMER_CARRY",
+          "block": "strength_B",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": "per hand",
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 4,
+              "time_s": 60,
+              "load_bw": 0.5
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "4x60 s at 50% BW per hand",
+          "target_text": "4x60 s at 50% BW per hand"
+        },
+        {
+          "item_key": "L8_conditioning_EX_SPRINT",
+          "exercise_id": "EX_SPRINT",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 4,
+              "distance_m": 30,
+              "effort_pct": 90
+            },
+            {
+              "sets": 5,
+              "distance_m": 30,
+              "effort_pct": 90
+            },
+            {
+              "sets": 6,
+              "distance_m": 30,
+              "effort_pct": 90
+            },
+            {
+              "sets": 6,
+              "distance_m": 35,
+              "effort_pct": 90
+            },
+            {
+              "sets": 6,
+              "distance_m": 40,
+              "effort_pct": 90
+            },
+            {
+              "sets": 6,
+              "distance_m": 40,
+              "effort_pct": 95
+            },
+            {
+              "sets": 6,
+              "distance_m": 40,
+              "effort_pct": 100
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 6,
+          "start_text": "4x30 m at 90% effort",
+          "target_text": "6x40 m at 100% effort"
+        },
+        {
+          "item_key": "L8_conditioning_EX_COD_DRILL",
+          "exercise_id": "EX_COD_DRILL",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 4,
+              "effort_pct": 80
+            },
+            {
+              "sets": 5,
+              "effort_pct": 80
+            },
+            {
+              "sets": 6,
+              "effort_pct": 80
+            },
+            {
+              "sets": 6,
+              "effort_pct": 90
+            },
+            {
+              "sets": 6,
+              "effort_pct": 100
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "4 sets at 80% effort",
+          "target_text": "6 sets at 100% effort"
+        },
+        {
+          "item_key": "L8_conditioning_EX_LATERAL_BOUND",
+          "exercise_id": "EX_LATERAL_BOUND",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": true,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 6
+            },
+            {
+              "sets": 3,
+              "reps": 8
+            },
+            {
+              "sets": 4,
+              "reps": 8
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 2,
+          "start_text": "3x6 per side",
+          "target_text": "4x8 per side"
+        },
+        {
+          "item_key": "L8_conditioning_EX_BROAD_JUMP",
+          "exercise_id": "EX_BROAD_JUMP",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 4
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "3x4",
+          "target_text": "3x4"
+        },
+        {
+          "item_key": "L8_conditioning_EX_ATHLETIC_CIRCUIT",
+          "exercise_id": "EX_ATHLETIC_CIRCUIT",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L8_conditioning_EX_SPRINT"
+          ],
+          "note": "",
+          "rungs": [
+            {
+              "time_min": 20,
+              "effort_pct": 70
+            },
+            {
+              "time_min": 25,
+              "effort_pct": 70
+            },
+            {
+              "time_min": 30,
+              "effort_pct": 70
+            },
+            {
+              "time_min": 35,
+              "effort_pct": 70
+            },
+            {
+              "time_min": 40,
+              "effort_pct": 70
+            },
+            {
+              "time_min": 40,
+              "effort_pct": 80
+            },
+            {
+              "time_min": 40,
+              "effort_pct": 90
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 6,
+          "start_text": "20 min at 70% effort",
+          "target_text": "40 min at 90% effort"
+        },
+        {
+          "item_key": "L8_conditioning_EX_SPORT_DRILLS",
+          "exercise_id": "EX_SPORT_DRILLS",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L8_conditioning_EX_ATHLETIC_CIRCUIT"
+          ],
+          "note": "",
+          "rungs": [
+            {
+              "time_min": 20,
+              "effort_pct": 60
+            },
+            {
+              "time_min": 30,
+              "effort_pct": 60
+            },
+            {
+              "time_min": 40,
+              "effort_pct": 60
+            },
+            {
+              "time_min": 50,
+              "effort_pct": 60
+            },
+            {
+              "time_min": 60,
+              "effort_pct": 60
+            },
+            {
+              "time_min": 60,
+              "effort_pct": 70
+            },
+            {
+              "time_min": 60,
+              "effort_pct": 80
+            },
+            {
+              "time_min": 60,
+              "effort_pct": 90
+            },
+            {
+              "time_min": 60,
+              "effort_pct": 100
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 8,
+          "start_text": "20 min at 60% effort",
+          "target_text": "60 min at 100% effort"
+        },
+        {
+          "item_key": "L8_walking_EX_WALK_EASY",
+          "exercise_id": "EX_WALK_EASY",
+          "block": "walking",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": true,
+          "requires": [],
+          "note": "Recovery walking.",
+          "rungs": [
+            {
+              "time_min": 30
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 0,
+          "start_text": "30 min",
+          "target_text": "30 min"
+        }
+      ],
+      "walking": {
+        "daily_total_min": "30 recovery walking",
+        "bouts": "1-2"
+      },
+      "standing": {
+        "break_every_min": [
+          90,
+          120
+        ],
+        "decomp": "optional",
+        "upright_h_target": "unrestricted"
+      },
+      "frequency": {
+        "core_days_per_week": "3-5",
+        "strength_sessions_per_week": "2-3",
+        "conditioning_sessions_per_week": "2 sprint/COD + sport",
+        "session_minutes": "50-70",
+        "effort": "up to 8-9/10 on strength; sprints 100%"
+      },
+      "avoid": [
+        "Loaded flexion and heavy good-mornings are not part of the plan; return to any other movement is staged by the same green check-in gates."
+      ],
+      "unlocks": [
+        "Maximal sprints, full-speed COD, athletic circuits, sport drills at full intensity."
+      ],
+      "regress_to": "L7"
+    }
+  ]
+}

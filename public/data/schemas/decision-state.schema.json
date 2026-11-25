@@ -1,0 +1,335 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pt.davidp.dev/schemas/decision-state.schema.json",
+  "title": "decision-state",
+  "$ref": "#/$defs/DecisionState",
+  "$defs": {
+    "DecisionState": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "string"
+        },
+        "plan_version": {
+          "type": "integer"
+        },
+        "level_id": {
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "active",
+            "settle",
+            "red_stop",
+            "maintenance",
+            "paused"
+          ]
+        },
+        "item_state": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "rung": {
+                "type": "integer"
+              },
+              "clean_exposures": {
+                "type": "integer"
+              },
+              "held_out": {
+                "type": "boolean"
+              },
+              "last_bump_session_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "rung",
+              "clean_exposures",
+              "held_out"
+            ]
+          }
+        },
+        "core_clean_days": {
+          "type": "integer"
+        },
+        "walk": {
+          "type": "object",
+          "properties": {
+            "current_min": {
+              "type": "number"
+            },
+            "clean_days": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "advance_stack": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string"
+              },
+              "session_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "track": {
+                "enum": [
+                  "strength",
+                  "core"
+                ]
+              },
+              "changes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "item_key": {
+                      "type": "string"
+                    },
+                    "from_rung": {
+                      "type": "integer"
+                    },
+                    "to_rung": {
+                      "type": "integer"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "item_key",
+                    "from_rung",
+                    "to_rung"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "event_id",
+              "changes"
+            ]
+          }
+        },
+        "lock": {
+          "type": "object",
+          "properties": {
+            "easy_dose": {
+              "type": "boolean"
+            },
+            "clean_required": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "easy_dose",
+            "clean_required"
+          ]
+        },
+        "orange_events": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 with offset, America/Chicago"
+          }
+        },
+        "level_regress_events": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 with offset, America/Chicago"
+          }
+        },
+        "incident_log": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ts": {
+                "type": "string",
+                "format": "date-time",
+                "description": "ISO 8601 with offset, America/Chicago"
+              },
+              "context": {
+                "type": "string"
+              },
+              "color": {
+                "enum": [
+                  "green",
+                  "yellow",
+                  "orange",
+                  "red"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "ts",
+              "context"
+            ]
+          }
+        },
+        "consecutive_yellow_sessions": {
+          "type": "integer"
+        },
+        "probation_sessions_remaining": {
+          "type": "integer"
+        },
+        "level_clean_streak": {
+          "type": "integer"
+        },
+        "baselines": {
+          "type": "object",
+          "properties": {
+            "pain_rest": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "stiffness_min": {
+              "type": "number"
+            },
+            "standing_h": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "stiffness_min",
+            "standing_h"
+          ]
+        },
+        "gate_tests": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "not_started",
+                  "pass_provisional",
+                  "pass_confirmed",
+                  "fail",
+                  "skipped_optional"
+                ]
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "string",
+                  "null"
+                ]
+              },
+              "session_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "retest_after_clean_sessions": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "status"
+            ]
+          }
+        },
+        "gate_pending": {
+          "type": "boolean"
+        },
+        "settle": {
+          "type": "object",
+          "properties": {
+            "resume_level": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "resume_item_state": {
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "green_days_in_row": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "red": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                null,
+                "emergency",
+                "clinician"
+              ]
+            },
+            "since": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "flags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "cleared_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "clearance_note": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "clinician_recommended": {
+          "type": "boolean"
+        },
+        "last_evaluated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 with offset, America/Chicago"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "plan_version",
+        "level_id",
+        "mode",
+        "item_state",
+        "advance_stack",
+        "lock",
+        "baselines",
+        "gate_tests"
+      ]
+    }
+  }
+}
