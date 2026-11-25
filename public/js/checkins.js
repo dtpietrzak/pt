@@ -104,12 +104,13 @@ export function buildCheckIn(type, f, ctx) {
       pain_on_waking: pain(f.pain),
       stiffness_min: f.stiffness_still ? num(f.stiffness_min, null) : num(f.stiffness_min, 0),
       stiffness_still_present: !!f.stiffness_still,
-      sleep_hours: clamp(num(f.sleep_hours, 7), 0, 16),
       sleep_quality: clamp(int(f.sleep_quality, 3), 1, 5),
       woke_from_pain_count: Math.max(0, int(f.woke)),
       hip_shift: !!f.hip_shift,
       symptoms: buildSymptoms(f, f.pain),
     };
+    // Hours slept is no longer asked; keep it only when a caller still supplies it.
+    if (f.sleep_hours !== undefined && f.sleep_hours !== null && f.sleep_hours !== "") data.sleep_hours = clamp(num(f.sleep_hours, 7), 0, 16);
   } else if (type === "post_workout") {
     const items = (f.items || []).map((i) => {
       const o = { item_key: i.item_key, completed: i.completed !== false, rung_done: int(i.rung_done) };

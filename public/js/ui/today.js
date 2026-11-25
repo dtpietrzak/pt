@@ -2,12 +2,17 @@
 // Uses event delegation + in-place DOM updates so tapping checkboxes or steppers never flickers.
 import { currentDose } from "../engine.js";
 import { formatDose, missingEquipment } from "../dose.js";
-import { loadView, redBannerHtml, checkinCardHtml, workoutCardHtml, onClick as checkinClick, refreshBadges } from "./checkins.js";
-import { $, esc, BLOCKS, today, nowHM, addMin, minutesSince, fmtDate, openSheet, closeSheet, showExercise } from "./dom.js";
+import { loadView, redBannerHtml, checkinCardHtml, availableTemplates, finishWorkout, WORKOUT_NAMES, onClick as checkinClick, refreshBadges } from "./checkins.js";
+import { templateItems, nextStrengthTemplate } from "../pipeline.js";
+import { isoLocal, localTime } from "../util.js";
+import { $, esc, BLOCKS, today, nowHM, addMin, minutesSince, fmtDate, openSheet, closeSheet, showExercise, toast } from "./dom.js";
 
 const DAILY = ["daily_mobility", "daily_core", "walking"];
 const MORNING_WINDOW_MIN = 45;
 const openBlocks = new Set();
+const STRENGTH = ["strength_A", "strength_B"];
+let strengthPick = null; // { date, template } when the other strength day was picked by hand
+const wkKey = (d) => `workout:${d}`; // in-progress ticks per template: { [template]: { started_at, done: [item_key] } }
 
 const CHEVRON = `<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`;
 
@@ -65,7 +70,8 @@ function blockSummary(block, its, doneSet, log, walkTarget) {
 export async function renderToday(ctx, main) {
   const d = today();
   const lv = ctx.level();
-  const [log, wake, view] = await Promise.all([dayLog(ctx, d), ctx.store.kvGet(`wake:${d}`), loadView(ctx)]);
+  const [log, wake, view, wkSaved] = await Promise.all([dayLog(ctx, d), ctx.store.kvGet(`wake:${d}`), loadView(ctx), ctx.store.kvGet(wkKey(d))]);
+  const wkTicks = wkSaved || {};
   const inWindow = wake && minutesSince(d, wake) < MORNING_WINDOW_MIN;
   const doneSet = new Set(log.checklist.filter((c) => c.done).map((c) => c.item_key));
   const items = lv.items.filter((i) => DAILY.includes(i.block));
@@ -107,7 +113,6 @@ export async function renderToday(ctx, main) {
   }
   // Check-ins: shown once the day has started, or earlier when a later one (evening, night, post-workout) is already due.
   if (wake || view.list.some((e) => e.state === "due" && e.type !== "morning")) html += checkinCardHtml(view);
-  if (wake && !inWindow) html += workoutCardHtml(ctx, view);
   for (const [block, label] of wake ? BLOCKS.filter(([b]) => DAILY.includes(b)) : []) {
     const its = itemsByBlock.get(block);
     if (!its) continue;
@@ -149,8 +154,20 @@ export async function renderToday(ctx, main) {
     }
     html += `</div></section>`;
   }
+  const workouts = wake ? workoutPlan(ctx, view, d) : [];
+  for (const w of workouts) html += workoutCardHtml(ctx, w, wkTicks[w.template], inWindow, wake);
   main.innerHTML = html;
   refreshBadges(ctx, view);
+
+  const updateWorkoutCard = (template, ticks) => {
+    const w = workouts.find((x) => x.template === template);
+    const card = main.querySelector(`[data-block="wk:${template}"]`);
+    if (!w || !card) return;
+    const sum = workoutSummary(w, ticks);
+    card.querySelector(`[data-block-sub="wk:${template}"]`).textContent = sum.sub;
+    card.querySelector(`[data-block-badge="wk:${template}"]`).textContent = sum.badge;
+    card.querySelector(`[data-block-bar="wk:${template}"]`).style.width = `${Math.round(sum.pct * 100)}%`;
+  };
 
   const updateBlockCard = (block, l) => {
     const its = itemsByBlock.get(block);
@@ -174,6 +191,22 @@ export async function renderToday(ctx, main) {
   };
 
   main.onchange = async (e) => {
+    const wcb = e.target.closest("input[data-wk-item]");
+    if (wcb) {
+      const template = wcb.dataset.wk;
+      const row = wcb.closest(".item");
+      row?.classList.toggle("done", wcb.checked);
+      if (wcb.checked) { row?.classList.remove("pop"); void row?.offsetWidth; row?.classList.add("pop"); navigator.vibrate?.(12); }
+      const all = (await ctx.store.kvGet(wkKey(d))) || {};
+      const t = all[template] || { started_at: isoLocal(), done: [] };
+      const set = new Set(t.done);
+      if (wcb.checked) set.add(wcb.dataset.wkItem); else set.delete(wcb.dataset.wkItem);
+      all[template] = { ...t, done: [...set] };
+      await ctx.store.kvSet(wkKey(d), all);
+      wkTicks[template] = all[template];
+      updateWorkoutCard(template, all[template]);
+      return;
+    }
     const cb = e.target.closest("input[data-item]");
     if (!cb) return;
     const k = cb.dataset.item;
@@ -220,6 +253,29 @@ export async function renderToday(ctx, main) {
         if (nextOpen) openBlocks.add(block);
         else openBlocks.delete(block);
       }
+      return;
+    }
+
+    const pick = e.target.closest("[data-wk-pick]");
+    if (pick) {
+      strengthPick = { date: d, template: pick.dataset.wkPick };
+      openBlocks.add(`wk:${pick.dataset.wkPick}`);
+      renderToday(ctx, main);
+      return;
+    }
+    const fin = e.target.closest("[data-wk-finish]");
+    if (fin) {
+      const template = fin.dataset.wkFinish;
+      const w = workouts.find((x) => x.template === template);
+      const t = wkTicks[template];
+      const done = new Set(t?.done || []);
+      if (!w || !done.size) { toast("Tick the exercises you did first."); return; }
+      fin.disabled = true;
+      const all = (await ctx.store.kvGet(wkKey(d))) || {};
+      delete all[template];
+      await ctx.store.kvSet(wkKey(d), all);
+      openBlocks.delete(`wk:${template}`);
+      await finishWorkout(ctx, template, w.items.map(({ item, rung }) => ({ item_key: item.item_key, rung, completed: done.has(item.item_key) })), t.started_at);
       return;
     }
 
@@ -288,13 +344,90 @@ function walkHint(lv, target) {
   return `Easy pace on flat ground${bouts}. Aim for ${target} min today.`;
 }
 
-function itemRow(ctx, it, done) {
+// ---------------------------------------------------------------- workouts
+
+/** The workout cards for today: the strength day (logged or next up) and conditioning, if the level has them. */
+function workoutPlan(ctx, v, d) {
+  const ts = availableTemplates(ctx);
+  if (!ts.length) return [];
+  const logged = v.sessions.filter((s) => s.local_date === d);
+  const loggedOf = (t) => logged.filter((s) => s.template === t).sort((a, b) => (a.ended_at < b.ended_at ? 1 : -1))[0] || null;
+  const strengths = ts.filter((t) => STRENGTH.includes(t));
+  let show = strengths.filter((t) => loggedOf(t));
+  if (!show.length && strengths.length) {
+    const next = strengths.includes(nextStrengthTemplate(v.sessions)) ? nextStrengthTemplate(v.sessions) : strengths[0];
+    show = [strengthPick?.date === d && strengths.includes(strengthPick.template) ? strengthPick.template : next];
+  }
+  show.push(...ts.filter((t) => !STRENGTH.includes(t)));
+  return show.map((template) => ({
+    template,
+    items: templateItems(ctx.docs, ctx.state, template),
+    session: loggedOf(template),
+    other: !loggedOf(template) && STRENGTH.includes(template) ? strengths.find((t) => t !== template && !show.includes(t)) : null,
+  }));
+}
+
+function workoutSummary(w, ticks) {
+  const total = w.items.length;
+  if (w.session) {
+    const n = w.session.items.filter((i) => i.completed).length;
+    return { sub: `Logged at ${localTime(w.session.ended_at || w.session.started_at)} · ${n} of ${w.session.items.length} done`, badge: "Done ✓", pct: 1, complete: true };
+  }
+  const n = w.items.filter(({ item }) => ticks?.done?.includes(item.item_key)).length;
+  return {
+    sub: n ? `${n} of ${total} done · finish when you're through` : `${total} exercises · tick them off as you go`,
+    badge: `${n}/${total}`,
+    pct: total ? n / total : 0,
+    complete: false,
+  };
+}
+
+function workoutCardHtml(ctx, w, ticks, inWindow, wake) {
+  const key = `wk:${w.template}`;
+  const name = WORKOUT_NAMES[w.template] || w.template;
+  const icon = BLOCK_ICON[STRENGTH.includes(w.template) ? "strength" : "conditioning"];
+  if (inWindow && !w.session) {
+    return `
+      <section class="card section-card locked" data-block="${key}">
+        <div class="section-head">${icon}
+          <div class="section-title"><span class="section-name">${esc(name)}</span>
+            <span class="section-sub">Opens at ${esc(addMin(wake, MORNING_WINDOW_MIN))}, after your easy morning</span></div>
+          <span class="section-badge">Later</span>
+        </div>
+      </section>`;
+  }
+  const sum = workoutSummary(w, ticks);
+  const isOpen = openBlocks.has(key);
+  const doneKeys = new Set(w.session ? w.session.items.filter((i) => i.completed).map((i) => i.item_key) : ticks?.done || []);
+  const rows = w.items.map(({ item }) => itemRow(ctx, item, doneKeys.has(item.item_key), w.session ? { locked: true } : { wk: w.template })).join("");
+  const foot = w.session ? "" : `
+    <button class="btn primary wide wk-finish" type="button" data-wk-finish="${w.template}">Finish and check in</button>
+    ${w.other ? `<button class="link wk-pick" type="button" data-wk-pick="${w.other}">Do ${esc(WORKOUT_NAMES[w.other])} instead</button>` : ""}`;
+  return `
+    <section class="card section-card${sum.complete ? " complete" : ""}${isOpen ? " open" : ""}" data-block="${key}" data-kind="${STRENGTH.includes(w.template) ? "strength" : "conditioning"}">
+      <button class="section-head" type="button" data-toggle-block="${key}" aria-expanded="${isOpen}">
+        ${icon}
+        <div class="section-title">
+          <span class="section-name">${esc(name)}</span>
+          <span class="section-sub" data-block-sub="${key}">${esc(sum.sub)}</span>
+        </div>
+        <div class="section-right">
+          <span class="section-badge" data-block-badge="${key}">${esc(sum.badge)}</span>
+          ${CHEVRON}
+        </div>
+        <span class="section-bar" aria-hidden="true"><span data-block-bar="${key}" style="width:${Math.round(sum.pct * 100)}%"></span></span>
+      </button>
+      <div class="section-body" data-block-body="${key}"${isOpen ? "" : " hidden"}>${rows}${foot}</div>
+    </section>`;
+}
+
+function itemRow(ctx, it, done, opt = {}) {
   const ex = ctx.exById[it.exercise_id] || { name: it.exercise_id };
   const { dose, rung } = currentDose(ctx.state, it);
   const miss = missingEquipment(ex, ctx.profile.equipment);
   const ladder = it.rungs.length > 1 ? `rung ${rung + 1}/${it.rungs.length}` : "";
   return `<div class="item ${done ? "done" : ""}">
-    <label class="check"><input type="checkbox" data-item="${esc(it.item_key)}" ${done ? "checked" : ""} aria-label="${esc(ex.name)}" /></label>
+    <label class="check"><input type="checkbox" ${opt.wk ? `data-wk="${opt.wk}" data-wk-item` : "data-item"}="${esc(it.item_key)}" ${done ? "checked" : ""}${opt.locked ? " disabled" : ""} aria-label="${esc(ex.name)}" /></label>
     <button class="text" type="button" data-info="${esc(it.item_key)}">
       <span class="name">${esc(ex.name)}</span>
       <span class="meta">${esc(formatDose(dose, it, ctx.profile))}${ladder ? ` · ${ladder}` : ""}${it.optional ? ` · <span class="bonus">bonus</span>` : ""}${miss.length ? ` · <span class="warn">needs ${esc(miss.join(", "))}</span>` : ""}</span>
@@ -307,6 +440,8 @@ function itemRow(ctx, it, done) {
 const ICON_PATHS = {
   daily_mobility: `<path d="M3 17c3 0 3-10 6-10s3 10 6 10 3-10 6-10"/>`,
   daily_core: `<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/>`,
+  strength: `<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>`,
+  conditioning: `<path d="M3 12h4l2.5-6 5 12 2.5-6h4"/>`,
   walking: `<ellipse cx="8.5" cy="8" rx="2.6" ry="4"/><path d="M7.4 14.5h2.4"/><ellipse cx="15.5" cy="12" rx="2.6" ry="4"/><path d="M14.4 18.5h2.4"/>`,
 };
 const BLOCK_ICON = Object.fromEntries(Object.entries(ICON_PATHS).map(([b, p]) =>

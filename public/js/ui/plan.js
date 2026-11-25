@@ -1,10 +1,79 @@
-// Plan view: current level criteria, all blocks, and full L0-L8 overview.
-import { currentDose } from "../engine.js";
-import { formatDose } from "../dose.js";
-import { esc, BLOCKS, showExercise } from "./dom.js";
+// Plan view: current level criteria, rehabilitation milestones (target dates), and full L0-L8 overview.
+import { esc } from "./dom.js";
+import { MILESTONES, milestoneOn } from "../milestones.js";
+import { localDate, addDays, dayDiff } from "../util.js";
 
-const openPlanBlocks = new Set();
-const CHEVRON = `<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`;
+const openMilestones = new Set(); // expanded milestone rows; all start condensed
+let calMonth = null; // "YYYY-MM" shown in the calendar; null = this month
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const md = (ymd) => `${MONTHS[+ymd.slice(5, 7) - 1]} ${+ymd.slice(8, 10)}`;
+const mdy = (ymd) => `${md(ymd)}, ${ymd.slice(0, 4)}`;
+const monthAdd = (ym, n) => { const t = new Date(Date.UTC(+ym.slice(0, 4), +ym.slice(5, 7) - 1 + n, 1)); return t.toISOString().slice(0, 7); };
+const OPEN_TAIL_DAYS = 42; // how much of open-ended L8 the bar draws
+
+function rangeText(m, today) {
+  if (!m.end) return `${mdy(m.start)} onward`;
+  const from = m.start <= today && today <= m.end ? "Now" : m.start.slice(0, 4) === m.end.slice(0, 4) ? md(m.start) : mdy(m.start);
+  return `${from} – ${mdy(m.end)}`;
+}
+
+function timelineHtml(ctx) {
+  const today = localDate();
+  const names = Object.fromEntries(ctx.docs.levels.levels.map((l) => [l.id, l.name]));
+  const actual = ctx.state.level_id;
+  const target = milestoneOn(today);
+  const first = MILESTONES[0].start, lastM = MILESTONES[MILESTONES.length - 1];
+  const barEnd = addDays(lastM.start, OPEN_TAIL_DAYS), span = dayDiff(barEnd, first);
+  const firstYm = (today < first ? today : first).slice(0, 7), lastYm = monthAdd(lastM.start.slice(0, 7), 5);
+  const ym = calMonth && calMonth >= firstYm && calMonth <= lastYm ? calMonth : today.slice(0, 7) < firstYm ? firstYm : today.slice(0, 7) > lastYm ? lastYm : today.slice(0, 7);
+
+  const num = (id) => Number(id.replace("L", ""));
+  let status = "";
+  if (target && /^L[1-8]$/.test(actual)) {
+    const diff = num(actual) - num(target.id);
+    status = diff === 0 ? `On target: you're in ${esc(actual)}.` : diff > 0 ? `Ahead of target: you're in ${esc(actual)}, the target for today is ${esc(target.id)}.` : `You're in ${esc(actual)}; the target for today is ${esc(target.id)}. Progress still decides.`;
+  }
+
+  const bar = MILESTONES.map((m) => `<button type="button" class="tl-seg${m.end ? "" : " open"}" data-lv="${esc(m.id)}" data-cal-jump="${m.start.slice(0, 7)}" style="flex-grow:${dayDiff(m.end ? addDays(m.end, 1) : barEnd, m.start)}" title="${esc(m.id)} · ${esc(mdy(m.start))}"><span>${num(m.id)}</span></button>`).join("");
+  const nowPct = Math.min(100, Math.max(0, (dayDiff(today, first) / span) * 100));
+  const rows = MILESTONES.map((m) => {
+    const open = openMilestones.has(m.id);
+    return `<button type="button" class="ms-row${m.id === actual ? " cur" : ""}${open ? " open" : ""}" data-lv="${esc(m.id)}" data-ms-toggle="${esc(m.id)}" aria-expanded="${open}">
+      <span class="ms-num" aria-hidden="true">${num(m.id)}</span>
+      <span class="ms-title"><b>${esc(m.id)} · ${esc(names[m.id] || "")}</b>${m.id === actual ? `<span class="ms-here">You're here</span>` : ""}</span>
+      <span class="ms-when">${esc(rangeText(m, today))}</span>
+      <span class="ms-focus"${open ? "" : " hidden"}>${esc(m.length)} · ${esc(m.focus)}</span></button>`;
+  }).join("");
+
+  // month grid, Sunday first (weeks end on Saturday)
+  const m1 = `${ym}-01`, lead = new Date(`${m1}T12:00:00Z`).getUTCDay();
+  // always 6 full weeks so the calendar keeps one height; faded days from the adjacent months fill the gaps
+  const total = 42, gridStart = addDays(m1, -lead);
+  let cells = "";
+  for (let i = 0; i < total; i++) {
+    const d = addDays(gridStart, i), m = milestoneOn(d);
+    const start = m && d === m.start, out = d.slice(0, 7) !== ym;
+    const cls = [m ? "on" : "", out ? "out" : "", d === today ? "today" : "", d < today ? "past" : "", start ? "start" : ""].filter(Boolean).join(" ");
+    cells += `<span class="${cls}"${m ? ` data-lv="${esc(m.id)}" title="${esc(m.id)}"` : ""}>${+d.slice(8, 10)}${start ? `<i>${esc(m.id)}</i>` : ""}</span>`;
+  }
+
+  return `<section class="card timeline">
+    <h3>Rehabilitation milestones</h3>
+    <p class="muted small">Dates are provisional targets, assuming symptoms and functional tests support progression.</p>
+    ${status ? `<p class="small ms-status">${status}</p>` : ""}
+    <div class="tl-bar">${bar}<span class="tl-now" style="left:${nowPct}%" aria-hidden="true"></span></div>
+    <div class="ms-rows">${rows}</div>
+    <div class="cal">
+      <div class="cal-head">
+        <button type="button" class="btn icon" data-cal-step="-1" aria-label="Previous month"${ym > firstYm ? "" : " disabled"}>‹</button>
+        <b>${MONTHS[+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}</b>
+        <button type="button" class="btn icon" data-cal-step="1" aria-label="Next month"${ym < lastYm ? "" : " disabled"}>›</button>
+      </div>
+      <div class="cal-grid cal-dow">${["S", "M", "T", "W", "T", "F", "S"].map((x) => `<span>${x}</span>`).join("")}</div>
+      <div class="cal-grid" data-cal-month="${ym}">${cells}</div>
+    </div>
+  </section>`;
+}
 
 export function renderPlan(ctx, main) {
   const lv = ctx.level();
@@ -22,36 +91,7 @@ export function renderPlan(ctx, main) {
     ${lv.avoid?.length ? `<h4>Avoid</h4><ul class="avoid">${lv.avoid.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>` : ""}
   </section>`;
 
-  for (const [block, label] of BLOCKS) {
-    const its = lv.items.filter((i) => i.block === block);
-    if (!its.length) continue;
-    const atTarget = its.filter((it) => currentDose(ctx.state, it).rung >= it.target_rung).length;
-    const optCount = its.filter((it) => it.optional).length;
-    const allAtTarget = atTarget === its.length;
-    const subParts = [`${its.length} ${its.length === 1 ? "exercise" : "exercises"}`];
-    if (optCount) subParts.push(`${optCount} optional`);
-    const isOpen = openPlanBlocks.has(block);
-    html += `
-      <section class="card section-card${allAtTarget ? " complete" : ""}${isOpen ? " open" : ""}" data-block="${block}">
-        <button class="section-head" type="button" data-toggle-block="${block}" aria-expanded="${isOpen}">
-          <div class="section-title">
-            <span class="section-name">${esc(label)}</span>
-            <span class="section-sub">${esc(subParts.join(" · "))}</span>
-          </div>
-          <div class="section-right">
-            <span class="section-badge">${atTarget}/${its.length} target${allAtTarget ? " ✓" : ""}</span>
-            ${CHEVRON}
-          </div>
-          <span class="section-bar" aria-hidden="true"><span style="width:${Math.round((atTarget / its.length) * 100)}%"></span></span>
-        </button>
-        <div class="section-body" data-block-body="${block}"${isOpen ? "" : " hidden"}>${its.map((it) => {
-      const ex = ctx.exById[it.exercise_id] || { name: it.exercise_id };
-      const { dose, rung } = currentDose(ctx.state, it);
-      return `<button class="plan-item" type="button" data-info="${esc(it.item_key)}"><span class="name">${esc(ex.name)}${it.optional ? " <i class='muted'>(optional)</i>" : ""}</span>
-        <span class="meta">Now: ${esc(formatDose(dose, it, ctx.profile))} · target ${esc(formatDose(it.rungs[it.target_rung], it, ctx.profile))} · rung ${rung + 1}/${it.rungs.length}</span></button>`;
-    }).join("")}</div>
-      </section>`;
-  }
+  html += timelineHtml(ctx);
 
   html += `<section class="block"><h3>All levels</h3>${ctx.docs.levels.levels.map((l) => `
     <details class="lvl ${l.id === lv.id ? "cur" : ""}"><summary><b>${esc(l.id)}</b> ${esc(l.name)}</summary>
@@ -62,22 +102,24 @@ export function renderPlan(ctx, main) {
 
   main.innerHTML = html;
   main.onclick = (e) => {
-    const toggle = e.target.closest("[data-toggle-block]");
-    if (toggle) {
-      const block = toggle.dataset.toggleBlock;
-      const card = toggle.closest(".section-card");
-      const body = card?.querySelector(`[data-block-body="${block}"]`);
-      if (card && body) {
-        const nextOpen = !card.classList.contains("open");
-        card.classList.toggle("open", nextOpen);
-        toggle.setAttribute("aria-expanded", String(nextOpen));
-        body.hidden = !nextOpen;
-        if (nextOpen) openPlanBlocks.add(block);
-        else openPlanBlocks.delete(block);
-      }
+    const row = e.target.closest("[data-ms-toggle]");
+    if (row) {
+      const id = row.dataset.msToggle, open = !openMilestones.has(id);
+      if (open) openMilestones.add(id); else openMilestones.delete(id);
+      row.classList.toggle("open", open);
+      row.setAttribute("aria-expanded", String(open));
+      row.querySelector(".ms-focus").hidden = !open;
       return;
     }
-    const info = e.target.closest("[data-info]");
-    if (info) showExercise(ctx, info.dataset.info);
+    const step = e.target.closest("[data-cal-step]");
+    const jump = e.target.closest("[data-cal-jump]");
+    if (step || jump) {
+      const cur = main.querySelector("[data-cal-month]")?.dataset.calMonth || localDate().slice(0, 7);
+      calMonth = jump ? jump.dataset.calJump : monthAdd(cur, Number(step.dataset.calStep));
+      const y = window.scrollY;
+      renderPlan(ctx, main);
+      window.scrollTo(0, y);
+      return;
+    }
   };
 }
