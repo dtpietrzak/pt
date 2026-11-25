@@ -12,8 +12,9 @@ import { loadCachedUser, saveCachedUser, activeUser, renderAccount, closeAccount
 import { renderToday } from "./js/ui/today.js";
 import { renderPlan } from "./js/ui/plan.js";
 import { renderSettings } from "./js/ui/settings.js";
+import { renderHistory, refreshEngine, startReminders } from "./js/ui/checkins.js";
 
-const PAGES = { today: "Today", work: "Work", plan: "Plan", settings: "Settings" };
+const PAGES = { today: "Today", work: "Work", plan: "Plan", settings: "Settings", history: "History" };
 const main = $("#main");
 
 let showingLogin = false;
@@ -39,7 +40,7 @@ function renderWork(c, root) {
   c.timerUI.show();
 }
 
-const VIEWS = { today: renderToday, work: renderWork, plan: renderPlan, settings: renderSettings };
+const VIEWS = { today: renderToday, work: renderWork, plan: renderPlan, settings: renderSettings, history: renderHistory };
 
 function route() {
   let r = location.hash.replace(/^#\/?/, "") || "today";
@@ -62,13 +63,14 @@ function render() {
   $("#level-chip").textContent = `${ctx.state.level_id}${ctx.state.mode !== "active" ? " · " + ctx.state.mode : ""}`;
   $("#level-chip").hidden = false;
   renderAccount(ctx);
-  document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("on", a.dataset.page === r));
+  document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("on", a.dataset.page === (r === "history" ? "today" : r)));
   $(".nav").hidden = false;
   VIEWS[r](ctx, main);
 }
 
 // Another device changed something: re-read IndexedDB and re-render (never while typing or in a sheet).
 let reloadT;
+let lastRemoteAt = 0;
 let reloadPending = false;
 function reloadFromStore() {
   clearTimeout(reloadT);
@@ -76,6 +78,7 @@ function reloadFromStore() {
     const editing = main.contains(document.activeElement) && /^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName);
     if (editing || !$("#sheet").hidden) { reloadPending = true; return; }
     reloadPending = false;
+    lastRemoteAt = Date.now();
     const [d, p, a, st] = await Promise.all(["docs", "profile", "app", "state"].map((k) => ctx.store.kvGet(k)));
     if (d && d !== ctx.docs) { ctx.docs = d; ctx.indexExercises(); }
     if (p) ctx.profile = p;
@@ -143,6 +146,10 @@ async function start() {
   window.addEventListener("online", connectCloud);
   render();
   connectCloud();
+  // Check-ins: re-run the engine over what's stored, then keep badges and reminders going while the app is open.
+  const quiet = () => Date.now() - lastRemoteAt > 60000;
+  refreshEngine(ctx).then((r) => { if (r.changed && activeUser()) render(); }).catch((e) => console.warn("Engine unavailable:", e));
+  startReminders(ctx, { isActive: () => !!activeUser(), onRemoteQuiet: quiet });
 }
 
 document.addEventListener("visibilitychange", () => { if (!document.hidden && activeUser() && ctx.state) render(); });

@@ -763,3 +763,71 @@ details.lvl summary { cursor: pointer; }
   font-size: 14px;
   max-width: 90vw;
 }
+
+/* ---------------------------------------------------------------- check-ins (Phase 2) */
+.pill { display: inline-block; font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 99px; background: var(--bg); color: var(--muted); white-space: nowrap; }
+.pill.green { background: var(--green-soft); color: var(--green); }
+.pill.yellow { background: color-mix(in srgb, var(--yellow) 28%, var(--card)); color: var(--warn); }
+.pill.orange { background: color-mix(in srgb, var(--orange) 28%, var(--card)); color: var(--danger); }
+.pill.red { background: var(--red); color: #fff; }
+.dot { width: 14px; height: 14px; border-radius: 50%; flex: none; background: var(--line); border: 2px solid var(--line); box-sizing: border-box; }
+.dot.green { background: var(--green); border-color: var(--green); }
+.dot.yellow { background: var(--yellow); border-color: var(--yellow); }
+.dot.orange { background: var(--orange); border-color: var(--orange); }
+.dot.red { background: var(--red); border-color: var(--red); }
+.dot.due { background: transparent; border-color: var(--accent); }
+.dot.later { background: transparent; border-color: var(--line); }
+
+.ci-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.ci-head h2 { margin: 0; flex: 1; font-size: 18px; }
+.ci-rows { display: grid; gap: 6px; }
+.ci-row { display: flex; align-items: center; gap: 12px; padding: 6px 0; }
+.ci-row-copy { flex: 1; min-width: 0; display: grid; }
+.ci-row-copy small { color: var(--muted); font-size: 13px; }
+.ci-row .btn { margin: 0; padding: 7px 14px; font-size: 14px; }
+.reasons { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--muted); }
+.reasons li { margin: 2px 0; }
+
+.red-banner { border: 2px solid var(--red); background: color-mix(in srgb, var(--red) 10%, var(--card)); }
+.red-banner h2 { color: var(--red); margin-top: 0; }
+
+.nav a { position: relative; }
+.nav a.has-due::after {
+  content: attr(data-due); position: absolute; top: 6px; left: calc(50% + 8px);
+  min-width: 17px; height: 17px; padding: 0 4px; box-sizing: border-box; border-radius: 99px;
+  background: var(--accent); color: var(--accent-ink); font-size: 11px; font-weight: 900; line-height: 17px; text-align: center;
+}
+
+.ci-form { margin-top: 10px; }
+.ci-q { display: block; margin: 14px 0; }
+.ci-label { display: flex; justify-content: space-between; align-items: baseline; font-weight: 800; font-size: 15px; }
+.ci-label small { color: var(--muted); font-weight: 600; }
+.ci-hint { display: block; color: var(--muted); font-size: 13px; font-weight: 500; margin-top: 2px; }
+.ci-val { font-size: 22px; font-weight: 900; min-width: 28px; text-align: right; }
+.ci-val.green { color: var(--green); } .ci-val.yellow { color: var(--warn); } .ci-val.orange { color: var(--danger); }
+.ci-q input[type="range"] { width: 100%; margin-top: 8px; accent-color: var(--accent-strong); height: 32px; }
+.ci-step { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+.ci-step input { width: 88px; text-align: center; font: inherit; font-size: 18px; font-weight: 800; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 8px; }
+.ci-q textarea, .ci-q input[name="note"] { width: 100%; box-sizing: border-box; font: inherit; font-size: 16px; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin-top: 6px; }
+.ci-toggle { align-items: flex-start; }
+.ci-toggle input { margin-top: 2px; flex: none; }
+.ci-sub { margin-left: 4px; padding-left: 12px; border-left: 3px solid var(--line); }
+.ci-more { margin: 14px 0; border: 1px solid var(--line); border-radius: 16px; padding: 4px 12px; }
+.ci-more summary { cursor: pointer; font-weight: 800; font-size: 15px; padding: 10px 0; }
+[data-show][hidden] { display: none !important; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.chip-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.chip-opt span, .chip-btn { display: inline-block; padding: 8px 14px; border-radius: 99px; border: 1.5px solid var(--line); background: var(--card); font-weight: 700; font-size: 14px; cursor: pointer; }
+.chip-opt input:checked + span { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-strong); }
+.chip-opt input:focus-visible + span { outline: 2px solid var(--accent-strong); outline-offset: 2px; }
+.chip-opt.small span { padding: 4px 10px; font-size: 13px; }
+.chip-btn { font: inherit; font-size: 13px; font-weight: 800; color: var(--text); }
+.chip-btn.green { border-color: var(--green); } .chip-btn.yellow { border-color: var(--yellow); } .chip-btn.orange { border-color: var(--orange); } .chip-btn.red { border-color: var(--red); background: var(--red); color: #fff; }
+.ci-items { margin: 14px 0; }
+.ci-item { border-top: 1px solid var(--line); padding: 4px 0; }
+.ci-item-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.wk-row { align-items: flex-start; border-bottom: 1px solid var(--line); padding: 10px 0; }
+.hist-day h2 { font-size: 16px; }
+.decisions { margin-top: 8px; border-top: 1px dashed var(--line); padding-top: 6px; }
+.decisions p { margin: 4px 0; }
+.workout-card .btn { margin-right: 6px; }

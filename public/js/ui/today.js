@@ -2,6 +2,7 @@
 // Uses event delegation + in-place DOM updates so tapping checkboxes or steppers never flickers.
 import { currentDose } from "../engine.js";
 import { formatDose, missingEquipment } from "../dose.js";
+import { loadView, redBannerHtml, checkinCardHtml, workoutCardHtml, onClick as checkinClick, refreshBadges } from "./checkins.js";
 import { $, esc, BLOCKS, today, nowHM, addMin, minutesSince, fmtDate, openSheet, closeSheet, showExercise } from "./dom.js";
 
 const DAILY = ["daily_mobility", "daily_core", "walking"];
@@ -64,7 +65,7 @@ function blockSummary(block, its, doneSet, log, walkTarget) {
 export async function renderToday(ctx, main) {
   const d = today();
   const lv = ctx.level();
-  const [log, wake] = await Promise.all([dayLog(ctx, d), ctx.store.kvGet(`wake:${d}`)]);
+  const [log, wake, view] = await Promise.all([dayLog(ctx, d), ctx.store.kvGet(`wake:${d}`), loadView(ctx)]);
   const inWindow = wake && minutesSince(d, wake) < MORNING_WINDOW_MIN;
   const doneSet = new Set(log.checklist.filter((c) => c.done).map((c) => c.item_key));
   const items = lv.items.filter((i) => DAILY.includes(i.block));
@@ -80,7 +81,7 @@ export async function renderToday(ctx, main) {
   const cheerFor = (n) => cheer(lv, n, requiredKeys.size, inWindow);
 
   // The day starts with "I'm up": until then, that button is the only thing on the page.
-  let html = wake ? `
+  let html = redBannerHtml(ctx) + (wake ? `
     <section class="hero" id="hero">
       <div class="hero-top">
         <div class="hero-copy">
@@ -100,10 +101,13 @@ export async function renderToday(ctx, main) {
       <p class="hero-cheer">Tap when you're out of bed. It starts a ${MORNING_WINDOW_MIN}-minute easy morning, then today's list opens up.</p>
       <button class="btn primary big wide wake-btn" id="wake-now" type="button">☀️ I'm up</button>
       <button class="link" id="wake-edit" type="button">Got up earlier? Set the time</button>
-    </section>`;
+    </section>`);
   if (inWindow) {
     html += `<section class="card note">Easy start: stroll around the house for now. Core and mobility open up after your morning window.</section>`;
   }
+  // Check-ins: shown once the day has started, or earlier when a later one (evening, night, post-workout) is already due.
+  if (wake || view.list.some((e) => e.state === "due" && e.type !== "morning")) html += checkinCardHtml(view);
+  if (wake && !inWindow) html += workoutCardHtml(ctx, view);
   for (const [block, label] of wake ? BLOCKS.filter(([b]) => DAILY.includes(b)) : []) {
     const its = itemsByBlock.get(block);
     if (!its) continue;
@@ -146,6 +150,7 @@ export async function renderToday(ctx, main) {
     html += `</div></section>`;
   }
   main.innerHTML = html;
+  refreshBadges(ctx, view);
 
   const updateBlockCard = (block, l) => {
     const its = itemsByBlock.get(block);
@@ -201,6 +206,7 @@ export async function renderToday(ctx, main) {
   };
 
   main.onclick = async (e) => {
+    if (await checkinClick(ctx, e)) return;
     const toggle = e.target.closest("[data-toggle-block]");
     if (toggle) {
       const block = toggle.dataset.toggleBlock;

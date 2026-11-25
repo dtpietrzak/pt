@@ -15,7 +15,7 @@ Data is saved on the device first (IndexedDB), so it works offline and before si
 | 1 | App shell, nav, settings, IndexedDB, plan data and sync, pure engine with test vectors, daily checklist | **live** |
 | 1.5 | Google sign-in + Firestore sync between devices | **live** |
 | 1.6 | Work posture timer (Work tab) + R16 dose progression | **live** |
-| 2 | Four check-ins (morning, post-workout, evening, night) and the green/yellow/orange/red rollup | next |
+| 2 | Four check-ins (morning, post-workout, evening, night), the green/yellow/orange/red rollup, due badges + reminders, a minimal workout log | **live** |
 | 3 | Advance/hold/regress UI, sessions, gate tests, red-flag screen | |
 | 4 | Weekly export (JSON + markdown) and agent plan-patch import | |
 
@@ -47,9 +47,18 @@ Work tab: **Start work mode** runs Stand 40 → Walk 2 → Sit 20 → Decompress
 
 - Time comes from stored wall-clock timestamps (`public/js/posture.js`, pure and tested), so reloads and background tabs don't drift. A worker drives a 1 Hz check so a hidden tab still alarms.
 - Work-timer state is the synced `kv/timer` record, so other devices see it. Alarms ring only on the device that started work mode unless Settings > Work timer > "Ring on every signed-in device" is on (stored in the `app` setting).
-- Blocks are logged to `kv/posture:log:<date>` and summarised in the daily log's `posture_cycle`; `postureCheckinData()` produces the evening check-in `posture_cycle` object for Phase 2.
+- Blocks are logged to `kv/posture:log:<date>` and summarised in the daily log's `posture_cycle`; `postureCheckinData()` produces the evening check-in `posture_cycle` object (used by the evening check-in).
 - R16 (`applyPosture` in `posture.js`, wired in `engine.js` `processDay`) runs on days whose evening check-in has `posture_cycle.work_mode_used`. Flare / settle exit apply the preset / restore.
 - Browsers need a tap to allow audio: Start unlocks it; after a reload tap anywhere once.
+
+## Check-ins (phase 2)
+
+- Today has a Check-ins card (morning, evening, night, plus a post-workout row after a workout) with a color dot per check-in and the day's rolled-up status. History (`#/history`, linked from that card) lists each day with its check-ins, sessions, reasons and the plan's decisions.
+- Forms are sliders, steppers and chips (`public/js/ui/checkins.js`); `public/js/checkins.js` builds schema-valid records and decides what is due (pure, tested). Evening pre-fills from the Work timer's log (`postureCheckinData()`), and the optional sitting block feeds R16.
+- Due times come from the profile `notify` settings (morning also waits for wake + 45 min). While the app is open it shows a badge on the Today tab and fires a local `Notification` once when a check-in becomes due (allow it with "Turn on reminders" on the card). There is no push server, so nothing fires while the app is closed.
+- Starting a workout (Today, Workout card) logs a session; finishing it opens the post-workout check-in. This is only the minimum needed to prompt that check-in. The full session runner and gate tests are phase 3.
+- Every save runs the engine (`public/js/pipeline.js`) and persists plan state, decision-log entries and each session's evaluation. A red check-in freezes the plan and shows a notice with guidance (no contact details); the only way out is "Symptoms resolved, or a clinician cleared me", which enters settle mode.
+- All of it goes through the synced store (`checkins`, `sessions`, `log`, `days`, `kv`), so it syncs like everything else. Those stores were already in the Firestore rules allow-list, so no rules change was needed.
 
 ## Layout
 
@@ -57,6 +66,7 @@ Work tab: **Start work mode** runs Stand 40 → Walk 2 → Sit 20 → Decompress
 - `public/js/engine.js`: the pure decision engine. It covers check-in colors, session evaluation, R1-R15, and manual events, and runs in both the browser and Node
 - `public/js/util.js`: Chicago time, ULIDs, and canonical JSON + SHA-256 (matches PT Bot's Python hashes)
 - `public/js/schema.js`: a small JSON Schema validator for the bundled schemas
+- `public/js/checkins.js` (due logic, form -> record), `pipeline.js` (store -> engine -> store), `ui/checkins.js` (forms, Today card, history, reminders)
 - `public/js/db.js`, `data.js`, `dose.js`, `defaults.js`: storage, seed loading and migration, dose text, and fallback defaults
 - `test/`: `node --test "test/*.test.mjs"`
 
