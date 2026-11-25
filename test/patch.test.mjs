@@ -17,6 +17,11 @@ test("canonical hashes match the Python generator", async () => {
   assert.equal(await docHash(levels), hashes.levels_sha256);
   assert.equal(await docHash(exercises), hashes.exercises_sha256);
   assert.equal(await docHash(tests), hashes.tests_sha256);
+  if (hashes.profile_sha256) assert.equal(await docHash(j("../public/data/profile.json")), hashes.profile_sha256);
+});
+
+test("default profile validates against the profile schema", () => {
+  assert.deepEqual(validate(S("profile"), j("../public/data/profile.json")).errors, []);
 });
 
 test("seed documents validate and satisfy invariants", () => {

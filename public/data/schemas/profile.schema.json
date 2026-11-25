@@ -11,13 +11,23 @@
       "const": "America/Chicago"
     },
     "body_weight_lb": {
-      "type": "number"
+      "type": "number",
+      "default": 180,
+      "description": "Default 180. Displayed load = load_bw * body_weight_lb, snapped to 5 lb unless equipment lists specific sizes."
+    },
+    "sports": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Sports the return-to-sport levels are programmed for. Default: soccer, football."
     },
     "equipment": {
       "type": "object",
       "properties": {
         "bands": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": true
         },
         "dumbbells_lb": {
           "type": "array",
@@ -32,7 +42,8 @@
           }
         },
         "barbell": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": true
         },
         "plates_lb": {
           "type": "array",
@@ -41,13 +52,16 @@
           }
         },
         "rack_with_safeties": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": true
         },
         "bench": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": true
         },
         "pull_up_bar": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": true
         },
         "step_box_in": {
           "type": "array",
@@ -56,13 +70,16 @@
           }
         },
         "blocks": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": true
         },
         "cones": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": true
         },
         "track_or_field": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
@@ -86,19 +103,26 @@
     },
     "clinician_contact": {
       "type": "string",
-      "description": "Treating physician name/phone shown on red-flag screens"
+      "description": "Treating physician name/phone shown on red-flag screens. Empty by default."
     },
     "notify": {
       "type": "object",
       "properties": {
         "morning": {
-          "type": "string"
+          "type": "string",
+          "description": "Default 08:00 America/Chicago"
         },
         "evening": {
-          "type": "string"
+          "type": "string",
+          "description": "Default 15:30 America/Chicago"
         },
         "night": {
-          "type": "string"
+          "type": "string",
+          "description": "Default 21:00 America/Chicago"
+        },
+        "post_workout": {
+          "type": "string",
+          "description": "Default on_session_complete: prompted when a session is completed, not on a schedule"
         }
       },
       "additionalProperties": false
@@ -109,10 +133,19 @@
         "max_item_changes_per_finalized_session": {
           "type": "integer",
           "minimum": 1,
-          "maximum": 6
+          "maximum": 6,
+          "default": 3
         },
         "layoff_rule_enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": true
+        },
+        "clean_exposures_required": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
+          "default": 2,
+          "description": "Clean exposures needed to advance one rung; default 2."
         }
       },
       "additionalProperties": false

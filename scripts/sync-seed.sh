@@ -18,7 +18,7 @@ import json, sys
 json.dump(json.load(open(sys.argv[1]))["agent_brief"], open(sys.argv[2], "w"), indent=2, ensure_ascii=False)
 PY
 # Optional settings defaults if PT Bot ships them.
-for f in profile-defaults settings-defaults profile.defaults; do
+for f in profile profile-defaults settings-defaults; do
   [ -f "$SRC/seed/$f.json" ] && cp "$SRC/seed/$f.json" "$DATA/$f.json" && echo "copied $f.json"
 done
 ls "$SRC/seed"

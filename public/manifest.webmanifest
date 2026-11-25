@@ -3,7 +3,7 @@
   "lang": "en",
   "name": "PT",
   "short_name": "PT",
-  "description": "A personal PT progress tracker.",
+  "description": "Personal lower-back rehab tracker.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

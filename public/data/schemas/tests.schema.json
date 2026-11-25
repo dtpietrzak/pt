@@ -49,6 +49,10 @@
                 },
                 "note": {
                   "type": "string"
+                },
+                "resolved_lb": {
+                  "type": "number",
+                  "description": "Pounds at the default profile body weight (180 lb), snapped to 5 lb; the app must recompute from the live profile.body_weight_lb"
                 }
               },
               "additionalProperties": false,

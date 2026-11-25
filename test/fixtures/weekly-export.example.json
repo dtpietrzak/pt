@@ -9,25 +9,55 @@
     "timezone": "America/Chicago",
     "app_version": "0.1.0-example",
     "plan_version": 1,
-    "levels_sha256": "b9160a83067fdc379ed3647d3dee42dadc00e46ec8014a13af7769e28f5ed457",
-    "exercises_sha256": "df6f838db2eb129d6cc9152ed251bd380dc15b8d1cf1c37362964c819580dd54",
+    "levels_sha256": "be46c947501509b7d5c65839444461bc652815cfc573a0e18ac30ffe6340476a",
+    "exercises_sha256": "d1f0f7c2d5f2faa56ece014bbb3aad87de109a7705a7b96437c580dfd6c373df",
+    "tests_sha256": "e0cc2efc83dcec1d950349e4bcd4f405907865e322935533ef9d2194f7f4e9c9",
+    "profile_sha256": "3cd28d6c578cf1cc01ee24b39d8a8af32acf7cdda23093d8734f754ae10b081a",
     "config_version": "1.0.0"
   },
   "profile": {
     "name": "David Pietrzak",
     "timezone": "America/Chicago",
-    "baselines": {
-      "stiffness_min": 30,
-      "standing_h": 5,
-      "pain_rest": 1
-    },
+    "body_weight_lb": 180,
+    "sports": [
+      "soccer",
+      "football"
+    ],
     "equipment": {
-      "bands": true
+      "bands": true,
+      "dumbbells_lb": [],
+      "kettlebells_lb": [],
+      "barbell": true,
+      "plates_lb": [],
+      "rack_with_safeties": true,
+      "bench": true,
+      "pull_up_bar": true,
+      "step_box_in": [
+        6,
+        8,
+        12,
+        18
+      ],
+      "blocks": true,
+      "cones": true,
+      "track_or_field": true
     },
-    "clinician_contact": "Treating physician (name and phone to be added)",
+    "baselines": {
+      "pain_rest": 1,
+      "stiffness_min": 30,
+      "standing_h": 5
+    },
+    "clinician_contact": "",
+    "notify": {
+      "morning": "08:00",
+      "evening": "15:30",
+      "night": "21:00",
+      "post_workout": "on_session_complete"
+    },
     "settings": {
       "max_item_changes_per_finalized_session": 3,
-      "layoff_rule_enabled": true
+      "layoff_rule_enabled": true,
+      "clean_exposures_required": 2
     }
   },
   "state_start": {

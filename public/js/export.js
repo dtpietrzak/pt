@@ -4,7 +4,7 @@ import { exportState, standingRatio, levelById } from "./engine.js";
 
 const SESSION_MODS = new Set(["poor_sleep", "illness", "unusual_load", "missing_morning_checkin", "pause_mode", "easy_dose"]);
 const SESSION_KEYS = ["id", "local_date", "started_at", "ended_at", "template", "level_id", "items", "gate_test_ids", "gate_results", "post_workout_checkin_id", "status", "tests", "final_color", "clean", "modifiers", "probation"];
-const PROFILE_KEYS = ["name", "timezone", "body_weight_lb", "equipment", "baselines", "clinician_contact", "notify", "settings"];
+const PROFILE_KEYS = ["name", "timezone", "body_weight_lb", "equipment", "baselines", "notify", "settings"];
 const pick = (o, keys) => Object.fromEntries(keys.filter((k) => o[k] !== undefined).map((k) => [k, o[k]]));
 
 export function weekRange(anyDate) {

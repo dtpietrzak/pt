@@ -1441,14 +1441,16 @@
             "test_id": "T_DL_LOAD",
             "threshold": {
               "value": "8 reps @ 20 lb",
-              "note": "KB block"
+              "note": "KB block",
+              "resolved_lb": 20
             },
             "optional": false
           },
           {
             "test_id": "T_CARRY",
             "threshold": {
-              "value": "20 lb suitcase x 40 s/side"
+              "value": "20 lb suitcase x 40 s/side",
+              "resolved_lb": 20
             },
             "optional": false
           }
@@ -2144,7 +2146,8 @@
             "test_id": "T_DL_LOAD",
             "threshold": {
               "value": "3x8 @ 25% BW",
-              "note": "KB block"
+              "note": "KB block; 45 lb at default 180 lb BW",
+              "resolved_lb": 45
             },
             "optional": false
           },
@@ -2159,7 +2162,9 @@
           {
             "test_id": "T_CARRY",
             "threshold": {
-              "value": "20% BW per hand x 60 s"
+              "value": "20% BW per hand x 60 s",
+              "note": "35 lb at default 180 lb BW per hand",
+              "resolved_lb": 35
             },
             "optional": false
           },
@@ -2685,12 +2690,7 @@
             },
             {
               "sets": 4,
-              "time_s": 40,
-              "load_lb": 15
-            },
-            {
-              "sets": 4,
-              "time_s": 50,
+              "time_s": 45,
               "load_lb": 15
             },
             {
@@ -2720,7 +2720,7 @@
             }
           ],
           "start_rung": 0,
-          "target_rung": 8,
+          "target_rung": 7,
           "start_text": "3x30 s with 15 lb per hand",
           "target_text": "4x60 s with 35 lb per hand"
         },
@@ -3032,7 +3032,8 @@
             "test_id": "T_DL_LOAD",
             "threshold": {
               "value": "3x8 @ 30% BW",
-              "note": "KB floor"
+              "note": "KB floor; 55 lb at default 180 lb BW",
+              "resolved_lb": 55
             },
             "optional": false
           },
@@ -3047,7 +3048,9 @@
           {
             "test_id": "T_CARRY",
             "threshold": {
-              "value": "25% BW per hand x 60 s"
+              "value": "25% BW per hand x 60 s",
+              "note": "45 lb at default 180 lb BW per hand",
+              "resolved_lb": 45
             },
             "optional": false
           },
@@ -3342,8 +3345,8 @@
           ],
           "start_rung": 0,
           "target_rung": 4,
-          "start_text": "3x6 at 15% BW",
-          "target_text": "3x8 at 30% BW"
+          "start_text": "3x6 at 15% BW (25 lb)",
+          "target_text": "3x8 at 30% BW (55 lb)"
         },
         {
           "item_key": "L5_strength_A_EX_GOBLET_SQUAT",
@@ -3381,8 +3384,8 @@
           ],
           "start_rung": 0,
           "target_rung": 3,
-          "start_text": "3x8 at 15% BW",
-          "target_text": "3x10 at 25% BW"
+          "start_text": "3x8 at 15% BW (25 lb)",
+          "target_text": "3x10 at 25% BW (45 lb)"
         },
         {
           "item_key": "L5_strength_A_EX_SPLIT_SQUAT_LOADED",
@@ -3415,8 +3418,8 @@
           ],
           "start_rung": 0,
           "target_rung": 2,
-          "start_text": "3x8 per side at 5% BW per hand",
-          "target_text": "3x10 per side at 10% BW per hand"
+          "start_text": "3x8 per side at 5% BW (10 lb) per hand",
+          "target_text": "3x10 per side at 10% BW (20 lb) per hand"
         },
         {
           "item_key": "L5_strength_A_EX_STEP_UP",
@@ -3449,8 +3452,8 @@
           ],
           "start_rung": 0,
           "target_rung": 2,
-          "start_text": "3x8 per side at 5% BW per hand",
-          "target_text": "3x10 per side at 10% BW per hand"
+          "start_text": "3x8 per side at 5% BW (10 lb) per hand",
+          "target_text": "3x10 per side at 10% BW (20 lb) per hand"
         },
         {
           "item_key": "L5_strength_A_EX_SL_RDL",
@@ -3482,7 +3485,7 @@
           "start_rung": 0,
           "target_rung": 2,
           "start_text": "3x6 per side",
-          "target_text": "3x8 per side at 5% BW per hand"
+          "target_text": "3x8 per side at 5% BW (10 lb) per hand"
         },
         {
           "item_key": "L5_strength_A_EX_HIP_THRUST",
@@ -3520,8 +3523,8 @@
           ],
           "start_rung": 0,
           "target_rung": 3,
-          "start_text": "3x10 at 15% BW",
-          "target_text": "3x12 at 35% BW"
+          "start_text": "3x10 at 15% BW (25 lb)",
+          "target_text": "3x12 at 35% BW (65 lb)"
         },
         {
           "item_key": "L5_strength_B_EX_DB_FLOOR_PRESS",
@@ -3559,8 +3562,8 @@
           ],
           "start_rung": 0,
           "target_rung": 3,
-          "start_text": "3x8 at 8% BW per hand",
-          "target_text": "3x10 at 15% BW per hand"
+          "start_text": "3x8 at 8% BW (15 lb) per hand",
+          "target_text": "3x10 at 15% BW (25 lb) per hand"
         },
         {
           "item_key": "L5_strength_B_EX_PUSHUP",
@@ -3679,8 +3682,8 @@
           ],
           "start_rung": 0,
           "target_rung": 6,
-          "start_text": "3x45 s at 10% BW per hand",
-          "target_text": "4x60 s at 25% BW per hand"
+          "start_text": "3x45 s at 10% BW (20 lb) per hand",
+          "target_text": "4x60 s at 25% BW (45 lb) per hand"
         },
         {
           "item_key": "L5_strength_B_EX_PALLOF_HALFKNEEL",
@@ -3965,7 +3968,8 @@
       "name": "Barbell introduction and jogging",
       "goal": "Start barbell deadlifts from blocks, dumbbell bench and assisted pull-ups, and start jogging with first plyometrics.",
       "entry": [
-        "Level 5 exit: all non-optional items at target, 6 consecutive clean sessions, L5 tests passed and confirmed, pogo hops pain-free."
+        "Level 5 exit: all non-optional items at target, 6 consecutive clean sessions, L5 tests passed and confirmed, pogo hops pain-free.",
+        "Reconfirm equipment before starting L6: barbell, plates, a rack with safeties, a bench, a pull-up bar, and later a track or field. The plan currently assumes all of these are available; if anything is missing, use the listed alternative or skip that item and revisit."
       ],
       "exit": {
         "clean_streak_sessions": 6,
@@ -3989,14 +3993,17 @@
             "test_id": "T_DL_LOAD",
             "threshold": {
               "value": "3x5 @ 75% BW",
-              "note": "barbell from blocks"
+              "note": "barbell from blocks; 135 lb at default 180 lb BW",
+              "resolved_lb": 135
             },
             "optional": false
           },
           {
             "test_id": "T_CARRY",
             "threshold": {
-              "value": "40% BW per hand x 60 s"
+              "value": "40% BW per hand x 60 s",
+              "note": "70 lb at default 180 lb BW per hand",
+              "resolved_lb": 70
             },
             "optional": false
           },
@@ -4018,7 +4025,9 @@
           {
             "test_id": "T_BENCH_LOAD",
             "threshold": {
-              "value": "3x8 @ 22% BW per hand"
+              "value": "3x8 @ 22% BW per hand",
+              "note": "dumbbell; 40 lb at default 180 lb BW per hand",
+              "resolved_lb": 40
             },
             "optional": false
           },
@@ -4271,8 +4280,8 @@
           ],
           "start_rung": 0,
           "target_rung": 4,
-          "start_text": "3x5 at 40% BW",
-          "target_text": "3x5 at 75% BW"
+          "start_text": "3x5 at 40% BW (70 lb)",
+          "target_text": "3x5 at 75% BW (135 lb)"
         },
         {
           "item_key": "L6_strength_A_EX_GOBLET_SQUAT",
@@ -4300,8 +4309,8 @@
           ],
           "start_rung": 0,
           "target_rung": 1,
-          "start_text": "3x10 at 25% BW",
-          "target_text": "3x10 at 30% BW"
+          "start_text": "3x10 at 25% BW (45 lb)",
+          "target_text": "3x10 at 30% BW (55 lb)"
         },
         {
           "item_key": "L6_strength_A_EX_SPLIT_SQUAT_LOADED",
@@ -4329,8 +4338,8 @@
           ],
           "start_rung": 0,
           "target_rung": 1,
-          "start_text": "3x10 per side at 10% BW per hand",
-          "target_text": "3x10 per side at 15% BW per hand"
+          "start_text": "3x10 per side at 10% BW (20 lb) per hand",
+          "target_text": "3x10 per side at 15% BW (25 lb) per hand"
         },
         {
           "item_key": "L6_strength_A_EX_SL_RDL",
@@ -4363,8 +4372,8 @@
           ],
           "start_rung": 0,
           "target_rung": 2,
-          "start_text": "3x8 per side at 8% BW per hand",
-          "target_text": "3x8 per side at 15% BW per hand"
+          "start_text": "3x8 per side at 8% BW (15 lb) per hand",
+          "target_text": "3x8 per side at 15% BW (25 lb) per hand"
         },
         {
           "item_key": "L6_strength_A_EX_HIP_THRUST",
@@ -4402,8 +4411,8 @@
           ],
           "start_rung": 0,
           "target_rung": 3,
-          "start_text": "3x10 at 35% BW",
-          "target_text": "3x10 at 60% BW"
+          "start_text": "3x10 at 35% BW (65 lb)",
+          "target_text": "3x10 at 60% BW (110 lb)"
         },
         {
           "item_key": "L6_strength_B_EX_DB_BENCH",
@@ -4441,8 +4450,8 @@
           ],
           "start_rung": 0,
           "target_rung": 3,
-          "start_text": "3x6 at 12% BW per hand",
-          "target_text": "3x8 at 22% BW per hand"
+          "start_text": "3x6 at 12% BW (20 lb) per hand",
+          "target_text": "3x8 at 22% BW (40 lb) per hand"
         },
         {
           "item_key": "L6_strength_B_EX_PUSHUP",
@@ -4573,8 +4582,8 @@
           ],
           "start_rung": 0,
           "target_rung": 3,
-          "start_text": "4x60 s at 25% BW per hand",
-          "target_text": "4x60 s at 40% BW per hand"
+          "start_text": "4x60 s at 25% BW (45 lb) per hand",
+          "target_text": "4x60 s at 40% BW (70 lb) per hand"
         },
         {
           "item_key": "L6_strength_B_EX_PALLOF_HALFKNEEL",
@@ -4829,7 +4838,7 @@
       "id": "L7",
       "number": 7,
       "name": "Strength build and speed introduction",
-      "goal": "Barbell deadlift from the floor, barbell bench, strict pull-ups, and the first speed work: strides, accelerations, bounds, and submaximal change of direction.",
+      "goal": "Barbell deadlift from the floor, barbell bench, strict pull-ups, and the first soccer- and football-specific speed work: strides, accelerations, planned deceleration, lateral shuffle, backpedal, bounds, submaximal change of direction, and 45-degree cuts.",
       "entry": [
         "Level 6 exit: all non-optional items at target, 6 consecutive clean sessions, L6 tests passed and confirmed (including jog and single-leg hops)."
       ],
@@ -4848,21 +4857,26 @@
             "test_id": "T_DL_LOAD",
             "threshold": {
               "value": "3x5 @ 125% BW",
-              "note": "barbell from the floor"
+              "note": "barbell from the floor; 225 lb at default 180 lb BW",
+              "resolved_lb": 225
             },
             "optional": false
           },
           {
             "test_id": "T_CARRY",
             "threshold": {
-              "value": "50% BW per hand x 60 s"
+              "value": "50% BW per hand x 60 s",
+              "note": "90 lb at default 180 lb BW per hand",
+              "resolved_lb": 90
             },
             "optional": false
           },
           {
             "test_id": "T_BENCH_LOAD",
             "threshold": {
-              "value": "3x5 @ 75% BW"
+              "value": "3x5 @ 75% BW",
+              "note": "barbell; 135 lb at default 180 lb BW",
+              "resolved_lb": 135
             },
             "optional": false
           },
@@ -4921,6 +4935,30 @@
             "test_id": "T_COD",
             "threshold": {
               "value": "80% effort"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_FOOTWORK",
+            "threshold": {
+              "value": 6,
+              "note": "x 20 m shuffle and x 20 m backpedal at 80%"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_DECEL",
+            "threshold": {
+              "value": 6,
+              "note": "x 20 m at 80%"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_CUT",
+            "threshold": {
+              "value": 6,
+              "note": "45-degree at 80%"
             },
             "optional": false
           }
@@ -5108,8 +5146,8 @@
           ],
           "start_rung": 0,
           "target_rung": 5,
-          "start_text": "3x5 at 75% BW",
-          "target_text": "3x5 at 125% BW"
+          "start_text": "3x5 at 75% BW (135 lb)",
+          "target_text": "3x5 at 125% BW (225 lb)"
         },
         {
           "item_key": "L7_strength_A_EX_BARBELL_SQUAT",
@@ -5157,8 +5195,8 @@
           ],
           "start_rung": 0,
           "target_rung": 5,
-          "start_text": "3x5 at 50% BW",
-          "target_text": "3x5 at 100% BW"
+          "start_text": "3x5 at 50% BW (90 lb)",
+          "target_text": "3x5 at 100% BW (180 lb)"
         },
         {
           "item_key": "L7_strength_A_EX_KB_SWING",
@@ -5203,8 +5241,8 @@
           ],
           "start_rung": 0,
           "target_rung": 4,
-          "start_text": "3x10 at 15% BW",
-          "target_text": "3x12 at 30% BW"
+          "start_text": "3x10 at 15% BW (25 lb)",
+          "target_text": "3x12 at 30% BW (55 lb)"
         },
         {
           "item_key": "L7_strength_A_EX_STEP_UP",
@@ -5242,8 +5280,8 @@
           ],
           "start_rung": 0,
           "target_rung": 3,
-          "start_text": "3x8 per side at 10% BW per hand",
-          "target_text": "3x8 per side at 25% BW per hand"
+          "start_text": "3x8 per side at 10% BW (20 lb) per hand",
+          "target_text": "3x8 per side at 25% BW (45 lb) per hand"
         },
         {
           "item_key": "L7_strength_A_EX_NORDIC_ECC",
@@ -5317,8 +5355,8 @@
           ],
           "start_rung": 0,
           "target_rung": 4,
-          "start_text": "3x5 at 40% BW",
-          "target_text": "3x5 at 75% BW"
+          "start_text": "3x5 at 40% BW (70 lb)",
+          "target_text": "3x5 at 75% BW (135 lb)"
         },
         {
           "item_key": "L7_strength_B_EX_PULLUP",
@@ -5387,8 +5425,8 @@
           ],
           "start_rung": 0,
           "target_rung": 3,
-          "start_text": "3x8 per side at 15% BW per hand",
-          "target_text": "3x8 per side at 30% BW per hand"
+          "start_text": "3x8 per side at 15% BW (25 lb) per hand",
+          "target_text": "3x8 per side at 30% BW (55 lb) per hand"
         },
         {
           "item_key": "L7_strength_B_EX_FARMER_CARRY",
@@ -5421,8 +5459,8 @@
           ],
           "start_rung": 0,
           "target_rung": 2,
-          "start_text": "4x60 s at 40% BW per hand",
-          "target_text": "4x60 s at 50% BW per hand"
+          "start_text": "4x60 s at 40% BW (70 lb) per hand",
+          "target_text": "4x60 s at 50% BW (90 lb) per hand"
         },
         {
           "item_key": "L7_strength_B_EX_PALLOF_HALFKNEEL",
@@ -5699,6 +5737,209 @@
           "target_text": "4 sets at 80% effort"
         },
         {
+          "item_key": "L7_conditioning_EX_LATERAL_SHUFFLE",
+          "exercise_id": "EX_LATERAL_SHUFFLE",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Soccer and football footwork; planned cones.",
+          "rungs": [
+            {
+              "sets": 4,
+              "distance_m": 10,
+              "effort_pct": 60
+            },
+            {
+              "sets": 5,
+              "distance_m": 10,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "distance_m": 10,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "distance_m": 15,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "distance_m": 20,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "distance_m": 20,
+              "effort_pct": 70
+            },
+            {
+              "sets": 6,
+              "distance_m": 20,
+              "effort_pct": 80
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 6,
+          "start_text": "4x10 m at 60% effort",
+          "target_text": "6x20 m at 80% effort"
+        },
+        {
+          "item_key": "L7_conditioning_EX_BACKPEDAL",
+          "exercise_id": "EX_BACKPEDAL",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L7_conditioning_EX_LATERAL_SHUFFLE"
+          ],
+          "note": "Planned marks only.",
+          "rungs": [
+            {
+              "sets": 4,
+              "distance_m": 10,
+              "effort_pct": 60
+            },
+            {
+              "sets": 5,
+              "distance_m": 10,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "distance_m": 10,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "distance_m": 15,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "distance_m": 20,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "distance_m": 20,
+              "effort_pct": 70
+            },
+            {
+              "sets": 6,
+              "distance_m": 20,
+              "effort_pct": 80
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 6,
+          "start_text": "4x10 m at 60% effort",
+          "target_text": "6x20 m at 80% effort"
+        },
+        {
+          "item_key": "L7_conditioning_EX_DECEL_STOP",
+          "exercise_id": "EX_DECEL_STOP",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L7_conditioning_EX_ACCEL_RUN"
+          ],
+          "note": "Quiet two-foot stop on a planned mark.",
+          "rungs": [
+            {
+              "sets": 4,
+              "distance_m": 15,
+              "effort_pct": 60
+            },
+            {
+              "sets": 5,
+              "distance_m": 15,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "distance_m": 15,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "distance_m": 20,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "distance_m": 20,
+              "effort_pct": 70
+            },
+            {
+              "sets": 6,
+              "distance_m": 20,
+              "effort_pct": 80
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 5,
+          "start_text": "4x15 m at 60% effort",
+          "target_text": "6x20 m at 80% effort"
+        },
+        {
+          "item_key": "L7_conditioning_EX_CUT_45",
+          "exercise_id": "EX_CUT_45",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L7_conditioning_EX_DECEL_STOP",
+            "L7_conditioning_EX_COD_DRILL"
+          ],
+          "note": "Planned 45-degree cuts only.",
+          "rungs": [
+            {
+              "sets": 4,
+              "effort_pct": 60
+            },
+            {
+              "sets": 5,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "effort_pct": 60
+            },
+            {
+              "sets": 6,
+              "effort_pct": 70
+            },
+            {
+              "sets": 6,
+              "effort_pct": 80
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "4 sets at 60% effort",
+          "target_text": "6 sets at 80% effort"
+        },
+        {
           "item_key": "L7_walking_EX_WALK_EASY",
           "exercise_id": "EX_WALK_EASY",
           "block": "walking",
@@ -5736,7 +5977,7 @@
       "frequency": {
         "core_days_per_week": "4-5",
         "strength_sessions_per_week": 3,
-        "conditioning_sessions_per_week": "2 speed + 1 jog",
+        "conditioning_sessions_per_week": "2 speed/footwork + 1 jog",
         "session_minutes": "50-60",
         "effort": "up to 7-8/10 on main lifts"
       },
@@ -5744,20 +5985,20 @@
         "Loaded or repeated spinal flexion (sit-ups, crunches, toe touches, seated forward folds, rounded-back lifting).",
         "Twisting under load and any end-range stretch that brings symptoms on.",
         "Bending, floor work or flexion stretches in the first 45-60 minutes after waking.",
-        "No maximal sprints, no loaded flexion, no good-mornings or heavy bent-over barbell rows."
+        "No maximal sprints, no reactive or 90-degree cuts, no max-effort kicking, no live or unplanned contact, no loaded flexion, no good-mornings or heavy bent-over barbell rows."
       ],
       "unlocks": [
-        "Barbell floor deadlift, barbell bench, pull-ups, kettlebell swings, Nordics, strides, accelerations, box and broad jumps, bounds, submax change of direction."
+        "Barbell floor deadlift, barbell bench, pull-ups, kettlebell swings, Nordics, strides, accelerations, box and broad jumps, bounds, submax change of direction, planned deceleration, lateral shuffle, backpedal, 45-degree cuts."
       ],
       "regress_to": "L6"
     },
     {
       "id": "L8",
       "number": 8,
-      "name": "Return to sport (full athletic training)",
-      "goal": "Maximal sprints, full-speed change of direction, athletic circuits, and sport-specific work at full intensity; then maintenance with weekly review.",
+      "name": "Return to sport (soccer and football)",
+      "goal": "Maximal sprints, full-speed cutting and change of direction, repeated-sprint work, a soccer kicking progression, football contact-readiness (controlled, no live tackling), athletic circuits, and soccer and football practice at full intensity; then maintenance with weekly review.",
       "entry": [
-        "Level 7 exit: all non-optional items at target, 6 consecutive clean sessions, L7 tests passed and confirmed (including hop battery LSI >= 90%, strides and accelerations)."
+        "Level 7 exit: all non-optional items at target, 6 consecutive clean sessions, L7 tests passed and confirmed (including hop battery LSI >= 90%, strides, accelerations, deceleration, footwork and 45-degree cuts)."
       ],
       "exit": {
         "clean_streak_sessions": 8,
@@ -5775,14 +6016,17 @@
             "test_id": "T_DL_LOAD",
             "threshold": {
               "value": "3x5 @ 150% BW",
-              "note": "barbell from the floor; proposed target, David to confirm"
+              "note": "barbell from the floor; confirmed standard; 270 lb at default 180 lb BW",
+              "resolved_lb": 270
             },
             "optional": false
           },
           {
             "test_id": "T_BENCH_LOAD",
             "threshold": {
-              "value": "3x5 @ 100% BW"
+              "value": "3x5 @ 100% BW",
+              "note": "barbell; confirmed standard; 180 lb at default 180 lb BW",
+              "resolved_lb": 180
             },
             "optional": false
           },
@@ -5831,6 +6075,46 @@
             "optional": false
           },
           {
+            "test_id": "T_DECEL",
+            "threshold": {
+              "value": 6,
+              "note": "x 20 m at 100%"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_CUT",
+            "threshold": {
+              "value": 6,
+              "note": "90-degree at 100%, plus one reactive if planned is clean"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_RSA",
+            "threshold": {
+              "value": 8,
+              "note": "x 30 m at 100%, 30 s rest"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_KICK",
+            "threshold": {
+              "value": "4x12 at 90%",
+              "note": "driven instep; volleys only if earlier rungs were clean"
+            },
+            "optional": false
+          },
+          {
+            "test_id": "T_CONTACT_PREP",
+            "threshold": {
+              "value": "controlled pad work at 80%",
+              "note": "no live tackling; no unexpected hits"
+            },
+            "optional": false
+          },
+          {
             "test_id": "T_ATHLETIC_CIRCUIT",
             "threshold": {
               "value": 40
@@ -5839,7 +6123,7 @@
           }
         ],
         "extra": [
-          "Exit means entering maintenance mode: keep strength 2-3 days, speed 1-2 days, core 3-5 days; check-ins reduce to morning and post-workout; the weekly export continues."
+          "Exit means entering maintenance mode: keep strength 2-3 days, speed or sport 1-2 days, core 3-5 days; check-ins reduce to morning and post-workout; the weekly export continues."
         ]
       },
       "items": [
@@ -5961,8 +6245,8 @@
           ],
           "start_rung": 0,
           "target_rung": 3,
-          "start_text": "3x5 at 125% BW",
-          "target_text": "3x5 at 150% BW"
+          "start_text": "3x5 at 125% BW (225 lb)",
+          "target_text": "3x5 at 150% BW (270 lb)"
         },
         {
           "item_key": "L8_strength_A_EX_BARBELL_SQUAT",
@@ -6000,8 +6284,8 @@
           ],
           "start_rung": 0,
           "target_rung": 3,
-          "start_text": "3x5 at 100% BW",
-          "target_text": "3x5 at 125% BW"
+          "start_text": "3x5 at 100% BW (180 lb)",
+          "target_text": "3x5 at 125% BW (225 lb)"
         },
         {
           "item_key": "L8_strength_A_EX_KB_SWING",
@@ -6024,8 +6308,8 @@
           ],
           "start_rung": 0,
           "target_rung": 0,
-          "start_text": "3x12 at 30% BW",
-          "target_text": "3x12 at 30% BW"
+          "start_text": "3x12 at 30% BW (55 lb)",
+          "target_text": "3x12 at 30% BW (55 lb)"
         },
         {
           "item_key": "L8_strength_A_EX_NORDIC_ECC",
@@ -6090,8 +6374,8 @@
           ],
           "start_rung": 0,
           "target_rung": 3,
-          "start_text": "3x5 at 75% BW",
-          "target_text": "3x5 at 100% BW"
+          "start_text": "3x5 at 75% BW (135 lb)",
+          "target_text": "3x5 at 100% BW (180 lb)"
         },
         {
           "item_key": "L8_strength_B_EX_PULLUP",
@@ -6145,8 +6429,8 @@
           ],
           "start_rung": 0,
           "target_rung": 0,
-          "start_text": "4x60 s at 50% BW per hand",
-          "target_text": "4x60 s at 50% BW per hand"
+          "start_text": "4x60 s at 50% BW (90 lb) per hand",
+          "target_text": "4x60 s at 50% BW (90 lb) per hand"
         },
         {
           "item_key": "L8_conditioning_EX_SPRINT",
@@ -6296,6 +6580,223 @@
           "target_text": "3x4"
         },
         {
+          "item_key": "L8_conditioning_EX_CUT_90",
+          "exercise_id": "EX_CUT_90",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L8_conditioning_EX_COD_DRILL"
+          ],
+          "note": "Planned 90-degree cuts; one reactive cut only at the last rung.",
+          "rungs": [
+            {
+              "sets": 4,
+              "effort_pct": 80
+            },
+            {
+              "sets": 5,
+              "effort_pct": 80
+            },
+            {
+              "sets": 6,
+              "effort_pct": 80
+            },
+            {
+              "sets": 6,
+              "effort_pct": 90
+            },
+            {
+              "sets": 6,
+              "effort_pct": 100
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 4,
+          "start_text": "4 sets at 80% effort",
+          "target_text": "6 sets at 100% effort"
+        },
+        {
+          "item_key": "L8_conditioning_EX_RSA_REPEATS",
+          "exercise_id": "EX_RSA_REPEATS",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L8_conditioning_EX_SPRINT"
+          ],
+          "note": "Full recovery on early rungs; 20-30 s rest at target. Quality of the last rep matters.",
+          "rungs": [
+            {
+              "sets": 4,
+              "distance_m": 20,
+              "effort_pct": 90
+            },
+            {
+              "sets": 5,
+              "distance_m": 20,
+              "effort_pct": 90
+            },
+            {
+              "sets": 6,
+              "distance_m": 20,
+              "effort_pct": 90
+            },
+            {
+              "sets": 7,
+              "distance_m": 20,
+              "effort_pct": 90
+            },
+            {
+              "sets": 8,
+              "distance_m": 20,
+              "effort_pct": 90
+            },
+            {
+              "sets": 8,
+              "distance_m": 25,
+              "effort_pct": 90
+            },
+            {
+              "sets": 8,
+              "distance_m": 30,
+              "effort_pct": 90
+            },
+            {
+              "sets": 8,
+              "distance_m": 30,
+              "effort_pct": 100
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 7,
+          "start_text": "4x20 m at 90% effort",
+          "target_text": "8x30 m at 100% effort"
+        },
+        {
+          "item_key": "L8_conditioning_EX_KICK_PROG",
+          "exercise_id": "EX_KICK_PROG",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [],
+          "note": "Short ground passes first; driven shots after 70%; volleys and longer strikes only at the last rungs.",
+          "rungs": [
+            {
+              "sets": 3,
+              "reps": 8,
+              "effort_pct": 50
+            },
+            {
+              "sets": 4,
+              "reps": 8,
+              "effort_pct": 50
+            },
+            {
+              "sets": 4,
+              "reps": 10,
+              "effort_pct": 50
+            },
+            {
+              "sets": 4,
+              "reps": 12,
+              "effort_pct": 50
+            },
+            {
+              "sets": 4,
+              "reps": 12,
+              "effort_pct": 60
+            },
+            {
+              "sets": 4,
+              "reps": 12,
+              "effort_pct": 70
+            },
+            {
+              "sets": 4,
+              "reps": 12,
+              "effort_pct": 80
+            },
+            {
+              "sets": 4,
+              "reps": 12,
+              "effort_pct": 90
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 7,
+          "start_text": "3x8 at 50% effort",
+          "target_text": "4x12 at 90% effort"
+        },
+        {
+          "item_key": "L8_conditioning_EX_CONTACT_PREP",
+          "exercise_id": "EX_CONTACT_PREP",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L8_conditioning_EX_COD_DRILL"
+          ],
+          "note": "Isometric pad holds at 40-50%; planned pad bumps at 60%; short-space planned contact at 70-80%. No live tackling.",
+          "rungs": [
+            {
+              "sets": 3,
+              "time_s": 10,
+              "effort_pct": 40
+            },
+            {
+              "sets": 4,
+              "time_s": 10,
+              "effort_pct": 40
+            },
+            {
+              "sets": 5,
+              "time_s": 10,
+              "effort_pct": 40
+            },
+            {
+              "sets": 5,
+              "time_s": 10,
+              "effort_pct": 50
+            },
+            {
+              "sets": 5,
+              "time_s": 10,
+              "effort_pct": 60
+            },
+            {
+              "sets": 5,
+              "time_s": 10,
+              "effort_pct": 70
+            },
+            {
+              "sets": 5,
+              "time_s": 10,
+              "effort_pct": 80
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 6,
+          "start_text": "3x10 s at 40% effort",
+          "target_text": "5x10 s at 80% effort"
+        },
+        {
           "item_key": "L8_conditioning_EX_ATHLETIC_CIRCUIT",
           "exercise_id": "EX_ATHLETIC_CIRCUIT",
           "block": "conditioning",
@@ -6345,8 +6846,8 @@
           "target_text": "40 min at 90% effort"
         },
         {
-          "item_key": "L8_conditioning_EX_SPORT_DRILLS",
-          "exercise_id": "EX_SPORT_DRILLS",
+          "item_key": "L8_conditioning_EX_SOCCER_DRILLS",
+          "exercise_id": "EX_SOCCER_DRILLS",
           "block": "conditioning",
           "rest_s": 60,
           "per_side": false,
@@ -6355,9 +6856,12 @@
           "optional": false,
           "maintain": false,
           "requires": [
-            "L8_conditioning_EX_ATHLETIC_CIRCUIT"
+            "L8_conditioning_EX_ATHLETIC_CIRCUIT",
+            "L8_conditioning_EX_KICK_PROG",
+            "L8_conditioning_EX_RSA_REPEATS",
+            "L8_conditioning_EX_CUT_90"
           ],
-          "note": "",
+          "note": "Technical and small-sided first; full practice intensity at the last rungs, not a league match.",
           "rungs": [
             {
               "time_min": 20,
@@ -6372,12 +6876,118 @@
               "effort_pct": 60
             },
             {
-              "time_min": 50,
+              "time_min": 45,
               "effort_pct": 60
             },
             {
-              "time_min": 60,
+              "time_min": 45,
+              "effort_pct": 70
+            },
+            {
+              "time_min": 45,
+              "effort_pct": 80
+            },
+            {
+              "time_min": 45,
+              "effort_pct": 90
+            },
+            {
+              "time_min": 45,
+              "effort_pct": 100
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 7,
+          "start_text": "20 min at 60% effort",
+          "target_text": "45 min at 100% effort"
+        },
+        {
+          "item_key": "L8_conditioning_EX_FOOTBALL_DRILLS",
+          "exercise_id": "EX_FOOTBALL_DRILLS",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": false,
+          "maintain": false,
+          "requires": [
+            "L8_conditioning_EX_ATHLETIC_CIRCUIT",
+            "L8_conditioning_EX_CONTACT_PREP",
+            "L8_conditioning_EX_RSA_REPEATS",
+            "L8_conditioning_EX_CUT_90"
+          ],
+          "note": "Non-contact movement first; controlled pad work only after contact-prep is at target.",
+          "rungs": [
+            {
+              "time_min": 20,
               "effort_pct": 60
+            },
+            {
+              "time_min": 30,
+              "effort_pct": 60
+            },
+            {
+              "time_min": 40,
+              "effort_pct": 60
+            },
+            {
+              "time_min": 45,
+              "effort_pct": 60
+            },
+            {
+              "time_min": 45,
+              "effort_pct": 70
+            },
+            {
+              "time_min": 45,
+              "effort_pct": 80
+            },
+            {
+              "time_min": 45,
+              "effort_pct": 90
+            },
+            {
+              "time_min": 45,
+              "effort_pct": 100
+            }
+          ],
+          "start_rung": 0,
+          "target_rung": 7,
+          "start_text": "20 min at 60% effort",
+          "target_text": "45 min at 100% effort"
+        },
+        {
+          "item_key": "L8_conditioning_EX_SPORT_DRILLS",
+          "exercise_id": "EX_SPORT_DRILLS",
+          "block": "conditioning",
+          "rest_s": 60,
+          "per_side": false,
+          "reps_label": null,
+          "load_note": null,
+          "optional": true,
+          "maintain": false,
+          "requires": [
+            "L8_conditioning_EX_SOCCER_DRILLS",
+            "L8_conditioning_EX_FOOTBALL_DRILLS"
+          ],
+          "note": "Optional combined soccer and football practice after both drill ladders are at target.",
+          "rungs": [
+            {
+              "time_min": 20,
+              "effort_pct": 70
+            },
+            {
+              "time_min": 30,
+              "effort_pct": 70
+            },
+            {
+              "time_min": 40,
+              "effort_pct": 70
+            },
+            {
+              "time_min": 50,
+              "effort_pct": 70
             },
             {
               "time_min": 60,
@@ -6397,8 +7007,8 @@
             }
           ],
           "start_rung": 0,
-          "target_rung": 8,
-          "start_text": "20 min at 60% effort",
+          "target_rung": 7,
+          "start_text": "20 min at 70% effort",
           "target_text": "60 min at 100% effort"
         },
         {
@@ -6439,15 +7049,16 @@
       "frequency": {
         "core_days_per_week": "3-5",
         "strength_sessions_per_week": "2-3",
-        "conditioning_sessions_per_week": "2 sprint/COD + sport",
+        "conditioning_sessions_per_week": "2 speed/COD + 1-2 soccer or football drill sessions",
         "session_minutes": "50-70",
         "effort": "up to 8-9/10 on strength; sprints 100%"
       },
       "avoid": [
-        "Loaded flexion and heavy good-mornings are not part of the plan; return to any other movement is staged by the same green check-in gates."
+        "Loaded flexion and heavy good-mornings are not part of the plan; return to any other movement is staged by the same green check-in gates.",
+        "No live tackling or unplanned open-field collisions in the default program. No max-effort dead-ball kicking until the kicking gate is confirmed."
       ],
       "unlocks": [
-        "Maximal sprints, full-speed COD, athletic circuits, sport drills at full intensity."
+        "Maximal sprints, full-speed 90-degree cuts, repeated sprints, soccer kicking progression, football contact-readiness, athletic circuits, soccer and football practice."
       ],
       "regress_to": "L7"
     }

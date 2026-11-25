@@ -1475,16 +1475,18 @@
         "flat surface"
       ],
       "cues": [
-        "Lean forward, drive the arms and legs, rise gradually to upright; 80-90% effort first."
+        "Lean forward, drive the arms and legs, rise gradually to upright; 80-90% effort first.",
+        "Football start: a short stance and first-step drive; soccer: the first 20-30 m of a break."
       ],
       "stop_if": "Hamstring or groin pain, or any back symptom.",
       "regressions": [
         "EX_STRIDES"
       ],
       "progressions": [
+        "EX_DECEL_STOP",
         "EX_SPRINT"
       ],
-      "contraindications": "Warm up thoroughly.",
+      "contraindications": "Warm up thoroughly. Football and soccer both use this as the acceleration base.",
       "in_default_program": true
     },
     {
@@ -1542,9 +1544,10 @@
         "EX_BROAD_JUMP"
       ],
       "progressions": [
-        "EX_COD_DRILL"
+        "EX_COD_DRILL",
+        "EX_CUT_45"
       ],
-      "contraindications": "Short distances first.",
+      "contraindications": "Short distances first. Prepares the plant for cutting.",
       "in_default_program": true
     },
     {
@@ -1555,16 +1558,20 @@
         "cones"
       ],
       "cues": [
-        "Plant and push on the outside foot, hips low, trunk braced; 60% speed first."
+        "Plant and push on the outside foot, hips low, trunk braced; 60% speed first.",
+        "Used as the closed-skill COD standard for both soccer and football."
       ],
       "stop_if": "Twisting pain, sharp pain, or leg symptoms.",
       "regressions": [
-        "EX_LATERAL_BOUND"
+        "EX_LATERAL_BOUND",
+        "EX_DECEL_STOP"
       ],
       "progressions": [
+        "EX_CUT_45",
+        "EX_CUT_90",
         "EX_SPRINT"
       ],
-      "contraindications": "Staged speeds: 60%, 80%, then 100%.",
+      "contraindications": "Staged speeds: 60%, 80%, then 100%. Planned cuts come after this feels smooth.",
       "in_default_program": true
     },
     {
@@ -1582,9 +1589,10 @@
         "EX_ACCEL_RUN"
       ],
       "progressions": [
+        "EX_RSA_REPEATS",
         "EX_ATHLETIC_CIRCUIT"
       ],
-      "contraindications": "Final speed step; only after all earlier tests.",
+      "contraindications": "Maximal isolated sprints before repeated-sprint work. Full recovery between reps.",
       "in_default_program": true
     },
     {
@@ -1595,34 +1603,288 @@
         "gym or field"
       ],
       "cues": [
-        "Planned circuit at sport-like intensity with controlled technique."
+        "Planned circuit at sport-like intensity with controlled technique.",
+        "Include a short soccer or football skill block (shuffles, a planned cut or two, a deceleration) once those items are unlocked."
       ],
       "stop_if": "Pain, leg symptoms, or technical breakdown.",
       "regressions": [
         "EX_SPRINT"
       ],
       "progressions": [
-        "EX_SPORT_DRILLS"
+        "EX_SOCCER_DRILLS",
+        "EX_FOOTBALL_DRILLS"
       ],
       "contraindications": "Only at the final level.",
       "in_default_program": true
     },
     {
       "id": "EX_SPORT_DRILLS",
-      "name": "Sport-specific drills (non-contact, then full)",
-      "category": "speed",
+      "name": "Combined soccer and football practice",
+      "category": "sport",
       "equipment": [
-        "sport equipment"
+        "ball",
+        "cones",
+        "field"
       ],
       "cues": [
-        "Progress from individual non-contact drills to practice at full intensity."
+        "Optional combined block after both soccer and football drill ladders are at target.",
+        "Blend technical soccer work and football movement in one session at the stated effort, still planned and coached, not a live game."
       ],
       "stop_if": "Pain, leg symptoms, or technique breakdown.",
       "regressions": [
-        "EX_ATHLETIC_CIRCUIT"
+        "EX_SOCCER_DRILLS",
+        "EX_FOOTBALL_DRILLS"
       ],
       "progressions": [],
-      "contraindications": "Return to sport is staged and symptom-led.",
+      "contraindications": "Optional. Live games and unplanned collisions are outside the default program.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_LATERAL_SHUFFLE",
+      "name": "Lateral shuffle (cone to cone)",
+      "category": "speed",
+      "equipment": [
+        "cones",
+        "flat space"
+      ],
+      "cues": [
+        "Athletic stance, hips low, trunk tall and braced, eyes up.",
+        "Short choppy steps; do not cross the feet; stay on the balls of the feet.",
+        "Change direction only at the cone, with a planned plant."
+      ],
+      "stop_if": "Twisting pain, knee cave, loss of posture, or any back symptom.",
+      "regressions": [
+        "EX_SIDE_STEP_BAND"
+      ],
+      "progressions": [
+        "EX_BACKPEDAL",
+        "EX_DECEL_STOP"
+      ],
+      "contraindications": "Position-agnostic football and soccer footwork. Low impact; start slow.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_BACKPEDAL",
+      "name": "Backpedal (then plant and go)",
+      "category": "speed",
+      "equipment": [
+        "cones",
+        "flat space"
+      ],
+      "cues": [
+        "Athletic stance, hips back, short steps, eyes up.",
+        "Backpedal to a planned mark, plant, then go forward 5 m.",
+        "Do not twist the lumbar spine to look; turn the head and the feet together."
+      ],
+      "stop_if": "Twisting, loss of balance, hamstring tightness, or any back symptom.",
+      "regressions": [
+        "EX_LATERAL_SHUFFLE"
+      ],
+      "progressions": [
+        "EX_DECEL_STOP",
+        "EX_ACCEL_RUN"
+      ],
+      "contraindications": "Football coverage pattern, also useful for soccer defending. Planned marks only at first; no reactive starts until later rungs feel easy.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_DECEL_STOP",
+      "name": "Planned deceleration to a two-foot stop",
+      "category": "speed",
+      "equipment": [
+        "cones",
+        "flat space"
+      ],
+      "cues": [
+        "Accelerate to the stated effort, then shorten the stride and sit the hips back.",
+        "Quiet two-foot stop on a planned mark; trunk tall and braced; hold 2 s.",
+        "Do not fold at the waist or let the knees cave."
+      ],
+      "stop_if": "Stiff or jarring stop, twisting, knee cave, or any back or hamstring symptom.",
+      "regressions": [
+        "EX_ACCEL_RUN",
+        "EX_BACKPEDAL"
+      ],
+      "progressions": [
+        "EX_CUT_45",
+        "EX_COD_DRILL"
+      ],
+      "contraindications": "Soccer and football both need this before cutting or kicking. Planned marks only; no surprise stops.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_CUT_45",
+      "name": "45-degree planned cuts",
+      "category": "speed",
+      "equipment": [
+        "cones",
+        "flat space"
+      ],
+      "cues": [
+        "Approach at the stated effort, plant the outside foot, and push off into a 45-degree change.",
+        "Trunk stays over the hips; no spinning or lumbar twist.",
+        "Stick or re-accelerate out of the cut under control."
+      ],
+      "stop_if": "Twisting pain, knee cave, sharp pain, or any leg or back symptom.",
+      "regressions": [
+        "EX_DECEL_STOP",
+        "EX_LATERAL_BOUND",
+        "EX_COD_DRILL"
+      ],
+      "progressions": [
+        "EX_CUT_90"
+      ],
+      "contraindications": "First cutting step for soccer and football. Planned cones only; submaximal at L7.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_CUT_90",
+      "name": "90-degree planned cuts, then one reactive cut",
+      "category": "speed",
+      "equipment": [
+        "cones",
+        "flat space"
+      ],
+      "cues": [
+        "Same plant mechanics as the 45-degree cut, into a sharper 90-degree change.",
+        "Planned cones first. A single partner- or self-called reactive cut is allowed only at the last rungs, after planned 90s are clean.",
+        "Hips low, trunk braced, no spinning."
+      ],
+      "stop_if": "Twisting pain, knee cave, sharp pain, or any leg or back symptom.",
+      "regressions": [
+        "EX_CUT_45",
+        "EX_COD_DRILL"
+      ],
+      "progressions": [
+        "EX_SOCCER_DRILLS",
+        "EX_FOOTBALL_DRILLS"
+      ],
+      "contraindications": "Do not start reactive or 180-degree cuts until planned 90s at the target effort are clean the next morning.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_RSA_REPEATS",
+      "name": "Repeated short sprints (RSA)",
+      "category": "speed",
+      "equipment": [
+        "flat track or field",
+        "cones"
+      ],
+      "cues": [
+        "Run 20-30 m at the stated effort; walk back or take the stated rest (full recovery on early rungs, 20-30 s at target).",
+        "The last rep should look like the first; stop the set if speed or form drops sharply.",
+        "Used for soccer repeated sprints and football play-to-play efforts."
+      ],
+      "stop_if": "Hamstring or groin tightness, back symptoms, or form breakdown.",
+      "regressions": [
+        "EX_SPRINT"
+      ],
+      "progressions": [
+        "EX_SOCCER_DRILLS",
+        "EX_FOOTBALL_DRILLS"
+      ],
+      "contraindications": "Only after isolated sprints are clean. Quality of the last rep matters more than the count.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_KICK_PROG",
+      "name": "Kicking progression (soccer)",
+      "category": "sport",
+      "equipment": [
+        "soccer ball",
+        "flat field"
+      ],
+      "cues": [
+        "Plant foot beside the ball, hips square or slightly open, trunk tall and braced; no lumbar whip.",
+        "Early rungs: short, controlled ground passes (inside and instep) only.",
+        "Driven shots after about 70% effort is clean. Volleys and longer dead-ball strikes only at the last rungs."
+      ],
+      "stop_if": "Back pain on the plant or follow-through, groin or hip-flexor sting, or any sharp or electrical symptom.",
+      "regressions": [
+        "EX_DECEL_STOP"
+      ],
+      "progressions": [
+        "EX_SOCCER_DRILLS"
+      ],
+      "contraindications": "The plant and brace are the skill. Never a max instep from a dead ball until the last two rungs are clean the next morning.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_CONTACT_PREP",
+      "name": "Contact and collision readiness (football, controlled)",
+      "category": "sport",
+      "equipment": [
+        "pad or heavy bag",
+        "open space"
+      ],
+      "cues": [
+        "See the contact coming. Hips low, trunk braced, chin tucked; absorb with the legs, not the lumbar spine.",
+        "Early rungs: isometric pad or partner holds (3-5 s) in an athletic stance. Then planned, coached pad bumps in a two-foot stance. Later rungs: short-space planned pad work.",
+        "Position-agnostic: stance, shed, absorb, and a controlled hinge get-up. No sit-up get-up."
+      ],
+      "stop_if": "An unexpected hit, any back or neck symptom, dizziness, or loss of control.",
+      "regressions": [
+        "EX_DECEL_STOP",
+        "EX_COD_DRILL"
+      ],
+      "progressions": [
+        "EX_FOOTBALL_DRILLS"
+      ],
+      "contraindications": "Controlled and coached only. Live tackling, unplanned collisions, and open-field hits are not default program items. Clear the gate test before adding any contact in practice, and only with a coach.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_SOCCER_DRILLS",
+      "name": "Soccer drills (technical, then small-sided)",
+      "category": "sport",
+      "equipment": [
+        "soccer ball",
+        "cones",
+        "field"
+      ],
+      "cues": [
+        "Start with individual technical work: short passing, receiving, planned cuts and decelerations, then the kicking progression at its current rung.",
+        "Progress to small-sided, planned drills (1v1 or 2v2 in a small grid) only after technical work at the target effort is clean.",
+        "Full practice intensity is the last rungs, still not a league match."
+      ],
+      "stop_if": "Pain, leg symptoms, a heavy plant, or technique breakdown.",
+      "regressions": [
+        "EX_ATHLETIC_CIRCUIT",
+        "EX_KICK_PROG",
+        "EX_RSA_REPEATS",
+        "EX_CUT_90"
+      ],
+      "progressions": [
+        "EX_SPORT_DRILLS"
+      ],
+      "contraindications": "Non-contact first. Shoulder-to-shoulder challenges wait until football contact-prep is also clean if both sports are trained in the same week.",
+      "in_default_program": true
+    },
+    {
+      "id": "EX_FOOTBALL_DRILLS",
+      "name": "Football drills (position-agnostic, non-contact then controlled)",
+      "category": "sport",
+      "equipment": [
+        "cones",
+        "field",
+        "pad or heavy bag"
+      ],
+      "cues": [
+        "Position-agnostic movement: stance and start, acceleration, backpedal, lateral shuffle, planned cuts, and a controlled deceleration.",
+        "Non-contact individual and group movement first. Controlled pad work only after `EX_CONTACT_PREP` is at target.",
+        "No live tackling and no unplanned open-field collisions in the default program."
+      ],
+      "stop_if": "Pain, neck or back symptoms, an unexpected hit, or technique breakdown.",
+      "regressions": [
+        "EX_ATHLETIC_CIRCUIT",
+        "EX_CONTACT_PREP",
+        "EX_RSA_REPEATS",
+        "EX_CUT_90"
+      ],
+      "progressions": [
+        "EX_SPORT_DRILLS"
+      ],
+      "contraindications": "Position-agnostic by design. Position skills (route, throw, catch, kick/punt) can be added later as optional items if David wants them.",
       "in_default_program": true
     }
   ]

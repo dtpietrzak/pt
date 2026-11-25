@@ -1,0 +1,45 @@
+{
+  "name": "David Pietrzak",
+  "timezone": "America/Chicago",
+  "body_weight_lb": 180,
+  "sports": [
+    "soccer",
+    "football"
+  ],
+  "equipment": {
+    "bands": true,
+    "dumbbells_lb": [],
+    "kettlebells_lb": [],
+    "barbell": true,
+    "plates_lb": [],
+    "rack_with_safeties": true,
+    "bench": true,
+    "pull_up_bar": true,
+    "step_box_in": [
+      6,
+      8,
+      12,
+      18
+    ],
+    "blocks": true,
+    "cones": true,
+    "track_or_field": true
+  },
+  "baselines": {
+    "pain_rest": 1,
+    "stiffness_min": 30,
+    "standing_h": 5
+  },
+  "clinician_contact": "",
+  "notify": {
+    "morning": "08:00",
+    "evening": "15:30",
+    "night": "21:00",
+    "post_workout": "on_session_complete"
+  },
+  "settings": {
+    "max_item_changes_per_finalized_session": 3,
+    "layoff_rule_enabled": true,
+    "clean_exposures_required": 2
+  }
+}
