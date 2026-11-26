@@ -224,8 +224,9 @@ test("eveningFromLogs fills standing, walking and sitting from Today and the wor
   const f = eveningFromLogs({ blocks, posture: pc, day: { walk_min: 30, standing_breaks_done: 5, decomp_breaks_done: 2 } }, { pain: 2, forced_rest: 0, leg: "none" });
   assert.equal(f.upright_h, 1); // 40 + 2 + 30 min, snapped to 0.5 h
   assert.equal(f.walk_min, 30);
-  assert.equal(f.breaks, 5);
-  assert.equal(f.decomp, 2);
+  assert.equal(f.breaks, undefined);
+  assert.equal(f.decomp, undefined);
+  assert.equal(f.forced_rest, 0);
   assert.equal(f.sit_on, true);
   assert.equal(f.sit_total_min, 20);
   assert.equal(f.no_pressure, undefined);
@@ -236,8 +237,9 @@ test("eveningFromLogs fills standing, walking and sitting from Today and the wor
   assert.equal("first_pressure_h" in rec.data.standing, false);
   assert.equal("censored" in rec.data.standing, false);
   assert.equal(rec.data.walk_min, 30);
-  assert.equal(rec.data.standing.breaks_taken, 5);
-  assert.equal(rec.data.standing.decomp_breaks_done, 2);
+  assert.equal("breaks_taken" in rec.data.standing, false);
+  assert.equal("decomp_breaks_done" in rec.data.standing, false);
+  assert.equal(rec.data.forced_rest_count, 0);
   assert.equal(rec.data.sitting.seated_min_total, 20);
   assert.equal("first_pressure_min" in rec.data.sitting, false);
   assert.equal(rec.data.posture_cycle.work_mode_used, true);
@@ -266,7 +268,7 @@ test("eveningFromLogs does not invent a 6h comfortable day when nothing was logg
   assert.match(eveningLogsNote({}), /unreported rather than guessed/);
 });
 
-test("a work-timer day without Today counters still counts relief phases as breaks", () => {
+test("a work-timer day does not count scheduled decompress phases as unplanned relief", () => {
   const d = "2026-12-01";
   const blocks = [
     { phase: "stand", prescribed_min: 40, actual_min: 40, started_at: `${d}T09:00:00-06:00`, ended_at: `${d}T09:40:00-06:00`, ended_how: "alarm", snoozes: 0 },
@@ -276,10 +278,16 @@ test("a work-timer day without Today counters still counts relief phases as brea
   ];
   const pc = postureCheckinData(blocks, [], { stand_min: 40, sit_min: 20, walk_min: 2, decomp_min: 5 });
   const f = eveningFromLogs({ blocks, posture: pc, day: {} }, { pain: 1, leg: "none" });
-  assert.equal(f.breaks, 3);
-  assert.equal(f.decomp, 1);
+  assert.equal(f.breaks, undefined);
+  assert.equal(f.decomp, undefined);
+  assert.equal(f.forced_rest, undefined);
   assert.equal(f.upright_h, 0.5); // 42 min, snapped to 0.5 h
   assert.equal(f.walk_min, undefined);
+  const rec = buildCheckIn("evening", { ...f, forced_rest: 0 }, ctx(at(d, "19:00"), { posture: pc }));
+  ok(rec);
+  assert.equal(rec.data.forced_rest_count, 0);
+  assert.equal("decomp_breaks_done" in rec.data.standing, false);
+  assert.equal(evaluateCheckIn(rec, B, config).color, "green");
 });
 
 test("editing an evening check-in keeps a previously entered first-pressure value", () => {

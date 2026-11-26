@@ -3,6 +3,7 @@
 import { evaluateAll, dailyMap } from "../engine.js";
 import { localDate, localTime, ulid } from "../util.js";
 import { checklist, dueNow, buildCheckIn, formFromCheckIn, summaryLine, redGuidance, tidyReasons, RED_FLAGS, TYPES, LABEL, noFlags, eveningFromLogs, keepEveningPressure, eveningLogsNote } from "../checkins.js";
+import { forcedRestFromReliefLogs } from "../relief.js";
 import { recordGate, evaluate, engineConfig, templateItems, buildSession, clearRed } from "../pipeline.js";
 import { postureCheckinData, postureLogKey } from "../posture.js";
 import { askNotifications } from "../timer-ui.js";
@@ -153,7 +154,7 @@ function formHtml(ctx, type, f) {
     const logsNote = f._logsNote || "";
     body = section("Pain", `${painQ("Worst back pain today")}
         ${qToggle("limited", "My back limited what I wanted to do", f.limited)}
-        ${qStep("forced_rest", "Times you had to stop and rest outside of scheduled breaks", f.forced_rest, { step: 1 })}
+        ${qStep("forced_rest", "Times you had to stop and rest outside of scheduled breaks", f.forced_rest, { step: 1, hint: "Pre-filled from today's Relief counters. Scheduled Work-timer breaks are not counted." })}
         ${qToggle("hip_shift", "Hips feel shifted to one side", f.hip_shift)}`)
       + (logsNote ? `<p class="ci-hint">${esc(logsNote)}</p>` : "")
       + safetyHtml(f);
@@ -180,7 +181,8 @@ async function defaultsFor(ctx, type, v, entry) {
   }
   if (type === "evening") {
     const x = await todayExtras(ctx, entry.date);
-    Object.assign(f, { forced_rest: 0, _logsNote: eveningLogsNote(x) });
+    const fromRelief = forcedRestFromReliefLogs(x.day);
+    Object.assign(f, { forced_rest: fromRelief ?? 0, _logsNote: eveningLogsNote(x) });
   }
   if (type === "night") Object.assign(f, { ready: true });
   return f;
@@ -325,11 +327,11 @@ function answersHtml(ctx, c) {
     html += group("What you did", items);
   } else if (c.type === "evening") {
     const st = d.standing || {}, sit = d.sitting;
-    html += group("Pain", row("Worst back pain today", painV(d.pain_peak_today)) + row("Back limited you", yn(d.activity_limited)) + row("Times you had to stop and rest outside of scheduled breaks", txt(d.forced_rest_count)) + row("Hips shifted", yn(d.hip_shift)));
+    html += group("Pain", row("Worst back pain today", painV(d.pain_peak_today)) + row("Back limited you", yn(d.activity_limited)) + row("Unplanned relief (Relief counters)", txt(d.forced_rest_count)) + row("Hips shifted", yn(d.hip_shift)));
     const pressH = st.censored === true || st.first_pressure_h === null ? "Never, stayed comfortable" : has(st.first_pressure_h) ? `After ${fmtH(st.first_pressure_h)}` : "";
     html += group("From Today and the Work timer", row("Time on your feet", has(st.upright_h_total) ? fmtH(st.upright_h_total) : "")
       + row("Pressure reached 3/10", pressH)
-      + row("Standing breaks", txt(st.breaks_taken)) + row("Decompression breaks", txt(st.decomp_breaks_done)) + row("Walking", has(d.walk_min) ? `${esc(d.walk_min)} min` : ""));
+      + row("Preventive standing breaks", txt(st.breaks_taken)) + row("Preventive decompression breaks", txt(st.decomp_breaks_done)) + row("Walking", has(d.walk_min) ? `${esc(d.walk_min)} min` : ""));
     if (sit) {
       const pressS = sit.censored === true || sit.first_pressure_min === null ? "Never, stayed comfortable" : has(sit.first_pressure_min) ? `After ${esc(sit.first_pressure_min)} min` : "";
       html += group("Sitting (from the Work timer)", row("Time seated", has(sit.seated_min_total) ? `${esc(sit.seated_min_total)} min` : "")

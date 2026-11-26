@@ -40,8 +40,6 @@ export function buildExport(i) {
     const doc = { local_date: d, level_id: log.level_id || i.stateEnd.level_id, checklist: log.checklist || [] };
     const walk = Math.max(log.walk_min ?? 0, ev?.data?.walk_min ?? 0);
     if (walk) doc.walk_min = walk;
-    if (log.decomp_breaks_done !== undefined || ev?.data?.standing?.decomp_breaks_done !== undefined) doc.decomp_breaks_done = log.decomp_breaks_done ?? ev.data.standing.decomp_breaks_done;
-    if (log.standing_breaks_done !== undefined || ev?.data?.standing?.breaks_taken !== undefined) doc.standing_breaks_done = log.standing_breaks_done ?? ev.data.standing.breaks_taken;
     if (st?.color) { doc.daily_status = st.color; doc.daily_status_reasons = st.reasons; }
     days.push(doc);
   }
@@ -88,7 +86,7 @@ export function buildExport(i) {
     },
     gate_tests: gateRows,
     adherence_pct: adherence,
-    relief: reliefRangeSummary(i.days || {}, i.start, lastDay),
+    relief: { kind: "unplanned_relief", ...reliefRangeSummary(i.days || {}, i.start, lastDay) },
   };
   const attention = buildAttention({ ...i, checkins, sessions, log, summary, days, dayLogs: i.days, planned, strengthDone, corePlanned, coreDays, mornings, evenings });
   const stem = exportStem(i.start);
@@ -213,7 +211,7 @@ export function renderMarkdown(x, i) {
   const rel = s.relief;
   if (rel && rel.total) {
     const typeBits = Object.entries(rel.by_type || {}).map(([id, n]) => `${n}× ${reliefById[id]?.label || id}`);
-    L.push("", "## Relief", "", `${rel.total} logged this week: ${typeBits.join(", ")}.`);
+    L.push("", "## Unplanned relief", "", `${rel.total} logged this week (Relief counters, not scheduled work breaks): ${typeBits.join(", ")}.`);
     for (const d of rel.by_day || []) L.push(`- ${d.local_date}: ${d.total}`);
   }
   L.push("", "## Attention", "");

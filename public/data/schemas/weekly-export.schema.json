@@ -209,6 +209,7 @@
         "relief": {
           "type": "object",
           "properties": {
+            "kind": { "const": "unplanned_relief" },
             "start": { "type": "string" },
             "end": { "type": "string" },
             "total": { "type": "integer" },

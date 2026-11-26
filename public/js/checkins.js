@@ -1,7 +1,7 @@
 // Check-ins (pure): which ones are due, and building schema-valid records from the quick forms.
 // No DOM and no I/O, so Node tests drive it. The UI lives in js/ui/checkins.js.
 import { isoLocal, localDate, localTime, addDays } from "./util.js";
-import { decompFromReliefLogs } from "./relief.js";
+import { forcedRestFromReliefLogs } from "./relief.js";
 
 export const TYPES = ["morning", "post_workout", "evening", "night"];
 export const LABEL = { morning: "Morning", post_workout: "Post-workout", evening: "Evening", night: "Night" };
@@ -208,8 +208,6 @@ export function eveningFromLogs(logs = {}, form = {}) {
   const phaseMin = (phase) => blocks.filter((b) => b.phase === phase).reduce((a, b) => a + (b.actual_min || 0), 0);
   const standWalkMin = phaseMin("stand") + phaseMin("walk");
   const sitMin = phaseMin("sit");
-  const workBreaks = blocks.filter((b) => b.phase === "walk" || b.phase === "sit" || b.phase === "decompress").length;
-  const workDecomp = blocks.filter((b) => b.phase === "decompress").length;
   const walk = hasNum(day.walk_min) ? Number(day.walk_min) : undefined;
   const f = { ...form, upright_h: Math.round(((standWalkMin + (walk || 0)) / 60) * 2) / 2 };
   delete f.no_pressure;
@@ -219,14 +217,14 @@ export function eveningFromLogs(logs = {}, form = {}) {
   delete f.sit_flared;
   if (walk !== undefined) f.walk_min = walk;
   else delete f.walk_min;
-  if (hasNum(day.standing_breaks_done)) f.breaks = Number(day.standing_breaks_done);
-  else if (workUsed) f.breaks = workBreaks;
-  else delete f.breaks;
-  const reliefDecomp = decompFromReliefLogs(day);
-  if (reliefDecomp !== null) f.decomp = reliefDecomp;
-  else if (hasNum(day.decomp_breaks_done)) f.decomp = Number(day.decomp_breaks_done);
-  else if (workUsed) f.decomp = workDecomp;
-  else delete f.decomp;
+  // Scheduled / preventive breaks (Work timer phases and any leftover Today
+  // standing/decomp counters) stay off the evening symptom fields.
+  delete f.breaks;
+  delete f.decomp;
+  const fromRelief = forcedRestFromReliefLogs(day);
+  if (fromRelief !== null && (form.forced_rest === undefined || form.forced_rest === "")) {
+    f.forced_rest = fromRelief;
+  }
   if (workUsed && blocks.some((b) => b.phase === "sit")) {
     f.sit_on = true;
     f.sit_total_min = Math.round(sitMin);
@@ -258,12 +256,11 @@ export function eveningLogsNote(logs = {}) {
   const f = eveningFromLogs(logs);
   const bits = [];
   if (f.walk_min !== undefined) bits.push(`walked ${f.walk_min} min`);
-  if (f.breaks !== undefined) bits.push(`${f.breaks} standing break${f.breaks === 1 ? "" : "s"}`);
-  if (f.decomp !== undefined) bits.push(`${f.decomp} decompression break${f.decomp === 1 ? "" : "s"}`);
+  if (f.forced_rest) bits.push(`${f.forced_rest} unplanned relief`);
   if (f.upright_h) bits.push(`${f.upright_h} h on your feet`);
   if (f.sit_on) bits.push(`sat ${f.sit_total_min} min at work`);
-  if (!bits.length) return "No walk or work-timer data logged today, so standing, walking and sitting times will be left unreported rather than guessed.";
-  return "From Today and the Work timer: " + bits.join(", ") + ".";
+  if (!bits.length) return "No walk, work-timer, or Relief log data today, so standing, walking and sitting times will be left unreported rather than guessed.";
+  return "From Today and the Work timer: " + bits.join(", ") + ". Scheduled work breaks are not counted as symptoms. Unplanned relief comes from the Relief counters.";
 }
 
 /** Primary pain number and one-line summary of a stored check-in, for lists. */

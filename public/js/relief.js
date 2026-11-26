@@ -74,8 +74,12 @@ export function reliefWeekSummary(daysMap, today) {
   return reliefRangeSummary(daysMap, weekStartMonday(today), weekEndSunday(today));
 }
 
-/** Map relief logs onto the evening decomp_breaks_done field when a log array is present. */
-export function decompFromReliefLogs(day) {
+/**
+ * Unplanned relief count for the evening forced_rest field.
+ * Returns null when no relief_log array is present so callers can fall back
+ * to an explicit form/vector value. Scheduled work-timer breaks are never included.
+ */
+export function forcedRestFromReliefLogs(day) {
   if (!day || !Array.isArray(day.relief_log)) return null;
   return day.relief_log.length;
 }

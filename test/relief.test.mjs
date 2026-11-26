@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   RELIEF_OPTIONS, newReliefEntry, addReliefEntry, removeLatestOfType, reliefLogOf, countByType,
-  reliefRangeSummary, decompFromReliefLogs, reliefById,
+  reliefRangeSummary, forcedRestFromReliefLogs, reliefById,
 } from "../public/js/relief.js";
 import { reliefCardHtml } from "../public/js/ui/relief.js";
 import { eveningFromLogs } from "../public/js/checkins.js";
@@ -50,16 +50,26 @@ test("relief logs stay off the checklist and count by day and type", () => {
   assert.deepEqual(countByType(reliefLogOf(d1)), { EX_DECOMP_90_90: 1, EX_STAND_EXTENSION: 1 });
 });
 
-test("evening decomp_breaks_done comes from relief_log when that array is present", () => {
+test("forced_rest comes from relief_log; scheduled decomp counters are ignored", () => {
   const day = { relief_log: [newReliefEntry({ exercise_id: "EX_DECOMP_90_90", ts: "t", id: "a" })], decomp_breaks_done: 9 };
-  assert.equal(decompFromReliefLogs(day), 1);
-  const f = eveningFromLogs({ day, blocks: [] }, { pain: 2, forced_rest: 0, leg: "none" });
-  assert.equal(f.decomp, 1);
-  // no log array: previous work-timer / day field mapping still applies
-  const f2 = eveningFromLogs({ day: { decomp_breaks_done: 2 }, blocks: [] }, { pain: 2, forced_rest: 0, leg: "none" });
-  assert.equal(f2.decomp, 2);
+  assert.equal(forcedRestFromReliefLogs(day), 1);
+  // no explicit form value: fill forced_rest from the log, leave decomp unset
+  const f = eveningFromLogs({ day, blocks: [] }, { pain: 2, leg: "none" });
+  assert.equal(f.forced_rest, 1);
+  assert.equal(f.decomp, undefined);
+  assert.equal(f.breaks, undefined);
+  // an explicit form/vector forced_rest wins; relief_log never writes decomp_breaks_done
+  const fKeep = eveningFromLogs({ day, blocks: [] }, { pain: 2, forced_rest: 0, leg: "none" });
+  assert.equal(fKeep.forced_rest, 0);
+  assert.equal(fKeep.decomp, undefined);
+  // no log array: do not treat leftover Today/work decomp counters as symptoms
+  const f2 = eveningFromLogs({ day: { decomp_breaks_done: 2, standing_breaks_done: 5 }, blocks: [] }, { pain: 2, forced_rest: 0, leg: "none" });
+  assert.equal(f2.decomp, undefined);
+  assert.equal(f2.breaks, undefined);
+  assert.equal(f2.forced_rest, 0);
   const f3 = eveningFromLogs({ day: {} }, { pain: 2, forced_rest: 0, leg: "none" });
   assert.equal(f3.decomp, undefined);
+  assert.equal(forcedRestFromReliefLogs({}), null);
 });
 
 test("Next on an idle timed bout advances the count without running the clock", () => {
