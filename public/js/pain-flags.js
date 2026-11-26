@@ -1,127 +1,86 @@
-// Unexpected-pain flags (pure): records, labels, and how they feed check-ins / progression.
-// Stored on the daily log as `pain_flags` (extra field; weekly export strips it and lists flags in attention).
-// Existing post-workout item fields (pain_peak, sharp_electrical) are reused when a session is checked in.
+// Unexpected-pain flags (pure): a simple per-item checkbox on the day log (`pain_flags`).
+// Older detailed flag records (pain/location/type/note) still count as checked.
+// Also hosts the 15 s rest-cue helpers used by the exercise timer.
 
-export const PAIN_LOCS = [
-  ["low_back", "Low back"],
-  ["leg", "Leg / radiating"],
-  ["hip", "Hip"],
-  ["other", "Other"],
-];
-export const PAIN_TYPES = [
-  ["sharp", "Sharp"],
-  ["ache", "Ache"],
-  ["nerve", "Nerve / tingling"],
-];
-export const LOC_LABEL = Object.fromEntries(PAIN_LOCS);
-export const TYPE_LABEL = Object.fromEntries(PAIN_TYPES);
-
-/** Matches the post-workout orange threshold (pain_peak >= 5 or sharp/electrical). */
-export function isSerious(flag) {
-  if (!flag) return false;
-  return (flag.pain ?? 0) >= 5 || flag.type === "sharp" || flag.type === "nerve" || flag.location === "leg";
-}
-
-/** Radiating/nerve, sharp, or high pain: show existing red-flag guidance (no auto-report). */
-export function needsRedGuidance(flag) {
-  if (!flag) return false;
-  return flag.location === "leg" || flag.type === "nerve" || flag.type === "sharp" || (flag.pain ?? 0) >= 7;
-}
-
-export function newFlag({ item_key = null, session_key = null, pain, location, type, note = "", ts, id }) {
-  const rec = {
-    id: id || `pf_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`,
-    pain: Math.max(0, Math.min(10, Math.round(Number(pain) || 0))),
-    location,
-    type,
-    ts,
-  };
-  if (item_key) rec.item_key = item_key;
-  if (session_key) rec.session_key = session_key;
-  const n = String(note || "").trim();
-  if (n) rec.note = n;
-  return rec;
-}
+export const FLAG_STREAK_TO_REGRESS = 2;
 
 export function flagsOf(day) {
   return Array.isArray(day?.pain_flags) ? day.pain_flags : [];
+}
+
+/** Any stored flag for this item counts as checked, including pre-simplification records. */
+export function isItemFlagged(day, itemKey) {
+  if (!itemKey) return false;
+  return flagsOf(day).some((f) => f.item_key === itemKey);
 }
 
 export function flagsForItem(day, itemKey) {
   return flagsOf(day).filter((f) => f.item_key === itemKey);
 }
 
-export function flagsForSession(day, sessionKey) {
-  return flagsOf(day).filter((f) => !f.item_key && f.session_key === sessionKey);
+export function flaggedItemKeys(day) {
+  return [...new Set(flagsOf(day).filter((f) => f.item_key).map((f) => f.item_key))];
 }
 
-export function upsertFlag(day, flag) {
-  const list = flagsOf(day).filter((f) => f.id !== flag.id);
-  list.push(flag);
-  list.sort((a, b) => (a.ts < b.ts ? -1 : 1));
-  return { ...day, pain_flags: list };
+export function setItemFlagged(day, itemKey, on, { ts, id } = {}) {
+  const rest = flagsOf(day).filter((f) => f.item_key !== itemKey);
+  if (!on) return { ...day, pain_flags: rest };
+  const existing = flagsOf(day).find((f) => f.item_key === itemKey);
+  const rec = existing
+    ? { ...existing, item_key: itemKey }
+    : { id: id || `pf_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`, item_key: itemKey, ts: ts || new Date().toISOString() };
+  return { ...day, pain_flags: [...rest, rec] };
 }
 
-export function removeFlag(day, id) {
-  return { ...day, pain_flags: flagsOf(day).filter((f) => f.id !== id) };
-}
-
-/** Map a flag onto the post-workout per-item fields the engine already reads. */
-export function toItemFields(flag) {
-  if (!flag) return { problem: false };
-  return {
-    problem: true,
-    pain_peak: flag.pain,
-    sharp: flag.type === "sharp" || flag.type === "nerve",
-  };
-}
-
-/** Prefill post-workout item rows from today's flags (worst flag wins; doesn't clear a worse stored value). */
-export function mergeFlagsIntoItems(items, flags) {
-  const by = {};
-  for (const f of flags || []) {
-    if (!f.item_key) continue;
-    const cur = by[f.item_key];
-    if (!cur || (f.pain ?? 0) > (cur.pain ?? 0) || (isSerious(f) && !isSerious(cur))) by[f.item_key] = f;
+/**
+ * Trailing run of flagged, completed sessions/days.
+ * `events` is chronological `{ done, flagged }` and should already be only the
+ * times this item was done; unflagged done events break the run.
+ */
+export function consecutiveFlagStreak(events) {
+  let n = 0;
+  for (let i = (events || []).length - 1; i >= 0; i--) {
+    if (!events[i].done) continue;
+    if (events[i].flagged) n++;
+    else break;
   }
-  return (items || []).map((i) => {
-    const f = by[i.item_key];
-    if (!f) return i;
-    const add = toItemFields(f);
-    return {
-      ...i,
-      problem: true,
-      pain_peak: i.pain_peak != null ? Math.max(i.pain_peak, add.pain_peak) : add.pain_peak,
-      sharp: !!(i.sharp || add.sharp),
-    };
-  });
+  return n;
 }
 
-/** Session-level (or any leftover) flags → session pain_peak / symptoms hints. */
-export function sessionFlagHints(flags) {
-  const list = flags || [];
-  if (!list.length) return null;
-  const pain = Math.max(0, ...list.map((f) => f.pain ?? 0));
-  const sharp = list.some((f) => f.type === "sharp" || f.type === "nerve");
-  const leg = list.some((f) => f.location === "leg") ? "new" : undefined;
-  return { pain, sharp, leg };
+function itemWasDoneInSession(session, itemKey) {
+  return (session.items || []).some((i) => i.item_key === itemKey && i.completed !== false && !i.skipped);
 }
 
-export function holdsCoreDay(flags, coreKeys) {
-  const keys = new Set(coreKeys || []);
-  return (flags || []).some((f) => keys.has(f.item_key) && isSerious(f));
+/** Completed sessions of this item up to and including `throughSession`, oldest first. */
+export function sessionFlagEvents(itemKey, sessions, days, throughSession) {
+  const list = (sessions || [])
+    .filter((s) => itemWasDoneInSession(s, itemKey))
+    .sort((a, b) => (a.started_at < b.started_at ? -1 : a.started_at > b.started_at ? 1 : 0));
+  const out = [];
+  for (const s of list) {
+    out.push({ id: s.id, date: s.local_date, done: true, flagged: isItemFlagged(days?.[s.local_date], itemKey) });
+    if (throughSession && (s.id === throughSession.id || s === throughSession)) break;
+  }
+  return out;
 }
 
-export function holdsWalkDay(flags, walkKey) {
-  if (!walkKey) return false;
-  return (flags || []).some((f) => f.item_key === walkKey && isSerious(f));
+function itemWasDoneOnDay(day, item) {
+  if (!day || !item) return false;
+  if ((day.checklist || []).some((c) => c.item_key === item.item_key && c.done)) return true;
+  if (item.block === "walking" && (day.walk_min ?? 0) > 0) return true;
+  return false;
 }
 
-export function flagSummary(flag, itemName) {
-  const who = itemName || (flag.session_key ? "This workout" : "This item");
-  const bits = [`${flag.pain}/10`, TYPE_LABEL[flag.type] || flag.type, LOC_LABEL[flag.location] || flag.location];
-  if (flag.note) bits.push(flag.note);
-  return `${who}: ${bits.join(" · ")}`;
+/** Days this daily item was done, up to and including `throughDate`. */
+export function dailyFlagEvents(item, daysMap, throughDate) {
+  const dates = Object.keys(daysMap || {}).filter((d) => !throughDate || d <= throughDate).sort();
+  const out = [];
+  for (const d of dates) {
+    const day = daysMap[d];
+    if (!itemWasDoneOnDay(day, item)) continue;
+    out.push({ date: d, done: true, flagged: isItemFlagged(day, item.item_key) });
+  }
+  return out;
 }
 
 export const REST_SEC = 15;

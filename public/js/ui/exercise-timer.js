@@ -3,9 +3,9 @@
 import { currentDose } from "../engine.js";
 import { formatDose, timedPlan, setPlan } from "../dose.js";
 import { unlockAudio, playAlarm, playCue, fmtClock, buzz, dingNotify } from "../audio.js";
-import { REST_SEC, needsRestAfter, restCuesToPlay } from "../pain-flags.js";
+import { REST_SEC, needsRestAfter, restCuesToPlay, isItemFlagged } from "../pain-flags.js";
 import { $, esc, openSheet, today, toast } from "./dom.js";
-import { loadDay, saveDay, wireFlagPanel } from "./pain-flag.js";
+import { loadDay, flagToggleHtml, wireFlagToggle } from "./pain-flag.js";
 
 let sess = null; // { itemKey, name, plan, step, status, endsAt, remain, restEndsAt, restPrev, sound }
 let sheetItem = null;
@@ -102,7 +102,7 @@ async function saveAuto(on) {
   await ctxRef.store.kvSet("app", ctxRef.app);
 }
 
-export function showExercise(ctx, itemKey) {
+export async function showExercise(ctx, itemKey) {
   const it = ctx.docs.levels.levels.flatMap((l) => l.items).find((i) => i.item_key === itemKey);
   if (!it) return;
   const ex = ctx.exById[it.exercise_id] || {};
@@ -121,7 +121,7 @@ export function showExercise(ctx, itemKey) {
     ${ex.cues?.length ? `<h4>Cues</h4><ul>${ex.cues.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}
     ${plan ? timerHtml(plan, formatDose(dose, it, ctx.profile), ctx) : ""}
     ${sets ? setCounterHtml(sets, formatDose(dose, it, ctx.profile)) : ""}
-    <div class="pain-flag" id="pain-flag"></div>
+    <div class="pain-flag" id="pain-flag">${flagToggleHtml(itemKey, isItemFlagged(await loadDay(ctx), itemKey))}</div>
     <h4>Ladder</h4><ol class="ladder">${ladder}</ol>
     ${ex.stop_if ? `<h4>Stop if</h4><p>${esc(ex.stop_if)}</p>` : ""}
     ${ex.contraindications ? `<h4>Cautions</h4><p>${esc(ex.contraindications)}</p>` : ""}
@@ -129,7 +129,7 @@ export function showExercise(ctx, itemKey) {
     ${it.requires?.length ? `<p class="muted small">Unlocks after: ${esc(it.requires.join(", "))}</p>` : ""}`, {
     onClose: () => { if (sheetItem === itemKey) sheetItem = null; render(); },
   });
-  wireFlagPanel($("#pain-flag"), ctx, { itemKey, itemName: ex.name || it.exercise_id, onChange: () => refreshTodayMarks(ctx, itemKey) });
+  wireFlagToggle($("#pain-flag"), ctx, itemKey);
   if (plan) {
     if (!sess || sess.itemKey !== itemKey || sess.plan.seconds !== plan.seconds || sess.plan.steps.length !== plan.steps.length) {
       if (!sess || sess.itemKey !== itemKey || sess.status === "idle" || sess.status === "done") {
@@ -402,17 +402,6 @@ function syncCheckbox(itemKey, done) {
   cb.checked = done;
   cb.dispatchEvent(new Event("change", { bubbles: true }));
 }
-async function refreshTodayMarks(ctx, itemKey) {
-  const { flagMarkHtml } = await import("./pain-flag.js");
-  const { flagsForItem } = await import("../pain-flags.js");
-  const day = await loadDay(ctx);
-  const html = flagMarkHtml(flagsForItem(day, itemKey), itemKey);
-  const key = (window.CSS && CSS.escape) ? CSS.escape(itemKey) : itemKey;
-  for (const el of document.querySelectorAll(`[data-flag-slot="${key}"]`)) el.outerHTML = html || `<span data-flag-slot="${itemKey}"></span>`;
-  const row = document.querySelector(`input[data-item="${key}"], input[data-wk-item="${key}"]`)?.closest(".item");
-  if (row) row.classList.toggle("flagged", /pain-mark/.test(html));
-}
-
 export function wireExerciseTimerChip(ctx) {
   const c = chip();
   if (!c || c.dataset.wired) return;

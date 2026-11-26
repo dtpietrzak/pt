@@ -2,7 +2,7 @@
 // Runs in the browser and in Node (tests reproduce seed/test-vectors.json).
 import { initPostureState, applyPosture, postureColor, postureEventFromEvening, postureConfig } from "./posture.js";
 import { RANK, worst, clone, addDays, dayDiff, hoursBetween, daysBetweenTs, median, round5, localDate } from "./util.js";
-import { flagsOf, holdsCoreDay, holdsWalkDay } from "./pain-flags.js";
+import { isItemFlagged, sessionFlagEvents, dailyFlagEvents, consecutiveFlagStreak, FLAG_STREAK_TO_REGRESS } from "./pain-flags.js";
 
 export const EMERGENCY_DEFAULT = ["saddle_numbness", "bladder_bowel_change"];
 export const CLINICIAN_DEFAULT = ["new_leg_weakness", "new_numbness_tingling", "fever_with_back_pain", "unexplained_weight_loss",
@@ -364,14 +364,16 @@ export function applySessionFinal(state, levelsDoc, ev, opts = {}) {
   const probation = s.probation_sessions_remaining > 0 && isStrength;
   if (probation) s.probation_sessions_remaining--;
 
+  const flagged = new Set(ev.flagged || []);
+  const streaks = ev.flag_streaks || {};
   if (ev.color === "green" && ev.clean) {
     s.consecutive_yellow_sessions = 0;
-    for (const k of keys) s.item_state[k].clean_exposures++;
+    for (const k of keys) if (!flagged.has(k)) s.item_state[k].clean_exposures++;
     const req = s.lock.easy_dose ? s.lock.clean_required : (cfg?.advance?.clean_exposures_required ?? 2);
     const paused = s.x.need_clean_after_pause > 0;
     const elig = paused ? [] : keys.filter((k) => {
       const st = s.item_state[k], it = items[k];
-      return st.clean_exposures >= req && !st.held_out && st.rung < it.target_rung &&
+      return !flagged.has(k) && st.clean_exposures >= req && !st.held_out && st.rung < it.target_rung &&
         (it.requires || []).every((r) => s.item_state[r] && items[r] && s.item_state[r].rung === items[r].target_rung);
     });
     if (paused) s.x.need_clean_after_pause--;
@@ -416,6 +418,25 @@ export function applySessionFinal(state, levelsDoc, ev, opts = {}) {
   } else if (ev.color === "orange") {
     const r = applyOrange(s, levelsDoc, { ts: ev.ts, culprits: ev.culprits || [], session_id: ev.session_id, color: "orange", probation, alreadyCounted: ev.alreadyCounted }, cfg);
     Object.assign(out, r.out); log.push(...r.log);
+  }
+  if (flagged.size && ev.color !== "orange") {
+    for (const k of keys) {
+      if (!flagged.has(k)) continue;
+      const st = s.item_state[k], it = items[k];
+      const streak = streaks[k] ?? 1;
+      const start = it.start_rung ?? 0;
+      st.clean_exposures = 0;
+      if (streak >= FLAG_STREAK_TO_REGRESS && st.rung > start) {
+        const c = { item_key: k, from_rung: st.rung, to_rung: st.rung - 1 };
+        st.rung -= 1;
+        out.outcome = "regress_step";
+        out.popped = [...(out.popped || []), k];
+        L_("R17", "regress_step", `Unexpected pain flagged in ${streak} sessions in a row: ${it.exercise_id} stepped back one rung.`, [c]);
+      } else {
+        if (out.outcome === "none") out.outcome = "hold";
+        L_("R17", "hold", `Unexpected pain flagged: ${it.exercise_id} will not advance this time.`);
+      }
+    }
   }
   return { state: s, out, log };
 }
@@ -568,7 +589,7 @@ export function runEngine(state, data, docs, cfg, now, newId = defaultId()) {
     if (s.mode === "red_stop") break;
     if (t.kind === "session") {
       processedS.add(t.ss.id);
-      s = processSession(s, t.ss, t.e, docs, cfg, cap, push, daily);
+      s = processSession(s, t.ss, t.e, docs, cfg, cap, push, daily, data);
     } else {
       processedD.add(t.date);
       s = processDay(s, t.date, data, daily, evals, checkins, docs, cfg, push);
@@ -601,7 +622,19 @@ export function dailyMap(checkins, evals) {
   return m;
 }
 
-function processSession(s, ss, e, docs, cfg, cap, push, daily) {
+
+function sessionFlagInfo(ss, data) {
+  const days = data?.days || {};
+  const sessions = data?.sessions || [];
+  const flagged = (ss.items || [])
+    .filter((i) => i.completed !== false && !i.skipped && isItemFlagged(days[ss.local_date], i.item_key))
+    .map((i) => i.item_key);
+  const flag_streaks = {};
+  for (const k of flagged) flag_streaks[k] = consecutiveFlagStreak(sessionFlagEvents(k, sessions, days, ss));
+  return { flagged, flag_streaks };
+}
+
+function processSession(s, ss, e, docs, cfg, cap, push, daily, data) {
   if (e.status === "unevaluated") {
     push({ rule_id: "R13", outcome: "none", session_id: ss.id, message: `Session ${ss.local_date} (${ss.template}) unevaluated: next-morning check-in missing for 36 h. Nothing advances on it.` });
     return s;
@@ -619,7 +652,7 @@ function processSession(s, ss, e, docs, cfg, cap, push, daily) {
   const dates = [ss.local_date, addDays(ss.local_date, 1)];
   const alreadyCounted = e.final_color === "orange" && dates.some((d) => s.x.orange_dates.includes(d));
   const items = ss.items.filter((i) => i.completed !== false && !i.skipped).map((i) => i.item_key);
-  const r = applySessionFinal(s, docs.levels, { color: e.final_color === "red" ? "orange" : e.final_color, clean: e.clean, items, culprits: e.culprits, ts: e.finalized_on || ss.ended_at, session_id: ss.id, template: ss.template, alreadyCounted }, { config: cfg, cap });
+  const r = applySessionFinal(s, docs.levels, { color: e.final_color === "red" ? "orange" : e.final_color, clean: e.clean, items, culprits: e.culprits, ts: e.finalized_on || ss.ended_at, session_id: ss.id, template: ss.template, alreadyCounted, ...sessionFlagInfo(ss, data) }, { config: cfg, cap });
   if (e.final_color === "orange" && !alreadyCounted) r.state.x.orange_dates.push(ss.local_date);
   for (const l of r.log) push({ ...l, checkin_ids: e.checkin_ids });
   return r.state;
@@ -666,6 +699,41 @@ export function gatePass(g, threshold, postEval) {
   else met = g.value === true || g.value === "met" || (typeof g.value === "string" && g.value.trim().toLowerCase() === String(thr).toLowerCase());
   const symptomsOk = !postEval || !postEval.reasons.some((r) => /sharp|leg symptoms|numbness/.test(r));
   return !!(met && g.form_ok !== false && (g.pain_peak ?? 0) <= 2 && symptomsOk);
+}
+
+
+function applyDailyPainFlags(s, level, data, d, dlog, walkItem, push) {
+  const dailyItems = (level.items || []).filter((i) => i.block === "daily_core" || i.block === "daily_mobility");
+  for (const it of dailyItems) {
+    if (!(dlog?.checklist || []).some((c) => c.item_key === it.item_key && c.done)) continue;
+    if (!isItemFlagged(dlog, it.item_key)) continue;
+    const st = s.item_state[it.item_key];
+    if (!st) continue;
+    const streak = consecutiveFlagStreak(dailyFlagEvents(it, data.days, d));
+    const start = it.start_rung ?? 0;
+    st.clean_exposures = 0;
+    if (streak >= FLAG_STREAK_TO_REGRESS && st.rung > start) {
+      const c = { item_key: it.item_key, from_rung: st.rung, to_rung: st.rung - 1 };
+      st.rung -= 1;
+      push({ rule_id: "R17", outcome: "regress_step", message: `Unexpected pain flagged in ${streak} days in a row: ${it.exercise_id} stepped back one rung.`, changes: [c] });
+    } else {
+      push({ rule_id: "R17", outcome: "hold", message: `Unexpected pain flagged: ${it.exercise_id} will not advance this time.` });
+    }
+  }
+  if (walkItem && s.walk && (dlog?.walk_min ?? 0) > 0 && isItemFlagged(dlog, walkItem.item_key)) {
+    const streak = consecutiveFlagStreak(dailyFlagEvents(walkItem, data.days, d));
+    const startMin = walkItem.rungs[walkItem.start_rung ?? 0]?.time_min ?? 5;
+    if (streak >= FLAG_STREAK_TO_REGRESS && s.walk.current_min > startMin) {
+      const from = s.walk.current_min;
+      s.walk.current_min = Math.max(startMin, s.walk.current_min - 5);
+      s.walk.clean_days = 0;
+      const st = s.item_state[walkItem.item_key];
+      if (st) { let r = 0; walkItem.rungs.forEach((g, n) => { if ((g.time_min ?? 0) <= s.walk.current_min) r = n; }); st.rung = r; }
+      push({ rule_id: "R17", outcome: "regress_step", message: `Unexpected pain flagged in ${streak} days in a row: walking ${from} → ${s.walk.current_min} min.` });
+    } else {
+      push({ rule_id: "R17", outcome: "hold", message: "Unexpected pain flagged: walking will not advance this time." });
+    }
+  }
 }
 
 function processDay(s, d, data, daily, evals, checkins, docs, cfg, push) {
@@ -727,15 +795,14 @@ function processDay(s, d, data, daily, evals, checkins, docs, cfg, push) {
   // R6 core track
   const core = level.items.filter((i) => i.block === "daily_core");
   const coreDone = core.length > 0 && dlog && core.filter((i) => !i.optional).every((i) => dlog.checklist?.some((c) => c.item_key === i.item_key && c.done));
-  const coreHeld = holdsCoreDay(flagsOf(dlog), core.filter((i) => !i.optional).map((i) => i.item_key));
-  if (coreDone && status === "green" && nextMorningGreen && !coreHeld) {
+  if (coreDone && status === "green" && nextMorningGreen) {
     s.core_clean_days++;
     if (s.core_clean_days >= (cfg.advance.core_clean_days_required ?? 3)) {
       s.core_clean_days = 0;
       const order = Object.fromEntries(level.items.map((i, n) => [i.item_key, n]));
       const elig = core.filter((i) => {
         const st = s.item_state[i.item_key];
-        return st && !st.held_out && st.rung < i.target_rung && (i.requires || []).every((r) => { const ri = level.items.find((x) => x.item_key === r); return ri && s.item_state[r]?.rung === ri.target_rung; });
+        return st && !st.held_out && !isItemFlagged(dlog, i.item_key) && st.rung < i.target_rung && (i.requires || []).every((r) => { const ri = level.items.find((x) => x.item_key === r); return ri && s.item_state[r]?.rung === ri.target_rung; });
       }).sort((a, b) => (b.target_rung - s.item_state[b.item_key].rung) - (a.target_rung - s.item_state[a.item_key].rung) || order[a.item_key] - order[b.item_key]);
       if (elig.length) {
         const it = elig[0], st = s.item_state[it.item_key];
@@ -745,15 +812,15 @@ function processDay(s, d, data, daily, evals, checkins, docs, cfg, push) {
         push({ rule_id: "R6", outcome: "advance", color: "green", message: `3 clean core days: ${it.exercise_id} up one rung.`, changes: [c] });
       }
     }
-  } else if (status !== "green" || !coreDone || !nextMorningGreen || coreHeld) s.core_clean_days = 0;
+  } else if (status !== "green" || !coreDone || !nextMorningGreen) s.core_clean_days = 0;
 
   // R7 walking track
   const walkItem = level.items.find((i) => i.block === "walking");
   if (walkItem && s.walk) {
     const cap = walkItem.rungs[walkItem.target_rung]?.time_min ?? s.walk.current_min;
     const walked = Math.max(dlog?.walk_min ?? 0, evening?.data?.walk_min ?? 0);
-    const walkHeld = holdsWalkDay(flagsOf(dlog), walkItem.item_key);
-    if (status === "green" && walked >= s.walk.current_min && !walkHeld) {
+    const walkFlagged = isItemFlagged(dlog, walkItem.item_key);
+    if (status === "green" && walked >= s.walk.current_min && !walkFlagged) {
       s.walk.clean_days++;
       if (s.walk.clean_days >= (cfg.advance.walk_clean_days_required ?? 3)) {
         s.walk.clean_days = 0;
@@ -763,11 +830,13 @@ function processDay(s, d, data, daily, evals, checkins, docs, cfg, push) {
           push({ rule_id: "R7", outcome: "advance", color: "green", message: `3 green days with the walking target met: walking ${from} → ${s.walk.current_min} min.` });
         }
       }
-    } else if (status !== "green" || walkHeld) s.walk.clean_days = 0;
+    } else if (status !== "green") s.walk.clean_days = 0;
     // keep the walking item's rung in step with the walking minutes
     const st = s.item_state[walkItem.item_key];
     if (st) { let r = 0; walkItem.rungs.forEach((g, n) => { if ((g.time_min ?? 0) <= s.walk.current_min) r = n; }); st.rung = r; }
   }
+
+  applyDailyPainFlags(s, level, data, d, dlog, walkItem, push);
 
   // R9 settle exit
   if (s.mode === "settle") {

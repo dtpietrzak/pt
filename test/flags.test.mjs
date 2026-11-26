@@ -1,122 +1,165 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  isSerious, needsRedGuidance, newFlag, flagsOf, flagsForItem, flagsForSession,
-  upsertFlag, removeFlag, toItemFields, mergeFlagsIntoItems, sessionFlagHints,
-  holdsCoreDay, holdsWalkDay, flagSummary, REST_SEC, restCuesToPlay, needsRestAfter,
+  isItemFlagged, flagsOf, flagsForItem, flaggedItemKeys, setItemFlagged,
+  consecutiveFlagStreak, sessionFlagEvents, dailyFlagEvents, FLAG_STREAK_TO_REGRESS,
+  REST_SEC, restCuesToPlay, needsRestAfter,
 } from "../public/js/pain-flags.js";
+import { initState, applySessionFinal } from "../public/js/engine.js";
 import { setPlan, timedPlan } from "../public/js/dose.js";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-
-const flag = (over = {}) => newFlag({ pain: 3, location: "low_back", type: "ache", ts: "2026-11-25T12:00:00", ...over });
-
-test("newFlag clamps pain, drops empty notes, and keeps keys", () => {
-  const f = newFlag({ item_key: "core_a", session_key: "wk:A", pain: 12, location: "leg", type: "nerve", note: "  zing  ", ts: "t" });
-  assert.equal(f.pain, 10);
-  assert.equal(f.item_key, "core_a");
-  assert.equal(f.session_key, "wk:A");
-  assert.equal(f.note, "zing");
-  assert.ok(f.id);
-  const bare = newFlag({ pain: -2, location: "hip", type: "sharp", ts: "t", note: "   " });
-  assert.equal(bare.pain, 0);
-  assert.equal(bare.item_key, undefined);
-  assert.equal(bare.note, undefined);
+const j = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url)));
+const levels = j("../public/data/levels.json");
+const config = j("../public/data/decision-config.json");
+const ITEM = "L1_strength_A_EX_GLUTE_BRIDGE";
+const ITEMS = [
+  "L1_strength_A_EX_GLUTE_BRIDGE",
+  "L1_strength_A_EX_BOX_SQUAT_STRAP",
+  "L1_strength_A_EX_HINGE_DOWEL",
+  "L1_strength_A_EX_SIDE_STEP_BAND",
+  "L1_strength_A_EX_CALF_RAISE",
+];
+const ev = (over = {}) => ({
+  color: "green",
+  clean: true,
+  items: ITEMS,
+  ts: "2026-12-01T12:00:00-06:00",
+  session_id: "S1",
+  template: "strength_A",
+  ...over,
 });
 
-test("isSerious matches the post-workout orange threshold, plus radiating/nerve", () => {
-  assert.equal(isSerious(flag({ pain: 4 })), false);
-  assert.equal(isSerious(flag({ pain: 5 })), true);
-  assert.equal(isSerious(flag({ pain: 2, type: "sharp" })), true);
-  assert.equal(isSerious(flag({ pain: 2, type: "nerve" })), true);
-  assert.equal(isSerious(flag({ pain: 2, location: "leg" })), true);
+test("FLAG_STREAK_TO_REGRESS is 2 consecutive flagged completed sessions", () => {
+  assert.equal(FLAG_STREAK_TO_REGRESS, 2);
 });
 
-test("needsRedGuidance covers radiating, nerve, sharp, or pain >= 7", () => {
-  assert.equal(needsRedGuidance(flag({ pain: 6, type: "ache" })), false);
-  assert.equal(needsRedGuidance(flag({ pain: 7, type: "ache" })), true);
-  assert.equal(needsRedGuidance(flag({ pain: 2, location: "leg" })), true);
-  assert.equal(needsRedGuidance(flag({ pain: 2, type: "nerve" })), true);
-  assert.equal(needsRedGuidance(flag({ pain: 2, type: "sharp" })), true);
-});
-
-test("flagsOf / upsert / remove keep a dated list on the day doc", () => {
-  assert.deepEqual(flagsOf(null), []);
-  const a = flag({ id: "a", item_key: "x", ts: "2026-11-25T10:00:00" });
-  const b = flag({ id: "b", item_key: "y", ts: "2026-11-25T09:00:00" });
-  let day = upsertFlag({ local_date: "2026-11-25", checklist: [] }, a);
-  day = upsertFlag(day, b);
-  assert.deepEqual(day.pain_flags.map((f) => f.id), ["b", "a"]);
-  assert.equal(flagsForItem(day, "x").length, 1);
-  assert.equal(flagsForSession(day, "wk:A").length, 0);
-  day = upsertFlag(day, { ...a, pain: 8 });
-  assert.equal(flagsForItem(day, "x")[0].pain, 8);
-  assert.equal(day.pain_flags.length, 2);
-  day = removeFlag(day, "a");
-  assert.deepEqual(day.pain_flags.map((f) => f.id), ["b"]);
-});
-
-test("session flags are those with a session_key and no item_key", () => {
+test("isItemFlagged treats any stored record with that item_key as checked, including old detailed flags", () => {
   const day = {
     pain_flags: [
-      flag({ id: "i", item_key: "x", session_key: "wk:A" }),
-      flag({ id: "s", session_key: "wk:A" }),
+      { id: "old", item_key: "core_a", pain: 6, location: "low_back", type: "ache", note: "old form", ts: "t" },
+      { id: "sess", session_key: "wk:A", pain: 4, ts: "t" },
     ],
   };
-  assert.equal(flagsForSession(day, "wk:A").map((f) => f.id).join(), "s");
-  assert.equal(flagsForItem(day, "x").map((f) => f.id).join(), "i");
+  assert.equal(isItemFlagged(day, "core_a"), true);
+  assert.equal(isItemFlagged(day, "core_b"), false);
+  assert.equal(isItemFlagged(null, "core_a"), false);
+  assert.deepEqual(flaggedItemKeys(day), ["core_a"]);
+  assert.equal(flagsForItem(day, "core_a").length, 1);
+  assert.deepEqual(flagsOf(null), []);
 });
 
-test("mergeFlagsIntoItems prefills problem/pain/sharp without clearing a worse value", () => {
-  const flags = [
-    flag({ item_key: "a", pain: 4, type: "ache" }),
-    flag({ item_key: "a", pain: 6, type: "sharp" }),
-    flag({ item_key: "b", pain: 3, type: "nerve" }),
+test("setItemFlagged toggles a simple record and preserves an existing detailed one", () => {
+  let day = setItemFlagged({ local_date: "2026-11-25", checklist: [] }, "x", true, { id: "a", ts: "t" });
+  assert.equal(isItemFlagged(day, "x"), true);
+  assert.equal(day.pain_flags[0].item_key, "x");
+  assert.equal(day.pain_flags[0].id, "a");
+  const detailed = { id: "old", item_key: "y", pain: 5, location: "hip", type: "sharp", ts: "t" };
+  day = { ...day, pain_flags: [...day.pain_flags, detailed] };
+  day = setItemFlagged(day, "y", true);
+  assert.equal(day.pain_flags.filter((f) => f.item_key === "y").length, 1);
+  assert.equal(day.pain_flags.find((f) => f.item_key === "y").pain, 5);
+  day = setItemFlagged(day, "y", false);
+  assert.equal(isItemFlagged(day, "y"), false);
+  assert.equal(isItemFlagged(day, "x"), true);
+});
+
+test("consecutiveFlagStreak counts a trailing run and resets after an unflagged done session", () => {
+  assert.equal(consecutiveFlagStreak([]), 0);
+  assert.equal(consecutiveFlagStreak([{ done: true, flagged: true }]), 1);
+  assert.equal(consecutiveFlagStreak([{ done: true, flagged: true }, { done: true, flagged: true }]), 2);
+  assert.equal(consecutiveFlagStreak([{ done: true, flagged: true }, { done: true, flagged: false }, { done: true, flagged: true }]), 1);
+  assert.equal(consecutiveFlagStreak([{ done: true, flagged: true }, { done: true, flagged: true }, { done: true, flagged: false }]), 0);
+});
+
+test("sessionFlagEvents only includes completed sessions of that item, in order, through the current one", () => {
+  const sessions = [
+    { id: "S1", local_date: "2026-12-01", started_at: "2026-12-01T12:00:00", items: [{ item_key: ITEM, completed: true }] },
+    { id: "S2", local_date: "2026-12-03", started_at: "2026-12-03T12:00:00", items: [{ item_key: ITEM, completed: true }] },
+    { id: "S3", local_date: "2026-12-05", started_at: "2026-12-05T12:00:00", items: [{ item_key: ITEM, skipped: true }] },
+    { id: "S4", local_date: "2026-12-07", started_at: "2026-12-07T12:00:00", items: [{ item_key: ITEM, completed: true }] },
   ];
-  const items = mergeFlagsIntoItems([
-    { item_key: "a", completed: true, pain_peak: 2 },
-    { item_key: "b", completed: true },
-    { item_key: "c", completed: true },
-  ], flags);
-  assert.equal(items[0].problem, true);
-  assert.equal(items[0].pain_peak, 6);
-  assert.equal(items[0].sharp, true);
-  assert.equal(items[1].pain_peak, 3);
-  assert.equal(items[1].sharp, true);
-  assert.equal(items[2].problem, undefined);
-  assert.deepEqual(toItemFields(flag({ pain: 2, type: "nerve" })), { problem: true, pain_peak: 2, sharp: true });
+  const days = {
+    "2026-12-01": { pain_flags: [{ item_key: ITEM }] },
+    "2026-12-03": { pain_flags: [{ item_key: ITEM }] },
+    "2026-12-07": { pain_flags: [] },
+  };
+  const all = sessionFlagEvents(ITEM, sessions, days);
+  assert.deepEqual(all.map((e) => e.id), ["S1", "S2", "S4"]);
+  assert.deepEqual(all.map((e) => e.flagged), [true, true, false]);
+  const through = sessionFlagEvents(ITEM, sessions, days, sessions[1]);
+  assert.deepEqual(through.map((e) => e.id), ["S1", "S2"]);
+  assert.equal(consecutiveFlagStreak(through), 2);
 });
 
-test("sessionFlagHints take the worst pain and radiating/nerve cues", () => {
-  assert.equal(sessionFlagHints([]), null);
-  const h = sessionFlagHints([
-    flag({ pain: 4, type: "ache", location: "low_back" }),
-    flag({ pain: 6, type: "nerve", location: "leg" }),
-  ]);
-  assert.equal(h.pain, 6);
-  assert.equal(h.sharp, true);
-  assert.equal(h.leg, "new");
+test("dailyFlagEvents counts checklist or walk minutes as done", () => {
+  const item = { item_key: "core_a", block: "daily_core" };
+  const walk = { item_key: "walk", block: "walking" };
+  const days = {
+    "2026-12-01": { checklist: [{ item_key: "core_a", done: true }], walk_min: 10, pain_flags: [{ item_key: "core_a" }] },
+    "2026-12-02": { checklist: [{ item_key: "core_a", done: false }], walk_min: 10, pain_flags: [{ item_key: "walk" }] },
+    "2026-12-03": { checklist: [{ item_key: "core_a", done: true }], walk_min: 0, pain_flags: [{ item_key: "core_a" }] },
+  };
+  const core = dailyFlagEvents(item, days, "2026-12-03");
+  assert.deepEqual(core.map((e) => e.date), ["2026-12-01", "2026-12-03"]);
+  assert.equal(consecutiveFlagStreak(core), 2);
+  const w = dailyFlagEvents(walk, days, "2026-12-02");
+  assert.deepEqual(w.map((e) => [e.date, e.flagged]), [["2026-12-01", false], ["2026-12-02", true]]);
+  assert.equal(consecutiveFlagStreak(w), 1);
 });
 
-test("holdsCoreDay / holdsWalkDay only fire on a serious flag for that item", () => {
-  const flags = [
-    flag({ item_key: "core_req", pain: 5 }),
-    flag({ item_key: "core_opt", pain: 8 }),
-    flag({ item_key: "walk", pain: 2, type: "ache" }),
-  ];
-  assert.equal(holdsCoreDay(flags, ["core_req"]), true);
-  assert.equal(holdsCoreDay(flags, ["other"]), false);
-  assert.equal(holdsCoreDay([flag({ item_key: "core_req", pain: 2 })], ["core_req"]), false);
-  assert.equal(holdsWalkDay(flags, "walk"), false);
-  assert.equal(holdsWalkDay([flag({ item_key: "walk", location: "leg", pain: 2 })], "walk"), true);
-  assert.equal(holdsWalkDay(flags, null), false);
+test("a flagged item does not advance on a clean session", () => {
+  let s = initState(levels, "L1");
+  s.item_state[ITEM].rung = 1;
+  s.item_state[ITEM].clean_exposures = 1;
+  const r = applySessionFinal(s, levels, ev({ flagged: [ITEM], flag_streaks: { [ITEM]: 1 } }), { config });
+  assert.equal(r.state.item_state[ITEM].rung, 1);
+  assert.equal(r.state.item_state[ITEM].clean_exposures, 0);
+  assert.ok(!r.out.bumped.includes(ITEM));
+  const r17 = r.log.filter((e) => e.rule_id === "R17");
+  assert.equal(r17.length, 1);
+  assert.equal(r17[0].outcome, "hold");
+  assert.match(r17[0].message, /will not advance/);
 });
 
-test("flagSummary lists pain, type, place, and a note", () => {
-  assert.match(flagSummary(flag({ pain: 6, type: "sharp", location: "hip", note: "ouch" }), "Bird dog"), /Bird dog: 6\/10 · Sharp · Hip · ouch/);
+test("two consecutive flagged completed sessions regress one rung when above the first rung", () => {
+  let s = initState(levels, "L1");
+  s.item_state[ITEM].rung = 1;
+  const first = applySessionFinal(s, levels, ev({ session_id: "S1", flagged: [ITEM], flag_streaks: { [ITEM]: 1 } }), { config });
+  assert.equal(first.state.item_state[ITEM].rung, 1);
+  assert.equal(first.log.find((e) => e.rule_id === "R17").outcome, "hold");
+  const second = applySessionFinal(first.state, levels, ev({ session_id: "S2", ts: "2026-12-03T12:00:00-06:00", flagged: [ITEM], flag_streaks: { [ITEM]: 2 } }), { config });
+  assert.equal(second.state.item_state[ITEM].rung, 0);
+  const r17 = second.log.filter((e) => e.rule_id === "R17");
+  assert.equal(r17.length, 1);
+  assert.equal(r17[0].outcome, "regress_step");
+  assert.match(r17[0].message, /2 sessions in a row/);
+  assert.match(r17[0].message, /stepped back one rung/);
+  assert.equal(second.out.outcome, "regress_step");
+});
+
+test("two consecutive flags at the first rung only hold", () => {
+  let s = initState(levels, "L1");
+  assert.equal(s.item_state[ITEM].rung, 0);
+  const first = applySessionFinal(s, levels, ev({ flagged: [ITEM], flag_streaks: { [ITEM]: 1 } }), { config });
+  const second = applySessionFinal(first.state, levels, ev({ session_id: "S2", flagged: [ITEM], flag_streaks: { [ITEM]: 2 } }), { config });
+  assert.equal(second.state.item_state[ITEM].rung, 0);
+  assert.equal(second.log.find((e) => e.rule_id === "R17").outcome, "hold");
+  assert.match(second.log.find((e) => e.rule_id === "R17").message, /will not advance/);
+});
+
+test("an unflagged completed session resets the consecutive flag streak", () => {
+  let s = initState(levels, "L1");
+  s.item_state[ITEM].rung = 1;
+  s = applySessionFinal(s, levels, ev({ session_id: "S1", flagged: [ITEM], flag_streaks: { [ITEM]: 1 } }), { config }).state;
+  s = applySessionFinal(s, levels, ev({ session_id: "S2", ts: "2026-12-03T12:00:00-06:00" }), { config }).state;
+  assert.equal(s.item_state[ITEM].rung, 1);
+  const third = applySessionFinal(s, levels, ev({ session_id: "S3", ts: "2026-12-05T12:00:00-06:00", flagged: [ITEM], flag_streaks: { [ITEM]: 1 } }), { config });
+  assert.equal(third.state.item_state[ITEM].rung, 1);
+  assert.equal(third.log.find((e) => e.rule_id === "R17").outcome, "hold");
 });
 
 test("REST_SEC is 15 and rest cues tick at 3-2-1 then go at 0", () => {

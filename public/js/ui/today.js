@@ -11,7 +11,8 @@ import { shouldShowStrengthRest, strengthCountThisWeek, weeklyStrengthTarget, we
 import { isoLocal, localTime } from "../util.js";
 import { $, esc, BLOCKS, today, nowHM, addMin, minutesSince, fmtDate, openSheet, closeSheet, toast } from "./dom.js";
 import { showExercise, wireExerciseTimerChip } from "./exercise-timer.js";
-import { flagMarkHtml, wireFlagPanel } from "./pain-flag.js";
+import { flagMarkHtml, persistItemFlag, paintFlagMark } from "./pain-flag.js";
+import { isItemFlagged } from "../pain-flags.js";
 
 const DAILY = ["daily_mobility", "daily_core", "walking"];
 const MORNING_WINDOW_MIN = 45;
@@ -160,7 +161,7 @@ export async function renderToday(ctx, main) {
           <span class="section-bar" aria-hidden="true"><span data-block-bar="${block}" style="width:${Math.round(sum.pct * 100)}%"></span></span>
         </button>
         <div class="section-body" data-block-body="${block}"${isOpen ? "" : " hidden"}>`;
-    for (const it of its) html += itemRow(ctx, it, doneSet.has(it.item_key), { flags: (log.pain_flags || []).filter((f) => f.item_key === it.item_key) });
+    for (const it of its) html += itemRow(ctx, it, doneSet.has(it.item_key), { flagged: isItemFlagged(log, it.item_key) });
     if (block === "walking") {
       html += stepper("Walked today", walkHint(lv, walkTarget), "walk_min", log.walk_min || 0, "min", 5);
     }
@@ -204,6 +205,14 @@ export async function renderToday(ctx, main) {
   };
 
   main.onchange = async (e) => {
+    const flagBox = e.target.closest("input[data-flag-item]");
+    if (flagBox) {
+      const on = flagBox.checked;
+      await persistItemFlag(ctx, flagBox.dataset.flagItem, on, d);
+      paintFlagMark(flagBox.dataset.flagItem, on);
+      toast(on ? "Unexpected pain flagged. This exercise will not advance." : "Pain flag cleared.");
+      return;
+    }
     const wcb = e.target.closest("input[data-wk-item]");
     if (wcb) {
       const template = wcb.dataset.wk;
@@ -300,18 +309,6 @@ export async function renderToday(ctx, main) {
     }
 
     const info = e.target.closest("[data-info]");
-    const wkFlag = e.target.closest("[data-wk-flag]");
-    if (wkFlag) {
-      const template = wkFlag.dataset.wkFlag;
-      const name = WORKOUT_NAMES[template] || template;
-      openSheet(`<h2>Flag unexpected pain</h2><p class="muted small">During ${esc(name)}, not tied to one exercise.</p><div class="pain-flag" id="pain-flag"></div>`);
-      wireFlagPanel(document.getElementById("pain-flag"), ctx, {
-        sessionKey: `wk:${template}`,
-        heading: `During ${name}`,
-        onChange: () => renderToday(ctx, main),
-      });
-      return;
-    }
     if (info) { showExercise(ctx, info.dataset.info); return; }
 
     const stepBtn = e.target.closest("[data-step-key]");
@@ -467,19 +464,16 @@ function workoutCardHtml(ctx, w, ticks, inWindow, wake, optFlags = []) {
   const sum = workoutSummary(w, ticks);
   const isOpen = openBlocks.has(key);
   const doneKeys = new Set(w.session ? w.session.items.filter((i) => i.completed).map((i) => i.item_key) : ticks?.done || []);
-  const flagsOf = (k) => (optFlags || []).filter((f) => f.item_key === k);
-  const rows = w.items.map(({ item }) => itemRow(ctx, item, doneKeys.has(item.item_key), { ...(w.session ? { locked: true } : { wk: w.template }), flags: flagsOf(item.item_key) })).join("");
-  const sessFlags = (optFlags || []).filter((f) => !f.item_key && f.session_key === key);
-  const foot = `
-    ${w.session ? "" : `<button class="btn primary wide wk-finish" type="button" data-wk-finish="${w.template}">Finish and check in</button>
-    ${w.other ? `<button class="link wk-pick" type="button" data-wk-pick="${w.other}">Do ${esc(WORKOUT_NAMES[w.other])} instead</button>` : ""}`}
-    <button class="btn wide" type="button" data-wk-flag="${w.template}">Flag unexpected pain during this workout${sessFlags.length ? " · flagged" : ""}</button>`;
+  const rows = w.items.map(({ item }) => itemRow(ctx, item, doneKeys.has(item.item_key), { ...(w.session ? { locked: true } : { wk: w.template }), flagged: isItemFlagged({ pain_flags: optFlags }, item.item_key) })).join("");
+  const foot = w.session ? "" : `
+    <button class="btn primary wide wk-finish" type="button" data-wk-finish="${w.template}">Finish and check in</button>
+    ${w.other ? `<button class="link wk-pick" type="button" data-wk-pick="${w.other}">Do ${esc(WORKOUT_NAMES[w.other])} instead</button>` : ""}`;
   return `
     <section class="card section-card${sum.complete ? " complete" : ""}${isOpen ? " open" : ""}" data-block="${key}" data-kind="${STRENGTH.includes(w.template) ? "strength" : "conditioning"}">
       <button class="section-head" type="button" data-toggle-block="${key}" aria-expanded="${isOpen}">
         ${icon}
         <div class="section-title">
-          <span class="section-name">${esc(name)}${flagMarkHtml(sessFlags, key)}</span>
+          <span class="section-name">${esc(name)}</span>
           <span class="section-sub" data-block-sub="${key}">${esc(sum.sub)}</span>
         </div>
         <div class="section-right">
@@ -497,15 +491,15 @@ function itemRow(ctx, it, done, opt = {}) {
   const { dose, rung } = currentDose(ctx.state, it);
   const miss = missingEquipment(ex, ctx.profile.equipment);
   const ladder = it.rungs.length > 1 ? `rung ${rung + 1}/${it.rungs.length}` : "";
-  const flags = opt.flags || [];
-  return `<div class="item ${done ? "done" : ""}${flags.length ? " flagged" : ""}">
+  const flagged = !!opt.flagged;
+  return `<div class="item ${done ? "done" : ""}${flagged ? " flagged" : ""}">
     <label class="check"><input type="checkbox" ${opt.wk ? `data-wk="${opt.wk}" data-wk-item` : "data-item"}="${esc(it.item_key)}" ${done ? "checked" : ""}${opt.locked ? " disabled" : ""} aria-label="${esc(ex.name)}" /></label>
     <button class="text" type="button" data-info="${esc(it.item_key)}">
-      <span class="name">${esc(ex.name)}${flagMarkHtml(flags, it.item_key)}</span>
+      <span class="name">${esc(ex.name)}${flagMarkHtml(flagged, it.item_key)}</span>
       <span class="meta">${esc(formatDose(dose, it, ctx.profile))}${ladder ? ` · ${ladder}` : ""}${it.optional ? ` · <span class="bonus">bonus</span>` : ""}${miss.length ? ` · <span class="warn">needs ${esc(miss.join(", "))}</span>` : ""}</span>
       ${it.note ? `<span class="meta note-line">${esc(it.note)}</span>` : ""}
     </button>
-    <button class="flag-btn" type="button" data-info="${esc(it.item_key)}" aria-label="Flag unexpected pain">⚑</button>
+    <label class="flag-check compact" title="Unexpected pain"><input type="checkbox" data-flag-item="${esc(it.item_key)}" ${flagged ? "checked" : ""} ${opt.locked ? " disabled" : ""} aria-label="Unexpected pain" /><span>Pain</span></label>
     </div>`;
 }
 

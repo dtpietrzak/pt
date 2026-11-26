@@ -115,7 +115,7 @@ export function buildGateSession({ id, state, tests, results, now, startedAt, en
 
 // ---------------------------------------------------------------- decisions to announce
 export const MAJOR = new Set(["promote", "regress_level", "settle_enter", "settle_exit", "red", "gate_pending"]);
-const isMajor = (e) => MAJOR.has(e.outcome) || (e.rule_id === "R15" && /physician|clinician/i.test(e.message || ""));
+const isMajor = (e) => MAJOR.has(e.outcome) || e.rule_id === "R17" || (e.rule_id === "R15" && /physician|clinician/i.test(e.message || ""));
 /** Log entries newer than the last acknowledged moment that deserve a full-screen explanation, oldest first. */
 export function unseenDecisions(log, ackTs) {
   const t = (x) => new Date(x).getTime();
@@ -125,6 +125,11 @@ const lvName = (levelsDoc, id) => levelById(levelsDoc, id)?.name || id;
 /** What the announcement screen says for a decision. state is the plan state right now. */
 export function decisionCopy(e, state, levelsDoc) {
   const lv = levelById(levelsDoc, state.level_id);
+  if (e.rule_id === "R17") {
+    return e.outcome === "regress_step"
+      ? { tone: "down", icon: "↩️", title: "Stepping that exercise back", body: e.message, points: ["It stays at this dose until you complete it without the unexpected-pain flag."] }
+      : { tone: "info", icon: "ℹ️", title: "Holding this exercise", body: e.message, points: ["A second flagged session in a row will step it back one rung, if it has one to step back from."] };
+  }
   switch (e.outcome) {
     case "promote": return {
       tone: "up", icon: "🎉", title: `Level up: ${state.level_id} ${lvName(levelsDoc, state.level_id)}`, body: e.message,

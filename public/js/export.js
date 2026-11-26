@@ -134,7 +134,7 @@ function buildAttention(x) {
   for (let d = x.start; d <= (x.end < x.today ? x.end : x.today); d = addDays(d, 1)) {
     for (const f of (x.dayLogs?.[d]?.pain_flags || [])) {
       const who = f.item_key || f.session_key || "workout";
-      flagNotes.push(`${d} ${who}: ${f.pain}/10 ${f.type} ${f.location}${f.note ? ` (${f.note})` : ""}`);
+      flagNotes.push(`${d} ${who}: pain flagged`);
     }
   }
   if (flagNotes.length) add("watch", "PAIN_FLAGS", `Unexpected pain flags: ${flagNotes.join("; ")}.`);
@@ -201,7 +201,7 @@ export function renderMarkdown(x, i) {
   const painLines = [];
   for (const d of x.days) {
     for (const f of (i.days?.[d.local_date]?.pain_flags || [])) {
-      painLines.push(`- ${d.local_date} · ${f.item_key || f.session_key || "workout"} · ${f.pain}/10 ${f.type} ${f.location}${f.note ? ` · ${f.note}` : ""}`);
+      painLines.push(`- ${d.local_date} · ${f.item_key || f.session_key || "workout"}: pain flagged`);
     }
   }
   if (painLines.length) { L.push(""); L.push("### Unexpected pain flags"); L.push(...painLines); }

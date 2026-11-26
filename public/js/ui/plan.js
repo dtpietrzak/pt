@@ -1,6 +1,6 @@
 // Plan view: current level criteria, rehabilitation milestones (target dates), and full L0-L8 overview.
 import { esc, fmtDate } from "./dom.js";
-import { flagsOf, flagSummary } from "../pain-flags.js";
+import { flagsOf } from "../pain-flags.js";
 import { MILESTONES, milestoneOn } from "../milestones.js";
 import { localDate, addDays, dayDiff } from "../util.js";
 
@@ -93,7 +93,7 @@ async function fillRecentFlags(ctx, slot) {
   if (!latest.length) return;
   const nameOf = (key) => ctx.exById?.[ctx.docs.levels.levels.flatMap((l) => l.items).find((it) => it.item_key === key)?.exercise_id]?.name || key;
   slot.outerHTML = `<section class="card"><div class="card-head"><h3>Recent pain flags</h3></div><div class="card-body">
-    ${latest.map(({ date, f }) => `<p class="small">${esc(fmtDate(date))} · ${esc(flagSummary(f, f.item_key ? nameOf(f.item_key) : "Workout"))}</p>`).join("")}
+    ${latest.map(({ date, f }) => `<p class="small">${esc(fmtDate(date))} · ${esc((f.item_key ? nameOf(f.item_key) : "Workout") + ": pain flagged")}</p>`).join("")}
   </div></section>`;
 }
 
