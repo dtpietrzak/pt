@@ -15,7 +15,7 @@ const cap = (s) => s[0].toUpperCase() + s.slice(1);
 const TITLES = { morning: "Morning check-in", post_workout: "Post-workout check-in", evening: "Evening check-in", night: "Night check-in" };
 const SUBTITLES = {
   morning: "Within about an hour of getting up. Takes a minute.",
-  post_workout: "About how the workout felt. Fill it in right after, and you can add the 15-minute pain later.",
+  post_workout: "About how the workout felt. Fill it in right after.",
   evening: "How today went: pain, rest, and how your back felt.",
   night: "Last one of the day, right before bed.",
 };
@@ -143,10 +143,7 @@ function formHtml(ctx, type, f) {
     }).join("");
     body = section("The workout", `${painQ("Worst back pain during the workout")}
         ${qScale("rpe", "How hard was it overall?", f.rpe, { min: 1, max: 10, lo: "Very easy", hi: "All out" })}
-        ${qChips("settle", "How long did any soreness take to settle?", SETTLE, f.settle)}
         ${qToggle("form_breakdown", "My form broke down at some point", f.form_breakdown)}`)
-      + section("15 minutes after", `${qToggle("has15", "It's been 15+ minutes since I finished", f.pain15 !== undefined && f.pain15 !== null)}
-        ${when("has15", qScale("pain15", "Back pain now", f.pain15, { P, required: true }))}`)
       + section("What you did", `<p class="ci-hint">Untick anything you skipped. Mark a problem to say what went wrong.</p>${rows || '<p class="ci-hint">No exercises were logged.</p>'}`)
       + safetyHtml(f);
   } else if (type === "evening") {
@@ -174,9 +171,8 @@ async function defaultsFor(ctx, type, v, entry) {
   if (type === "morning") Object.assign(f, { stiffness_min: B.stiffness_min, sleep_quality: 3, woke: 0, window_ok: true });
   if (type === "post_workout") {
     const s = v.sessions.find((x) => x.id === entry.session_id);
-    const minsAgo = s?.ended_at ? (v.now - new Date(s.ended_at)) / 60000 : 999;
     const keyed = ctx.docs.levels.levels.flatMap((l) => l.items);
-    Object.assign(f, { rpe: 5, settle: minsAgo < 60 ? "not_yet" : "lt_30", items: (s?.items || []).map((i) => ({ item_key: i.item_key, completed: !!i.completed, rung_done: i.prescribed_rung, problem: false })).filter((i) => keyed.some((k) => k.item_key === i.item_key)) });
+    Object.assign(f, { rpe: 5, items: (s?.items || []).map((i) => ({ item_key: i.item_key, completed: !!i.completed, rung_done: i.prescribed_rung, problem: false })).filter((i) => keyed.some((k) => k.item_key === i.item_key)) });
   }
   if (type === "evening") {
     const x = await todayExtras(ctx, entry.date);
@@ -227,7 +223,7 @@ function readForm(form, type) {
     sharp_settle_min: n("sharp_settle_min"), scary: b("scary"), flags: Object.fromEntries(RED_FLAGS.map(([k]) => [k, b(`flag_${k}`)])), oddities: g("oddities") || "", tags: fd.getAll("tag") };
   if (type === "morning") Object.assign(f, { stiffness_min: n("stiffness_min"), stiffness_still: b("stiffness_still"), sleep_quality: n("sleep_quality"), woke: n("woke"), hip_shift: b("hip_shift"), window_ok: b("window_ok") });
   if (type === "post_workout") {
-    Object.assign(f, { rpe: n("rpe"), settle: g("settle") || undefined, form_breakdown: b("form_breakdown"), pain15: b("has15") ? n("pain15") : undefined });
+    Object.assign(f, { rpe: n("rpe"), form_breakdown: b("form_breakdown") });
     f.items = [...form.querySelectorAll("[name^=done_]")].map((el) => {
       const k = el.name.slice(5);
       return { item_key: k, completed: el.checked, rung_done: 0, problem: b(`prob_${k}`), pain_peak: n(`pp_${k}`), sharp: b(`sharp_${k}`), form: b(`form_${k}`) };
@@ -242,6 +238,9 @@ async function save(ctx, type, form, { existing, session_id, date }) {
   let f = readForm(form, type);
   // Older morning check-ins recorded hours slept; the form no longer asks, so keep the stored value on edit.
   if (type === "morning" && existing?.data?.sleep_hours != null) f.sleep_hours = existing.data.sleep_hours;
+  // Older post-workout check-ins recorded settle time and 15-min pain; the form no longer asks, so keep the stored values on edit.
+  if (type === "post_workout" && existing?.data?.settle_bucket) f.settle = existing.data.settle_bucket;
+  if (type === "post_workout" && existing?.data?.pain_15min_after != null) f.pain15 = existing.data.pain_15min_after;
   // Keep an existing item's rung when editing a post-workout check-in.
   if (type === "post_workout" && existing) for (const i of f.items) i.rung_done = existing.data.completed_items?.find((x) => x.item_key === i.item_key)?.rung_done ?? 0;
   if (type === "post_workout" && !existing) {
@@ -318,7 +317,7 @@ function answersHtml(ctx, c) {
     html += group("This morning", row("Kept the easy morning", yn(d.protection_window_respected)) + row("Hips shifted", yn(d.hip_shift)));
   } else if (c.type === "post_workout") {
     html += group("The workout", row("Worst back pain", painV(d.pain_peak)) + row("Effort", has(d.rpe) ? `${esc(d.rpe)}/10` : "") + row("Soreness settled", d.settle_bucket ? esc(optLabel(SETTLE, d.settle_bucket)) : "") + row("Form broke down", yn(d.form_breakdown)));
-    html += group("15 minutes after", row("Back pain", has(d.pain_15min_after) ? painV(d.pain_15min_after) : "Not filled in yet"));
+    html += group("15 minutes after", has(d.pain_15min_after) ? row("Back pain", painV(d.pain_15min_after)) : "");
     const items = (d.completed_items || []).map((i) => {
       const notes = [i.pain_peak !== undefined ? `pain ${i.pain_peak}/10` : "", i.sharp_electrical ? "sharp" : "", i.form_breakdown ? "form fell apart" : ""].filter(Boolean).join(", ");
       return row(itemName(ctx, i.item_key), `${i.completed ? "Done" : '<span class="muted">Skipped</span>'}${notes ? ` · ${esc(notes)}` : ""}`);

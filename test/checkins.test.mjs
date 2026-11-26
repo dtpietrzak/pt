@@ -79,6 +79,26 @@ test("each check-in rolls up to the right color", () => {
   assert.match(summaryLine(buildCheckIn("night", { pain: 3, leg: "none" }, ctx(at("2026-12-01", "22:00")))), /pain 3\/10/);
 });
 
+test("new post-workout check-ins omit settle time and 15-min pain; old values still color and round-trip", () => {
+  const fresh = buildCheckIn("post_workout", { pain: 1, rpe: 5, leg: "none", items: [] }, ctx(at("2026-12-01", "17:45"), { session_id: "S1" }));
+  ok(fresh);
+  assert.equal("pain_15min_after" in fresh.data, false);
+  assert.equal("settle_bucket" in fresh.data, false);
+  const ev = evaluateCheckIn(fresh, B, config);
+  assert.equal(ev.color, "green");
+  assert.equal(ev.reasons.some((r) => /15 min after|120 min to settle/.test(r)), false);
+
+  const old = buildCheckIn("post_workout", { pain: 1, rpe: 5, settle: "gt_120", pain15: 5, leg: "none", items: [] }, ctx(at("2026-12-01", "17:50"), { session_id: "S1" }));
+  ok(old);
+  assert.equal(old.data.pain_15min_after, 5);
+  assert.equal(old.data.settle_bucket, "gt_120");
+  const evOld = evaluateCheckIn(old, B, config);
+  assert.equal(evOld.color, "orange");
+  assert.ok(evOld.reasons.some((r) => /pain 15 min after 5\/10/.test(r)));
+  assert.ok(evOld.reasons.some((r) => /symptoms took over 120 min to settle/.test(r)));
+  assert.deepEqual(buildCheckIn("post_workout", formFromCheckIn(old), ctx(at("2026-12-01", "20:00"), { existing: old })), old);
+});
+
 test("due logic follows the profile notify times", () => {
   const d = "2026-12-01";
   const state = (now, o = {}) => checklist({ now, profile, checkins: [], sessions: [], ...o });
