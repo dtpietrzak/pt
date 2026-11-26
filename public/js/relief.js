@@ -38,6 +38,17 @@ export function removeReliefEntry(day, id) {
   return { ...day, relief_log: reliefLogOf(day).filter((e) => e.id !== id) };
 }
 
+/** Remove the most recent log of this type today. No-op if the count is already 0. */
+export function removeLatestOfType(day, exercise_id) {
+  const log = reliefLogOf(day);
+  let last = -1;
+  for (let i = log.length - 1; i >= 0; i--) {
+    if (log[i].exercise_id === exercise_id) { last = i; break; }
+  }
+  if (last < 0) return day;
+  return { ...day, relief_log: [...log.slice(0, last), ...log.slice(last + 1)] };
+}
+
 export function countByType(entries) {
   const out = {};
   for (const e of entries || []) {

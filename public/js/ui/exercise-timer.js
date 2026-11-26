@@ -431,13 +431,15 @@ export function showReliefTimer(ctx, opt, onDone) {
   ctxRef = ctx;
   openSheet(`
     <h2>${esc(name)}</h2>
-    <p class="muted small">${esc(opt.range || "Timed relief")}. Start runs the countdown. Next marks it done and logs it, without starting the clock.</p>
+    <p class="muted small">${esc(opt.range || "Timed relief")}. Start runs the countdown. Logging a count is done with the stepper on Today, not by finishing the timer.</p>
     ${ex.cues?.length ? `<h4>Cues</h4><ul>${ex.cues.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}
     ${timerHtml(plan, opt.range || name, ctx)}
     ${ex.stop_if && ex.stop_if !== "None." ? `<h4>Stop if</h4><p>${esc(ex.stop_if)}</p>` : ""}
     ${ex.contraindications && ex.contraindications !== "None." ? `<h4>Cautions</h4><p>${esc(ex.contraindications)}</p>` : ""}
   `, { onClose: () => { if (sheetItem === it.item_key) sheetItem = null; render(); } });
-  sess = { itemKey: it.item_key, name, plan, step: 0, status: "idle", endsAt: null, remain: seconds * 1000, sound: ctx.app?.timer_sound, onReliefDone: onDone };
+  if (!sess || sess.itemKey !== it.item_key || sess.status === "idle" || sess.status === "done") {
+    sess = { itemKey: it.item_key, name, plan, step: 0, status: "idle", endsAt: null, remain: seconds * 1000, sound: ctx.app?.timer_sound, onReliefDone: onDone };
+  }
   wireTimer(ctx, it, ex, plan);
   render();
 }
@@ -446,7 +448,15 @@ export function wireExerciseTimerChip(ctx) {
   const c = chip();
   if (!c || c.dataset.wired) return;
   c.dataset.wired = "1";
-  c.onclick = () => { if (sess) showExercise(ctx, sess.itemKey); };
+  c.onclick = () => {
+    if (!sess) return;
+    if (String(sess.itemKey).startsWith("relief:")) {
+      const id = String(sess.itemKey).slice("relief:".length);
+      showReliefTimer(ctx, { exercise_id: id, label: sess.name, seconds: sess.plan?.seconds });
+      return;
+    }
+    showExercise(ctx, sess.itemKey);
+  };
 }
 
 export { timedPlan, REST_SEC, needsRestAfter, restCuesToPlay, advanceTimerByNext };

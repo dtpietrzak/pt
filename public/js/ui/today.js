@@ -12,7 +12,7 @@ import { isoLocal, localTime } from "../util.js";
 import { $, esc, BLOCKS, today, nowHM, addMin, minutesSince, fmtDate, openSheet, closeSheet, toast } from "./dom.js";
 import { showExercise, wireExerciseTimerChip } from "./exercise-timer.js";
 import { flagMarkHtml } from "./pain-flag.js";
-import { reliefCardHtml, openReliefPicker, undoRelief } from "./relief.js";
+import { reliefCardHtml, paintReliefCard, bumpRelief, dropRelief, openReliefDetail } from "./relief.js";
 import { isItemFlagged } from "../pain-flags.js";
 
 const DAILY = ["daily_mobility", "daily_core", "walking"];
@@ -127,7 +127,6 @@ export async function renderToday(ctx, main) {
   if (wake || view.list.some((e) => e.state === "due" && e.type !== "morning")) html += checkinCardHtml(view);
   if (wake) html += statusCardHtml(ctx, view);
   html += await exportCardHtml(ctx);
-  if (wake) html += reliefCardHtml(ctx, log);
   for (const [block, label] of wake ? BLOCKS.filter(([b]) => DAILY.includes(b)) : []) {
     const its = itemsByBlock.get(block);
     if (!its) continue;
@@ -172,6 +171,7 @@ export async function renderToday(ctx, main) {
   if (wake && equipNeeded) html += equipCardHtml(); // barbell work waits for the equipment reconfirm
   const workouts = wake && !equipNeeded ? workoutPlan(ctx, view, d) : [];
   for (const w of workouts) html += workoutCardHtml(ctx, w, wkTicks[w.template], inWindow, wake, log.pain_flags || []);
+  if (wake) html += reliefCardHtml(ctx, log, { open: openBlocks.has("relief") });
   main.innerHTML = html;
   refreshBadges(ctx, view);
 
@@ -255,15 +255,17 @@ export async function renderToday(ctx, main) {
   };
 
   main.onclick = async (e) => {
-    if (e.target.closest("[data-relief-open]")) {
-      openReliefPicker(ctx, { onLogged: () => renderToday(ctx, main) });
+    const reliefStep = e.target.closest("[data-relief-step]");
+    if (reliefStep) {
+      const id = reliefStep.dataset.reliefStep;
+      const delta = Number(reliefStep.dataset.delta);
+      const next = delta < 0 ? await dropRelief(ctx, id, d) : await bumpRelief(ctx, id, d);
+      paintReliefCard(main, next);
       return;
     }
-    const undo = e.target.closest("[data-relief-undo]");
-    if (undo) {
-      await undoRelief(ctx, undo.dataset.reliefUndo, d);
-      toast("Relief entry removed.");
-      renderToday(ctx, main);
+    const reliefInfo = e.target.closest("[data-relief-info]");
+    if (reliefInfo) {
+      openReliefDetail(ctx, reliefInfo.dataset.reliefInfo);
       return;
     }
     if (await checkinClick(ctx, e)) return;

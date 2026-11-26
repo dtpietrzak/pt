@@ -1320,12 +1320,10 @@ button.ci-row:active { background: color-mix(in srgb, var(--line) 45%, transpare
 .rest-day .card-body .btn { margin-top: 8px; }
 
 /* ---------------------------------------------------------------- relief log */
-.relief-card .section-head { cursor: default; }
-.relief-log { list-style: none; margin: 12px 0 0; padding: 0; }
-.relief-row { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding: 6px 0; font-size: 14px; }
-.relief-picker { display: flex; flex-direction: column; gap: 12px; margin: 12px 0; }
-.relief-opt { padding: 10px 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
-.relief-opt .text { width: 100%; text-align: left; }
-.relief-opt-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.item .stepper-ctrl { margin-top: 0; align-self: center; }
+.item.counted {
+  background: color-mix(in srgb, var(--blk, var(--accent)) 12%, var(--card));
+  border-color: color-mix(in srgb, var(--blk, var(--accent)) 28%, transparent);
+}
 .relief-hist { margin: 8px 0; }
 .relief-hist small { display: block; margin-bottom: 4px; }

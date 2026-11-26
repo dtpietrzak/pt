@@ -2,9 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
-  RELIEF_OPTIONS, newReliefEntry, addReliefEntry, reliefLogOf, countByType,
+  RELIEF_OPTIONS, newReliefEntry, addReliefEntry, removeLatestOfType, reliefLogOf, countByType,
   reliefRangeSummary, decompFromReliefLogs, reliefById,
 } from "../public/js/relief.js";
+import { reliefCardHtml } from "../public/js/ui/relief.js";
 import { eveningFromLogs } from "../public/js/checkins.js";
 import { advanceTimerByNext } from "../public/js/pain-flags.js";
 import { RED_FLAGS } from "../public/js/checkins.js";
@@ -103,4 +104,37 @@ test("heavy squat, deadlift and swing cues carry the breathing guidance", () => 
     const cues = (byId[id].cues || []).join(" ");
     assert.match(cues, /Brief brace only, no long strain/, id);
   }
+});
+
+test("minus removes the most recent log of that type and will not go below zero", () => {
+  const a = newReliefEntry({ exercise_id: "EX_DECOMP_90_90", ts: "2026-11-25T08:00:00-06:00", id: "a" });
+  const b = newReliefEntry({ exercise_id: "EX_STAND_EXTENSION", ts: "2026-11-25T09:00:00-06:00", id: "b" });
+  const c = newReliefEntry({ exercise_id: "EX_DECOMP_90_90", ts: "2026-11-25T10:00:00-06:00", id: "c" });
+  let day = { local_date: "2026-11-25", checklist: [], relief_log: [a, b, c] };
+  day = removeLatestOfType(day, "EX_DECOMP_90_90");
+  assert.deepEqual(reliefLogOf(day).map((e) => e.id), ["a", "b"]);
+  day = removeLatestOfType(day, "EX_DECOMP_90_90");
+  assert.deepEqual(reliefLogOf(day).map((e) => e.id), ["b"]);
+  const same = removeLatestOfType(day, "EX_DECOMP_90_90");
+  assert.equal(same, day);
+  assert.deepEqual(reliefLogOf(same).map((e) => e.id), ["b"]);
+});
+
+test("the Today Relief card is a collapsed accordion with a stepper per option", () => {
+  const html = reliefCardHtml({ exById: byId }, {
+    relief_log: [
+      newReliefEntry({ exercise_id: "EX_DECOMP_90_90", ts: "t", id: "a" }),
+      newReliefEntry({ exercise_id: "EX_DECOMP_90_90", ts: "t2", id: "b" }),
+    ],
+  });
+  assert.match(html, /data-toggle-block="relief"/);
+  assert.match(html, />2 today</);
+  assert.equal(/section-card open/.test(html), false);
+  assert.match(html, /hidden/);
+  assert.equal(/data-relief-open|Log relief|relief-picker/.test(html), false);
+  for (const o of RELIEF_OPTIONS) {
+    assert.match(html, new RegExp(`data-relief-step="${o.exercise_id}"`));
+  }
+  assert.match(html, /data-relief-val="EX_DECOMP_90_90">2</);
+  assert.match(html, /data-block="relief"/);
 });
