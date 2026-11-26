@@ -10,7 +10,8 @@ import { templateItems, nextStrengthTemplate } from "../pipeline.js";
 import { shouldShowStrengthRest, strengthCountThisWeek, weeklyStrengthTarget, weeklyStrengthLabel } from "../strength-week.js";
 import { isoLocal, localTime } from "../util.js";
 import { $, esc, BLOCKS, today, nowHM, addMin, minutesSince, fmtDate, openSheet, closeSheet, toast } from "./dom.js";
-import { showExercise, wireExerciseTimerChip } from "./exercise-timer.js";
+import { showExercise, wireExerciseTimerChip, onItemUnchecked } from "./exercise-timer.js";
+import { clearItemProgress } from "../item-progress.js";
 import { flagMarkHtml } from "./pain-flag.js";
 import { reliefCardHtml, paintReliefCard, bumpRelief, dropRelief, openReliefDetail } from "./relief.js";
 import { isItemFlagged } from "../pain-flags.js";
@@ -221,6 +222,11 @@ export async function renderToday(ctx, main) {
       await ctx.store.kvSet(wkKey(d), all);
       wkTicks[template] = all[template];
       updateWorkoutCard(template, all[template]);
+      if (!wcb.checked) {
+        const day = clearItemProgress(await dayLog(ctx, d), wcb.dataset.wkItem);
+        await ctx.store.put("days", day);
+        onItemUnchecked(wcb.dataset.wkItem);
+      }
       return;
     }
     const cb = e.target.closest("input[data-item]");
@@ -240,7 +246,9 @@ export async function renderToday(ctx, main) {
     if (entry) entry.done = cb.checked;
     else l.checklist.push({ item_key: k, done: cb.checked });
     l.level_id = ctx.state.level_id;
-    await ctx.store.put("days", l);
+    const next = cb.checked ? l : clearItemProgress(l, k);
+    await ctx.store.put("days", next);
+    if (!cb.checked) onItemUnchecked(k);
     const doneNow = l.checklist.filter((c) => c.done && requiredKeys.has(c.item_key)).length;
     const ring = $("#daily-ring", main);
     const ringLabel = $("#daily-ring-label", main);
@@ -250,7 +258,7 @@ export async function renderToday(ctx, main) {
     const cheerEl = $("#hero-cheer", main);
     if (cheerEl) cheerEl.textContent = cheerFor(doneNow);
     const block = cb.closest("[data-block]")?.dataset.block;
-    if (block) updateBlockCard(block, l);
+    if (block) updateBlockCard(block, next);
     if (requiredKeys.size && doneNow === requiredKeys.size && before < requiredKeys.size) celebrate(main);
   };
 

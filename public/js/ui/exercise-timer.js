@@ -6,6 +6,7 @@ import { unlockAudio, playAlarm, playCue, fmtClock, buzz, dingNotify } from "../
 import { REST_SEC, needsRestAfter, restCuesToPlay, isItemFlagged, advanceTimerByNext } from "../pain-flags.js";
 import { $, esc, openSheet, today, toast } from "./dom.js";
 import { loadDay, saveDay, flagToggleHtml, wireFlagToggle } from "./pain-flag.js";
+import { clearItemProgress, itemSheetTailHtml } from "../item-progress.js";
 
 let sess = null; // { itemKey, name, plan, step, status, endsAt, remain, restEndsAt, restPrev, sound }
 let sheetItem = null;
@@ -13,6 +14,7 @@ let clockStop = null;
 let dingedFor = "";
 let lastRestRemain = null;
 let ctxRef = null;
+let setCtl = null; // set-counter hooks while a details sheet is open
 
 const chip = () => document.getElementById("ex-timer-chip");
 const stepOf = () => sess?.plan.steps[sess.step];
@@ -116,21 +118,24 @@ export async function showExercise(ctx, itemKey) {
     .join("");
   sheetItem = itemKey;
   ctxRef = ctx;
+  setCtl = null;
+  const flagged = isItemFlagged(await loadDay(ctx), itemKey);
   openSheet(`
     <h2>${esc(ex.name || it.exercise_id)}</h2>
     <p class="muted small">${esc(it.item_key)} · ${esc(ex.category || "")} · rest ${it.rest_s ?? "-"} s${easy ? " · easy-dose sets" : ""}</p>
     ${ex.cues?.length ? `<h4>Cues</h4><ul>${ex.cues.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}
     ${plan ? timerHtml(plan, formatDose(dose, it, ctx.profile), ctx) : ""}
     ${sets ? setCounterHtml(sets, formatDose(dose, it, ctx.profile)) : ""}
-    <div class="pain-flag" id="pain-flag">${flagToggleHtml(itemKey, isItemFlagged(await loadDay(ctx), itemKey))}</div>
     <h4>Ladder</h4><ol class="ladder">${ladder}</ol>
     ${ex.stop_if ? `<h4>Stop if</h4><p>${esc(ex.stop_if)}</p>` : ""}
     ${ex.contraindications ? `<h4>Cautions</h4><p>${esc(ex.contraindications)}</p>` : ""}
     ${ex.equipment?.length ? `<h4>Equipment</h4><p>${esc(ex.equipment.join(", "))}</p>` : ""}
-    ${it.requires?.length ? `<p class="muted small">Unlocks after: ${esc(it.requires.join(", "))}</p>` : ""}`, {
-    onClose: () => { if (sheetItem === itemKey) sheetItem = null; render(); },
+    ${it.requires?.length ? `<p class="muted small">Unlocks after: ${esc(it.requires.join(", "))}</p>` : ""}
+    ${itemSheetTailHtml(`<div class="pain-flag" id="pain-flag">${flagToggleHtml(itemKey, flagged)}</div>`)}`, {
+    onClose: () => { if (sheetItem === itemKey) { sheetItem = null; setCtl = null; } render(); },
   });
   wireFlagToggle($("#pain-flag"), ctx, itemKey);
+  wireFinish(ctx, it, ex);
   if (plan) {
     if (!sess || sess.itemKey !== itemKey || sess.plan.seconds !== plan.seconds || sess.plan.steps.length !== plan.steps.length) {
       if (!sess || sess.itemKey !== itemKey || sess.status === "idle" || sess.status === "done") {
@@ -300,7 +305,7 @@ function render() {
     }
     if (startBtn) {
       startBtn.hidden = false;
-      startBtn.textContent = running ? "Pause" : paused ? "Resume" : (ready || rest) ? (sess.plan.steps[sess.step + 1]?.label ? `Start ${sess.plan.steps[sess.step + 1].label}` : "Start next") : done ? "Start over" : "Start";
+      startBtn.textContent = running ? "Pause" : paused ? "Resume" : (ready || rest) ? (sess.plan.steps[sess.step + 1]?.label ? `Start ${sess.plan.steps[sess.step + 1].label}` : "Start next") : "Start";
     }
     if (nextBtn) {
       nextBtn.hidden = !!done;
@@ -349,9 +354,10 @@ async function wireSets(ctx, it, plan) {
     if (finished) {
       if (step) step.textContent = `All ${plan.sets} sets done`;
       if (count) { count.textContent = "Done"; count.classList.add("done"); }
-      if (nextBtn) nextBtn.textContent = "Start over";
-      if (hint) hint.textContent = "This item is marked done for today. Reset if you need to recount.";
+      if (nextBtn) { nextBtn.textContent = "Finish"; nextBtn.hidden = true; }
+      if (hint) hint.textContent = "This item is marked done for today. Uncheck it on Today if you need to recount.";
     } else {
+      if (nextBtn) nextBtn.hidden = false;
       if (step) step.textContent = `Set ${current} of ${plan.sets}`;
       if (count) { count.innerHTML = `${current}<span class="ex-sets-of">/${plan.sets}</span>`; count.classList.remove("done"); }
       if (nextBtn) nextBtn.textContent = current >= plan.sets ? "Finish" : "Next";
@@ -378,7 +384,7 @@ async function wireSets(ctx, it, plan) {
     }
     if (act === "next") {
       unlockAudio();
-      if (finished) { current = 1; finished = false; await persist(); unmarkItem(it.item_key); paint(); return; }
+      if (finished) return;
       if (current >= plan.sets) {
         finished = true;
         await persist();
@@ -395,7 +401,57 @@ async function wireSets(ctx, it, plan) {
     }
   };
   paint();
+  setCtl = {
+    markFinished: async () => {
+      if (finished) return;
+      current = plan.sets;
+      finished = true;
+      await persist();
+      paint();
+    },
+    resetFromUncheck: () => {
+      current = 1;
+      finished = false;
+      paint();
+    },
+  };
 }
+
+function wireFinish(ctx, it, ex) {
+  const btn = document.querySelector("[data-ex-finish]");
+  if (!btn) return;
+  btn.onclick = () => completeItem(ctx, it, ex);
+}
+
+async function completeItem(ctx, it, ex) {
+  const name = (ex || ctx.exById[it.exercise_id] || {}).name || "Item";
+  if (setCtl) await setCtl.markFinished();
+  if (sess?.itemKey === it.item_key && sess.status !== "done") {
+    sess.status = "done";
+    sess.remain = 0;
+    sess.endsAt = null;
+    render();
+    stopClockIfIdle();
+  }
+  markItemDone(it.item_key);
+  if (ctx.app?.timer_sound !== false) void playAlarm("done");
+  buzz([300, 150, 300, 150, 300]);
+  toast(`${name} marked done.`);
+}
+
+/** Today-row uncheck is the reset path: clear an open timer or set counter for this item. */
+export function onItemUnchecked(itemKey) {
+  if (sess?.itemKey === itemKey) {
+    sess = { ...sess, step: 0, status: "idle", endsAt: null, remain: sess.plan.seconds * 1000, restEndsAt: null };
+    dingedFor = "";
+    lastRestRemain = null;
+    render();
+    stopClockIfIdle();
+  }
+  setCtl?.resetFromUncheck?.();
+}
+
+export { clearItemProgress };
 
 function markItemDone(itemKey) {
   syncCheckbox(itemKey, true);
