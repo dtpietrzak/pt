@@ -2,7 +2,7 @@
 // Data goes through ctx.store (the synced store), so everything here syncs like the rest of the app.
 import { evaluateAll, dailyMap } from "../engine.js";
 import { localDate, localTime, ulid } from "../util.js";
-import { checklist, dueNow, buildCheckIn, formFromCheckIn, summaryLine, redGuidance, tidyReasons, RED_FLAGS, TYPES, LABEL, noFlags, eveningFromLogs, keepEveningPressure, eveningLogsNote } from "../checkins.js";
+import { checklist, dueNow, buildCheckIn, formFromCheckIn, summaryLine, redGuidance, tidyReasons, RED_FLAGS, TYPES, LABEL, noFlags, eveningFromLogs, keepEveningPressure, eveningLogsNote, morningTrend } from "../checkins.js";
 import { forcedRestFromReliefLogs } from "../relief.js";
 import { recordGate, evaluate, engineConfig, templateItems, buildSession, clearRed } from "../pipeline.js";
 import { postureCheckinData, postureLogKey } from "../posture.js";
@@ -126,11 +126,11 @@ function formHtml(ctx, type, f) {
   const painQ = (label, hint = "") => qScale("pain", label, f.pain, { P, required: true, hint });
   let body = "";
   if (type === "morning") {
-    body = section("Pain", painQ("Back pain right now"))
+    body = section("Pain", `${painQ("Back pain right now")}
+        ${qStep("woke", "Times you noticed soreness when you flipped over at night", f.woke, { step: 1, hint: "Waking and rolling over, not waking because of pain." })}`)
       + section("Stiffness", `${qStep("stiffness_min", "How long until you loosened up", f.stiffness_min, { step: 5, unit: "min", hint: `Your usual is about ${B.stiffness_min} min.` })}
         ${qToggle("stiffness_still", "Still stiff right now", f.stiffness_still, { hint: "Then enter how long it's been so far." })}`)
-      + section("Sleep", `${qScale("sleep_quality", "Sleep quality", f.sleep_quality, { min: 1, max: 5, lo: "Awful", hi: "Great" })}
-        ${qStep("woke", "Times you woke up with pain", f.woke, { step: 1 })}`)
+      + section("Sleep", `${qScale("sleep_quality", "Sleep quality", f.sleep_quality, { min: 1, max: 5, lo: "Awful", hi: "Great" })}`)
       + section("This morning", `${qToggle("window_ok", "Kept the easy morning", f.window_ok, { hint: "No bending, lifting or stretching early." })}
         ${qToggle("hip_shift", "Hips feel shifted to one side", f.hip_shift)}`)
       + safetyHtml(f);
@@ -311,9 +311,9 @@ function answersHtml(ctx, c) {
   const group = (title, rows) => (rows.trim() ? `<section class="ci-ans-sec"><h3>${esc(title)}</h3><dl>${rows}</dl></section>` : "");
   let html = "";
   if (c.type === "morning") {
-    html += group("Pain", row("Back pain on waking", painV(d.pain_on_waking)));
+    html += group("Pain", row("Back pain on waking", painV(d.pain_on_waking)) + row("Soreness when flipping over", has(d.woke_from_pain_count) ? txt(d.woke_from_pain_count) : ""));
     html += group("Stiffness", row("Loosened up after", has(d.stiffness_min) ? `${esc(d.stiffness_min)} min${d.stiffness_still_present ? " (still stiff)" : ""}` : d.stiffness_still_present ? "Still stiff" : ""));
-    html += group("Sleep", row("Hours slept", has(d.sleep_hours) ? fmtH(d.sleep_hours) : "") + row("Quality", has(d.sleep_quality) ? `${esc(d.sleep_quality)}/5` : "") + row("Times you woke up with pain", txt(d.woke_from_pain_count)));
+    html += group("Sleep", row("Hours slept", has(d.sleep_hours) ? fmtH(d.sleep_hours) : "") + row("Quality", has(d.sleep_quality) ? `${esc(d.sleep_quality)}/5` : ""));
     html += group("This morning", row("Kept the easy morning", yn(d.protection_window_respected)) + row("Hips shifted", yn(d.hip_shift)));
   } else if (c.type === "post_workout") {
     html += group("The workout", row("Worst back pain", painV(d.pain_peak)) + row("Effort", has(d.rpe) ? `${esc(d.rpe)}/10` : "") + row("Soreness settled", d.settle_bucket ? esc(optLabel(SETTLE, d.settle_bucket)) : "") + row("Form broke down", yn(d.form_breakdown)));
@@ -443,6 +443,21 @@ export async function onClick(ctx, e) {
   return false;
 }
 
+// Compact, date-ordered numbers so night-flip soreness can be watched next to morning pain and stiffness.
+export function morningTrendHtml(rows) {
+  if (!rows?.length) return "";
+  const line = (label, vals) => {
+    if (!vals.some((v) => v !== undefined && v !== null && v !== "")) return "";
+    const bits = vals.map((v) => (v === undefined || v === null || v === "" ? "—" : esc(v))).join(" · ");
+    return `<p class="small"><span class="muted">${esc(label)}</span> ${bits}</p>`;
+  };
+  return `<section class="card"><div class="card-head"><h3>Morning trend</h3></div><div class="card-body">
+    ${line("Pain on waking", rows.map((r) => r.pain))}
+    ${line("Soreness when flipping over", rows.map((r) => r.flip_soreness))}
+    ${line("Stiffness (min)", rows.map((r) => r.stiffness_min))}
+  </div></section>`;
+}
+
 // ---------------------------------------------------------------- history
 export async function renderHistory(ctx, main) {
   const v = await loadView(ctx);
@@ -469,6 +484,7 @@ export async function renderHistory(ctx, main) {
       ${decisions.length ? `<div class="decisions"><small class="muted">Plan decisions</small>${decisions.map((l) => `<p class="small">${esc(l.message || `${l.rule_id}: ${l.outcome}`)}</p>`).join("")}</div>` : ""}</section>`;
   };
   main.innerHTML = `${redBannerHtml(ctx)}<p><a class="link" href="#/today">← Today</a></p>
+    ${morningTrendHtml(morningTrend(v.checkins))}
     ${days.length ? days.map(card).join("") : '<section class="card"><p class="muted">Nothing here yet. Your check-ins and plan decisions will show up by day.</p></section>'}`;
   main.onclick = (e) => { onClick(ctx, e); };
   main.onchange = null;

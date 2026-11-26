@@ -77,6 +77,7 @@ export function buildExport(i) {
     trend: {
       morning_stiffness_min: mornings.filter((c) => typeof c.data.stiffness_min === "number").map((c) => c.data.stiffness_min),
       morning_pain: mornings.map((c) => c.data.pain_on_waking),
+      woke_from_pain_count: mornings.filter((c) => typeof c.data.woke_from_pain_count === "number").map((c) => c.data.woke_from_pain_count),
       evening_pain_peak: evenings.map((c) => c.data.pain_peak_today),
       first_pressure_h: evenings.map((c) => c.data.standing?.first_pressure_h ?? null),
       first_sitting_pressure_min: evenings.map((c) => c.data.sitting?.first_pressure_min ?? null),
@@ -177,7 +178,7 @@ export function renderMarkdown(x, i) {
   L.push(`- Level: **${s.level_start}** at start, **${s.level_end}** at end · mode: ${e.mode} · plan v${x.meta.plan_version}`);
   L.push(`- Daily statuses: green ${s.daily_status_counts.green}, yellow ${s.daily_status_counts.yellow}, orange ${s.daily_status_counts.orange}, red ${s.daily_status_counts.red}`);
   L.push(`- Strength sessions: ${s.strength_sessions_completed} of ${s.strength_sessions_planned} · clean: ${s.clean_sessions} · core days: ${s.core_days_done} · walking: ${s.walk_minutes_total} min · adherence ${s.adherence_pct}%`);
-  L.push(`- Trend (morning stiffness min): [${s.trend.morning_stiffness_min.join(", ")}] · (evening pain peak): [${s.trend.evening_pain_peak.join(", ")}] · (first pressure h): [${s.trend.first_pressure_h.map((v) => (v === null ? "censored" : v)).join(", ")}]`);
+  L.push(`- Trend (morning stiffness min): [${s.trend.morning_stiffness_min.join(", ")}] · (pain on waking): [${(s.trend.morning_pain || []).join(", ")}] · (soreness when flipping over): [${(s.trend.woke_from_pain_count || []).join(", ")}] · (evening pain peak): [${s.trend.evening_pain_peak.join(", ")}] · (first pressure h): [${s.trend.first_pressure_h.map((v) => (v === null ? "censored" : v)).join(", ")}]`);
   if ((s.trend.first_sitting_pressure_min || []).some((v) => v != null) || (s.trend.stand_block_min || []).some((v) => v != null))
     L.push(`- Trend (sitting first pressure min): [${(s.trend.first_sitting_pressure_min || []).map((v) => (v === null ? "censored" : v)).join(", ")}] · (stand block min): [${(s.trend.stand_block_min || []).map((v) => v ?? "-").join(", ")}] · (sit block min): [${(s.trend.sit_block_min || []).map((v) => v ?? "-").join(", ")}]`);
   L.push(`- Baselines: stiffness ${e.baselines.stiffness_min} min, standing ${e.baselines.standing_h} h, sitting ${e.baselines.sitting_min ?? "-"} min, rest pain ${e.baselines.pain_rest ?? "-"}`);

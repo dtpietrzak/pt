@@ -276,6 +276,24 @@ export function summaryLine(c) {
   return bits.join(" · ");
 }
 
+/**
+ * Last `limit` morning check-ins, oldest first, one per day.
+ * flip_soreness is woke_from_pain_count: a progress tally, not a status input.
+ */
+export function morningTrend(checkins, { limit = 14, end = null } = {}) {
+  const byDate = new Map();
+  for (const c of checkins || []) {
+    if (c.type !== "morning") continue;
+    if (end && c.local_date > end) continue;
+    const prev = byDate.get(c.local_date);
+    if (!prev || c.ts >= prev.ts) byDate.set(c.local_date, c);
+  }
+  return [...byDate.keys()].sort().slice(-limit).map((d) => {
+    const data = byDate.get(d).data || {};
+    return { local_date: d, pain: data.pain_on_waking, stiffness_min: data.stiffness_min, flip_soreness: data.woke_from_pain_count };
+  });
+}
+
 /** Plain-language banner for a red result. No contact details by design. */
 export function redGuidance(red) {
   if (!red) return null;

@@ -74,9 +74,7 @@ export function evaluateCheckIn(ci, B, cfg, ctx = {}) {
       if ((ctx.prior_hip_shift_checkins || 0) >= 2) { red = red || "clinician"; add("red", "hip shift in 3 consecutive check-ins"); }
       else add("orange", "lateral hip shift");
     }
-    const w = d.woke_from_pain_count || 0;
-    if (w >= 2 && d.pain_on_waking >= 5) add("orange", "woke from pain repeatedly");
-    else if (w >= 1) add("yellow", "woke from pain");
+    // woke_from_pain_count is a neutral night-flip soreness tally; it does not color the day.
     if ((d.sleep_hours ?? 8) < cfg.sleep.block_advance_if_hours_below || (d.sleep_quality ?? 5) <= cfg.sleep.block_advance_if_quality_at_or_below) mods.push("poor_sleep");
   } else if (t === "post_workout") {
     add(painColor(d.pain_peak, cfg), `peak pain ${d.pain_peak}/10`);

@@ -152,6 +152,13 @@
                 "type": "number"
               }
             },
+            "woke_from_pain_count": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
             "evening_pain_peak": {
               "type": "array",
               "items": {

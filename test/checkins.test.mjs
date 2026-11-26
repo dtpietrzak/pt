@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { tidyReasons, checklist, dueNow, buildCheckIn, formFromCheckIn, effectiveDate, noFlags, redGuidance, summaryLine, eveningFromLogs, keepEveningPressure, eveningLogsNote } from "../public/js/checkins.js";
+import { tidyReasons, checklist, dueNow, buildCheckIn, formFromCheckIn, effectiveDate, noFlags, redGuidance, summaryLine, eveningFromLogs, keepEveningPressure, eveningLogsNote, morningTrend } from "../public/js/checkins.js";
 import { evaluate, engineConfig, templateItems, nextStrengthTemplate, buildSession, clearRed } from "../public/js/pipeline.js";
 import { evaluateCheckIn, initState } from "../public/js/engine.js";
 import { postureCheckinData } from "../public/js/posture.js";
@@ -77,6 +77,32 @@ test("each check-in rolls up to the right color", () => {
   assert.match(redGuidance({ kind: "emergency" }).title, /emergency/i);
   assert.doesNotMatch(JSON.stringify([redGuidance({ kind: "clinician" }), redGuidance({ kind: "emergency" })]), /\d{3}[-.\s]\d{4}|@/);
   assert.match(summaryLine(buildCheckIn("night", { pain: 3, leg: "none" }, ctx(at("2026-12-01", "22:00")))), /pain 3\/10/);
+});
+
+test("night flip-over soreness is stored but does not color the day or appear in reasons", () => {
+  const e = (f) => evaluateCheckIn(buildCheckIn("morning", { leg: "none", flags: noFlags(), pain: 1, stiffness_min: 30, sleep_hours: 7, sleep_quality: 4, ...f }, ctx(at("2026-12-01", "08:30"))), B, config);
+  const once = e({ woke: 1 });
+  assert.equal(once.color, "green");
+  assert.equal(once.reasons.some((r) => /woke from pain/i.test(r)), false);
+  const many = e({ woke: 3, pain: 1 });
+  assert.equal(many.color, "green");
+  const withPain = e({ woke: 2, pain: 5 });
+  assert.equal(withPain.color, "orange");
+  assert.ok(withPain.reasons.some((r) => /pain on waking 5\/10/.test(r)));
+  assert.equal(withPain.reasons.some((r) => /woke from pain/i.test(r)), false);
+  const rec = buildCheckIn("morning", { pain: 1, stiffness_min: 30, sleep_quality: 4, woke: 2, leg: "none", flags: noFlags() }, ctx(at("2026-12-01", "08:30")));
+  assert.equal(rec.data.woke_from_pain_count, 2);
+  assert.equal(formFromCheckIn(rec).woke, 2);
+});
+
+test("morningTrend lists pain, flip-over soreness and stiffness oldest first", () => {
+  const mk = (d, pain, woke, stiff) => buildCheckIn("morning", { pain, woke, stiffness_min: stiff, sleep_quality: 4, leg: "none", flags: noFlags() }, ctx(at(d, "08:30")));
+  const rows = morningTrend([mk("2026-12-03", 1, 1, 20), mk("2026-12-01", 2, 3, 30), mk("2026-12-02", 2, 2, 25)]);
+  assert.deepEqual(rows.map((r) => [r.local_date, r.pain, r.flip_soreness, r.stiffness_min]), [
+    ["2026-12-01", 2, 3, 30],
+    ["2026-12-02", 2, 2, 25],
+    ["2026-12-03", 1, 1, 20],
+  ]);
 });
 
 test("new post-workout check-ins omit settle time and 15-min pain; old values still color and round-trip", () => {

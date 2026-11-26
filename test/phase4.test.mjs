@@ -102,6 +102,8 @@ test("gatherExport, apply the example patch, and revert it", async () => {
   assert.deepEqual(validate(S("weekly-export"), built.json).errors, []);
   assert.ok(built.json.meta.posture_cycle_sha256);
   assert.equal(built.json.checkins.length, 1);
+  assert.deepEqual(built.json.summary.trend.woke_from_pain_count, [0]);
+  assert.match(built.markdown, /soreness when flipping over/);
 
   const beforeItems = docs.levels.levels.find((l) => l.id === "L2").items.length;
   const applied = await applyPlanPatch(store, docs, profile, example, schemas);

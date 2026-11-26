@@ -462,7 +462,7 @@
     {
       "id": "CC10",
       "kind": "checkin_color",
-      "description": "Morning: woke from pain once is yellow",
+      "description": "Morning: night flip-over soreness count does not color the day",
       "input": {
         "baselines": {
           "stiffness_min": 30,
@@ -507,7 +507,7 @@
         }
       },
       "expect": {
-        "color": "yellow"
+        "color": "green"
       }
     },
     {
