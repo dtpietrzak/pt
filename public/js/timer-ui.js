@@ -394,7 +394,7 @@ export function createTimerUI({ store, ctx, setState, toast, root, chip }) {
     async reload() { await load(); onTick(); update(true); },
     show() { root.dataset.timerPage = "1"; shape = ""; applyPendingFallback().catch(() => {}); update(true); },
     hide() { delete root.dataset.timerPage; },
-    testAlarm() { unlockAudio(); setTimeout(() => { if (!playAlarm("walk")) toast("Couldn't start audio. Tap again."); notify("Test alarm", "This is what a phase change looks like."); }, 50); },
+    async testAlarm() { await unlockAudio(); const ok = await playAlarm("walk"); if (!ok) toast("Couldn't play the sound. Tap Test sound again."); notify("Test sound", "This is the timer ding."); },
     get active() { return !!timer?.active; },
   };
 }

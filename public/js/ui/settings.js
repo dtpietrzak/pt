@@ -4,6 +4,7 @@ import { DISCLAIMER } from "../defaults.js";
 import { isoLocal, clone } from "../util.js";
 import { activeUser } from "./account.js";
 import { $, esc, today, toast, download, confirmSheet } from "./dom.js";
+import { unlockAudio, playAlarm, dingNotify } from "../audio.js";
 import { exportCardHtml } from "./export.js";
 
 const EQUIP_BOOL = [
@@ -52,9 +53,11 @@ export function renderSettings(ctx, main) {
         <label class="field">Snooze (min)<input type="number" name="pc_snooze" min="1" max="15" step="1" value="${pc.snooze_min ?? 5}"></label>
         <label class="field">Max snoozes per phase<input type="number" name="pc_maxsnz" min="0" max="5" step="1" value="${pc.max_snoozes_per_phase ?? 2}"></label>
       </div>
-      <label class="toggle"><input type="checkbox" name="pc_sound" ${ctx.app.timer_sound !== false ? "checked" : ""}><span>Alarm sound</span></label>
+      <div class="sound-row">
+        <label class="toggle"><input type="checkbox" name="pc_sound" ${ctx.app.timer_sound !== false ? "checked" : ""}><span>Alarm sound</span></label>
+        <button class="btn" id="test-sound" type="button">Test sound</button>
+      </div>
       <label class="toggle"><input type="checkbox" name="pc_all" ${ctx.app.timer_alarm_all_devices ? "checked" : ""}><span>Ring on every signed-in device (off = only the device that started work mode)</span></label>
-      <button class="btn" id="test-alarm" type="button">Test alarm + notification</button>
       <p class="muted small">Stand ${ctx.state.posture_cycle?.stand_min ?? 40} · walk ${ctx.state.posture_cycle?.walk_min ?? 2} · sit ${ctx.state.posture_cycle?.sit_min ?? 20} · decompress ${ctx.state.posture_cycle?.decomp_min ?? 5} min now. These doses change with your check-ins, not here.</p>
       </div>
     </section>
@@ -110,8 +113,12 @@ export function renderSettings(ctx, main) {
   $("#settings", main).onsubmit = (ev) => saveSettings(ctx, ev);
 
   main.onclick = async (e) => {
-    if (e.target.closest("#test-alarm")) {
-      ctx.timerUI?.testAlarm();
+    if (e.target.closest("#test-sound")) {
+      e.preventDefault();
+      await unlockAudio();
+      const ok = await playAlarm("walk");
+      if (!ok) toast("Couldn't play the sound. Tap Test sound again.");
+      dingNotify("Test sound", "This is the timer ding.");
       return;
     }
     if (e.target.closest("#restart")) {

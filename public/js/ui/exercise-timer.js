@@ -45,7 +45,7 @@ function fireDone() {
   sess.status = more ? "next" : "done";
   sess.remain = 0;
   sess.endsAt = null;
-  if (sess.sound !== false) playAlarm("done") || playAlarm("end");
+  if (sess.sound !== false) void playAlarm("done");
   buzz([300, 150, 300, 150, 300]);
   const st = stepOf();
   dingNotify(more ? `${st.label} done` : `${sess.name} done`, more ? "Start the next set when you're ready." : "All timed sets for this dose are done.", "pt-ex-timer");

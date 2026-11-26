@@ -37,7 +37,7 @@ const files = walk(PUBLIC)
     if (rel === "sw.js" || rel === "index.html") return false;
     if (rel.startsWith("data/")) return RUNTIME_DATA.has(rel);
     return rel === "styles.css" || rel === "app.js" || rel === "manifest.webmanifest"
-      || rel.startsWith("js/") || rel.startsWith("icons/") || rel.startsWith("fonts/");
+      || rel.startsWith("js/") || rel.startsWith("icons/") || rel.startsWith("fonts/") || rel.startsWith("sounds/");
   })
   .sort();
 
