@@ -3,6 +3,7 @@
 import { runEngine, manualEvent, levelById, SESSION_BLOCKS, currentDose, recordGateResults, evaluateCheckIn } from "./engine.js";
 import { isoLocal, ulid, clone, localDate, addDays, docHash } from "./util.js";
 import { buildExport } from "./export.js";
+import { BODY_WEIGHT_LB, SPORTS } from "./defaults.js";
 import { validatePatch, migrateState } from "./patch.js";
 
 const SESSION_MODS = new Set(["poor_sleep", "illness", "unusual_load", "missing_morning_checkin", "pause_mode", "easy_dose"]);
@@ -151,10 +152,11 @@ export async function gatherExport(store, docs, profile, {
   };
   if (profile) hashes.profile_sha256 = await docHash(profile);
   if (docs.posture) hashes.posture_cycle_sha256 = await docHash(docs.posture);
-  const sport = (profile?.sports || []).filter(Boolean).join(" + ");
+  const sport = SPORTS.join(" + ");
+  const exportProfile = profile ? { ...profile, body_weight_lb: BODY_WEIGHT_LB, sports: SPORTS.slice() } : profile;
   return buildExport({
     start, end, today, now: isoLocal(now), appVersion, config: docs.config, levels: docs.levels, hashes,
-    profile, sport, stateStart, stateEnd, checkins, evals: r.evals, sessions, allSessions: sessions,
+    profile: exportProfile, sport, stateStart, stateEnd, checkins, evals: r.evals, sessions, allSessions: sessions,
     days: dayMap, daily: r.daily, decisionLog, patchLog, userNotes, agentBrief,
   });
 }

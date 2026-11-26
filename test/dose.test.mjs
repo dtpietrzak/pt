@@ -119,3 +119,12 @@ test("cable lifts snap load_lb to the 5-55 lb stack", () => {
   const snapped = formatDose({ sets: 3, reps: 10, load_lb: 13 }, { exercise_id: "EX_BAND_ROW" }, { equipment: eq });
   assert.match(snapped, /15 lb/);
 });
+
+test("load_bw pounds use the fixed 180 lb body weight, not a profile field", () => {
+  const dose = { sets: 3, reps: 5, load_bw: 0.75 };
+  const a = formatDose(dose, { exercise_id: "EX_DL" }, { body_weight_lb: 200 });
+  const b = formatDose(dose, { exercise_id: "EX_DL" }, { body_weight_lb: 150 });
+  assert.match(a, /75% BW ≈ 135 lb/);
+  assert.equal(a, b);
+  assert.doesNotMatch(a, /150 lb/);
+});

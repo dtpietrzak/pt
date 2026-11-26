@@ -1,9 +1,12 @@
 // Fallback only: the real defaults come from data/profile.json (PT Bot's seed/profile.json).
+// Body weight and sports are fixed for this app, not Settings fields.
+export const BODY_WEIGHT_LB = 180;
+export const SPORTS = ["soccer", "football"];
 export const DEFAULT_PROFILE = {
   name: "David Pietrzak",
-  sports: ["soccer", "football"],
+  sports: SPORTS,
   timezone: "America/Chicago",
-  body_weight_lb: 180,
+  body_weight_lb: BODY_WEIGHT_LB,
   equipment: {
     bands: true, dumbbells_lb: [], kettlebells_lb: [], barbell: true, plates_lb: [], rack_with_safeties: true,
     bench: true, pull_up_bar: true, step_box_in: [6, 8, 12, 18], blocks: true, cones: true, track_or_field: true, cable_stack: true, cable_stack_lb: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],

@@ -36,4 +36,7 @@ test("the app no longer gates the main UI on a signed-in user", () => {
   const settings = src("../public/js/ui/settings.js");
   assert.match(settings, /syncCardHtml/);
   assert.match(settings, /Sign in above to sync across devices/);
+  assert.doesNotMatch(settings, /body_weight_lb/);
+  assert.doesNotMatch(settings, /name="sports"/);
+  assert.doesNotMatch(settings, />You</);
 });

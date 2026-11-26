@@ -148,3 +148,17 @@ test("writeState does not let a stale copy overwrite a newer restart", async () 
   const ok = await writeState(store, { level_id: "L1", mode: "active", x: { restarted_at: "2026-11-25T16:41:00-06:00" } });
   assert.equal(ok.mode, "active");
 });
+
+test("the weekly export ignores a stored profile body weight or sports list", async () => {
+  const store = memStore();
+  const docs = { levels, exercises, tests, config, posture, patched: false, seed_hash: "x" };
+  const state = initState(levels, "L1", { now: "2026-11-23T07:00:00-06:00", baselines: profile.baselines });
+  await store.kvSet("state", state);
+  const weird = { ...profile, body_weight_lb: 200, sports: ["tennis"] };
+  const out = await gatherExport(store, docs, weird, {
+    start: "2026-11-23", end: "2026-11-29", now: new Date("2026-11-25T16:00:00-06:00"), userNotes: "", agentBrief: brief,
+  });
+  assert.equal(out.json.profile.body_weight_lb, 180);
+  assert.deepEqual(out.json.profile.sports, ["soccer", "football"]);
+  assert.match(out.markdown, /soccer \+ football/);
+});

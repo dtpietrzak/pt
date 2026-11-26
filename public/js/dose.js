@@ -1,4 +1,5 @@
 // Turn a rung's dose object into readable text. Pure.
+import { BODY_WEIGHT_LB } from "./defaults.js";
 const r5 = (x) => Math.round(x / 5) * 5;
 function nearest(x, sizes) {
   if (!sizes?.length) return r5(x);
@@ -31,8 +32,7 @@ export function formatDose(dose, item, profile = {}) {
     : /barbell/i.test(id) ? null : profile.equipment?.dumbbells_lb;
   if (dose.load_lb) p.push(`@ ${nearest(dose.load_lb, sizes)} lb${item?.load_note ? " " + item.load_note : ""}`);
   if (dose.load_bw) {
-    const bw = profile.body_weight_lb || 180;
-    p.push(`@ ${Math.round(dose.load_bw * 100)}% BW ≈ ${nearest(dose.load_bw * bw, sizes)} lb${item?.load_note ? " " + item.load_note : ""}`);
+    p.push(`@ ${Math.round(dose.load_bw * 100)}% BW ≈ ${nearest(dose.load_bw * BODY_WEIGHT_LB, sizes)} lb${item?.load_note ? " " + item.load_note : ""}`);
   }
   return p.join(" · ") || "as prescribed";
 }

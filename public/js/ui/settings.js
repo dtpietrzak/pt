@@ -26,12 +26,6 @@ export function renderSettings(ctx, main) {
   main.innerHTML = `
   ${syncCardHtml()}
   <form id="settings" class="settings">
-    <section class="card"><div class="card-head"><h3>You</h3></div>
-      <div class="card-body">
-      <label class="field">Body weight (lb)<input type="number" name="body_weight_lb" min="60" max="400" step="1" value="${p.body_weight_lb ?? 180}" inputmode="decimal"></label>
-      <label class="field">Sports<input name="sports" value="${esc((p.sports || []).join(", "))}" placeholder="soccer, football"></label>
-      </div>
-    </section>
     <section class="card"><div class="card-head"><h3>Check-in reminders</h3></div>
       <div class="card-body">
       <div class="times">
@@ -169,8 +163,6 @@ async function saveSettings(ctx, ev) {
   ev.preventDefault();
   const f = new FormData(ev.target);
   const p = clone(ctx.profile);
-  p.body_weight_lb = +f.get("body_weight_lb") || p.body_weight_lb;
-  p.sports = String(f.get("sports") || "").split(",").map((s) => s.trim()).filter(Boolean);
   delete p.clinician_contact;
   p.notify = { ...p.notify, morning: f.get("n_morning"), evening: f.get("n_evening"), night: f.get("n_night"), post_workout: "on_session_complete" };
   for (const [k] of EQUIP_BOOL) p.equipment[k] = f.get(`eq_${k}`) === "on";

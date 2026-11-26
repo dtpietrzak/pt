@@ -6,11 +6,10 @@ import { RED_FLAGS, redGuidance } from "../checkins.js";
 import { engineConfig, manual, recordGate } from "../pipeline.js";
 import { gatePass } from "../engine.js";
 import { isoLocal, localDate, ulid } from "../util.js";
-import { DISCLAIMER } from "../defaults.js";
+import { DISCLAIMER, BODY_WEIGHT_LB } from "../defaults.js";
 import { $, esc, openSheet, closeSheet, confirmSheet, toast, fmtDate } from "./dom.js";
 
 const cap = (s) => s[0].toUpperCase() + s.slice(1);
-const bw = (ctx) => ctx.profile.body_weight_lb || 180;
 const exName = (ctx, id) => ctx.exById[id]?.name || id;
 
 export function statusOf(ctx) { return levelStatus(ctx.state, ctx.docs.levels, engineConfig(ctx.docs, ctx.profile), ctx.docs.tests); }
@@ -65,11 +64,11 @@ export async function renderStatus(ctx, main) {
 
   // Gate tests
   if (st.gates.length) {
-    html += `<section class="card"><h2>Gate tests</h2><p class="small muted">Objective checks that decide the move up. Run on a green day, one group per session. A pass counts once the next morning is green too. Weights use your body weight (${bw(ctx)} lb), rounded to 5 lb.</p>`;
+    html += `<section class="card"><h2>Gate tests</h2><p class="small muted">Objective checks that decide the move up. Run on a green day, one group per session. A pass counts once the next morning is green too. Weights are based on 180 lb body weight, rounded to 5 lb.</p>`;
     html += st.gates.map((g) => {
       const [label, cls] = GATE_STATUS[g.status] || [g.status, "later"];
       const retest = g.status === "fail" ? (g.retestAfter > 0 ? ` · retest after ${g.retestAfter} more clean session${g.retestAfter > 1 ? "s" : ""}` : " · ready to retest") : "";
-      return `<details class="gate"><summary>${dot(cls)}<span class="gate-copy"><b>${esc(g.test?.name || g.test_id)}${g.optional ? " <small>(optional)</small>" : ""}</b><small>Target: ${esc(thresholdText(g.test, g.threshold, bw(ctx)))}</small><small>${esc(label + retest)}</small></span></summary>
+      return `<details class="gate"><summary>${dot(cls)}<span class="gate-copy"><b>${esc(g.test?.name || g.test_id)}${g.optional ? " <small>(optional)</small>" : ""}</b><small>Target: ${esc(thresholdText(g.test, g.threshold, BODY_WEIGHT_LB))}</small><small>${esc(label + retest)}</small></span></summary>
         <p class="small">${esc(g.test?.protocol || "")}</p><p class="small muted">${esc(g.test?.safety || "")}</p>
         ${g.optional && g.status === "not_started" ? `<button class="btn" type="button" data-skip-test="${esc(g.test_id)}">Skip for good (log why)</button>` : ""}</details>`;
     }).join("");
@@ -178,7 +177,7 @@ async function openGateSession(ctx, groupId) {
     const numeric = isNumericTest(g.threshold);
     return `<fieldset class="ci-sec gt" data-test="${esc(id)}"><legend>${esc(t.name)}</legend>
       <p class="small">${esc(t.protocol || "")}</p><p class="small muted">${esc(t.safety || "")}</p>
-      <p class="small"><b>Target:</b> ${esc(thresholdText(t, g.threshold, bw(ctx)))}</p>
+      <p class="small"><b>Target:</b> ${esc(thresholdText(t, g.threshold, BODY_WEIGHT_LB))}</p>
       ${numeric ? qStep(`v_${id}`, "Your result", "", { step: g.threshold.value >= 30 ? 5 : 1, unit: t.unit && !/[;%]/.test(t.unit) ? t.unit : "" }) : qToggle(`met_${id}`, "I hit the target as written", false)}
       ${qToggle(`form_${id}`, "Form stayed clean the whole way", true)}
       ${qScale(`pain_${id}`, "Worst pain during the test", 0, { P, required: true })}
