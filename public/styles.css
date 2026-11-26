@@ -7,7 +7,7 @@
   src: url("fonts/nunito-latin.woff2") format("woff2");
 }
 
-/* Blue-tinted neutrals with a warm (periwinkle-leaning) blue accent; olive for "done". */
+/* Blue-tinted neutrals with a warm (periwinkle-leaning) blue accent; section colors mark completed Today rows. */
 :root {
   --bg: #e6ebf6;
   --glow: #d3dcf3;
@@ -641,8 +641,8 @@ body[data-page="export"] .card:nth-of-type(6n+6) { --card-tint: var(--blk-streng
   background: color-mix(in srgb, var(--blk) 15%, var(--card));
 }
 .section-icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.section-card.complete .section-icon { color: var(--green-ink); background: var(--green); }
-.section-card.complete { border-color: color-mix(in srgb, var(--green) 45%, var(--line)); }
+.section-card.complete .section-icon { color: var(--accent-ink); background: var(--blk); }
+.section-card.complete { border-color: color-mix(in srgb, var(--blk) 45%, var(--line)); }
 .section-card.locked { opacity: .72; }
 
 .section-head {
@@ -679,9 +679,9 @@ button.section-head:active { background: color-mix(in srgb, var(--line) 45%, tra
   white-space: nowrap;
 }
 .section-card.complete .section-badge {
-  background: color-mix(in srgb, var(--green) 16%, transparent);
-  color: var(--green);
-  border-color: color-mix(in srgb, var(--green) 35%, transparent);
+  background: color-mix(in srgb, var(--blk) 16%, transparent);
+  color: var(--blk);
+  border-color: color-mix(in srgb, var(--blk) 35%, transparent);
 }
 
 .chev {
@@ -712,7 +712,7 @@ button.section-head:active { background: color-mix(in srgb, var(--line) 45%, tra
   background: var(--blk);
   transition: width .35s cubic-bezier(.3, 1.3, .5, 1);
 }
-.section-card.complete .section-bar span { background: var(--green); }
+.section-card.complete .section-bar span { background: var(--blk); }
 
 .section-body {
   padding: 10px 12px 12px;
@@ -734,8 +734,14 @@ button.section-head:active { background: color-mix(in srgb, var(--line) 45%, tra
   margin-bottom: 8px;
   transition: background .2s ease, border-color .2s ease;
 }
-.item.done { background: var(--green-soft); border-color: color-mix(in srgb, var(--green) 25%, transparent); }
-.item.done .name { color: color-mix(in srgb, var(--text) 70%, var(--green)); }
+.item.done {
+  background: color-mix(in srgb, var(--blk, var(--accent)) 18%, var(--card));
+  border-color: color-mix(in srgb, var(--blk, var(--accent)) 35%, transparent);
+}
+.item.done .name { color: color-mix(in srgb, var(--text) 72%, var(--blk, var(--accent))); }
+@media (prefers-color-scheme: dark) {
+  .item.done { background: color-mix(in srgb, var(--blk, var(--accent)) 22%, var(--card)); }
+}
 .item.pop .check input { animation: check-pop .45s cubic-bezier(.3, 1.8, .5, 1); }
 @keyframes check-pop { 0% { transform: scale(.7); } 60% { transform: scale(1.18); } 100% { transform: scale(1); } }
 .bonus {
@@ -778,12 +784,12 @@ button.section-head:active { background: color-mix(in srgb, var(--line) 45%, tra
   cursor: pointer;
   background: transparent;
 }
-.check input:checked { background: var(--green); border-color: var(--green); }
+.check input:checked { background: var(--blk, var(--accent)); border-color: var(--blk, var(--accent)); }
 .check input:checked::after {
   content: "";
   width: 6px;
   height: 12px;
-  border: solid var(--green-ink);
+  border: solid var(--accent-ink);
   border-width: 0 3px 3px 0;
   transform: rotate(45deg) translate(-1px, -1px);
 }
