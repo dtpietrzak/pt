@@ -541,6 +541,9 @@ body[data-page="export"] .card:nth-of-type(6n+6) { --card-tint: var(--blk-streng
 }
 .google-btn:disabled { opacity: .6; cursor: default; }
 .google-btn svg { width: 18px; height: 18px; flex: none; }
+#sync-card .google-btn { margin: 10px 0 6px; }
+.sync-hint { margin: 0 0 12px; font-size: 13px; color: var(--muted); }
+.sync-hint .link { margin-left: 6px; }
 
 /* ---------------------------------------------------------------- today & plan */
 .hero {

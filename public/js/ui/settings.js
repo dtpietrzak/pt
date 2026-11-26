@@ -2,7 +2,7 @@
 import { newState } from "../data.js";
 import { DISCLAIMER } from "../defaults.js";
 import { isoLocal, clone } from "../util.js";
-import { activeUser } from "./account.js";
+import { activeUser, syncCardHtml, wireSyncCard } from "./account.js";
 import { $, esc, today, toast, download, confirmSheet } from "./dom.js";
 import { unlockAudio, playAlarm, dingNotify } from "../audio.js";
 import { exportCardHtml } from "./export.js";
@@ -24,6 +24,7 @@ export function renderSettings(ctx, main) {
   const pc = p.settings?.posture_cycle || {};
 
   main.innerHTML = `
+  ${syncCardHtml()}
   <form id="settings" class="settings">
     <section class="card"><div class="card-head"><h3>You</h3></div>
       <div class="card-body">
@@ -101,7 +102,9 @@ export function renderSettings(ctx, main) {
   <section class="card"><div class="card-head"><h3>Data</h3></div>
     <div class="card-body">
     <p class="small">Plan v${ctx.docs.levels.plan_version ?? 1} · ${ctx.docs.levels.levels.length} levels · ${ctx.docs.exercises.exercises.length} exercises · ${ctx.docs.tests.tests.length} gate tests</p>
-    <p class="muted small">Saved on this device first so it works offline, and synced automatically to your private Firebase database.</p>
+    <p class="muted small">${activeUser()
+      ? "Saved on this device first so it works offline, and synced automatically to your private database."
+      : "Saved on this device only. Sign in above to sync across devices."}</p>
     <p><a class="btn" href="#/export">Weekly export &amp; plan changes</a></p>
     <button class="btn" id="backup" type="button">Download backup (JSON)</button>
     <button class="btn danger" id="wipe" type="button">Erase this device's data</button>
@@ -110,6 +113,7 @@ export function renderSettings(ctx, main) {
   <p class="disclaimer pad">${esc(DISCLAIMER)}</p>`;
 
   exportCardHtml(ctx).then((html) => { const slot = $("#export-slot", main); if (slot) slot.outerHTML = html || ""; }).catch(() => {});
+  wireSyncCard(ctx, main);
 
   $("#settings", main).onsubmit = (ev) => saveSettings(ctx, ev);
 

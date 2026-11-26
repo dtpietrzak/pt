@@ -1,6 +1,5 @@
-// Remembered Google sign-in, login screen, and top-right circular account menu.
+// Remembered Google sign-in, account menu, and the optional Settings sign-in-to-sync card.
 import { cloudState, signIn, signOutCloud } from "../cloud.js";
-import { DISCLAIMER } from "../defaults.js";
 import { $, esc, toast } from "./dom.js";
 
 const AUTH_KEY = "pt:auth";
@@ -29,6 +28,77 @@ export function saveCachedUser(u) {
 }
 
 export const activeUser = () => cloudState().user || cachedUser;
+
+const HINT_KEY = "pt:sync-hint-dismissed";
+export function syncHintDismissed() {
+  try { return localStorage.getItem(HINT_KEY) === "1"; } catch { return false; }
+}
+export function dismissSyncHint() {
+  try { localStorage.setItem(HINT_KEY, "1"); } catch {}
+}
+
+/** One-line first-run note on Today when the device is not signed in. */
+export function syncHintHtml() {
+  if (activeUser() || syncHintDismissed()) return "";
+  return `<p class="sync-hint" id="sync-hint">Data stays on this device. <a class="link" href="#/settings">Sign in to sync</a> <button type="button" class="link" data-dismiss-sync-hint>Got it</button></p>`;
+}
+
+/** Settings card: sign in to turn on sync, or show status when already signed in. */
+export function syncCardHtml() {
+  const u = activeUser();
+  if (!u) {
+    const c = cloudState();
+    return `<section class="card" id="sync-card"><div class="card-head"><h3>Sync</h3></div>
+      <div class="card-body">
+      <p class="muted small">Data stays on this device. Sign in to sync across devices.</p>
+      <button class="btn google-btn" id="google-sign-in" type="button" ${c.available ? "" : "disabled"}>
+        ${GOOGLE_G}<span>Sign in to sync</span>
+      </button>
+      <p class="muted small" id="login-msg"></p>
+      </div>
+    </section>`;
+  }
+  return `<section class="card" id="sync-card"><div class="card-head"><h3>Sync</h3></div>
+    <div class="card-body">
+    <p>Signed in as <b>${esc(u.email || u.name || "your account")}</b></p>
+    <p class="muted small" id="settings-sync-line">${esc(syncLine())}</p>
+    <button class="btn" id="settings-sign-out" type="button">Sign out</button>
+    <p class="muted small">Signing out keeps your data on this device.</p>
+    </div>
+  </section>`;
+}
+
+export async function doSignOut(ctx) {
+  closeAccountMenu();
+  saveCachedUser(null);
+  try { await signOutCloud(); } catch (e) { console.warn("Sign out:", e); }
+  toast("Signed out. Your data stays on this device.");
+  ctx.render();
+}
+
+export function wireSyncCard(ctx, root) {
+  const btn = $("#google-sign-in", root);
+  const msg = $("#login-msg", root);
+  const out = $("#settings-sign-out", root);
+  const line = $("#settings-sync-line", root);
+  const paint = () => {
+    const c = cloudState();
+    if (btn) btn.disabled = !c.available;
+    if (line) { line.textContent = syncLine(); line.classList.toggle("err", !!c.error); }
+    if (!msg) return;
+    if (c.error) msg.textContent = c.error;
+    else if (!navigator.onLine) msg.textContent = "Connect to the internet to sign in.";
+    else if (!c.available) msg.textContent = "Loading…";
+    else msg.textContent = "";
+  };
+  paint();
+  if (btn) btn.onclick = async () => {
+    btn.disabled = true;
+    try { await signIn(); } catch (e) { if (e.message) toast(e.message); }
+    finally { paint(); }
+  };
+  if (out) out.onclick = () => doSignOut(ctx);
+}
 
 export function syncLine() {
   const c = cloudState();
@@ -90,49 +160,5 @@ export function wireAccountMenu(ctx) {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeAccountMenu();
   });
-  so.addEventListener("click", async () => {
-    closeAccountMenu();
-    saveCachedUser(null);
-    try { await signOutCloud(); } catch (e) { console.warn("Sign out:", e); }
-    ctx.render();
-  });
-}
-
-export function renderLogin(main) {
-  $("#title").textContent = "PT";
-  $(".nav").hidden = true;
-  $("#level-chip").hidden = true;
-  const tc = $("#timer-chip");
-  if (tc) tc.hidden = true;
-  $("#account-wrap").hidden = true;
-  closeAccountMenu();
-  main.innerHTML = `
-    <section class="card login-card">
-      <h2>PT</h2>
-      <p class="muted small">Sign in with Google to access your plan.</p>
-      <button class="btn google-btn" id="google-sign-in" type="button" ${cloudState().available ? "" : "disabled"}>
-        ${GOOGLE_G}<span>Sign in with Google</span>
-      </button>
-      <p class="muted small" id="login-msg"></p>
-    </section>
-    <p class="disclaimer pad">${esc(DISCLAIMER)}</p>`;
-  updateLoginStatus();
-  $("#google-sign-in").onclick = async () => {
-    const btn = $("#google-sign-in");
-    btn.disabled = true;
-    try { await signIn(); } catch (e) { toast(e.message); }
-    finally { updateLoginStatus(); }
-  };
-}
-
-export function updateLoginStatus() {
-  const btn = $("#google-sign-in");
-  const msg = $("#login-msg");
-  if (!btn || !msg) return;
-  const c = cloudState();
-  btn.disabled = !c.available;
-  if (c.error) msg.textContent = c.error;
-  else if (!navigator.onLine) msg.textContent = "Connect to the internet to sign in on this device.";
-  else if (!c.available) msg.textContent = "Loading…";
-  else msg.textContent = "";
+  so.addEventListener("click", () => doSignOut(ctx));
 }

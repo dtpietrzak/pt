@@ -166,3 +166,51 @@ test("restart at a level syncs; a later stale write from the other device does n
   assert.equal((await phone.store.kvGet("state")).level_id, "L1", "phone is not overwritten");
   assert.equal(JSON.parse(server.docs.get("kv/state").d).value.level_id, "L1");
 });
+
+test("local-only use after boot uploads on first sign-in and merges with existing cloud records", async () => {
+  const server = fakeServer(), clock = { t: 1_800_000_000_000 };
+  // Phone already synced: a profile and an older day.
+  const phone = await device(server, clock, { legacy: {
+    kv: [{ key: "profile", value: { body_weight_lb: 182 } }],
+    days: [{ local_date: "2026-11-20", checklist: ["walk"] }],
+  } });
+  await phone.engine.start(); await settle();
+  phone.engine.stop();
+
+  // Tablet is used locally first (no engine = not signed in). Boot writes a default profile,
+  // then the user logs a new day and edits the profile.
+  const tablet = await device(server, clock, { boot: { profile: { body_weight_lb: 180 } } });
+  clock.t += 5000;
+  await tablet.store.put("days", { local_date: "2026-11-26", checklist: ["core"] });
+  clock.t += 1000;
+  await tablet.store.kvSet("profile", { body_weight_lb: 185 });
+  assert.ok(!server.docs.has("days/2026-11-26"), "nothing is pushed before sign-in");
+
+  await tablet.engine.start(); await settle();
+  assert.deepEqual(await tablet.base.get("days", "2026-11-20"), { local_date: "2026-11-20", checklist: ["walk"] }, "cloud-only day is pulled");
+  assert.deepEqual(await tablet.base.get("days", "2026-11-26"), { local_date: "2026-11-26", checklist: ["core"] }, "local day is kept");
+  assert.ok(server.docs.has("days/2026-11-26"), "local day is uploaded");
+  assert.ok(server.docs.has("days/2026-11-20"), "cloud day is not wiped");
+  assert.equal(JSON.parse(server.docs.get("kv/profile").d).value.body_weight_lb, 185, "newer local profile edit wins");
+});
+
+test("edits after sign-out stay on the device and upload on the next sign-in, without dropping cloud-only records", async () => {
+  const server = fakeServer(), clock = { t: 1_800_000_000_000 };
+  const phone = await device(server, clock, { legacy: {
+    days: [{ local_date: "2026-11-20", checklist: ["walk"] }],
+  } });
+  await phone.engine.start(); await settle();
+  phone.engine.stop();
+
+  clock.t += 1000;
+  await phone.store.put("days", { local_date: "2026-11-26", checklist: ["core"] });
+  assert.ok(!server.docs.has("days/2026-11-26"), "signed-out writes do not touch the remote");
+  assert.deepEqual(await phone.base.get("days", "2026-11-26"), { local_date: "2026-11-26", checklist: ["core"] });
+
+  const again = createSyncEngine(phone.store, server.remote());
+  await again.start(); await settle();
+  assert.ok(server.docs.has("days/2026-11-26"), "the local day uploads after sign-in");
+  assert.ok(server.docs.has("days/2026-11-20"), "the earlier cloud day remains");
+  assert.deepEqual(await phone.base.get("days", "2026-11-20"), { local_date: "2026-11-20", checklist: ["walk"] });
+  again.stop();
+});

@@ -15,6 +15,7 @@ import { clearItemProgress } from "../item-progress.js";
 import { flagMarkHtml } from "./pain-flag.js";
 import { reliefCardHtml, paintReliefCard, bumpRelief, dropRelief, openReliefDetail } from "./relief.js";
 import { isItemFlagged } from "../pain-flags.js";
+import { syncHintHtml, dismissSyncHint } from "./account.js";
 
 const DAILY = ["daily_mobility", "daily_core", "walking"];
 const MORNING_WINDOW_MIN = 45;
@@ -100,7 +101,7 @@ export async function renderToday(ctx, main) {
   const cheerFor = (n) => cheer(lv, n, requiredKeys.size, inWindow);
 
   // The day starts with "I'm up": until then, that button is the only thing on the page.
-  let html = redBannerHtml(ctx) + (wake ? `
+  let html = redBannerHtml(ctx) + syncHintHtml() + (wake ? `
     <section class="hero" id="hero">
       <div class="hero-top">
         <div class="hero-copy">
@@ -263,6 +264,11 @@ export async function renderToday(ctx, main) {
   };
 
   main.onclick = async (e) => {
+    if (e.target.closest("[data-dismiss-sync-hint]")) {
+      dismissSyncHint();
+      $("#sync-hint", main)?.remove();
+      return;
+    }
     const reliefStep = e.target.closest("[data-relief-step]");
     if (reliefStep) {
       const id = reliefStep.dataset.reliefStep;

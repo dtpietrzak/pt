@@ -9,7 +9,7 @@ import { isoLocal } from "./js/util.js";
 import { writeState } from "./js/pipeline.js";
 import { levelById } from "./js/engine.js";
 import { $, esc, toast } from "./js/ui/dom.js";
-import { loadCachedUser, saveCachedUser, activeUser, renderAccount, closeAccountMenu, wireAccountMenu, renderLogin, updateLoginStatus } from "./js/ui/account.js";
+import { loadCachedUser, saveCachedUser, activeUser, renderAccount, closeAccountMenu, wireAccountMenu } from "./js/ui/account.js";
 import { renderToday } from "./js/ui/today.js";
 import { renderPlan } from "./js/ui/plan.js";
 import { renderSettings } from "./js/ui/settings.js";
@@ -21,7 +21,7 @@ import { wireExerciseTimerChip } from "./js/ui/exercise-timer.js";
 const PAGES = { today: "Today", work: "Work", plan: "Plan", settings: "Settings", history: "History", status: "Status", red: "Red flags", export: "Export" };
 const main = $("#main");
 
-let showingLogin = false;
+let wasSignedIn = false;
 const ctx = {
   store: null,
   docs: null,
@@ -56,13 +56,6 @@ function render() {
   main.onclick = null;
   main.onchange = null;
   ctx.timerUI?.hide();
-  if (!activeUser()) {
-    showingLogin = true;
-    document.body.dataset.page = "login";
-    renderLogin(main);
-    return;
-  }
-  showingLogin = false;
   const r = route();
   document.body.dataset.page = r;
   $("#title").textContent = PAGES[r];
@@ -92,32 +85,24 @@ function reloadFromStore() {
     if (a) ctx.app = { ...ctx.app, ...a };
     if (st) ctx.state = st;
     await ctx.timerUI?.reload();
-    if (activeUser()) render();
+    render();
   }, 150);
 }
 main.addEventListener("focusout", () => { if (reloadPending) setTimeout(reloadFromStore, 300); });
 
 function onCloudChange() {
   const c = cloudState();
-  if (c.user) {
-    saveCachedUser(c.user);
-    if (showingLogin) {
-      if (!location.hash || location.hash === "#") location.hash = "#/today";
-      render();
-      return;
-    }
-    renderAccount(ctx);
+  if (c.user) saveCachedUser(c.user);
+  else if (c.authResolved) saveCachedUser(null);
+  const signedIn = !!activeUser();
+  if (signedIn !== wasSignedIn && ctx.state) {
+    wasSignedIn = signedIn;
+    if (!signedIn) closeAccountMenu();
+    render();
     return;
   }
-  if (c.authResolved && !c.user) {
-    saveCachedUser(null);
-    closeAccountMenu();
-    if (!showingLogin) render();
-    else updateLoginStatus();
-    return;
-  }
-  if (showingLogin) updateLoginStatus();
-  else renderAccount(ctx);
+  wasSignedIn = signedIn;
+  if (signedIn) renderAccount(ctx);
 }
 
 function connectCloud() {
@@ -151,6 +136,7 @@ async function start() {
   ctx.timerUI.init().catch((e) => console.warn("Timer unavailable:", e));
   if (b.resynced) toast("Plan data updated from the latest seed.");
   wireAccountMenu(ctx);
+  wasSignedIn = !!activeUser();
   $("#level-chip").onclick = () => { location.hash = "#/status"; };
   window.addEventListener("hashchange", render);
   window.addEventListener("online", connectCloud);
@@ -158,10 +144,10 @@ async function start() {
   connectCloud();
   // Check-ins: re-run the engine over what's stored, then keep badges and reminders going while the app is open.
   const quiet = () => Date.now() - lastRemoteAt > 60000;
-  refreshEngine(ctx).then((r) => { if (r.changed && activeUser()) render(); }).catch((e) => console.warn("Engine unavailable:", e));
-  startReminders(ctx, { isActive: () => !!activeUser(), onRemoteQuiet: quiet });
+  refreshEngine(ctx).then((r) => { if (r.changed) render(); }).catch((e) => console.warn("Engine unavailable:", e));
+  startReminders(ctx, { isActive: () => true, onRemoteQuiet: quiet });
 }
 
-document.addEventListener("visibilitychange", () => { if (!document.hidden && activeUser() && ctx.state) render(); });
+document.addEventListener("visibilitychange", () => { if (!document.hidden && ctx.state) render(); });
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
 start().catch((e) => { main.innerHTML = `<section class="card"><h2>Couldn't start</h2><p>${esc(e.message)}</p></section>`; console.error(e); });
