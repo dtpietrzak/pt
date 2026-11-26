@@ -117,9 +117,8 @@ async function todayExtras(ctx, date) {
   const blocks = log?.blocks || [], early = log?.early_switches || [];
   const doses = ctx.state.posture_cycle;
   const posture = blocks.length && doses ? postureCheckinData(blocks, early, doses) : null;
-  const upMin = blocks.filter((b) => b.phase === "stand" || b.phase === "walk").reduce((a, b) => a + (b.actual_min || 0), 0);
   const sitMin = blocks.filter((b) => b.phase === "sit").reduce((a, b) => a + (b.actual_min || 0), 0);
-  return { posture, day, blocks, upH: Math.round((upMin / 60) * 2) / 2, sitMin: Math.round(sitMin) };
+  return { posture, day, blocks, sitMin: Math.round(sitMin) };
 }
 
 function formHtml(ctx, type, f) {
@@ -329,8 +328,7 @@ function answersHtml(ctx, c) {
     const st = d.standing || {}, sit = d.sitting;
     html += group("Pain", row("Worst back pain today", painV(d.pain_peak_today)) + row("Back limited you", yn(d.activity_limited)) + row("Unplanned relief (Relief counters)", txt(d.forced_rest_count)) + row("Hips shifted", yn(d.hip_shift)));
     const pressH = st.censored === true || st.first_pressure_h === null ? "Never, stayed comfortable" : has(st.first_pressure_h) ? `After ${fmtH(st.first_pressure_h)}` : "";
-    html += group("From Today and the Work timer", row("Time on your feet", has(st.upright_h_total) ? fmtH(st.upright_h_total) : "")
-      + row("Pressure reached 3/10", pressH)
+    html += group("From Today and the Work timer", row("Pressure reached 3/10", pressH)
       + row("Preventive standing breaks", txt(st.breaks_taken)) + row("Preventive decompression breaks", txt(st.decomp_breaks_done)) + row("Walking", has(d.walk_min) ? `${esc(d.walk_min)} min` : ""));
     if (sit) {
       const pressS = sit.censored === true || sit.first_pressure_min === null ? "Never, stayed comfortable" : has(sit.first_pressure_min) ? `After ${esc(sit.first_pressure_min)} min` : "";

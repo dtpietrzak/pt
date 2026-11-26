@@ -130,21 +130,23 @@ export function buildCheckIn(type, f, ctx) {
     if (f.settle) data.settle_bucket = f.settle;
     if (f.form_breakdown) data.form_breakdown = true;
   } else if (type === "evening") {
-    const standing = { upright_h_total: Math.max(0, num(f.upright_h, 0)) };
+    const standing = {};
     // first_pressure / censored stay omitted unless actually supplied. Setting censored with
     // no measurement would make standingRatio treat the day as fully comfortable.
     if (f.no_pressure) { standing.first_pressure_h = null; standing.censored = true; }
     else if (hasNum(f.first_pressure_h)) standing.first_pressure_h = Math.max(0, num(f.first_pressure_h, 0));
     if (f.breaks !== undefined && f.breaks !== "") standing.breaks_taken = Math.max(0, int(f.breaks));
     if (f.decomp !== undefined && f.decomp !== "") standing.decomp_breaks_done = Math.max(0, int(f.decomp));
+    // Do not invent upright hours. Only keep an explicit value (old records / vector inputs).
+    if (hasNum(f.upright_h)) standing.upright_h_total = Math.max(0, num(f.upright_h, 0));
     data = {
-      standing,
       pain_peak_today: pain(f.pain),
       forced_rest_count: Math.max(0, int(f.forced_rest)),
       activity_limited: !!f.limited,
       hip_shift: !!f.hip_shift,
       symptoms: buildSymptoms(f, f.pain),
     };
+    if (Object.keys(standing).length) data.standing = standing;
     if (hasNum(f.walk_min)) data.walk_min = Math.max(0, num(f.walk_min));
     if (f.sit_on) {
       const sit = { flared: !!f.sit_flared };
@@ -196,9 +198,9 @@ export function formFromCheckIn(c) {
 
 /**
  * Fill evening standing / walking / sitting fields from the Today log and work-timer blocks.
- * Does not invent first-pressure, a comfortable (censored) day, or a default standing duration.
- * Schema requires standing.upright_h_total, so that is 0 when nothing was logged (the engine
- * does not use it for color). Sitting and posture_cycle are omitted when there was no work mode.
+ * Does not invent first-pressure, a comfortable (censored) day, or upright hours
+ * (the Work timer and walk log cannot see the whole day). Sitting and posture_cycle
+ * are omitted when there was no work mode.
  */
 export function eveningFromLogs(logs = {}, form = {}) {
   const day = logs.day || {};
@@ -206,10 +208,10 @@ export function eveningFromLogs(logs = {}, form = {}) {
   const posture = logs.posture || null;
   const workUsed = !!(posture?.work_mode_used || blocks.length);
   const phaseMin = (phase) => blocks.filter((b) => b.phase === phase).reduce((a, b) => a + (b.actual_min || 0), 0);
-  const standWalkMin = phaseMin("stand") + phaseMin("walk");
   const sitMin = phaseMin("sit");
   const walk = hasNum(day.walk_min) ? Number(day.walk_min) : undefined;
-  const f = { ...form, upright_h: Math.round(((standWalkMin + (walk || 0)) / 60) * 2) / 2 };
+  const f = { ...form };
+  delete f.upright_h;
   delete f.no_pressure;
   delete f.first_pressure_h;
   delete f.sit_no_pressure;
@@ -242,6 +244,7 @@ export function keepEveningPressure(f, existing) {
   const st = existing.data?.standing || {};
   if (st.censored === true || st.first_pressure_h === null) out.no_pressure = true;
   else if (hasNum(st.first_pressure_h)) out.first_pressure_h = st.first_pressure_h;
+  if (hasNum(st.upright_h_total)) out.upright_h = st.upright_h_total;
   const sit = existing.data?.sitting;
   if (sit && out.sit_on) {
     if (sit.censored === true || sit.first_pressure_min === null) out.sit_no_pressure = true;
@@ -257,7 +260,6 @@ export function eveningLogsNote(logs = {}) {
   const bits = [];
   if (f.walk_min !== undefined) bits.push(`walked ${f.walk_min} min`);
   if (f.forced_rest) bits.push(`${f.forced_rest} unplanned relief`);
-  if (f.upright_h) bits.push(`${f.upright_h} h on your feet`);
   if (f.sit_on) bits.push(`sat ${f.sit_total_min} min at work`);
   if (!bits.length) return "No walk, work-timer, or Relief log data today, so standing, walking and sitting times will be left unreported rather than guessed.";
   return "From Today and the Work timer: " + bits.join(", ") + ". Scheduled work breaks are not counted as symptoms. Unplanned relief comes from the Relief counters.";

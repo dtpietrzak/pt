@@ -45,7 +45,8 @@ test("body-weight targets are recomputed from the live weight and snapped to 5 l
   assert.match(thresholdText(T("T_DL_LOAD"), thr, 200), /75% BW \(≈ 150 lb\)/);
   assert.doesNotMatch(thresholdText(T("T_DL_LOAD"), thr, 200), /135/, "no stale 180 lb note");
   assert.equal(thresholdText(T("T_WALK_CONT"), exitTest("L1", "T_WALK_CONT").threshold, 180), "30 min");
-  assert.match(thresholdText(T("T_STAND_FUNC"), exitTest("L1", "T_STAND_FUNC").threshold, 180), /5 hours upright/);
+  assert.equal(T("T_STAND_FUNC"), undefined);
+  assert.equal(exitTest("L1", "T_STAND_FUNC"), undefined);
 });
 
 test("level status lists what's needed to advance", () => {

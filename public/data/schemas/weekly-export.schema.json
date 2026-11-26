@@ -1517,10 +1517,7 @@
                       "type": "integer"
                     }
                   },
-                  "additionalProperties": false,
-                  "required": [
-                    "upright_h_total"
-                  ]
+                  "additionalProperties": false
                 },
                 "sitting": {
                   "type": "object",
@@ -1681,7 +1678,6 @@
               },
               "additionalProperties": false,
               "required": [
-                "standing",
                 "pain_peak_today",
                 "symptoms"
               ]

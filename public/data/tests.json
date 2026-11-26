@@ -29,32 +29,6 @@
       "category": "function"
     },
     {
-      "id": "T_STAND_FUNC",
-      "name": "Workday upright tolerance (with breaks)",
-      "protocol": "On a normal day, accumulate the target upright hours while using the work posture cycle (stand, walk, sit, decompress) or, away from the timer, changing position before symptoms start. Local pressure stays at 2/10 or less at the end of the day and the next morning is no worse. This measures function, it is not a challenge to stand or sit without breaks. Sitting has its own tolerance.",
-      "unit": "hours upright",
-      "thresholds": {
-        "L1": {
-          "value": 5
-        },
-        "L2": {
-          "value": 6
-        },
-        "L3": {
-          "value": 6
-        },
-        "L4": {
-          "value": 7
-        },
-        "L5": {
-          "value": 8
-        }
-      },
-      "safety": "Never stand without breaks just to pass this test.",
-      "optional": false,
-      "category": "function"
-    },
-    {
       "id": "T_HINGE_DOWEL",
       "name": "Pain-free dowel hinge",
       "protocol": "10 reps of the dowel hip hinge with head, upper back and tailbone staying in contact on every rep, no pain.",

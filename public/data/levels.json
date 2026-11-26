@@ -184,13 +184,6 @@
             "optional": false
           },
           {
-            "test_id": "T_STAND_FUNC",
-            "threshold": {
-              "value": 5
-            },
-            "optional": false
-          },
-          {
             "test_id": "T_HINGE_DOWEL",
             "threshold": {
               "value": 10
@@ -879,13 +872,6 @@
             "test_id": "T_WALK_CONT",
             "threshold": {
               "value": 40
-            },
-            "optional": false
-          },
-          {
-            "test_id": "T_STAND_FUNC",
-            "threshold": {
-              "value": 6
             },
             "optional": false
           },
@@ -1593,13 +1579,6 @@
             "test_id": "T_WALK_CONT",
             "threshold": {
               "value": 45
-            },
-            "optional": false
-          },
-          {
-            "test_id": "T_STAND_FUNC",
-            "threshold": {
-              "value": 6
             },
             "optional": false
           },
@@ -2393,13 +2372,6 @@
             "test_id": "T_WALK_CONT",
             "threshold": {
               "value": 60
-            },
-            "optional": false
-          },
-          {
-            "test_id": "T_STAND_FUNC",
-            "threshold": {
-              "value": 7
             },
             "optional": false
           },
@@ -3388,13 +3360,6 @@
             "threshold": {
               "value": 60,
               "note": "include 5 x 2 min brisk"
-            },
-            "optional": false
-          },
-          {
-            "test_id": "T_STAND_FUNC",
-            "threshold": {
-              "value": 8
             },
             "optional": false
           },

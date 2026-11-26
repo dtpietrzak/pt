@@ -222,7 +222,7 @@ test("eveningFromLogs fills standing, walking and sitting from Today and the wor
   ];
   const pc = postureCheckinData(blocks, [], { stand_min: 40, sit_min: 20, walk_min: 2, decomp_min: 5 });
   const f = eveningFromLogs({ blocks, posture: pc, day: { walk_min: 30, standing_breaks_done: 5, decomp_breaks_done: 2 } }, { pain: 2, forced_rest: 0, leg: "none" });
-  assert.equal(f.upright_h, 1); // 40 + 2 + 30 min, snapped to 0.5 h
+  assert.equal(f.upright_h, undefined);
   assert.equal(f.walk_min, 30);
   assert.equal(f.breaks, undefined);
   assert.equal(f.decomp, undefined);
@@ -233,12 +233,8 @@ test("eveningFromLogs fills standing, walking and sitting from Today and the wor
   assert.equal(f.first_pressure_h, undefined);
   const rec = buildCheckIn("evening", f, ctx(at(d, "19:00"), { posture: pc }));
   ok(rec);
-  assert.equal(rec.data.standing.upright_h_total, 1);
-  assert.equal("first_pressure_h" in rec.data.standing, false);
-  assert.equal("censored" in rec.data.standing, false);
+  assert.equal(rec.data.standing, undefined);
   assert.equal(rec.data.walk_min, 30);
-  assert.equal("breaks_taken" in rec.data.standing, false);
-  assert.equal("decomp_breaks_done" in rec.data.standing, false);
   assert.equal(rec.data.forced_rest_count, 0);
   assert.equal(rec.data.sitting.seated_min_total, 20);
   assert.equal("first_pressure_min" in rec.data.sitting, false);
@@ -249,16 +245,14 @@ test("eveningFromLogs fills standing, walking and sitting from Today and the wor
 
 test("eveningFromLogs does not invent a 6h comfortable day when nothing was logged", () => {
   const f = eveningFromLogs({}, { pain: 2, forced_rest: 0, leg: "none" });
-  assert.equal(f.upright_h, 0);
+  assert.equal(f.upright_h, undefined);
   assert.equal(f.walk_min, undefined);
   assert.equal(f.sit_on, undefined);
   assert.equal(f.breaks, undefined);
   assert.equal(f.no_pressure, undefined);
   const rec = buildCheckIn("evening", f, ctx(at("2026-12-01", "19:00")));
   ok(rec);
-  assert.equal(rec.data.standing.upright_h_total, 0);
-  assert.equal("first_pressure_h" in rec.data.standing, false);
-  assert.equal("censored" in rec.data.standing, false);
+  assert.equal(rec.data.standing, undefined);
   assert.equal(rec.data.sitting, undefined);
   assert.equal(rec.data.posture_cycle, undefined);
   assert.equal(rec.data.walk_min, undefined);
@@ -281,12 +275,12 @@ test("a work-timer day does not count scheduled decompress phases as unplanned r
   assert.equal(f.breaks, undefined);
   assert.equal(f.decomp, undefined);
   assert.equal(f.forced_rest, undefined);
-  assert.equal(f.upright_h, 0.5); // 42 min, snapped to 0.5 h
+  assert.equal(f.upright_h, undefined);
   assert.equal(f.walk_min, undefined);
   const rec = buildCheckIn("evening", { ...f, forced_rest: 0 }, ctx(at(d, "19:00"), { posture: pc }));
   ok(rec);
   assert.equal(rec.data.forced_rest_count, 0);
-  assert.equal("decomp_breaks_done" in rec.data.standing, false);
+  assert.equal(rec.data.standing, undefined);
   assert.equal(evaluateCheckIn(rec, B, config).color, "green");
 });
 
@@ -294,9 +288,9 @@ test("editing an evening check-in keeps a previously entered first-pressure valu
   const rec = buildCheckIn("evening", { pain: 2, upright_h: 7, no_pressure: false, first_pressure_h: 4, leg: "none" }, ctx(at("2026-12-01", "19:00")));
   const f = keepEveningPressure(eveningFromLogs({}, { pain: 3, forced_rest: 1, leg: "none" }), rec);
   assert.equal(f.first_pressure_h, 4);
-  assert.equal(f.upright_h, 0);
+  assert.equal(f.upright_h, 7);
   const again = buildCheckIn("evening", f, ctx(at("2026-12-01", "19:30"), { existing: rec }));
   assert.equal(again.data.standing.first_pressure_h, 4);
-  assert.equal(again.data.standing.upright_h_total, 0);
+  assert.equal(again.data.standing.upright_h_total, 7);
   ok(again);
 });
