@@ -98,3 +98,32 @@ export function restCuesToPlay(prevRemainMs, remainMs) {
 export function needsRestAfter(step, stepCount) {
   return stepCount > 1 && step < stepCount - 1;
 }
+
+/**
+ * Apply Next to a timed session without starting the next countdown.
+ * Idle/ready: the current (or upcoming, if rest already ended) bout is marked
+ * done and the count moves to the next hold, idle. Running/paused: the bout
+ * finishes as if the clock hit zero (rest if more remain, else done).
+ * During rest: skip rest and land on the next hold idle.
+ */
+export function advanceTimerByNext(sess, now = Date.now()) {
+  if (!sess || sess.status === "done") return { sess, ding: false, markDone: false };
+  const duration = sess.plan.seconds * 1000;
+  const steps = sess.plan.steps.length;
+  const base = { ...sess, endsAt: null, restEndsAt: null };
+
+  if (sess.status === "rest") {
+    return { sess: { ...base, step: sess.step + 1, status: "idle", remain: duration }, ding: false, markDone: false };
+  }
+
+  const step = (sess.status === "ready" || sess.status === "next") ? sess.step + 1 : sess.step;
+  const more = needsRestAfter(step, steps);
+  const runningLike = sess.status === "running" || sess.status === "paused";
+  if (runningLike && more) {
+    return { sess: { ...base, step, status: "rest", remain: 0, restEndsAt: now + REST_SEC * 1000 }, ding: true, markDone: false };
+  }
+  if (more) {
+    return { sess: { ...base, step: step + 1, status: "idle", remain: duration }, ding: true, markDone: false };
+  }
+  return { sess: { ...base, step, status: "done", remain: 0 }, ding: true, markDone: true };
+}

@@ -3,9 +3,9 @@
 import { currentDose } from "../engine.js";
 import { formatDose, timedPlan, setPlan } from "../dose.js";
 import { unlockAudio, playAlarm, playCue, fmtClock, buzz, dingNotify } from "../audio.js";
-import { REST_SEC, needsRestAfter, restCuesToPlay, isItemFlagged } from "../pain-flags.js";
+import { REST_SEC, needsRestAfter, restCuesToPlay, isItemFlagged, advanceTimerByNext } from "../pain-flags.js";
 import { $, esc, openSheet, today, toast } from "./dom.js";
-import { loadDay, flagToggleHtml, wireFlagToggle } from "./pain-flag.js";
+import { loadDay, saveDay, flagToggleHtml, wireFlagToggle } from "./pain-flag.js";
 
 let sess = null; // { itemKey, name, plan, step, status, endsAt, remain, restEndsAt, restPrev, sound }
 let sheetItem = null;
@@ -66,6 +66,7 @@ function fireDone() {
     sess.remain = 0;
     sess.endsAt = null;
     dingNotify(`${sess.name} done`, "All timed sets for this dose are done.", "pt-ex-timer");
+    finishReliefOrItem();
   }
 }
 
@@ -158,8 +159,7 @@ function timerHtml(plan, doseText, ctx) {
     <div class="ex-timer-count" id="ex-timer-count" aria-live="polite">${fmtClock(plan.seconds * 1000)}</div>
     <div class="ex-timer-actions">
       <button class="btn primary btn-lg" type="button" data-ex-act="start" id="ex-timer-start">Start</button>
-      <button class="btn primary btn-lg" type="button" data-ex-act="next" id="ex-timer-next" hidden>Next</button>
-      <button class="btn" type="button" data-ex-act="pause" id="ex-timer-pause" hidden>Pause</button>
+      <button class="btn primary btn-lg" type="button" data-ex-act="next" id="ex-timer-next">Next</button>
       <button class="btn" type="button" data-ex-act="reset" id="ex-timer-reset">Reset</button>
     </div>
     ${sets > 1 ? autoToggleHtml(ctx) : ""}
@@ -187,9 +187,10 @@ function wireTimer(ctx, it, ex, plan) {
   root.onclick = (e) => {
     const act = e.target.closest("[data-ex-act]")?.dataset.exAct;
     if (!act) return;
-    if (act === "start") start(ctx, it, ex, plan);
-    else if (act === "pause") pause();
-    else if (act === "reset") reset(it, ex, plan);
+    if (act === "start") {
+      if (sess?.itemKey === it.item_key && sess.status === "running") pause();
+      else start(ctx, it, ex, plan);
+    } else if (act === "reset") reset(it, ex, plan);
     else if (act === "next") next(ctx, it, ex, plan);
   };
   root.onchange = (e) => {
@@ -220,22 +221,28 @@ function start(ctx, it, ex, plan) {
 function next(ctx, it, ex, plan) {
   unlockAudio();
   if (!sess || sess.itemKey !== it.item_key) adopt(ctx, it, ex, plan);
-  if (sess.status === "running" || sess.status === "paused") {
-    sess.remain = 0;
-    sess.endsAt = sess.endsAt || Date.now();
-    fireDone();
-    render();
-    return;
+  if (sess.status === "done") return;
+  const { sess: nextSess, ding, markDone } = advanceTimerByNext(sess, Date.now());
+  sess = nextSess;
+  if (ding) {
+    const key = `${sess.itemKey}:${sess.step}:${sess.status}`;
+    if (dingedFor !== key) {
+      dingedFor = key;
+      if (soundOn()) void playAlarm("done");
+      buzz([300, 150, 300, 150, 300]);
+    }
   }
-  if (sess.status === "rest" || sess.status === "ready" || sess.status === "next") {
-    skipRest();
-    render();
-    return;
+  if (sess.status === "rest") {
+    lastRestRemain = REST_SEC * 1000 + 1;
+    const st = stepOf();
+    dingNotify(`${st?.label || "Set"} done`, `Rest ${REST_SEC} s, then the next one.`, "pt-ex-timer");
+    ensureClock();
+  } else if (markDone) {
+    dingNotify(`${sess.name} done`, "All timed sets for this dose are done.", "pt-ex-timer");
+    finishReliefOrItem();
   }
-  if (sess.status === "done") {
-    sess.step = 0; sess.status = "idle"; sess.remain = sess.plan.seconds * 1000;
-    render();
-  }
+  render();
+  stopClockIfIdle();
 }
 
 function pause() {
@@ -281,7 +288,6 @@ function render() {
     const countEl = $("#ex-timer-count", box);
     const startBtn = $("#ex-timer-start", box);
     const nextBtn = $("#ex-timer-next", box);
-    const pauseBtn = $("#ex-timer-pause", box);
     const hint = $("#ex-timer-hint", box);
     const more = sess && needsRestAfter(sess.step, sess.plan.steps.length);
     if (stepEl) {
@@ -293,25 +299,24 @@ function render() {
       countEl.classList.toggle("rest", rest);
     }
     if (startBtn) {
-      startBtn.hidden = running || rest;
-      startBtn.textContent = paused ? "Resume" : ready ? (sess.plan.steps[sess.step + 1]?.label ? `Start ${sess.plan.steps[sess.step + 1].label}` : "Start next") : done ? "Start over" : "Start";
+      startBtn.hidden = false;
+      startBtn.textContent = running ? "Pause" : paused ? "Resume" : (ready || rest) ? (sess.plan.steps[sess.step + 1]?.label ? `Start ${sess.plan.steps[sess.step + 1].label}` : "Start next") : done ? "Start over" : "Start";
     }
     if (nextBtn) {
-      nextBtn.hidden = !(running || paused || rest || ready);
-      nextBtn.textContent = rest ? "Skip rest" : ready ? "Start next" : (more ? "Next" : "Finish");
+      nextBtn.hidden = !!done;
+      nextBtn.textContent = rest ? "Skip rest" : ready ? "Next" : (more ? "Next" : "Finish");
     }
-    if (pauseBtn) pauseBtn.hidden = !running;
     const autoEl = box.querySelector("[data-ex-act=auto]");
     if (autoEl && autoEl.checked !== autoOn()) autoEl.checked = autoOn();
     if (hint) {
       hint.textContent = rest
-        ? (autoOn() ? `Rest ${REST_SEC} s. The next set starts on its own after the go cue.` : `Rest ${REST_SEC} s. After the go cue, tap Start or Next when you're ready.`)
+        ? (autoOn() ? `Rest ${REST_SEC} s. The next set starts on its own after the go cue. Next skips the rest without starting the clock.` : `Rest ${REST_SEC} s. Start begins the next bout; Next skips the rest without starting the clock.`)
         : ready
-          ? (sess.plan.rest_s && sess.plan.rest_s !== REST_SEC ? `Rest is over. Start the next one when you're ready.` : "Rest is over. Start the next one when you're ready.")
+          ? "Rest is over. Start begins the next bout; Next marks it done without running it."
           : done ? "All timed sets for this dose are done."
           : paused ? "Paused."
           : running ? (more ? "Next ends this bout and starts the rest." : "Next ends this bout and finishes the dose.")
-          : "Starts a countdown for this dose. Pause, skip with Next, or reset any time.";
+          : "Start runs a countdown. Next marks this bout done and moves the count up, without starting the clock.";
     }
   }
   const c = chip();
@@ -372,11 +377,14 @@ async function wireSets(ctx, it, plan) {
       return;
     }
     if (act === "next") {
+      unlockAudio();
       if (finished) { current = 1; finished = false; await persist(); unmarkItem(it.item_key); paint(); return; }
       if (current >= plan.sets) {
         finished = true;
         await persist();
         markItemDone(it.item_key);
+        if (ctx.app?.timer_sound !== false) void playAlarm("done");
+        buzz([300, 150, 300, 150, 300]);
         paint();
         toast(`${(ctx.exById[it.exercise_id] || {}).name || "Item"} marked done.`);
         return;
@@ -402,6 +410,38 @@ function syncCheckbox(itemKey, done) {
   cb.checked = done;
   cb.dispatchEvent(new Event("change", { bubbles: true }));
 }
+
+function finishReliefOrItem() {
+  if (sess?.onReliefDone) {
+    const cb = sess.onReliefDone;
+    sess.onReliefDone = null;
+    Promise.resolve(cb({ duration_s: sess.plan.seconds })).catch(() => {});
+    return;
+  }
+  if (sess?.itemKey && !String(sess.itemKey).startsWith("relief:")) markItemDone(sess.itemKey);
+}
+
+export function showReliefTimer(ctx, opt, onDone) {
+  const ex = ctx.exById?.[opt.exercise_id] || { name: opt.label };
+  const name = opt.label || ex.name || opt.exercise_id;
+  const seconds = opt.seconds || 180;
+  const plan = { seconds, steps: [{ label: name, seconds }] };
+  const it = { item_key: `relief:${opt.exercise_id}`, exercise_id: opt.exercise_id, rest_s: 0 };
+  sheetItem = it.item_key;
+  ctxRef = ctx;
+  openSheet(`
+    <h2>${esc(name)}</h2>
+    <p class="muted small">${esc(opt.range || "Timed relief")}. Start runs the countdown. Next marks it done and logs it, without starting the clock.</p>
+    ${ex.cues?.length ? `<h4>Cues</h4><ul>${ex.cues.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}
+    ${timerHtml(plan, opt.range || name, ctx)}
+    ${ex.stop_if && ex.stop_if !== "None." ? `<h4>Stop if</h4><p>${esc(ex.stop_if)}</p>` : ""}
+    ${ex.contraindications && ex.contraindications !== "None." ? `<h4>Cautions</h4><p>${esc(ex.contraindications)}</p>` : ""}
+  `, { onClose: () => { if (sheetItem === it.item_key) sheetItem = null; render(); } });
+  sess = { itemKey: it.item_key, name, plan, step: 0, status: "idle", endsAt: null, remain: seconds * 1000, sound: ctx.app?.timer_sound, onReliefDone: onDone };
+  wireTimer(ctx, it, ex, plan);
+  render();
+}
+
 export function wireExerciseTimerChip(ctx) {
   const c = chip();
   if (!c || c.dataset.wired) return;
@@ -409,4 +449,4 @@ export function wireExerciseTimerChip(ctx) {
   c.onclick = () => { if (sess) showExercise(ctx, sess.itemKey); };
 }
 
-export { timedPlan, REST_SEC, needsRestAfter, restCuesToPlay };
+export { timedPlan, REST_SEC, needsRestAfter, restCuesToPlay, advanceTimerByNext };

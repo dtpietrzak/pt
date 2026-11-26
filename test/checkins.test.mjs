@@ -53,7 +53,7 @@ test("every check-in type builds a schema-valid record", () => {
   assert.equal(recs[4].data.sitting, undefined);
   assert.equal(recs[0].ts, "2026-12-01T08:30:00-06:00");
   assert.equal(recs[0].data.wake_time, "07:15");
-  assert.ok(Object.keys(recs[0].red_flags).length === 9 && !Object.values(recs[0].red_flags).some(Boolean));
+  assert.ok(Object.keys(recs[0].red_flags).length === 10 && !Object.values(recs[0].red_flags).some(Boolean));
 });
 
 test("editing keeps id, ts and date; the form round-trips", () => {

@@ -190,6 +190,26 @@
       "verdict": "relief-only"
     },
     {
+      "id": "EX_INVERSION_TABLE",
+      "name": "Inversion table",
+      "category": "relief",
+      "equipment": [
+        "inversion table"
+      ],
+      "cues": [
+        "Use the inversion table's supports and straps as the manufacturer describes, and stay within a comfortable angle.",
+        "Stay inverted for 2-5 minutes, then come back upright slowly. Stop if symptoms increase."
+      ],
+      "stop_if": "Any increase in back, buttock, or leg symptoms, dizziness, or discomfort coming back upright.",
+      "regressions": [
+        "EX_DECOMP_90_90"
+      ],
+      "progressions": [],
+      "contraindications": "A rest position only, for 2-5 minutes. Come up slowly. Skip it if it does not clearly feel okay.",
+      "in_default_program": false,
+      "verdict": "relief-only"
+    },
+    {
       "id": "EX_CALF_STRETCH",
       "name": "Standing calf stretch",
       "category": "stretch",
@@ -665,7 +685,8 @@
       ],
       "cues": [
         "Hold straps or counter for balance; feet hip-width; push hips back, sit lightly to chair height; stand tall.",
-        "Keep chest-to-pelvis angle the same; do not go below chair height."
+        "Keep chest-to-pelvis angle the same; do not go below chair height.",
+        "Keep breathing; no long breath-hold (Valsalva)."
       ],
       "stop_if": "Low-back rounding at the bottom or any symptom.",
       "regressions": [],
@@ -684,7 +705,8 @@
       ],
       "cues": [
         "Feet slightly wider than hips; brace; sit hips back to lightly tap the chair without relaxing or rounding.",
-        "Stand by driving through the whole foot."
+        "Stand by driving through the whole foot.",
+        "Keep breathing; no long breath-hold (Valsalva)."
       ],
       "stop_if": "Rounding at the bottom, or any symptom.",
       "regressions": [
@@ -706,7 +728,8 @@
       ],
       "cues": [
         "Hold the weight at the chest, elbows in; same box squat mechanics.",
-        "Weight goes up only in 5 lb steps."
+        "Weight goes up only in 5 lb steps.",
+        "Keep breathing; no long breath-hold (Valsalva)."
       ],
       "stop_if": "Rounding, or any symptom.",
       "regressions": [
@@ -727,7 +750,8 @@
       ],
       "cues": [
         "Weight at the chest, brace, squat to a depth where the low back stays neutral (not 'butt wink').",
-        "Drive up through the heels."
+        "Drive up through the heels.",
+        "Keep breathing; no long breath-hold (Valsalva)."
       ],
       "stop_if": "Pelvic tuck/rounding at the bottom, or any symptom.",
       "regressions": [
@@ -749,7 +773,8 @@
       ],
       "cues": [
         "Bar on the upper back, brace, hips and knees break together; keep chest-to-pelvis angle constant.",
-        "Start to a box; always inside safety pins."
+        "Start to a box; always inside safety pins.",
+        "Brief brace only, no long strain."
       ],
       "stop_if": "Rounding, shift, or any symptom.",
       "regressions": [
@@ -768,7 +793,8 @@
       ],
       "cues": [
         "Staggered stance, one hand on a wall or chair; torso tall; lower the back knee straight down; push through the front heel.",
-        "Front knee tracks over toes."
+        "Front knee tracks over toes.",
+        "Keep breathing; no long breath-hold (Valsalva)."
       ],
       "stop_if": "Torso leaning forward with back rounding; front-knee pain; back symptom.",
       "regressions": [],
@@ -786,7 +812,8 @@
         "dumbbells"
       ],
       "cues": [
-        "Same as the supported version, holding weights at the sides; no hand support."
+        "Same as the supported version, holding weights at the sides; no hand support.",
+        "Keep breathing; no long breath-hold (Valsalva)."
       ],
       "stop_if": "Torso lean/rounding or back symptom.",
       "regressions": [
@@ -882,7 +909,8 @@
       ],
       "cues": [
         "Bell between feet on a block; hinge back, brace, stand by driving hips forward; do not lean back at the top.",
-        "Start light; +5 lb steps only."
+        "Start light; +5 lb steps only.",
+        "Keep breathing; no long breath-hold (Valsalva)."
       ],
       "stop_if": "Rounding at the bottom, or any symptom.",
       "regressions": [
@@ -903,7 +931,8 @@
       ],
       "cues": [
         "Same mechanics from floor height.",
-        "Return to the block immediately if the back rounds."
+        "Return to the block immediately if the back rounds.",
+        "Keep breathing; no long breath-hold (Valsalva)."
       ],
       "stop_if": "Rounding or any symptom.",
       "regressions": [
@@ -924,7 +953,8 @@
         "dumbbell (later)"
       ],
       "cues": [
-        "One hand on a wall; hinge on one leg, back leg and torso move as one plank; hips stay square."
+        "One hand on a wall; hinge on one leg, back leg and torso move as one plank; hips stay square.",
+        "Keep breathing; no long breath-hold (Valsalva)."
       ],
       "stop_if": "Rotation of the pelvis, rounding, or any symptom.",
       "regressions": [
@@ -945,7 +975,8 @@
         "rack with safeties"
       ],
       "cues": [
-        "Bar raised on blocks to about mid-shin; brace, hinge, push the floor away; lock out with glutes."
+        "Bar raised on blocks to about mid-shin; brace, hinge, push the floor away; lock out with glutes.",
+        "Brief brace only, no long strain."
       ],
       "stop_if": "Rounding, bar drifting forward, or any symptom.",
       "regressions": [
@@ -966,7 +997,8 @@
         "plates"
       ],
       "cues": [
-        "Bar over mid-foot, hinge, brace, push the floor away; no hitching or leaning back."
+        "Bar over mid-foot, hinge, brace, push the floor away; no hitching or leaning back.",
+        "Brief brace only, no long strain."
       ],
       "stop_if": "Rounding or any symptom.",
       "regressions": [
@@ -985,7 +1017,8 @@
       ],
       "cues": [
         "Hinge, hike the bell back, snap the hips forward; arms are hooks, the bell floats to chest height.",
-        "Spine stays neutral throughout."
+        "Spine stays neutral throughout.",
+        "Brief brace only, no long strain."
       ],
       "stop_if": "Any rounding, any back symptom.",
       "regressions": [

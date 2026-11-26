@@ -11,7 +11,8 @@ import { shouldShowStrengthRest, strengthCountThisWeek, weeklyStrengthTarget, we
 import { isoLocal, localTime } from "../util.js";
 import { $, esc, BLOCKS, today, nowHM, addMin, minutesSince, fmtDate, openSheet, closeSheet, toast } from "./dom.js";
 import { showExercise, wireExerciseTimerChip } from "./exercise-timer.js";
-import { flagMarkHtml, persistItemFlag, paintFlagMark } from "./pain-flag.js";
+import { flagMarkHtml } from "./pain-flag.js";
+import { reliefCardHtml, openReliefPicker, undoRelief } from "./relief.js";
 import { isItemFlagged } from "../pain-flags.js";
 
 const DAILY = ["daily_mobility", "daily_core", "walking"];
@@ -126,6 +127,7 @@ export async function renderToday(ctx, main) {
   if (wake || view.list.some((e) => e.state === "due" && e.type !== "morning")) html += checkinCardHtml(view);
   if (wake) html += statusCardHtml(ctx, view);
   html += await exportCardHtml(ctx);
+  if (wake) html += reliefCardHtml(ctx, log);
   for (const [block, label] of wake ? BLOCKS.filter(([b]) => DAILY.includes(b)) : []) {
     const its = itemsByBlock.get(block);
     if (!its) continue;
@@ -205,14 +207,6 @@ export async function renderToday(ctx, main) {
   };
 
   main.onchange = async (e) => {
-    const flagBox = e.target.closest("input[data-flag-item]");
-    if (flagBox) {
-      const on = flagBox.checked;
-      await persistItemFlag(ctx, flagBox.dataset.flagItem, on, d);
-      paintFlagMark(flagBox.dataset.flagItem, on);
-      toast(on ? "Unexpected pain flagged. This exercise will not advance." : "Pain flag cleared.");
-      return;
-    }
     const wcb = e.target.closest("input[data-wk-item]");
     if (wcb) {
       const template = wcb.dataset.wk;
@@ -261,6 +255,17 @@ export async function renderToday(ctx, main) {
   };
 
   main.onclick = async (e) => {
+    if (e.target.closest("[data-relief-open]")) {
+      openReliefPicker(ctx, { onLogged: () => renderToday(ctx, main) });
+      return;
+    }
+    const undo = e.target.closest("[data-relief-undo]");
+    if (undo) {
+      await undoRelief(ctx, undo.dataset.reliefUndo, d);
+      toast("Relief entry removed.");
+      renderToday(ctx, main);
+      return;
+    }
     if (await checkinClick(ctx, e)) return;
     const toggle = e.target.closest("[data-toggle-block]");
     if (toggle) {
@@ -499,7 +504,6 @@ function itemRow(ctx, it, done, opt = {}) {
       <span class="meta">${esc(formatDose(dose, it, ctx.profile))}${ladder ? ` · ${ladder}` : ""}${it.optional ? ` · <span class="bonus">bonus</span>` : ""}${miss.length ? ` · <span class="warn">needs ${esc(miss.join(", "))}</span>` : ""}</span>
       ${it.note ? `<span class="meta note-line">${esc(it.note)}</span>` : ""}
     </button>
-    <label class="flag-check compact" title="Unexpected pain"><input type="checkbox" data-flag-item="${esc(it.item_key)}" ${flagged ? "checked" : ""} ${opt.locked ? " disabled" : ""} aria-label="Unexpected pain" /><span>Pain</span></label>
     </div>`;
 }
 
@@ -511,6 +515,7 @@ const ICON_PATHS = {
   strength: `<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>`,
   conditioning: `<path d="M3 12h4l2.5-6 5 12 2.5-6h4"/>`,
   walking: `<ellipse cx="8.5" cy="8" rx="2.6" ry="4"/><path d="M7.4 14.5h2.4"/><ellipse cx="15.5" cy="12" rx="2.6" ry="4"/><path d="M14.4 18.5h2.4"/>`,
+  relief: `<path d="M4 14c4-8 12-8 16 0"/><path d="M8 16c2-4 6-4 8 0"/>`,
 };
 const BLOCK_ICON = Object.fromEntries(Object.entries(ICON_PATHS).map(([b, p]) =>
   [b, `<span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24">${p}</svg></span>`]));

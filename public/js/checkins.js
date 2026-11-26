@@ -1,6 +1,7 @@
 // Check-ins (pure): which ones are due, and building schema-valid records from the quick forms.
 // No DOM and no I/O, so Node tests drive it. The UI lives in js/ui/checkins.js.
 import { isoLocal, localDate, localTime, addDays } from "./util.js";
+import { decompFromReliefLogs } from "./relief.js";
 
 export const TYPES = ["morning", "post_workout", "evening", "night"];
 export const LABEL = { morning: "Morning", post_workout: "Post-workout", evening: "Evening", night: "Night" };
@@ -18,6 +19,7 @@ export const RED_FLAGS = [
   ["bilateral_leg_symptoms", "Symptoms in both legs", "clinician"],
   ["trauma_since_last_checkin", "A fall or injury since the last check-in", "clinician"],
   ["unexplained_weight_loss", "Unexplained weight loss", "clinician"],
+  ["new_swelling_in_back", "New swelling in the back", "clinician"],
 ];
 export const noFlags = () => Object.fromEntries(RED_FLAGS.map(([k]) => [k, false]));
 
@@ -220,7 +222,9 @@ export function eveningFromLogs(logs = {}, form = {}) {
   if (hasNum(day.standing_breaks_done)) f.breaks = Number(day.standing_breaks_done);
   else if (workUsed) f.breaks = workBreaks;
   else delete f.breaks;
-  if (hasNum(day.decomp_breaks_done)) f.decomp = Number(day.decomp_breaks_done);
+  const reliefDecomp = decompFromReliefLogs(day);
+  if (reliefDecomp !== null) f.decomp = reliefDecomp;
+  else if (hasNum(day.decomp_breaks_done)) f.decomp = Number(day.decomp_breaks_done);
   else if (workUsed) f.decomp = workDecomp;
   else delete f.decomp;
   if (workUsed && blocks.some((b) => b.phase === "sit")) {

@@ -6,7 +6,7 @@ import { isItemFlagged, sessionFlagEvents, dailyFlagEvents, consecutiveFlagStrea
 
 export const EMERGENCY_DEFAULT = ["saddle_numbness", "bladder_bowel_change"];
 export const CLINICIAN_DEFAULT = ["new_leg_weakness", "new_numbness_tingling", "fever_with_back_pain", "unexplained_weight_loss",
-  "night_pain_unrelieved", "bilateral_leg_symptoms", "trauma_since_last_checkin"];
+  "night_pain_unrelieved", "bilateral_leg_symptoms", "trauma_since_last_checkin", "new_swelling_in_back"];
 const STRENGTH_TEMPLATES = new Set(["strength_A", "strength_B"]);
 const SESSION_BLOCKS = { strength_A: ["strength_A"], strength_B: ["strength_B"], conditioning: ["conditioning"], core_only: ["daily_core"] };
 export { SESSION_BLOCKS };

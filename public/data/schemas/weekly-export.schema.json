@@ -205,6 +205,36 @@
         },
         "adherence_pct": {
           "type": "number"
+        },
+        "relief": {
+          "type": "object",
+          "properties": {
+            "start": { "type": "string" },
+            "end": { "type": "string" },
+            "total": { "type": "integer" },
+            "by_type": {
+              "type": "object",
+              "additionalProperties": { "type": "integer" }
+            },
+            "by_day": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "local_date": { "type": "string" },
+                  "total": { "type": "integer" },
+                  "by_type": {
+                    "type": "object",
+                    "additionalProperties": { "type": "integer" }
+                  }
+                },
+                "additionalProperties": false,
+                "required": ["local_date", "total"]
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": ["total"]
         }
       },
       "additionalProperties": false
@@ -1888,6 +1918,9 @@
           "type": "boolean"
         },
         "unexplained_weight_loss": {
+          "type": "boolean"
+        },
+        "new_swelling_in_back": {
           "type": "boolean"
         }
       },

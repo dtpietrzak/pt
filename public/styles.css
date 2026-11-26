@@ -35,6 +35,7 @@
   --blk-walking: #4f781a;
   --blk-strength: #c0571b;
   --blk-conditioning: #13827c;
+  --blk-relief: #3d5ea8;
   /* Pain scale: real traffic-light colors, on purpose outside the blue theme */
   --pain-green: #3f8a2e;
   --pain-yellow: #e2b007;
@@ -87,6 +88,7 @@
     --blk-walking: #a8c860;
     --blk-strength: #f39a5d;
     --blk-conditioning: #5cc9c0;
+    --blk-relief: #8aa4e6;
     --pain-green: #7cc85a;
     --pain-yellow: #f2c94c;
     --pain-red: #f06a5e;
@@ -354,6 +356,7 @@ body[data-page="today"] .equip-card { --pat: var(--pat-rings); --pat-size: 24px 
 body[data-page="today"] .section-card[data-block="daily_mobility"] { --pat: var(--pat-waves); --pat-size: 32px 16px; }
 body[data-page="today"] .section-card[data-block="daily_core"] { --pat: var(--pat-hex); --pat-size: 28px 16px; }
 body[data-page="today"] .section-card[data-block="walking"] { --pat: var(--pat-diag); --pat-size: 14px 14px; }
+body[data-page="today"] .section-card[data-block="relief"] { --pat: var(--pat-rings); --pat-size: 24px 24px; }
 body[data-page="today"] .section-card[data-block="wk:strength_A"] { --pat: var(--pat-hatch); --pat-size: 12px 12px; }
 body[data-page="today"] .section-card[data-block="wk:strength_B"] { --pat: var(--pat-brick); --pat-size: 24px 16px; }
 body[data-page="today"] .section-card[data-block="wk:conditioning"] { --pat: var(--pat-plus); --pat-size: 18px 18px; }
@@ -628,6 +631,7 @@ body[data-page="export"] .card:nth-of-type(6n+6) { --card-tint: var(--blk-streng
 .section-card[data-block="daily_mobility"] { --blk: var(--blk-mobility); }
 .section-card[data-block="daily_core"] { --blk: var(--blk-core); }
 .section-card[data-block="walking"] { --blk: var(--blk-walking); }
+.section-card[data-block="relief"] { --blk: var(--blk-relief); }
 .section-card[data-kind="strength"] { --blk: var(--blk-strength); }
 .section-card[data-kind="conditioning"] { --blk: var(--blk-conditioning); }
 .wk-finish { margin: 4px 0 0; }
@@ -1314,3 +1318,14 @@ button.ci-row:active { background: color-mix(in srgb, var(--line) 45%, transpare
 .rest-day .section-badge { background: color-mix(in srgb, var(--blk, var(--accent)) 16%, var(--card)); color: var(--muted); }
 .rest-day .card-body { padding: 4px 16px 16px; }
 .rest-day .card-body .btn { margin-top: 8px; }
+
+/* ---------------------------------------------------------------- relief log */
+.relief-card .section-head { cursor: default; }
+.relief-log { list-style: none; margin: 12px 0 0; padding: 0; }
+.relief-row { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding: 6px 0; font-size: 14px; }
+.relief-picker { display: flex; flex-direction: column; gap: 12px; margin: 12px 0; }
+.relief-opt { padding: 10px 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+.relief-opt .text { width: 100%; text-align: left; }
+.relief-opt-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.relief-hist { margin: 8px 0; }
+.relief-hist small { display: block; margin-bottom: 4px; }

@@ -1,6 +1,7 @@
 // Plan view: current level criteria, rehabilitation milestones (target dates), and full L0-L8 overview.
-import { esc, fmtDate } from "./dom.js";
+import { esc, fmtDate, today } from "./dom.js";
 import { flagsOf } from "../pain-flags.js";
+import { reliefWeekHtml } from "./relief.js";
 import { MILESTONES, milestoneOn } from "../milestones.js";
 import { localDate, addDays, dayDiff } from "../util.js";
 
@@ -81,6 +82,15 @@ function timelineHtml(ctx) {
 }
 
 
+
+async function fillReliefWeek(ctx, slot) {
+  if (!slot || !ctx.store?.all) return;
+  const recs = await ctx.store.all("days");
+  const html = reliefWeekHtml(ctx, recs, today());
+  if (html) slot.outerHTML = html;
+  else slot.remove();
+}
+
 async function fillRecentFlags(ctx, slot) {
   if (!slot || !ctx.store?.all) return;
   const recs = await ctx.store.all("days");
@@ -126,10 +136,12 @@ export function renderPlan(ctx, main) {
       <p class="muted small">${l.items.length} items · ${(l.exit?.tests || []).length} gate tests${l.frequency?.strength_sessions_per_week ? ` · ${l.frequency.strength_sessions_per_week} strength sessions/week` : ""}</p>
     </details>`).join("")}</section>
     <p class="muted small center">Plan v${ctx.docs.levels.plan_version ?? 1} · ${ctx.docs.exercises.exercises.length} exercises · ${ctx.docs.tests.tests.length} tests</p>
+    <div id="relief-week"></div>
     <div id="recent-flags"></div>`;
 
   main.innerHTML = html;
   fillRecentFlags(ctx, main.querySelector("#recent-flags"));
+  fillReliefWeek(ctx, main.querySelector("#relief-week"));
   main.onclick = (e) => {
     const row = e.target.closest("[data-ms-toggle]");
     if (row) {

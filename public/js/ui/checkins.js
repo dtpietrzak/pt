@@ -8,6 +8,7 @@ import { postureCheckinData, postureLogKey } from "../posture.js";
 import { askNotifications } from "../timer-ui.js";
 import { $, esc, openSheet, closeSheet, toast, fmtDate, confirmSheet } from "./dom.js";
 import { flagsOf } from "../pain-flags.js";
+import { reliefHistoryHtml } from "./relief.js";
 
 const cap = (s) => s[0].toUpperCase() + s.slice(1);
 const TITLES = { morning: "Morning check-in", post_workout: "Post-workout check-in", evening: "Evening check-in", night: "Night check-in" };
@@ -465,7 +466,7 @@ export async function renderHistory(ctx, main) {
       <div class="chips">${cis.map((c) => `<button class="chip-btn ${v.evals[c.id].color}" type="button" data-ci-view="${esc(c.id)}">${esc(LABEL[c.type])}</button>`).join("")}</div>
       ${day?.reasons.length ? `<ul class="reasons">${tidyReasons(day.reasons).map((r) => `<li>${esc(r)}</li>`).join("")}</ul>` : ""}
       ${ss.map((s) => `<p class="small">🏋️ ${esc(WORKOUT_NAMES[s.template] || s.template.replace(/_/g, " "))}${s.final_color ? ` · ${cap(s.final_color)}${s.status === "final" ? "" : " so far"}` : " · waiting on check-ins"}${s.clean ? " · counts toward advancing" : ""}</p>`).join("")}
-      ${flags.length ? `<div class="pain-flag-hist"><small class="muted">Unexpected pain</small>${flags.map((f) => `<p class="small">${esc(flagLine(d, f))}</p>`).join("")}</div>` : ""}
+      ${reliefHistoryHtml(ctx, dayRecs.find((r) => r.local_date === d) || {})}${flags.length ? `<div class="pain-flag-hist"><small class="muted">Unexpected pain</small>${flags.map((f) => `<p class="small">${esc(flagLine(d, f))}</p>`).join("")}</div>` : ""}
       ${decisions.length ? `<div class="decisions"><small class="muted">Plan decisions</small>${decisions.map((l) => `<p class="small">${esc(l.message || `${l.rule_id}: ${l.outcome}`)}</p>`).join("")}</div>` : ""}</section>`;
   };
   main.innerHTML = `${redBannerHtml(ctx)}<p><a class="link" href="#/today">← Today</a></p>

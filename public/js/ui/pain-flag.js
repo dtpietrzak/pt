@@ -1,4 +1,4 @@
-// Simple unexpected-pain checkbox for an exercise sheet or Today row.
+// Simple unexpected-pain checkbox for an exercise sheet. Today rows may show a read-only mark.
 import { isoLocal } from "../util.js";
 import { isItemFlagged, setItemFlagged } from "../pain-flags.js";
 import { $, esc, toast, today } from "./dom.js";

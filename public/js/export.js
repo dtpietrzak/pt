@@ -1,6 +1,7 @@
 // Weekly export for agents (data-model.md section 6): JSON + markdown. Pure.
 import { addDays, isoWeek, weekStart, dayDiff, clone } from "./util.js";
 import { exportState, standingRatio, levelById } from "./engine.js";
+import { reliefRangeSummary, reliefById } from "./relief.js";
 
 const SESSION_MODS = new Set(["poor_sleep", "illness", "unusual_load", "missing_morning_checkin", "pause_mode", "easy_dose"]);
 const SESSION_KEYS = ["id", "local_date", "started_at", "ended_at", "template", "level_id", "items", "gate_test_ids", "gate_results", "post_workout_checkin_id", "status", "tests", "final_color", "clean", "modifiers", "probation"];
@@ -87,6 +88,7 @@ export function buildExport(i) {
     },
     gate_tests: gateRows,
     adherence_pct: adherence,
+    relief: reliefRangeSummary(i.days || {}, i.start, lastDay),
   };
   const attention = buildAttention({ ...i, checkins, sessions, log, summary, days, dayLogs: i.days, planned, strengthDone, corePlanned, coreDays, mornings, evenings });
   const stem = exportStem(i.start);
@@ -208,7 +210,14 @@ export function renderMarkdown(x, i) {
   L.push("", "## Gate tests", "");
   if (s.gate_tests.length) for (const g of s.gate_tests) L.push(`- ${g.date} ${g.test_id}: ${g.value} (${g.passed ? "provisional pass" : "not passed"}; now ${g.status || "-"})`);
   else L.push("None run this week.");
+  const rel = s.relief;
+  if (rel && rel.total) {
+    const typeBits = Object.entries(rel.by_type || {}).map(([id, n]) => `${n}× ${reliefById[id]?.label || id}`);
+    L.push("", "## Relief", "", `${rel.total} logged this week: ${typeBits.join(", ")}.`);
+    for (const d of rel.by_day || []) L.push(`- ${d.local_date}: ${d.total}`);
+  }
   L.push("", "## Attention", "");
+
   if (x.attention.length) for (const a of x.attention) L.push(`- **${a.severity.toUpperCase()} ${a.code}**: ${a.message}`);
   else L.push("- Nothing needs attention.");
   L.push("", "## David's notes and oddities", "");

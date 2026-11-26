@@ -698,6 +698,9 @@
         },
         "unexplained_weight_loss": {
           "type": "boolean"
+        },
+        "new_swelling_in_back": {
+          "type": "boolean"
         }
       },
       "additionalProperties": false

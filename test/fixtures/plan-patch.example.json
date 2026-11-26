@@ -11,7 +11,7 @@
   "base": {
     "plan_version": 1,
     "levels_sha256": "2282cbcf3abf50042f4c03c7bb66d0cb18a364c04c7263c2da0232a2de6ccadb",
-    "exercises_sha256": "e3980e1ee2f8d09e1993ea89d87484d3c561bb7aa88ac1d0fa8e9cb28c2d841c"
+    "exercises_sha256": "af7616bb11009e677a1d08040dbaae1854e39a08d49ce179cdc08237f7dbfa0c"
   },
   "summary": "EXAMPLE: add an optional upright hip flexor stretch to L2 daily mobility and clarify the standing cable row note.",
   "rationale": "Example only. Illustrates add, replace and test ops. David reported feeling tight through the front of the hips after long standing; an upright, glute-led stretch is allowed in the library and spares the lumbar spine.",

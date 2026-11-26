@@ -9,6 +9,7 @@ export const BLOCKS = [
   ["daily_mobility", "Daily mobility"],
   ["daily_core", "Daily core"],
   ["walking", "Walking"],
+  ["relief", "Relief"],
   ["strength_A", "Strength A"],
   ["strength_B", "Strength B"],
   ["conditioning", "Conditioning"],
