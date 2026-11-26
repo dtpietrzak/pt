@@ -92,4 +92,13 @@ test("unlockAudio primes the shared element and playAlarm replays it", async () 
   const audible = plays.filter((p) => p.muted === false && p.volume === 1);
   assert.ok(audible.length >= 1, "playAlarm should play the same element unmuted");
   assert.ok(String(audible[0].src).endsWith("sounds/ding.wav"));
+
+  assert.ok(String(audio.TICK_SRC).endsWith("sounds/tick.wav"));
+  assert.ok(String(audio.GO_SRC).endsWith("sounds/go.wav"));
+  const nBefore = plays.length;
+  await audio.playTick();
+  await audio.playGo();
+  const after = plays.slice(nBefore).filter((p) => p.muted === false);
+  assert.ok(after.some((p) => String(p.src).endsWith("sounds/tick.wav")));
+  assert.ok(after.some((p) => String(p.src).endsWith("sounds/go.wav")));
 });

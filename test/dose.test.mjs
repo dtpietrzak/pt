@@ -107,3 +107,15 @@ test("formatDose still reads the same timed schemes", () => {
   assert.match(formatDose({ time_min: 20 }), /20 min/);
   assert.match(formatDose({ pyr_top: 4, hold_s: 8 }), /4-2-1 holds of 8 s/);
 });
+
+test("cable lifts snap load_lb to the 5-55 lb stack", () => {
+  const eq = { cable_stack: true, cable_stack_lb: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55] };
+  const pallof = formatDose({ sets: 2, reps: 6, hold_s: 3, load_lb: 5 }, { exercise_id: "EX_PALLOF_STD", per_side: true }, { equipment: eq });
+  assert.match(pallof, /2x6/);
+  assert.match(pallof, /5 lb/);
+  const row = formatDose({ sets: 3, reps: 12, load_lb: 15 }, { exercise_id: "EX_BAND_ROW" }, { equipment: eq });
+  assert.match(row, /3x12/);
+  assert.match(row, /15 lb/);
+  const snapped = formatDose({ sets: 3, reps: 10, load_lb: 13 }, { exercise_id: "EX_BAND_ROW" }, { equipment: eq });
+  assert.match(snapped, /15 lb/);
+});

@@ -8,12 +8,12 @@ import { unlockAudio, playAlarm, dingNotify } from "../audio.js";
 import { exportCardHtml } from "./export.js";
 
 const EQUIP_BOOL = [
-  ["bands", "Resistance bands"], ["barbell", "Barbell"], ["rack_with_safeties", "Rack with safeties"],
+  ["bands", "Resistance bands"], ["cable_stack", "Cable stack"], ["barbell", "Barbell"], ["rack_with_safeties", "Rack with safeties"],
   ["bench", "Bench"], ["pull_up_bar", "Pull-up bar"], ["blocks", "Blocks"], ["cones", "Cones"], ["track_or_field", "Track or field"],
 ];
 const EQUIP_LIST = [
   ["dumbbells_lb", "Dumbbell sizes (lb)"], ["kettlebells_lb", "Kettlebell sizes (lb)"],
-  ["plates_lb", "Plates (lb)"], ["step_box_in", "Step / box heights (in)"],
+  ["plates_lb", "Plates (lb)"], ["cable_stack_lb", "Cable stack sizes (lb)"], ["step_box_in", "Step / box heights (in)"],
 ];
 const nums = (s) => String(s || "").split(/[,\s]+/).map(Number).filter((n) => n > 0);
 
@@ -58,6 +58,7 @@ export function renderSettings(ctx, main) {
         <button class="btn" id="test-sound" type="button">Test sound</button>
       </div>
       <label class="toggle"><input type="checkbox" name="pc_all" ${ctx.app.timer_alarm_all_devices ? "checked" : ""}><span>Ring on every signed-in device (off = only the device that started work mode)</span></label>
+      <label class="toggle"><input type="checkbox" name="pc_auto" ${ctx.app.timer_auto_continue ? "checked" : ""}><span>Auto-continue timed sets after the 15 s rest</span></label>
       <p class="muted small">Stand ${ctx.state.posture_cycle?.stand_min ?? 40} · walk ${ctx.state.posture_cycle?.walk_min ?? 2} · sit ${ctx.state.posture_cycle?.sit_min ?? 20} · decompress ${ctx.state.posture_cycle?.decomp_min ?? 5} min now. These doses change with your check-ins, not here.</p>
       </div>
     </section>
@@ -208,7 +209,7 @@ async function saveSettings(ctx, ev) {
       max_snoozes_per_phase: Math.min(5, Math.max(0, Math.round(+(f.get("pc_maxsnz") ?? 2)))),
     },
   };
-  ctx.app = { ...ctx.app, timer_sound: f.get("pc_sound") === "on", timer_alarm_all_devices: f.get("pc_all") === "on" };
+  ctx.app = { ...ctx.app, timer_sound: f.get("pc_sound") === "on", timer_alarm_all_devices: f.get("pc_all") === "on", timer_auto_continue: f.get("pc_auto") === "on" };
   ctx.profile = p;
   ctx.state = { ...ctx.state, baselines: clone(nb) };
   await ctx.store.kvSet("profile", ctx.profile);

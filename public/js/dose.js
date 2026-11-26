@@ -25,8 +25,10 @@ export function formatDose(dose, item, profile = {}) {
     if (dose.distance_m) p.push(`${dose.distance_m} m`);
   }
   if (dose.effort_pct) p.push(`${dose.effort_pct}% effort`);
-  const sizes = /kettlebell|kb/i.test(item?.exercise_id || "") ? profile.equipment?.kettlebells_lb
-    : /barbell/i.test(item?.exercise_id || "") ? null : profile.equipment?.dumbbells_lb;
+  const id = item?.exercise_id || "";
+  const sizes = /PALLOF|BAND_ROW|CABLE/i.test(id) ? profile.equipment?.cable_stack_lb
+    : /kettlebell|kb/i.test(id) ? profile.equipment?.kettlebells_lb
+    : /barbell/i.test(id) ? null : profile.equipment?.dumbbells_lb;
   if (dose.load_lb) p.push(`@ ${nearest(dose.load_lb, sizes)} lb${item?.load_note ? " " + item.load_note : ""}`);
   if (dose.load_bw) {
     const bw = profile.body_weight_lb || 180;
@@ -40,7 +42,7 @@ const NEEDS = [
   [/barbell/i, (e) => e.barbell], [/plates/i, (e) => e.barbell],
   [/rack/i, (e) => e.rack_with_safeties], [/^bench$/i, (e) => e.bench], [/pull-up bar/i, (e) => e.pull_up_bar],
   [/cones/i, (e) => e.cones], [/track|field/i, (e) => e.track_or_field], [/^blocks$/i, (e) => e.blocks],
-  [/^(mini )?band$/i, (e) => e.bands], [/^step$/i, (e) => (e.step_box_in ?? [1]).length > 0],
+  [/^(mini )?band$/i, (e) => e.bands], [/^cable stack$/i, (e) => e.cable_stack !== false && (e.cable_stack_lb == null || e.cable_stack_lb.length > 0 || e.cable_stack)], [/^step$/i, (e) => (e.step_box_in ?? [1]).length > 0],
 ];
 export function missingEquipment(exercise, equipment = {}) {
   return (exercise?.equipment || []).filter((name) => {
@@ -95,4 +97,17 @@ export function timedPlan(dose, item = {}) {
   }
   const rest_s = item.rest_s > 0 && steps.length > 1 ? item.rest_s : undefined;
   return { seconds: iv.seconds, kind: iv.kind, steps, ...(rest_s ? { rest_s } : {}) };
+}
+
+/**
+ * Set counter for untimed (rep-based) doses. Timed holds use timedPlan instead.
+ * @returns {{ sets: number } | null}
+ */
+export function setPlan(dose) {
+  if (!dose || timedPlan(dose)) return null;
+  if (dose.sets && dose.sets > 0) return { sets: dose.sets };
+  const pyr = pyramidCounts(dose);
+  if (pyr) return { sets: pyr.length };
+  if (dose.reps && dose.reps > 0) return { sets: 1 };
+  return null;
 }

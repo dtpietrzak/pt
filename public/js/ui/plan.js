@@ -1,5 +1,6 @@
 // Plan view: current level criteria, rehabilitation milestones (target dates), and full L0-L8 overview.
-import { esc } from "./dom.js";
+import { esc, fmtDate } from "./dom.js";
+import { flagsOf, flagSummary } from "../pain-flags.js";
 import { MILESTONES, milestoneOn } from "../milestones.js";
 import { localDate, addDays, dayDiff } from "../util.js";
 
@@ -79,6 +80,23 @@ function timelineHtml(ctx) {
   </section>`;
 }
 
+
+async function fillRecentFlags(ctx, slot) {
+  if (!slot || !ctx.store?.all) return;
+  const recs = await ctx.store.all("days");
+  const rows = [];
+  for (const rec of recs || []) {
+    for (const f of flagsOf(rec)) rows.push({ date: rec.local_date, f });
+  }
+  rows.sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : (a.f.ts < b.f.ts ? 1 : -1)));
+  const latest = rows.slice(0, 8);
+  if (!latest.length) return;
+  const nameOf = (key) => ctx.exById?.[ctx.docs.levels.levels.flatMap((l) => l.items).find((it) => it.item_key === key)?.exercise_id]?.name || key;
+  slot.outerHTML = `<section class="card"><div class="card-head"><h3>Recent pain flags</h3></div><div class="card-body">
+    ${latest.map(({ date, f }) => `<p class="small">${esc(fmtDate(date))} · ${esc(flagSummary(f, f.item_key ? nameOf(f.item_key) : "Workout"))}</p>`).join("")}
+  </div></section>`;
+}
+
 export function renderPlan(ctx, main) {
   const lv = ctx.level();
   const testUnit = (id) => ctx.docs.tests.tests.find((t) => t.id === id)?.unit || "";
@@ -107,9 +125,11 @@ export function renderPlan(ctx, main) {
       <p class="small">${esc(l.goal)}</p>
       <p class="muted small">${l.items.length} items · ${(l.exit?.tests || []).length} gate tests${l.frequency?.strength_sessions_per_week ? ` · ${l.frequency.strength_sessions_per_week} strength sessions/week` : ""}</p>
     </details>`).join("")}</section>
-    <p class="muted small center">Plan v${ctx.docs.levels.plan_version ?? 1} · ${ctx.docs.exercises.exercises.length} exercises · ${ctx.docs.tests.tests.length} tests</p>`;
+    <p class="muted small center">Plan v${ctx.docs.levels.plan_version ?? 1} · ${ctx.docs.exercises.exercises.length} exercises · ${ctx.docs.tests.tests.length} tests</p>
+    <div id="recent-flags"></div>`;
 
   main.innerHTML = html;
+  fillRecentFlags(ctx, main.querySelector("#recent-flags"));
   main.onclick = (e) => {
     const row = e.target.closest("[data-ms-toggle]");
     if (row) {

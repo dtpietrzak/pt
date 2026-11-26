@@ -459,14 +459,13 @@
     },
     {
       "id": "EX_PALLOF_STD",
-      "name": "Pallof press (standing)",
+      "name": "Cable Pallof press",
       "category": "core",
       "equipment": [
-        "band",
-        "anchor"
+        "cable stack"
       ],
       "cues": [
-        "Stand sideways to a chest-height anchor, band at the sternum, feet shoulder-width, knees soft.",
+        "Stand sideways to a chest-height cable, handle at the sternum, feet shoulder-width, knees soft.",
         "Press straight out and hold; do not let the torso rotate; return slowly."
       ],
       "stop_if": "Torso twists or back symptom.",
@@ -476,19 +475,18 @@
       "progressions": [
         "EX_PALLOF_STEPOUT"
       ],
-      "contraindications": "Increase band tension, never rotation range. This is your clinic anti-rotation band drill.",
+      "contraindications": "Increase the stack one plate at a time (5 lb), never rotation range. This is your clinic anti-rotation drill, now on the cable stack.",
       "in_default_program": true
     },
     {
       "id": "EX_PALLOF_STEPOUT",
-      "name": "Pallof press with step-out",
+      "name": "Cable Pallof press with step-out",
       "category": "core",
       "equipment": [
-        "band",
-        "anchor"
+        "cable stack"
       ],
       "cues": [
-        "As the Pallof press, but step one pace farther from the anchor before the press.",
+        "As the cable Pallof press, but step one pace farther from the stack before the press.",
         "Hips and shoulders stay square."
       ],
       "stop_if": "Torso rotation or back symptom.",
@@ -498,20 +496,19 @@
       "progressions": [
         "EX_PALLOF_HALFKNEEL"
       ],
-      "contraindications": "Same as Pallof press.",
+      "contraindications": "Same as the cable Pallof press.",
       "in_default_program": true
     },
     {
       "id": "EX_PALLOF_HALFKNEEL",
-      "name": "Half-kneeling Pallof press",
+      "name": "Half-kneeling cable Pallof press",
       "category": "core",
       "equipment": [
-        "band",
-        "anchor",
+        "cable stack",
         "pad"
       ],
       "cues": [
-        "Half-kneel with the inside knee down, glute squeezed, ribs down.",
+        "Half-kneel with the inside knee down, glute squeezed, ribs down, cable handle at the sternum.",
         "Press and hold without rotating or leaning."
       ],
       "stop_if": "Rotation, leaning, or back symptom.",
@@ -519,7 +516,7 @@
         "EX_PALLOF_STEPOUT"
       ],
       "progressions": [],
-      "contraindications": "Same as Pallof press.",
+      "contraindications": "Same as the cable Pallof press.",
       "in_default_program": true
     },
     {
@@ -1157,21 +1154,20 @@
     },
     {
       "id": "EX_BAND_ROW",
-      "name": "Standing band row",
+      "name": "Standing cable row",
       "category": "pull",
       "equipment": [
-        "band",
-        "anchor"
+        "cable stack"
       ],
       "cues": [
-        "Stand tall; pull the elbow back toward the hip and squeeze the shoulder blade; trunk stays still."
+        "Stand tall facing the cable stack; pull the handle back toward the hip and squeeze the shoulder blade; trunk stays still."
       ],
       "stop_if": "Trunk sway or back symptom.",
       "regressions": [],
       "progressions": [
         "EX_DB_ROW_SUPPORTED"
       ],
-      "contraindications": "None specific.",
+      "contraindications": "None specific. Use the cable stack (5–55 lb).",
       "in_default_program": true
     },
     {

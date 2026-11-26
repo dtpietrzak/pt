@@ -6,7 +6,7 @@ export const DEFAULT_PROFILE = {
   body_weight_lb: 180,
   equipment: {
     bands: true, dumbbells_lb: [], kettlebells_lb: [], barbell: true, plates_lb: [], rack_with_safeties: true,
-    bench: true, pull_up_bar: true, step_box_in: [6, 8, 12, 18], blocks: true, cones: true, track_or_field: true,
+    bench: true, pull_up_bar: true, step_box_in: [6, 8, 12, 18], blocks: true, cones: true, track_or_field: true, cable_stack: true, cable_stack_lb: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
   },
   baselines: { pain_rest: 1, stiffness_min: 30, standing_h: 5, sitting_min: 20 },
   notify: { morning: "08:00", evening: "15:30", night: "21:00", post_workout: "on_session_complete" },
@@ -20,5 +20,6 @@ export const DEFAULT_APP = {
   // Work timer: alarms ring only on the device that started work mode, unless this is on.
   timer_alarm_all_devices: false,
   timer_sound: true,
+  timer_auto_continue: false,
 };
 export const DISCLAIMER = "This app supports self-management of a recovering lumbar disc. It is not medical advice, does not diagnose, and does not replace a clinician.";

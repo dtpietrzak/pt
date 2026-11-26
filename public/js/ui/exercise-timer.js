@@ -1,21 +1,29 @@
-// Countdown for timed-exercise doses, shown inside the exercise sheet (and a header chip if the sheet is closed).
+// Countdown for timed-exercise doses (with Next, 15 s rest, and auto-continue)
+// and a set counter for untimed (rep-based) doses. Also hosts the pain-flag panel.
 import { currentDose } from "../engine.js";
-import { formatDose, timedPlan } from "../dose.js";
-import { unlockAudio, playAlarm, fmtClock, buzz, dingNotify } from "../audio.js";
-import { $, esc, openSheet } from "./dom.js";
+import { formatDose, timedPlan, setPlan } from "../dose.js";
+import { unlockAudio, playAlarm, playCue, fmtClock, buzz, dingNotify } from "../audio.js";
+import { REST_SEC, needsRestAfter, restCuesToPlay } from "../pain-flags.js";
+import { $, esc, openSheet, today, toast } from "./dom.js";
+import { loadDay, saveDay, wireFlagPanel } from "./pain-flag.js";
 
-let sess = null; // { itemKey, name, plan, step, status, endsAt, remain, sound }
+let sess = null; // { itemKey, name, plan, step, status, endsAt, remain, restEndsAt, restPrev, sound }
 let sheetItem = null;
 let clockStop = null;
 let dingedFor = "";
+let lastRestRemain = null;
+let ctxRef = null;
 
 const chip = () => document.getElementById("ex-timer-chip");
 const stepOf = () => sess?.plan.steps[sess.step];
 const remainMs = (now = Date.now()) => {
   if (!sess) return 0;
   if (sess.status === "running") return Math.max(0, sess.endsAt - now);
+  if (sess.status === "rest") return Math.max(0, sess.restEndsAt - now);
   return sess.remain ?? sess.plan.seconds * 1000;
 };
+const soundOn = () => sess?.sound !== false;
+const autoOn = () => ctxRef?.app?.timer_auto_continue === true;
 
 function ensureClock() {
   if (clockStop) return;
@@ -33,22 +41,65 @@ function ensureClock() {
 }
 
 function stopClockIfIdle() {
-  if (sess && (sess.status === "running" || sess.status === "paused")) return;
+  if (sess && (sess.status === "running" || sess.status === "paused" || sess.status === "rest")) return;
   if (!sess) { clockStop?.(); }
 }
 
 function fireDone() {
-  const key = `${sess.itemKey}:${sess.step}:${sess.endsAt}`;
+  const key = `${sess.itemKey}:${sess.step}:${sess.endsAt || "next"}`;
   if (dingedFor === key) return;
   dingedFor = key;
-  const more = sess.step < sess.plan.steps.length - 1;
-  sess.status = more ? "next" : "done";
-  sess.remain = 0;
-  sess.endsAt = null;
-  if (sess.sound !== false) void playAlarm("done");
+  const more = needsRestAfter(sess.step, sess.plan.steps.length);
+  if (soundOn()) void playAlarm("done");
   buzz([300, 150, 300, 150, 300]);
   const st = stepOf();
-  dingNotify(more ? `${st.label} done` : `${sess.name} done`, more ? "Start the next set when you're ready." : "All timed sets for this dose are done.", "pt-ex-timer");
+  if (more) {
+    sess.status = "rest";
+    sess.remain = 0;
+    sess.endsAt = null;
+    sess.restEndsAt = Date.now() + REST_SEC * 1000;
+    lastRestRemain = REST_SEC * 1000 + 1;
+    dingNotify(`${st?.label || "Set"} done`, `Rest ${REST_SEC} s, then the next one.`, "pt-ex-timer");
+    ensureClock();
+  } else {
+    sess.status = "done";
+    sess.remain = 0;
+    sess.endsAt = null;
+    dingNotify(`${sess.name} done`, "All timed sets for this dose are done.", "pt-ex-timer");
+  }
+}
+
+function finishRest() {
+  if (!sess || sess.status !== "rest") return;
+  if (autoOn()) startNextSet();
+  else {
+    sess.status = "ready";
+    sess.restEndsAt = null;
+    sess.remain = sess.plan.seconds * 1000;
+  }
+}
+
+function startNextSet() {
+  if (!sess) return;
+  sess.step += 1;
+  sess.status = "running";
+  sess.remain = sess.plan.seconds * 1000;
+  sess.endsAt = Date.now() + sess.remain;
+  sess.restEndsAt = null;
+  dingedFor = "";
+  lastRestRemain = null;
+  ensureClock();
+}
+
+function skipRest() {
+  if (!sess || (sess.status !== "rest" && sess.status !== "ready")) return;
+  startNextSet();
+}
+
+async function saveAuto(on) {
+  if (!ctxRef) return;
+  ctxRef.app = { ...ctxRef.app, timer_auto_continue: !!on };
+  await ctxRef.store.kvSet("app", ctxRef.app);
 }
 
 export function showExercise(ctx, itemKey) {
@@ -58,15 +109,19 @@ export function showExercise(ctx, itemKey) {
   const st = ctx.state.item_state[itemKey];
   const { dose, rung, easy } = currentDose(ctx.state, it);
   const plan = timedPlan(dose, it);
+  const sets = plan ? null : setPlan(dose);
   const ladder = it.rungs
     .map((r, n) => `<li class="${st && st.rung === n ? "cur" : ""}">${esc(formatDose(r, it, ctx.profile))}${n === it.target_rung ? " (target)" : ""}</li>`)
     .join("");
   sheetItem = itemKey;
+  ctxRef = ctx;
   openSheet(`
     <h2>${esc(ex.name || it.exercise_id)}</h2>
     <p class="muted small">${esc(it.item_key)} · ${esc(ex.category || "")} · rest ${it.rest_s ?? "-"} s${easy ? " · easy-dose sets" : ""}</p>
     ${ex.cues?.length ? `<h4>Cues</h4><ul>${ex.cues.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}
-    ${plan ? timerHtml(plan, formatDose(dose, it, ctx.profile), rung) : ""}
+    ${plan ? timerHtml(plan, formatDose(dose, it, ctx.profile), ctx) : ""}
+    ${sets ? setCounterHtml(sets, formatDose(dose, it, ctx.profile)) : ""}
+    <div class="pain-flag" id="pain-flag"></div>
     <h4>Ladder</h4><ol class="ladder">${ladder}</ol>
     ${ex.stop_if ? `<h4>Stop if</h4><p>${esc(ex.stop_if)}</p>` : ""}
     ${ex.contraindications ? `<h4>Cautions</h4><p>${esc(ex.contraindications)}</p>` : ""}
@@ -74,38 +129,59 @@ export function showExercise(ctx, itemKey) {
     ${it.requires?.length ? `<p class="muted small">Unlocks after: ${esc(it.requires.join(", "))}</p>` : ""}`, {
     onClose: () => { if (sheetItem === itemKey) sheetItem = null; render(); },
   });
+  wireFlagPanel($("#pain-flag"), ctx, { itemKey, itemName: ex.name || it.exercise_id, onChange: () => refreshTodayMarks(ctx, itemKey) });
   if (plan) {
-    // Re-open keeps an in-progress timer; a different exercise keeps running in the chip until Start is pressed here.
     if (!sess || sess.itemKey !== itemKey || sess.plan.seconds !== plan.seconds || sess.plan.steps.length !== plan.steps.length) {
       if (!sess || sess.itemKey !== itemKey || sess.status === "idle" || sess.status === "done") {
         sess = { itemKey, name: ex.name || it.exercise_id, plan, step: 0, status: "idle", endsAt: null, remain: plan.seconds * 1000, sound: ctx.app?.timer_sound };
-      } else if (sess.itemKey !== itemKey) {
-        // Leave the other exercise running in the chip; this sheet shows a fresh idle plan until they press Start.
       }
     }
-    wireSheet(ctx, it, ex, plan);
+    wireTimer(ctx, it, ex, plan);
     render();
   }
+  if (sets) wireSets(ctx, it, sets).catch((e) => console.warn(e));
 }
 
-function timerHtml(plan, doseText) {
+function autoToggleHtml(ctx) {
+  const on = ctx?.app?.timer_auto_continue === true;
+  return `<label class="toggle auto-continue"><input type="checkbox" data-ex-act="auto" ${on ? "checked" : ""}><span>Auto-continue</span></label>`;
+}
+
+function timerHtml(plan, doseText, ctx) {
   const dur = plan.seconds >= 60 && plan.seconds % 60 === 0 ? `${plan.seconds / 60} min` : `${plan.seconds} s`;
   const sets = plan.steps.length;
+  const restNote = sets > 1 ? ` A ${REST_SEC} s rest comes between bouts.` : "";
   return `<div class="ex-timer" id="ex-timer">
     <h4>Timer</h4>
-    <p class="muted small">Current dose: ${esc(doseText)}. ${sets > 1 ? `${sets} timed bouts of ${dur}.` : `One ${dur} countdown.`} The clock uses wall time, so it stays honest if you switch apps.</p>
+    <p class="muted small">Current dose: ${esc(doseText)}. ${sets > 1 ? `${sets} timed bouts of ${dur}.` : `One ${dur} countdown.`} The clock uses wall time, so it stays honest if you switch apps.${restNote}</p>
     <div class="ex-timer-step" id="ex-timer-step"></div>
     <div class="ex-timer-count" id="ex-timer-count" aria-live="polite">${fmtClock(plan.seconds * 1000)}</div>
     <div class="ex-timer-actions">
-      <button class="btn primary" type="button" data-ex-act="start" id="ex-timer-start">Start</button>
+      <button class="btn primary btn-lg" type="button" data-ex-act="start" id="ex-timer-start">Start</button>
+      <button class="btn primary btn-lg" type="button" data-ex-act="next" id="ex-timer-next" hidden>Next</button>
       <button class="btn" type="button" data-ex-act="pause" id="ex-timer-pause" hidden>Pause</button>
       <button class="btn" type="button" data-ex-act="reset" id="ex-timer-reset">Reset</button>
     </div>
+    ${sets > 1 ? autoToggleHtml(ctx) : ""}
     <p class="muted small" id="ex-timer-hint"></p>
   </div>`;
 }
 
-function wireSheet(ctx, it, ex, plan) {
+function setCounterHtml(plan, doseText) {
+  return `<div class="ex-timer set-counter" id="ex-sets">
+    <h4>Sets</h4>
+    <p class="muted small">Current dose: ${esc(doseText)}. Tap Next after each set. Reset starts over.</p>
+    <div class="ex-timer-step" id="ex-sets-step">Set 1 of ${plan.sets}</div>
+    <div class="ex-timer-count" id="ex-sets-count" aria-live="polite">1<span class="ex-sets-of">/${plan.sets}</span></div>
+    <div class="ex-timer-actions">
+      <button class="btn primary btn-lg" type="button" data-set-act="next" id="ex-sets-next">Next</button>
+      <button class="btn btn-lg" type="button" data-set-act="reset" id="ex-sets-reset">Reset</button>
+    </div>
+    <p class="muted small" id="ex-sets-hint"></p>
+  </div>`;
+}
+
+function wireTimer(ctx, it, ex, plan) {
   const root = $("#ex-timer");
   if (!root) return;
   root.onclick = (e) => {
@@ -114,6 +190,13 @@ function wireSheet(ctx, it, ex, plan) {
     if (act === "start") start(ctx, it, ex, plan);
     else if (act === "pause") pause();
     else if (act === "reset") reset(it, ex, plan);
+    else if (act === "next") next(ctx, it, ex, plan);
+  };
+  root.onchange = (e) => {
+    if (e.target.closest("[data-ex-act=auto]")) {
+      saveAuto(e.target.checked).catch(() => {});
+      render();
+    }
   };
 }
 
@@ -125,12 +208,34 @@ function start(ctx, it, ex, plan) {
   unlockAudio();
   if (!sess || sess.itemKey !== it.item_key) adopt(ctx, it, ex, plan);
   if (sess.status === "done") { sess.step = 0; sess.status = "idle"; sess.remain = sess.plan.seconds * 1000; }
-  if (sess.status === "next") { sess.step += 1; sess.remain = sess.plan.seconds * 1000; }
+  if (sess.status === "ready" || sess.status === "next") return startNextSet(), render();
+  if (sess.status === "rest") return skipRest(), render();
   sess.status = "running";
   sess.endsAt = Date.now() + (sess.remain || sess.plan.seconds * 1000);
   dingedFor = "";
   ensureClock();
   render();
+}
+
+function next(ctx, it, ex, plan) {
+  unlockAudio();
+  if (!sess || sess.itemKey !== it.item_key) adopt(ctx, it, ex, plan);
+  if (sess.status === "running" || sess.status === "paused") {
+    sess.remain = 0;
+    sess.endsAt = sess.endsAt || Date.now();
+    fireDone();
+    render();
+    return;
+  }
+  if (sess.status === "rest" || sess.status === "ready" || sess.status === "next") {
+    skipRest();
+    render();
+    return;
+  }
+  if (sess.status === "done") {
+    sess.step = 0; sess.status = "idle"; sess.remain = sess.plan.seconds * 1000;
+    render();
+  }
 }
 
 function pause() {
@@ -147,17 +252,27 @@ function reset(it, ex, plan) {
   const p = plan || sess?.plan;
   sess = { itemKey: key, name, plan: p, step: 0, status: "idle", endsAt: null, remain: p.seconds * 1000, sound: sess?.sound };
   dingedFor = "";
+  lastRestRemain = null;
   render();
   stopClockIfIdle();
 }
 
 function render() {
   if (sess?.status === "running" && remainMs() <= 0) fireDone();
+  if (sess?.status === "rest") {
+    const ms = remainMs();
+    if (lastRestRemain != null && soundOn()) {
+      for (const cue of restCuesToPlay(lastRestRemain, ms)) void playCue(cue);
+    }
+    lastRestRemain = ms;
+    if (ms <= 0) finishRest();
+  }
   const st = stepOf();
   const ms = remainMs();
   const running = sess?.status === "running";
   const paused = sess?.status === "paused";
-  const next = sess?.status === "next";
+  const rest = sess?.status === "rest";
+  const ready = sess?.status === "ready" || sess?.status === "next";
   const done = sess?.status === "done";
   const inSheet = sheetItem && sess && sheetItem === sess.itemKey;
   const box = inSheet ? $("#ex-timer") : null;
@@ -165,37 +280,137 @@ function render() {
     const stepEl = $("#ex-timer-step", box);
     const countEl = $("#ex-timer-count", box);
     const startBtn = $("#ex-timer-start", box);
+    const nextBtn = $("#ex-timer-next", box);
     const pauseBtn = $("#ex-timer-pause", box);
     const hint = $("#ex-timer-hint", box);
-    if (stepEl) stepEl.textContent = st ? st.label : "";
+    const more = sess && needsRestAfter(sess.step, sess.plan.steps.length);
+    if (stepEl) {
+      stepEl.textContent = rest ? "Rest" : ready && sess.plan.steps[sess.step + 1] ? sess.plan.steps[sess.step + 1].label : (st ? st.label : "");
+    }
     if (countEl) {
-      countEl.textContent = done ? "Done" : next ? "Done" : fmtClock(ms);
-      countEl.classList.toggle("done", done || next);
+      countEl.textContent = done ? "Done" : ready ? "Ready" : fmtClock(ms);
+      countEl.classList.toggle("done", done || ready);
+      countEl.classList.toggle("rest", rest);
     }
     if (startBtn) {
-      startBtn.hidden = running;
-      startBtn.textContent = paused ? "Resume" : next ? (sess.step + 2 <= sess.plan.steps.length ? `Start ${sess.plan.steps[sess.step + 1].label}` : "Start next") : done ? "Start over" : "Start";
+      startBtn.hidden = running || rest;
+      startBtn.textContent = paused ? "Resume" : ready ? (sess.plan.steps[sess.step + 1]?.label ? `Start ${sess.plan.steps[sess.step + 1].label}` : "Start next") : done ? "Start over" : "Start";
+    }
+    if (nextBtn) {
+      nextBtn.hidden = !(running || paused || rest || ready);
+      nextBtn.textContent = rest ? "Skip rest" : ready ? "Start next" : (more ? "Next" : "Finish");
     }
     if (pauseBtn) pauseBtn.hidden = !running;
+    const autoEl = box.querySelector("[data-ex-act=auto]");
+    if (autoEl && autoEl.checked !== autoOn()) autoEl.checked = autoOn();
     if (hint) {
-      hint.textContent = next && sess.plan.rest_s
-        ? `Rest ${sess.plan.rest_s} s, then start the next one when you're ready.`
-        : done ? "All timed sets for this dose are done."
-        : paused ? "Paused."
-        : running ? "" : "Starts a countdown for this dose. Pause or reset any time.";
+      hint.textContent = rest
+        ? (autoOn() ? `Rest ${REST_SEC} s. The next set starts on its own after the go cue.` : `Rest ${REST_SEC} s. After the go cue, tap Start or Next when you're ready.`)
+        : ready
+          ? (sess.plan.rest_s && sess.plan.rest_s !== REST_SEC ? `Rest is over. Start the next one when you're ready.` : "Rest is over. Start the next one when you're ready.")
+          : done ? "All timed sets for this dose are done."
+          : paused ? "Paused."
+          : running ? (more ? "Next ends this bout and starts the rest." : "Next ends this bout and finishes the dose.")
+          : "Starts a countdown for this dose. Pause, skip with Next, or reset any time.";
     }
   }
   const c = chip();
   if (c) {
-    const show = !!(sess && (running || paused || next) && !inSheet);
+    const show = !!(sess && (running || paused || rest || ready) && !inSheet);
     c.hidden = !show;
     if (show) {
-      const label = next ? "done — next" : fmtClock(ms);
+      const label = rest ? `rest ${fmtClock(ms)}` : ready ? "ready" : fmtClock(ms);
       c.textContent = `⏱ ${label} · ${sess.name}`;
-      c.classList.toggle("due", next);
+      c.classList.toggle("due", ready || rest);
     }
   }
   stopClockIfIdle();
+}
+
+async function wireSets(ctx, it, plan) {
+  const root = $("#ex-sets");
+  if (!root) return;
+  const day0 = await loadDay(ctx);
+  const saved = day0.set_progress?.[it.item_key];
+  let current = Math.min(Math.max(1, saved?.current || 1), plan.sets);
+  let finished = !!saved?.done && current >= plan.sets;
+  if (finished) current = plan.sets;
+
+  const paint = () => {
+    const step = $("#ex-sets-step", root);
+    const count = $("#ex-sets-count", root);
+    const nextBtn = $("#ex-sets-next", root);
+    const hint = $("#ex-sets-hint", root);
+    if (finished) {
+      if (step) step.textContent = `All ${plan.sets} sets done`;
+      if (count) { count.textContent = "Done"; count.classList.add("done"); }
+      if (nextBtn) nextBtn.textContent = "Start over";
+      if (hint) hint.textContent = "This item is marked done for today. Reset if you need to recount.";
+    } else {
+      if (step) step.textContent = `Set ${current} of ${plan.sets}`;
+      if (count) { count.innerHTML = `${current}<span class="ex-sets-of">/${plan.sets}</span>`; count.classList.remove("done"); }
+      if (nextBtn) nextBtn.textContent = current >= plan.sets ? "Finish" : "Next";
+      if (hint) hint.textContent = current >= plan.sets ? "Last set — Finish marks this item done." : "Tap Next when you finish this set.";
+    }
+  };
+
+  const persist = async () => {
+    const day = await loadDay(ctx);
+    day.set_progress = { ...(day.set_progress || {}), [it.item_key]: { current, done: finished } };
+    await saveDay(ctx, day);
+  };
+
+  root.onclick = async (e) => {
+    const act = e.target.closest("[data-set-act]")?.dataset.setAct;
+    if (!act) return;
+    if (act === "reset") {
+      current = 1;
+      finished = false;
+      await persist();
+      unmarkItem(it.item_key);
+      paint();
+      return;
+    }
+    if (act === "next") {
+      if (finished) { current = 1; finished = false; await persist(); unmarkItem(it.item_key); paint(); return; }
+      if (current >= plan.sets) {
+        finished = true;
+        await persist();
+        markItemDone(it.item_key);
+        paint();
+        toast(`${(ctx.exById[it.exercise_id] || {}).name || "Item"} marked done.`);
+        return;
+      }
+      current += 1;
+      await persist();
+      paint();
+    }
+  };
+  paint();
+}
+
+function markItemDone(itemKey) {
+  syncCheckbox(itemKey, true);
+}
+function unmarkItem(itemKey) {
+  syncCheckbox(itemKey, false);
+}
+function syncCheckbox(itemKey, done) {
+  const key = (window.CSS && CSS.escape) ? CSS.escape(itemKey) : itemKey.replace(/"/g, '\\"');
+  const cb = document.querySelector(`input[data-item="${key}"], input[data-wk-item="${key}"]`);
+  if (!cb || cb.disabled || cb.checked === done) return;
+  cb.checked = done;
+  cb.dispatchEvent(new Event("change", { bubbles: true }));
+}
+async function refreshTodayMarks(ctx, itemKey) {
+  const { flagMarkHtml } = await import("./pain-flag.js");
+  const { flagsForItem } = await import("../pain-flags.js");
+  const day = await loadDay(ctx);
+  const html = flagMarkHtml(flagsForItem(day, itemKey), itemKey);
+  const key = (window.CSS && CSS.escape) ? CSS.escape(itemKey) : itemKey;
+  for (const el of document.querySelectorAll(`[data-flag-slot="${key}"]`)) el.outerHTML = html || `<span data-flag-slot="${itemKey}"></span>`;
+  const row = document.querySelector(`input[data-item="${key}"], input[data-wk-item="${key}"]`)?.closest(".item");
+  if (row) row.classList.toggle("flagged", /pain-mark/.test(html));
 }
 
 export function wireExerciseTimerChip(ctx) {
@@ -205,4 +420,4 @@ export function wireExerciseTimerChip(ctx) {
   c.onclick = () => { if (sess) showExercise(ctx, sess.itemKey); };
 }
 
-export { timedPlan };
+export { timedPlan, REST_SEC, needsRestAfter, restCuesToPlay };

@@ -7,9 +7,11 @@ import { onClick as checkinClick, statusCardHtml, equipCardHtml, renderRedToday 
 import { exportCardHtml } from "./export.js";
 import { needsEquipConfirm } from "../status.js";
 import { templateItems, nextStrengthTemplate } from "../pipeline.js";
+import { shouldShowStrengthRest, strengthCountThisWeek, weeklyStrengthTarget, weeklyStrengthLabel } from "../strength-week.js";
 import { isoLocal, localTime } from "../util.js";
 import { $, esc, BLOCKS, today, nowHM, addMin, minutesSince, fmtDate, openSheet, closeSheet, toast } from "./dom.js";
 import { showExercise, wireExerciseTimerChip } from "./exercise-timer.js";
+import { flagMarkHtml, wireFlagPanel } from "./pain-flag.js";
 
 const DAILY = ["daily_mobility", "daily_core", "walking"];
 const MORNING_WINDOW_MIN = 45;
@@ -158,7 +160,7 @@ export async function renderToday(ctx, main) {
           <span class="section-bar" aria-hidden="true"><span data-block-bar="${block}" style="width:${Math.round(sum.pct * 100)}%"></span></span>
         </button>
         <div class="section-body" data-block-body="${block}"${isOpen ? "" : " hidden"}>`;
-    for (const it of its) html += itemRow(ctx, it, doneSet.has(it.item_key));
+    for (const it of its) html += itemRow(ctx, it, doneSet.has(it.item_key), { flags: (log.pain_flags || []).filter((f) => f.item_key === it.item_key) });
     if (block === "walking") {
       html += stepper("Walked today", walkHint(lv, walkTarget), "walk_min", log.walk_min || 0, "min", 5);
     }
@@ -166,7 +168,7 @@ export async function renderToday(ctx, main) {
   }
   if (wake && equipNeeded) html += equipCardHtml(); // barbell work waits for the equipment reconfirm
   const workouts = wake && !equipNeeded ? workoutPlan(ctx, view, d) : [];
-  for (const w of workouts) html += workoutCardHtml(ctx, w, wkTicks[w.template], inWindow, wake);
+  for (const w of workouts) html += workoutCardHtml(ctx, w, wkTicks[w.template], inWindow, wake, log.pain_flags || []);
   main.innerHTML = html;
   refreshBadges(ctx, view);
 
@@ -267,9 +269,16 @@ export async function renderToday(ctx, main) {
       return;
     }
 
+    const anyway = e.target.closest("[data-wk-anyway]");
+    if (anyway) {
+      strengthPick = { date: d, template: anyway.dataset.wkAnyway, anyway: true };
+      openBlocks.add(`wk:${anyway.dataset.wkAnyway}`);
+      renderToday(ctx, main);
+      return;
+    }
     const pick = e.target.closest("[data-wk-pick]");
     if (pick) {
-      strengthPick = { date: d, template: pick.dataset.wkPick };
+      strengthPick = { date: d, template: pick.dataset.wkPick, anyway: true };
       openBlocks.add(`wk:${pick.dataset.wkPick}`);
       renderToday(ctx, main);
       return;
@@ -291,6 +300,18 @@ export async function renderToday(ctx, main) {
     }
 
     const info = e.target.closest("[data-info]");
+    const wkFlag = e.target.closest("[data-wk-flag]");
+    if (wkFlag) {
+      const template = wkFlag.dataset.wkFlag;
+      const name = WORKOUT_NAMES[template] || template;
+      openSheet(`<h2>Flag unexpected pain</h2><p class="muted small">During ${esc(name)}, not tied to one exercise.</p><div class="pain-flag" id="pain-flag"></div>`);
+      wireFlagPanel(document.getElementById("pain-flag"), ctx, {
+        sessionKey: `wk:${template}`,
+        heading: `During ${name}`,
+        onChange: () => renderToday(ctx, main),
+      });
+      return;
+    }
     if (info) { showExercise(ctx, info.dataset.info); return; }
 
     const stepBtn = e.target.closest("[data-step-key]");
@@ -357,43 +378,79 @@ function walkHint(lv, target) {
 
 // ---------------------------------------------------------------- workouts
 
-/** The workout cards for today: the strength day (logged or next up) and conditioning, if the level has them. */
+/** The workout cards for today: the strength day (logged, rest, or next up) and conditioning, if the level has them. */
+function weekStrengthLine(level, sessions, d) {
+  const target = weeklyStrengthTarget(level);
+  return weeklyStrengthLabel(strengthCountThisWeek(sessions, d), target);
+}
+
 function workoutPlan(ctx, v, d) {
   const ts = availableTemplates(ctx);
   if (!ts.length) return [];
   const logged = v.sessions.filter((s) => s.local_date === d);
   const loggedOf = (t) => logged.filter((s) => s.template === t).sort((a, b) => (a.ended_at < b.ended_at ? 1 : -1))[0] || null;
   const strengths = ts.filter((t) => STRENGTH.includes(t));
+  const weekLine = weekStrengthLine(ctx.level(), v.sessions, d);
   let show = strengths.filter((t) => loggedOf(t));
+  let rest = null;
   if (!show.length && strengths.length) {
     const next = strengths.includes(nextStrengthTemplate(v.sessions)) ? nextStrengthTemplate(v.sessions) : strengths[0];
-    show = [strengthPick?.date === d && strengths.includes(strengthPick.template) ? strengthPick.template : next];
+    const picked = strengthPick?.date === d && strengths.includes(strengthPick.template);
+    const anyway = strengthPick?.date === d && !!strengthPick.anyway;
+    if (shouldShowStrengthRest({ sessions: v.sessions, today: d, loggedToday: false, startedAnyway: picked || anyway })) {
+      rest = { rest: true, nextTemplate: next, nextName: WORKOUT_NAMES[next] || next, weekLine };
+    } else {
+      show = [picked ? strengthPick.template : next];
+    }
   }
   show.push(...ts.filter((t) => !STRENGTH.includes(t)));
-  return show.map((template) => ({
+  const cards = show.map((template) => ({
     template,
     items: templateItems(ctx.docs, ctx.state, template),
     session: loggedOf(template),
     other: !loggedOf(template) && STRENGTH.includes(template) ? strengths.find((t) => t !== template && !show.includes(t)) : null,
+    weekLine: STRENGTH.includes(template) ? weekLine : "",
   }));
+  return rest ? [rest, ...cards] : cards;
 }
 
 function workoutSummary(w, ticks) {
   const total = w.items.length;
+  const week = w.weekLine ? ` · ${w.weekLine}` : "";
   if (w.session) {
     const n = w.session.items.filter((i) => i.completed).length;
-    return { sub: `Logged at ${localTime(w.session.ended_at || w.session.started_at)} · ${n} of ${w.session.items.length} done`, badge: "Done ✓", pct: 1, complete: true };
+    return { sub: `Logged at ${localTime(w.session.ended_at || w.session.started_at)} · ${n} of ${w.session.items.length} done${week}`, badge: "Done ✓", pct: 1, complete: true };
   }
   const n = w.items.filter(({ item }) => ticks?.done?.includes(item.item_key)).length;
   return {
-    sub: n ? `${n} of ${total} done · finish when you're through` : `${total} exercises · tick them off as you go`,
+    sub: (n ? `${n} of ${total} done · finish when you're through` : `${total} exercises · tick them off as you go`) + week,
     badge: `${n}/${total}`,
     pct: total ? n / total : 0,
     complete: false,
   };
 }
 
-function workoutCardHtml(ctx, w, ticks, inWindow, wake) {
+function restDayCardHtml(w) {
+  const next = w.nextName || "the next session";
+  return `
+    <section class="card section-card rest-day" data-block="wk:rest" data-kind="strength">
+      <div class="section-head">
+        ${BLOCK_ICON.strength}
+        <div class="section-title">
+          <span class="section-name">Strength rest day</span>
+          <span class="section-sub">Next up: ${esc(next)} tomorrow${w.weekLine ? ` · ${esc(w.weekLine)}` : ""}</span>
+        </div>
+        <span class="section-badge">Rest</span>
+      </div>
+      <div class="card-body">
+        <p class="muted small">You trained yesterday. Take today off, or start anyway if you want an extra session.</p>
+        <button class="btn" type="button" data-wk-anyway="${esc(w.nextTemplate)}">Start anyway</button>
+      </div>
+    </section>`;
+}
+
+function workoutCardHtml(ctx, w, ticks, inWindow, wake, optFlags = []) {
+  if (w.rest) return restDayCardHtml(w);
   const key = `wk:${w.template}`;
   const name = WORKOUT_NAMES[w.template] || w.template;
   const icon = BLOCK_ICON[STRENGTH.includes(w.template) ? "strength" : "conditioning"];
@@ -410,16 +467,19 @@ function workoutCardHtml(ctx, w, ticks, inWindow, wake) {
   const sum = workoutSummary(w, ticks);
   const isOpen = openBlocks.has(key);
   const doneKeys = new Set(w.session ? w.session.items.filter((i) => i.completed).map((i) => i.item_key) : ticks?.done || []);
-  const rows = w.items.map(({ item }) => itemRow(ctx, item, doneKeys.has(item.item_key), w.session ? { locked: true } : { wk: w.template })).join("");
-  const foot = w.session ? "" : `
-    <button class="btn primary wide wk-finish" type="button" data-wk-finish="${w.template}">Finish and check in</button>
-    ${w.other ? `<button class="link wk-pick" type="button" data-wk-pick="${w.other}">Do ${esc(WORKOUT_NAMES[w.other])} instead</button>` : ""}`;
+  const flagsOf = (k) => (optFlags || []).filter((f) => f.item_key === k);
+  const rows = w.items.map(({ item }) => itemRow(ctx, item, doneKeys.has(item.item_key), { ...(w.session ? { locked: true } : { wk: w.template }), flags: flagsOf(item.item_key) })).join("");
+  const sessFlags = (optFlags || []).filter((f) => !f.item_key && f.session_key === key);
+  const foot = `
+    ${w.session ? "" : `<button class="btn primary wide wk-finish" type="button" data-wk-finish="${w.template}">Finish and check in</button>
+    ${w.other ? `<button class="link wk-pick" type="button" data-wk-pick="${w.other}">Do ${esc(WORKOUT_NAMES[w.other])} instead</button>` : ""}`}
+    <button class="btn wide" type="button" data-wk-flag="${w.template}">Flag unexpected pain during this workout${sessFlags.length ? " · flagged" : ""}</button>`;
   return `
     <section class="card section-card${sum.complete ? " complete" : ""}${isOpen ? " open" : ""}" data-block="${key}" data-kind="${STRENGTH.includes(w.template) ? "strength" : "conditioning"}">
       <button class="section-head" type="button" data-toggle-block="${key}" aria-expanded="${isOpen}">
         ${icon}
         <div class="section-title">
-          <span class="section-name">${esc(name)}</span>
+          <span class="section-name">${esc(name)}${flagMarkHtml(sessFlags, key)}</span>
           <span class="section-sub" data-block-sub="${key}">${esc(sum.sub)}</span>
         </div>
         <div class="section-right">
@@ -437,13 +497,16 @@ function itemRow(ctx, it, done, opt = {}) {
   const { dose, rung } = currentDose(ctx.state, it);
   const miss = missingEquipment(ex, ctx.profile.equipment);
   const ladder = it.rungs.length > 1 ? `rung ${rung + 1}/${it.rungs.length}` : "";
-  return `<div class="item ${done ? "done" : ""}">
+  const flags = opt.flags || [];
+  return `<div class="item ${done ? "done" : ""}${flags.length ? " flagged" : ""}">
     <label class="check"><input type="checkbox" ${opt.wk ? `data-wk="${opt.wk}" data-wk-item` : "data-item"}="${esc(it.item_key)}" ${done ? "checked" : ""}${opt.locked ? " disabled" : ""} aria-label="${esc(ex.name)}" /></label>
     <button class="text" type="button" data-info="${esc(it.item_key)}">
-      <span class="name">${esc(ex.name)}</span>
+      <span class="name">${esc(ex.name)}${flagMarkHtml(flags, it.item_key)}</span>
       <span class="meta">${esc(formatDose(dose, it, ctx.profile))}${ladder ? ` · ${ladder}` : ""}${it.optional ? ` · <span class="bonus">bonus</span>` : ""}${miss.length ? ` · <span class="warn">needs ${esc(miss.join(", "))}</span>` : ""}</span>
       ${it.note ? `<span class="meta note-line">${esc(it.note)}</span>` : ""}
-    </button></div>`;
+    </button>
+    <button class="flag-btn" type="button" data-info="${esc(it.item_key)}" aria-label="Flag unexpected pain">⚑</button>
+    </div>`;
 }
 
 // ---------------------------------------------------------------- hero and celebration

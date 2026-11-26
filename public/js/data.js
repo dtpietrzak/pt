@@ -52,6 +52,8 @@ export async function boot(store, now) {
     let dirty = false;
     if (profile.baselines && profile.baselines.sitting_min === undefined) { profile.baselines.sitting_min = B0.sitting_min; dirty = true; }
     if (!profile.settings?.posture_cycle) { profile.settings = { ...(profile.settings || {}), posture_cycle: clone(DEFAULT_PROFILE.settings.posture_cycle) }; dirty = true; }
+    if (profile.equipment && profile.equipment.cable_stack === undefined) { profile.equipment.cable_stack = true; dirty = true; }
+    if (profile.equipment && profile.equipment.cable_stack_lb === undefined) { profile.equipment.cable_stack_lb = (DEFAULT_PROFILE.equipment.cable_stack_lb || []).slice(); dirty = true; }
     if (dirty) await store.kvSet("profile", profile);
   }
   if (docs?.posture) {

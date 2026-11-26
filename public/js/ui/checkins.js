@@ -7,6 +7,7 @@ import { recordGate, evaluate, engineConfig, templateItems, buildSession, clearR
 import { postureCheckinData, postureLogKey } from "../posture.js";
 import { askNotifications } from "../timer-ui.js";
 import { $, esc, openSheet, closeSheet, toast, fmtDate, confirmSheet } from "./dom.js";
+import { mergeFlagsIntoItems, sessionFlagHints, flagSummary, flagsOf } from "../pain-flags.js";
 
 const cap = (s) => s[0].toUpperCase() + s.slice(1);
 const TITLES = { morning: "Morning check-in", post_workout: "Post-workout check-in", evening: "Evening check-in", night: "Night check-in" };
@@ -175,6 +176,18 @@ async function defaultsFor(ctx, type, v, entry) {
     const minsAgo = s?.ended_at ? (v.now - new Date(s.ended_at)) / 60000 : 999;
     const keyed = ctx.docs.levels.levels.flatMap((l) => l.items);
     Object.assign(f, { rpe: 5, settle: minsAgo < 60 ? "not_yet" : "lt_30", items: (s?.items || []).map((i) => ({ item_key: i.item_key, completed: !!i.completed, rung_done: i.prescribed_rung, problem: false })).filter((i) => keyed.some((k) => k.item_key === i.item_key)) });
+    const day = await ctx.store.get("days", entry.date || v.date);
+    const flags = flagsOf(day);
+    const itemKeys = new Set((s?.items || []).map((i) => i.item_key));
+    const sessionKey = s?.template ? `wk:${s.template}` : null;
+    const related = flags.filter((fl) => (fl.item_key && itemKeys.has(fl.item_key)) || (!fl.item_key && sessionKey && fl.session_key === sessionKey));
+    f.items = mergeFlagsIntoItems(f.items, related);
+    const hints = sessionFlagHints(related);
+    if (hints) {
+      if (f.pain == null) f.pain = hints.pain;
+      if (hints.sharp) f.sharp = true;
+      if (hints.leg) f.leg = hints.leg;
+    }
   }
   if (type === "evening") {
     const x = await todayExtras(ctx, entry.date);
@@ -446,18 +459,25 @@ export async function onClick(ctx, e) {
 export async function renderHistory(ctx, main) {
   const v = await loadView(ctx);
   const dates = new Set([...v.checkins.map((c) => c.local_date), ...v.sessions.map((s) => s.local_date), ...v.logs.map((l) => localDate(l.ts))]);
+  const dayRecs = await ctx.store.all("days");
+  for (const rec of dayRecs) if (rec?.local_date) dates.add(rec.local_date);
   const days = [...dates].sort().reverse().slice(0, 30);
+  const flagsBy = {};
+  for (const rec of dayRecs) if (rec?.local_date) flagsBy[rec.local_date] = flagsOf(rec);
   const logsBy = {};
   for (const l of v.logs) (logsBy[localDate(l.ts)] ||= []).push(l);
+  const flagLine = (d, f) => flagSummary(f, f.item_key ? itemName(ctx, f.item_key) : (f.session_key ? "This workout" : "This item"));
   const card = (d) => {
     const day = v.daily[d];
     const cis = v.checkins.filter((c) => c.local_date === d).sort((a, b) => (a.ts < b.ts ? -1 : 1));
     const ss = v.sessions.filter((s) => s.local_date === d);
     const decisions = (logsBy[d] || []).sort((a, b) => (a.ts < b.ts ? -1 : 1));
+    const flags = flagsBy[d] || [];
     return `<section class="card hist-day"><div class="ci-head"><h2>${esc(fmtDate(d))}</h2>${day ? `<span class="pill ${day.color}">${cap(day.color)}</span>` : '<span class="pill none">No check-ins</span>'}</div>
       <div class="chips">${cis.map((c) => `<button class="chip-btn ${v.evals[c.id].color}" type="button" data-ci-view="${esc(c.id)}">${esc(LABEL[c.type])}</button>`).join("")}</div>
       ${day?.reasons.length ? `<ul class="reasons">${tidyReasons(day.reasons).map((r) => `<li>${esc(r)}</li>`).join("")}</ul>` : ""}
       ${ss.map((s) => `<p class="small">🏋️ ${esc(WORKOUT_NAMES[s.template] || s.template.replace(/_/g, " "))}${s.final_color ? ` · ${cap(s.final_color)}${s.status === "final" ? "" : " so far"}` : " · waiting on check-ins"}${s.clean ? " · counts toward advancing" : ""}</p>`).join("")}
+      ${flags.length ? `<div class="pain-flag-hist"><small class="muted">Unexpected pain</small>${flags.map((f) => `<p class="small">${esc(flagLine(d, f))}</p>`).join("")}</div>` : ""}
       ${decisions.length ? `<div class="decisions"><small class="muted">Plan decisions</small>${decisions.map((l) => `<p class="small">${esc(l.message || `${l.rule_id}: ${l.outcome}`)}</p>`).join("")}</div>` : ""}</section>`;
   };
   main.innerHTML = `${redBannerHtml(ctx)}<p><a class="link" href="#/today">← Today</a></p>

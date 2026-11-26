@@ -399,6 +399,18 @@
             "track_or_field": {
               "type": "boolean",
               "default": true
+            },
+            "cable_stack": {
+              "type": "boolean",
+              "default": true,
+              "description": "Cable stack available. Default true. David's stack is 5-55 lb in 5 lb plates."
+            },
+            "cable_stack_lb": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Available cable-stack plate settings in pounds. Default 5 through 55 in 5 lb steps. Empty means snap to 5 lb."
             }
           },
           "additionalProperties": false

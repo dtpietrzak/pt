@@ -2,6 +2,7 @@
 // Runs in the browser and in Node (tests reproduce seed/test-vectors.json).
 import { initPostureState, applyPosture, postureColor, postureEventFromEvening, postureConfig } from "./posture.js";
 import { RANK, worst, clone, addDays, dayDiff, hoursBetween, daysBetweenTs, median, round5, localDate } from "./util.js";
+import { flagsOf, holdsCoreDay, holdsWalkDay } from "./pain-flags.js";
 
 export const EMERGENCY_DEFAULT = ["saddle_numbness", "bladder_bowel_change"];
 export const CLINICIAN_DEFAULT = ["new_leg_weakness", "new_numbness_tingling", "fever_with_back_pain", "unexplained_weight_loss",
@@ -726,7 +727,8 @@ function processDay(s, d, data, daily, evals, checkins, docs, cfg, push) {
   // R6 core track
   const core = level.items.filter((i) => i.block === "daily_core");
   const coreDone = core.length > 0 && dlog && core.filter((i) => !i.optional).every((i) => dlog.checklist?.some((c) => c.item_key === i.item_key && c.done));
-  if (coreDone && status === "green" && nextMorningGreen) {
+  const coreHeld = holdsCoreDay(flagsOf(dlog), core.filter((i) => !i.optional).map((i) => i.item_key));
+  if (coreDone && status === "green" && nextMorningGreen && !coreHeld) {
     s.core_clean_days++;
     if (s.core_clean_days >= (cfg.advance.core_clean_days_required ?? 3)) {
       s.core_clean_days = 0;
@@ -743,14 +745,15 @@ function processDay(s, d, data, daily, evals, checkins, docs, cfg, push) {
         push({ rule_id: "R6", outcome: "advance", color: "green", message: `3 clean core days: ${it.exercise_id} up one rung.`, changes: [c] });
       }
     }
-  } else if (status !== "green" || !coreDone || !nextMorningGreen) s.core_clean_days = 0;
+  } else if (status !== "green" || !coreDone || !nextMorningGreen || coreHeld) s.core_clean_days = 0;
 
   // R7 walking track
   const walkItem = level.items.find((i) => i.block === "walking");
   if (walkItem && s.walk) {
     const cap = walkItem.rungs[walkItem.target_rung]?.time_min ?? s.walk.current_min;
     const walked = Math.max(dlog?.walk_min ?? 0, evening?.data?.walk_min ?? 0);
-    if (status === "green" && walked >= s.walk.current_min) {
+    const walkHeld = holdsWalkDay(flagsOf(dlog), walkItem.item_key);
+    if (status === "green" && walked >= s.walk.current_min && !walkHeld) {
       s.walk.clean_days++;
       if (s.walk.clean_days >= (cfg.advance.walk_clean_days_required ?? 3)) {
         s.walk.clean_days = 0;
@@ -760,7 +763,7 @@ function processDay(s, d, data, daily, evals, checkins, docs, cfg, push) {
           push({ rule_id: "R7", outcome: "advance", color: "green", message: `3 green days with the walking target met: walking ${from} → ${s.walk.current_min} min.` });
         }
       }
-    } else if (status !== "green") s.walk.clean_days = 0;
+    } else if (status !== "green" || walkHeld) s.walk.clean_days = 0;
     // keep the walking item's rung in step with the walking minutes
     const st = s.item_state[walkItem.item_key];
     if (st) { let r = 0; walkItem.rungs.forEach((g, n) => { if ((g.time_min ?? 0) <= s.walk.current_min) r = n; }); st.rung = r; }

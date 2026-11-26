@@ -88,7 +88,7 @@ export function buildExport(i) {
     gate_tests: gateRows,
     adherence_pct: adherence,
   };
-  const attention = buildAttention({ ...i, checkins, sessions, log, summary, days, planned, strengthDone, corePlanned, coreDays, mornings, evenings });
+  const attention = buildAttention({ ...i, checkins, sessions, log, summary, days, dayLogs: i.days, planned, strengthDone, corePlanned, coreDays, mornings, evenings });
   const stem = exportStem(i.start);
   const profile = pick(clone(i.profile), PROFILE_KEYS);
   const notes = [i.sport ? `Sport: ${i.sport}.` : "", i.userNotes || ""].filter(Boolean).join("\n");
@@ -130,6 +130,14 @@ function buildAttention(x) {
   if (risingRun(st, 3)) add("watch", "STIFFNESS_TRENDING_UP", `Morning stiffness rising over 3+ mornings: ${st.join(", ")} min.`);
   const fp = x.summary.trend.first_pressure_h.filter((v) => v !== null);
   if (risingRun(fp.map((v) => -v), 3)) add("watch", "STANDING_TRENDING_DOWN", `First-pressure hours falling over 3+ evenings: ${fp.join(", ")} h.`);
+  const flagNotes = [];
+  for (let d = x.start; d <= (x.end < x.today ? x.end : x.today); d = addDays(d, 1)) {
+    for (const f of (x.dayLogs?.[d]?.pain_flags || [])) {
+      const who = f.item_key || f.session_key || "workout";
+      flagNotes.push(`${d} ${who}: ${f.pain}/10 ${f.type} ${f.location}${f.note ? ` (${f.note})` : ""}`);
+    }
+  }
+  if (flagNotes.length) add("watch", "PAIN_FLAGS", `Unexpected pain flags: ${flagNotes.join("; ")}.`);
   if (x.summary.sharp_incidents >= 2) add("watch", "SHARP_INCIDENTS", `${x.summary.sharp_incidents} accidental sharp incidents this week.`);
   const poorSleep = x.mornings.filter((c) => x.evals[c.id]?.modifiers.includes("poor_sleep")).length;
   if (poorSleep >= 3) add("info", "POOR_SLEEP_PATTERN", `${poorSleep} nights with sleep blocking advancement.`);
@@ -190,6 +198,13 @@ export function renderMarkdown(x, i) {
     const done = d.checklist.filter((c) => c.done).length;
     L.push(`| ${d.local_date} | ${d.daily_status || "no check-ins"} | ${d.walk_min ?? 0} | ${done}/${d.checklist.length} | ${cell((d.daily_status_reasons || []).join("; ") || "-")} |`);
   }
+  const painLines = [];
+  for (const d of x.days) {
+    for (const f of (i.days?.[d.local_date]?.pain_flags || [])) {
+      painLines.push(`- ${d.local_date} · ${f.item_key || f.session_key || "workout"} · ${f.pain}/10 ${f.type} ${f.location}${f.note ? ` · ${f.note}` : ""}`);
+    }
+  }
+  if (painLines.length) { L.push(""); L.push("### Unexpected pain flags"); L.push(...painLines); }
   L.push("", "## Gate tests", "");
   if (s.gate_tests.length) for (const g of s.gate_tests) L.push(`- ${g.date} ${g.test_id}: ${g.value} (${g.passed ? "provisional pass" : "not passed"}; now ${g.status || "-"})`);
   else L.push("None run this week.");

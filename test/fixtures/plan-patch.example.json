@@ -10,10 +10,10 @@
   "based_on_export_id": "EXAMPLE-2026-W49",
   "base": {
     "plan_version": 1,
-    "levels_sha256": "9fd26f1751a7972a0c564d8a05deba0e7bd6698c5de0ef77748cd2cd3a3e05b6",
-    "exercises_sha256": "7ea857ceb416683201fe823b0d6f8bd04975270b45c7abe470d57caaebbc2b01"
+    "levels_sha256": "2282cbcf3abf50042f4c03c7bb66d0cb18a364c04c7263c2da0232a2de6ccadb",
+    "exercises_sha256": "e3980e1ee2f8d09e1993ea89d87484d3c561bb7aa88ac1d0fa8e9cb28c2d841c"
   },
-  "summary": "EXAMPLE: add an optional upright hip flexor stretch to L2 daily mobility and clarify the band-row note.",
+  "summary": "EXAMPLE: add an optional upright hip flexor stretch to L2 daily mobility and clarify the standing cable row note.",
   "rationale": "Example only. Illustrates add, replace and test ops. David reported feeling tight through the front of the hips after long standing; an upright, glute-led stretch is allowed in the library and spares the lumbar spine.",
   "evidence": [
     {
@@ -66,12 +66,12 @@
         {
           "op": "test",
           "path": "/levels/2/items/17/note",
-          "value": "Move to a stronger band at target."
+          "value": "Move up 5 lb on the stack when you hit the target, up to 55 lb."
         },
         {
           "op": "replace",
           "path": "/levels/2/items/17/note",
-          "value": "Move to a stronger band at target; keep the shoulder blade pulling back, not the low back arching."
+          "value": "Move up 5 lb on the stack when you hit the target, up to 55 lb; keep the shoulder blade pulling back, not the low back arching."
         }
       ]
     }

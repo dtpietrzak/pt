@@ -700,28 +700,38 @@
             {
               "sets": 2,
               "reps": 6,
-              "hold_s": 3
+              "hold_s": 3,
+              "load_lb": 5
             },
             {
               "sets": 2,
               "reps": 8,
-              "hold_s": 3
+              "hold_s": 3,
+              "load_lb": 5
             },
             {
               "sets": 2,
               "reps": 10,
-              "hold_s": 3
+              "hold_s": 3,
+              "load_lb": 5
             },
             {
               "sets": 3,
               "reps": 10,
-              "hold_s": 3
+              "hold_s": 3,
+              "load_lb": 5
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "hold_s": 3,
+              "load_lb": 10
             }
           ],
           "start_rung": 0,
-          "target_rung": 3,
-          "start_text": "2x6 (3 s hold) per side",
-          "target_text": "3x10 (3 s hold) per side"
+          "target_rung": 4,
+          "start_text": "2x6 (3 s hold) per side with 5 lb",
+          "target_text": "3x10 (3 s hold) per side with 10 lb"
         },
         {
           "item_key": "L1_strength_B_EX_BAND_ROW",
@@ -738,21 +748,29 @@
           "rungs": [
             {
               "sets": 2,
-              "reps": 10
+              "reps": 10,
+              "load_lb": 10
             },
             {
               "sets": 2,
-              "reps": 12
+              "reps": 12,
+              "load_lb": 10
             },
             {
               "sets": 3,
-              "reps": 12
+              "reps": 12,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "load_lb": 15
             }
           ],
           "start_rung": 0,
-          "target_rung": 2,
-          "start_text": "2x10",
-          "target_text": "3x12"
+          "target_rung": 3,
+          "start_text": "2x10 with 10 lb",
+          "target_text": "3x12 with 15 lb"
         },
         {
           "item_key": "L1_strength_B_EX_DEAD_BUG_HEELTAP",
@@ -838,7 +856,7 @@
         "Loaded or repeated spinal flexion (sit-ups, crunches, toe touches, seated forward folds, rounded-back lifting).",
         "Twisting under load and any end-range stretch that brings symptoms on.",
         "Bending, floor work or flexion stretches in the first 45-60 minutes after waking.",
-        "No external load beyond bands. No dumbbells or kettlebells yet."
+        "No dumbbells or kettlebells yet. Cable stack is allowed for the Pallof press and standing cable row."
       ],
       "unlocks": [
         "Core block daily, two strength templates, planned decompression."
@@ -1358,23 +1376,32 @@
             {
               "sets": 3,
               "reps": 8,
-              "hold_s": 3
+              "hold_s": 3,
+              "load_lb": 10
             },
             {
               "sets": 3,
               "reps": 8,
-              "hold_s": 5
+              "hold_s": 5,
+              "load_lb": 10
             },
             {
               "sets": 3,
               "reps": 10,
-              "hold_s": 5
+              "hold_s": 5,
+              "load_lb": 10
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "hold_s": 5,
+              "load_lb": 15
             }
           ],
           "start_rung": 0,
-          "target_rung": 2,
-          "start_text": "3x8 (3 s hold) per side",
-          "target_text": "3x10 (5 s hold) per side"
+          "target_rung": 3,
+          "start_text": "3x8 (3 s hold) per side with 10 lb",
+          "target_text": "3x10 (5 s hold) per side with 15 lb"
         },
         {
           "item_key": "L2_strength_B_EX_BAND_ROW",
@@ -1387,25 +1414,38 @@
           "optional": false,
           "maintain": false,
           "requires": [],
-          "note": "Move to a stronger band at target.",
+          "note": "Move up 5 lb on the stack when you hit the target, up to 55 lb.",
           "rungs": [
             {
               "sets": 3,
-              "reps": 12
+              "reps": 12,
+              "load_lb": 15
             },
             {
               "sets": 3,
-              "reps": 14
+              "reps": 14,
+              "load_lb": 15
             },
             {
               "sets": 3,
-              "reps": 15
+              "reps": 15,
+              "load_lb": 15
+            },
+            {
+              "sets": 3,
+              "reps": 15,
+              "load_lb": 20
+            },
+            {
+              "sets": 3,
+              "reps": 15,
+              "load_lb": 25
             }
           ],
           "start_rung": 0,
-          "target_rung": 2,
-          "start_text": "3x12",
-          "target_text": "3x15"
+          "target_rung": 4,
+          "start_text": "3x12 with 15 lb",
+          "target_text": "3x15 with 25 lb"
         },
         {
           "item_key": "L2_strength_B_EX_MONSTER_WALK",
@@ -1530,7 +1570,7 @@
         "Loaded or repeated spinal flexion (sit-ups, crunches, toe touches, seated forward folds, rounded-back lifting).",
         "Twisting under load and any end-range stretch that brings symptoms on.",
         "Bending, floor work or flexion stretches in the first 45-60 minutes after waking.",
-        "No dumbbells or kettlebells yet. Bodyweight and bands only."
+        "No dumbbells or kettlebells yet. Cable stack is allowed for the Pallof press and standing cable row."
       ],
       "unlocks": [
         "Unsupported box squat, marching bridge, monster walks, wall push-ups."
@@ -2119,18 +2159,26 @@
             {
               "sets": 3,
               "reps": 8,
-              "hold_s": 5
+              "hold_s": 5,
+              "load_lb": 15
             },
             {
               "sets": 3,
               "reps": 10,
-              "hold_s": 5
+              "hold_s": 5,
+              "load_lb": 15
+            },
+            {
+              "sets": 3,
+              "reps": 10,
+              "hold_s": 5,
+              "load_lb": 20
             }
           ],
           "start_rung": 0,
-          "target_rung": 1,
-          "start_text": "3x8 (5 s hold) per side",
-          "target_text": "3x10 (5 s hold) per side"
+          "target_rung": 2,
+          "start_text": "3x8 (5 s hold) per side with 15 lb",
+          "target_text": "3x10 (5 s hold) per side with 20 lb"
         },
         {
           "item_key": "L3_strength_B_EX_INCLINE_PUSHUP",
@@ -3066,23 +3114,32 @@
             {
               "sets": 3,
               "reps": 8,
-              "hold_s": 5
+              "hold_s": 5,
+              "load_lb": 20
             },
             {
               "sets": 3,
               "reps": 10,
-              "hold_s": 5
+              "hold_s": 5,
+              "load_lb": 20
             },
             {
               "sets": 3,
               "reps": 12,
-              "hold_s": 5
+              "hold_s": 5,
+              "load_lb": 20
+            },
+            {
+              "sets": 3,
+              "reps": 12,
+              "hold_s": 5,
+              "load_lb": 25
             }
           ],
           "start_rung": 0,
-          "target_rung": 2,
-          "start_text": "3x8 (5 s hold) per side",
-          "target_text": "3x12 (5 s hold) per side"
+          "target_rung": 3,
+          "start_text": "3x8 (5 s hold) per side with 20 lb",
+          "target_text": "3x12 (5 s hold) per side with 25 lb"
         },
         {
           "item_key": "L4_strength_B_EX_INCLINE_PUSHUP",
@@ -4120,13 +4177,14 @@
             {
               "sets": 3,
               "reps": 12,
-              "hold_s": 5
+              "hold_s": 5,
+              "load_lb": 30
             }
           ],
           "start_rung": 0,
           "target_rung": 0,
-          "start_text": "3x12 (5 s hold) per side",
-          "target_text": "3x12 (5 s hold) per side"
+          "start_text": "3x12 (5 s hold) per side with 30 lb",
+          "target_text": "3x12 (5 s hold) per side with 30 lb"
         },
         {
           "item_key": "L5_strength_B_EX_DEAD_HANG",
@@ -5136,13 +5194,14 @@
             {
               "sets": 3,
               "reps": 12,
-              "hold_s": 5
+              "hold_s": 5,
+              "load_lb": 35
             }
           ],
           "start_rung": 0,
           "target_rung": 0,
-          "start_text": "3x12 (5 s hold) per side",
-          "target_text": "3x12 (5 s hold) per side"
+          "start_text": "3x12 (5 s hold) per side with 35 lb",
+          "target_text": "3x12 (5 s hold) per side with 35 lb"
         },
         {
           "item_key": "L6_conditioning_EX_POGO",
@@ -6129,13 +6188,14 @@
             {
               "sets": 3,
               "reps": 12,
-              "hold_s": 5
+              "hold_s": 5,
+              "load_lb": 40
             }
           ],
           "start_rung": 0,
           "target_rung": 0,
-          "start_text": "3x12 (5 s hold) per side",
-          "target_text": "3x12 (5 s hold) per side"
+          "start_text": "3x12 (5 s hold) per side with 40 lb",
+          "target_text": "3x12 (5 s hold) per side with 40 lb"
         },
         {
           "item_key": "L7_conditioning_EX_JOG",

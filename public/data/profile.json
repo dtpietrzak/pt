@@ -23,7 +23,21 @@
     ],
     "blocks": true,
     "cones": true,
-    "track_or_field": true
+    "track_or_field": true,
+    "cable_stack": true,
+    "cable_stack_lb": [
+      5,
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      55
+    ]
   },
   "baselines": {
     "pain_rest": 1,
