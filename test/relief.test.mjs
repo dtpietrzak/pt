@@ -3,9 +3,9 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   RELIEF_OPTIONS, newReliefEntry, addReliefEntry, removeLatestOfType, reliefLogOf, countByType,
-  reliefRangeSummary, forcedRestFromReliefLogs, reliefById,
+  reliefRangeSummary, forcedRestFromReliefLogs, reliefById, reliefLabel,
 } from "../public/js/relief.js";
-import { reliefCardHtml } from "../public/js/ui/relief.js";
+import { reliefCardHtml, reliefHistoryHtml, reliefWeekHtml } from "../public/js/ui/relief.js";
 import { eveningFromLogs } from "../public/js/checkins.js";
 import { advanceTimerByNext } from "../public/js/pain-flags.js";
 import { RED_FLAGS } from "../public/js/checkins.js";
@@ -16,13 +16,20 @@ const exercises = j("../public/data/exercises.json");
 const config = j("../public/data/decision-config.json");
 const byId = Object.fromEntries(exercises.exercises.map((e) => [e.id, e]));
 
-test("relief options cover the seven listed positions, including the inversion table", () => {
+test("relief options drop standing extension and rename the hang to a pull-up bar hang", () => {
   const ids = RELIEF_OPTIONS.map((o) => o.exercise_id);
   assert.deepEqual(ids, [
     "EX_DECOMP_90_90", "EX_SIDELYING_REST", "EX_DECOMP_PRONE_ELBOWS",
-    "EX_STAND_EXTENSION", "EX_DOOR_HANG", "EX_KNEE_TO_CHEST_RELIEF", "EX_INVERSION_TABLE",
+    "EX_DOOR_HANG", "EX_KNEE_TO_CHEST_RELIEF", "EX_INVERSION_TABLE",
   ]);
+  assert.ok(!ids.includes("EX_STAND_EXTENSION"));
   for (const id of ids) assert.ok(byId[id], id);
+  const hang = reliefById.EX_DOOR_HANG;
+  assert.equal(hang.label, "Pull-up bar hang");
+  assert.match(hang.cues.join(" "), /pull-up bar/i);
+  assert.match(hang.cues.join(" "), /floor or a box/i);
+  assert.doesNotMatch(hang.cues.join(" "), /door frame/i);
+  assert.equal(hang.timed, true);
   const inv = byId.EX_INVERSION_TABLE;
   assert.match(inv.name, /Inversion table/i);
   assert.equal(inv.category, "relief");
@@ -30,7 +37,6 @@ test("relief options cover the seven listed positions, including the inversion t
   assert.equal(/diagnos|treat|cure|heal|decompress the disc/i.test(inv.cues.join(" ")), false);
   assert.ok(RELIEF_OPTIONS.find((o) => o.exercise_id === "EX_INVERSION_TABLE").timed);
   assert.ok(RELIEF_OPTIONS.find((o) => o.exercise_id === "EX_DECOMP_90_90").timed);
-  assert.equal(RELIEF_OPTIONS.find((o) => o.exercise_id === "EX_STAND_EXTENSION").timed, false);
 });
 
 test("relief logs stay off the checklist and count by day and type", () => {
@@ -147,4 +153,28 @@ test("the Today Relief card is a collapsed accordion with a stepper per option",
   }
   assert.match(html, /data-relief-val="EX_DECOMP_90_90">2</);
   assert.match(html, /data-block="relief"/);
+  assert.match(html, /Pull-up bar hang/);
+  assert.doesNotMatch(html, /Standing extension/);
+  assert.doesNotMatch(html, /Door-frame/);
+  assert.doesNotMatch(html, /EX_STAND_EXTENSION/);
+});
+
+test("old standing-extension logs still have a name, and the hang rename applies to old entries", () => {
+  assert.equal(reliefLabel("EX_STAND_EXTENSION"), "Standing extension");
+  assert.equal(reliefLabel("EX_STAND_EXTENSION", "Standing extension (work-friendly reset)"), "Standing extension");
+  assert.equal(reliefLabel("EX_DOOR_HANG", "Door-frame hang (feet on the floor)"), "Pull-up bar hang");
+  const day = {
+    local_date: "2026-11-25",
+    relief_log: [
+      { id: "a", exercise_id: "EX_STAND_EXTENSION", label: "Standing extension", ts: "t" },
+      { id: "b", exercise_id: "EX_DOOR_HANG", label: "Door-frame hang (feet on the floor)", ts: "t2" },
+    ],
+  };
+  const hist = reliefHistoryHtml({ exById: byId }, day);
+  assert.match(hist, /Standing extension/);
+  assert.match(hist, /Pull-up bar hang/);
+  assert.doesNotMatch(hist, /Door-frame/);
+  const week = reliefWeekHtml({ exById: byId }, [day], "2026-11-25");
+  assert.match(week, /Standing extension/);
+  assert.match(week, /Pull-up bar hang/);
 });

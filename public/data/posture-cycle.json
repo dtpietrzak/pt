@@ -55,13 +55,12 @@
       "cues": [
         "Preferred: lie face up with calves on a chair (90/90) for 3-5 minutes.",
         "Or lie face down propped on your elbows, only if that feels good.",
-        "If you can't lie down at work: a gentle standing extension, or a door-frame hang with your feet still on the floor, and breathe.",
+        "If you can't lie down at work: a pull-up bar hang — feet can stay on the floor or a box to unload partially — and breathe.",
         "This is a short reset, not a rest to lengthen. The goal is to need it less often, not for longer."
       ],
       "exercise_ids": [
         "EX_DECOMP_90_90",
         "EX_DECOMP_PRONE_ELBOWS",
-        "EX_STAND_EXTENSION",
         "EX_DOOR_HANG"
       ]
     }

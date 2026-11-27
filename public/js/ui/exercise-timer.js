@@ -478,8 +478,15 @@ function finishReliefOrItem() {
 }
 
 export function showReliefTimer(ctx, opt, onDone) {
-  const ex = ctx.exById?.[opt.exercise_id] || { name: opt.label };
-  const name = opt.label || ex.name || opt.exercise_id;
+  const catalog = ctx.exById?.[opt.exercise_id] || {};
+  const ex = {
+    ...catalog,
+    name: opt.label || catalog.name || opt.exercise_id,
+    ...(opt.cues ? { cues: opt.cues } : {}),
+    ...(opt.stop_if ? { stop_if: opt.stop_if } : {}),
+    ...(opt.contraindications ? { contraindications: opt.contraindications } : {}),
+  };
+  const name = ex.name;
   const seconds = opt.seconds || 180;
   const plan = { seconds, steps: [{ label: name, seconds }] };
   const it = { item_key: `relief:${opt.exercise_id}`, exercise_id: opt.exercise_id, rest_s: 0 };

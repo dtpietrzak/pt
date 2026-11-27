@@ -6,13 +6,34 @@ export const RELIEF_OPTIONS = [
   { exercise_id: "EX_DECOMP_90_90", label: "90/90 rest", range: "3–5 min", seconds: 5 * 60, timed: true },
   { exercise_id: "EX_SIDELYING_REST", label: "Side-lying with pillow", range: "3–10 min", seconds: 5 * 60, timed: true },
   { exercise_id: "EX_DECOMP_PRONE_ELBOWS", label: "Prone on elbows", range: null, seconds: null, timed: false },
-  { exercise_id: "EX_STAND_EXTENSION", label: "Standing extension", range: null, seconds: null, timed: false },
-  { exercise_id: "EX_DOOR_HANG", label: "Door-frame hang (feet on the floor)", range: "3–5 min", seconds: 5 * 60, timed: true },
+  {
+    exercise_id: "EX_DOOR_HANG",
+    label: "Pull-up bar hang",
+    range: "3–5 min",
+    seconds: 5 * 60,
+    timed: true,
+    cues: [
+      "Hold a sturdy pull-up bar and let the shoulders and back gently unload. Feet can stay on the floor or a box to unload partially.",
+      "Bend the knees a little; do not hang from the hands only if you need to unload. Breathe for 3–5 min, or as long as is comfortable within that range.",
+    ],
+    stop_if: "Shoulder pain, wrist pain, or any increase in back symptoms.",
+    contraindications: "Feet can stay on the floor or a box to unload partially. This is not a pull-up dead hang unless that feels comfortable.",
+  },
   { exercise_id: "EX_KNEE_TO_CHEST_RELIEF", label: "Single knee-to-chest (relief only)", range: null, seconds: null, timed: false },
   { exercise_id: "EX_INVERSION_TABLE", label: "Inversion table", range: "2–5 min", seconds: 3 * 60, timed: true },
 ];
 
 export const reliefById = Object.fromEntries(RELIEF_OPTIONS.map((o) => [o.exercise_id, o]));
+
+/** Types no longer offered, kept so old relief_log entries still have a name. */
+export const RETIRED_RELIEF = {
+  EX_STAND_EXTENSION: { exercise_id: "EX_STAND_EXTENSION", label: "Standing extension", timed: false },
+};
+
+/** Display name for a relief type, including retired ones. Known IDs win over a stored label (so the hang rename applies to old logs). */
+export function reliefLabel(exercise_id, stored) {
+  return reliefById[exercise_id]?.label || RETIRED_RELIEF[exercise_id]?.label || stored || exercise_id;
+}
 
 export function reliefLogOf(day) {
   return Array.isArray(day?.relief_log) ? day.relief_log : [];
@@ -23,7 +44,7 @@ export function newReliefEntry({ exercise_id, ts, duration_s, timed, id } = {}) 
   return {
     id: id || `rl_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`,
     exercise_id,
-    label: opt?.label || exercise_id,
+    label: reliefLabel(exercise_id),
     ts,
     timed: !!timed,
     ...(duration_s != null ? { duration_s } : {}),

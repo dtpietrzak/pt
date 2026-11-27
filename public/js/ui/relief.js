@@ -1,10 +1,10 @@
 // Today Relief accordion and logging. Tracking only — not a checklist item.
 import { isoLocal } from "../util.js";
-import { RELIEF_OPTIONS, reliefById, reliefLogOf, newReliefEntry, addReliefEntry, removeLatestOfType, countByType, reliefWeekSummary } from "../relief.js";
+import { RELIEF_OPTIONS, reliefById, reliefLabel, reliefLogOf, newReliefEntry, addReliefEntry, removeLatestOfType, countByType, reliefWeekSummary } from "../relief.js";
 import { esc, openSheet, today, fmtDate } from "./dom.js";
 import { loadDay, saveDay } from "./pain-flag.js";
 
-const nameOf = (ctx, id) => ctx.exById?.[id]?.name || reliefById[id]?.label || id;
+const nameOf = (_ctx, id, stored) => reliefLabel(id, stored);
 
 function reliefSub(n) {
   return `${n} today`;
@@ -85,8 +85,15 @@ export async function dropRelief(ctx, exercise_id, date) {
 
 export async function openReliefDetail(ctx, exercise_id) {
   const o = reliefById[exercise_id];
-  const ex = ctx.exById?.[exercise_id] || {};
-  const name = o?.label || ex.name || exercise_id;
+  const catalog = ctx.exById?.[exercise_id] || {};
+  const ex = {
+    ...catalog,
+    name: o?.label || catalog.name || exercise_id,
+    ...(o?.cues ? { cues: o.cues } : {}),
+    ...(o?.stop_if ? { stop_if: o.stop_if } : {}),
+    ...(o?.contraindications ? { contraindications: o.contraindications } : {}),
+  };
+  const name = ex.name;
   if (o?.timed) {
     const { showReliefTimer } = await import("./exercise-timer.js");
     showReliefTimer(ctx, o);
@@ -105,7 +112,7 @@ export function reliefHistoryHtml(ctx, dayRec) {
   if (!entries.length) return "";
   const by = {};
   for (const e of entries) {
-    const label = e.label || nameOf(ctx, e.exercise_id);
+    const label = reliefLabel(e.exercise_id, e.label);
     by[label] = (by[label] || 0) + 1;
   }
   const bits = Object.entries(by).map(([k, n]) => `${n}× ${k}`);
